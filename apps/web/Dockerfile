@@ -19,6 +19,6 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 RUN pnpm --filter @agriflow/web run build
 
-FROM nginx:1.27-alpine AS runtime
+FROM nginx:1.31-alpine AS runtime
 COPY --from=build /repo/apps/web/dist /usr/share/nginx/html
 EXPOSE 80
