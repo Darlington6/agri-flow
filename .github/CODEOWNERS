@@ -1,0 +1,6 @@
+# Default owner for everything not covered below.
+* @Darlington6
+
+# Split as the team grows — for now this is a documentation signal,
+# not an enforced review gate (see CONTRIBUTING.md on why required
+# reviews aren't turned on yet for a single-maintainer repo).
