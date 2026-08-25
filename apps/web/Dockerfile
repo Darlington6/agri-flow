@@ -6,7 +6,7 @@
 # up` identical for every contributor regardless of what's installed
 # locally.
 
-FROM node:20-slim AS build
+FROM node:25-slim AS build
 WORKDIR /repo
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml turbo.json ./
 COPY apps/web/package.json apps/web/package.json
