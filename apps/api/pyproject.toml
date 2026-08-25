@@ -16,6 +16,8 @@ psycopg = { extras = ["binary"], version = "^3.2" }
 celery = "^5.4"
 redis = "^5.0"
 gunicorn = "^23.0"
+djangorestframework-simplejwt = "^5.5.1"
+phonenumbers = "^9.0.37"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.7"
@@ -29,6 +31,8 @@ build-backend = "poetry.core.masonry.api"
 [tool.ruff]
 line-length = 100
 target-version = "py312"
+# Django-generated, never hand-edited — not worth linting for style.
+exclude = ["**/migrations/*.py"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
