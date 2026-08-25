@@ -1,0 +1,29 @@
+name: Deploy
+
+# Deliberately manual-only for now. No hosting provider is chosen yet
+# (Platform Blueprint, Section 20 names Render/Fly/Railway/ECS as
+# candidates) — wiring real deploy credentials/targets is a separate,
+# explicit step once that decision is made. This file exists so the
+# branch/environment model (dev -> staging -> main) has a documented
+# home for CD, rather than being bolted on later as an afterthought.
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        required: true
+        type: choice
+        options: [staging, production]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Not configured yet
+        run: |
+          echo "No deploy target is wired up yet."
+          echo "Once a hosting provider is chosen, this job builds apps/api" \
+               "and apps/web's Docker images and ships them to ${{ inputs.environment }}."
+          exit 1
