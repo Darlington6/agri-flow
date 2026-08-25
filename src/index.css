@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand: deep natural greens */
+  --color-brand-50: #f2f8f4;
+  --color-brand-100: #e0efe4;
+  --color-brand-200: #c1dfca;
+  --color-brand-300: #96c7a7;
+  --color-brand-400: #66a87f;
+  --color-brand-500: #438a61;
+  --color-brand-600: #316f4c;
+  --color-brand-700: #28583e;
+  --color-brand-800: #204633;
+  --color-brand-900: #163224;
+  --color-brand-950: #0d1e16;
+
+  /* Earth: warm neutrals used alongside brand green */
+  --color-earth-50: #faf8f4;
+  --color-earth-100: #f3ede1;
+  --color-earth-200: #e6d9c2;
+  --color-earth-300: #d3bd97;
+  --color-earth-400: #bc9d6c;
+  --color-earth-500: #a6824f;
+  --color-earth-600: #8a6740;
+  --color-earth-700: #6d5136;
+  --color-earth-800: #55402d;
+  --color-earth-900: #403124;
+
+  /* Neutral surface scale (near-white to ink) */
+  --color-ink-50: #f7f8f7;
+  --color-ink-100: #eef0ee;
+  --color-ink-200: #dde1dd;
+  --color-ink-300: #c1c8c1;
+  --color-ink-400: #9aa59b;
+  --color-ink-500: #78857a;
+  --color-ink-600: #5c6a5f;
+  --color-ink-700: #48544a;
+  --color-ink-800: #33403a; /* keep close to brand for headings */
+  --color-ink-900: #1a221d;
+  --color-ink-950: #101510;
+
+  /* Status */
+  --color-status-good: #2f8f5b;
+  --color-status-good-bg: #eaf6ef;
+  --color-status-warn: #b8791f;
+  --color-status-warn-bg: #fdf3e3;
+  --color-status-risk: #c14639;
+  --color-status-risk-bg: #fbeae8;
+  --color-status-info: #2b6ea8;
+  --color-status-info-bg: #eaf3fb;
+
+  --font-display: "Manrope", "Segoe UI", system-ui, sans-serif;
+  --font-sans: "DM Sans", "Segoe UI", system-ui, sans-serif;
+
+  --shadow-card: 0 1px 2px rgba(16, 21, 16, 0.04), 0 8px 24px -12px rgba(16, 21, 16, 0.12);
+  --shadow-card-hover: 0 2px 4px rgba(16, 21, 16, 0.06), 0 16px 32px -12px rgba(16, 21, 16, 0.16);
+
+  --animate-fade-in: fade-in 0.2s ease-out;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    color-scheme: light;
+  }
+
+  body {
+    @apply bg-ink-50 text-ink-800 antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    @apply tracking-tight;
+  }
+
+  :where(h1, h2, h3, h4, h5, h6) {
+    @apply text-ink-900;
+  }
+
+  ::selection {
+    @apply bg-brand-200 text-brand-900;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-ink-200 rounded-full;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
