@@ -8,6 +8,7 @@ environment (django-environ), never hardcoded — see ../../.env.example
 for the variables this file expects.
 """
 
+from datetime import timedelta
 from pathlib import Path
 
 import environ
@@ -30,12 +31,16 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Third-party
     "rest_framework",
+    "rest_framework_simplejwt.token_blacklist",
     "drf_spectacular",
     "corsheaders",
     # AgriFlow bounded-context apps land here one at a time
     # (Identity & Access, Network, Demand & Matching, Contracts, ...)
-    # — Platform Blueprint, Section 1. None exist yet in this scaffold.
+    # — Platform Blueprint, Section 1.
+    "apps.identity",
 ]
+
+AUTH_USER_MODEL = "identity.User"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -99,6 +104,18 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {"class": "logging.StreamHandler"},
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
+    },
+}
+
 # CORS: explicit allow-list from the environment, never "allow all" outside
 # of DEBUG — apps/web (and later apps/site, apps/mobile) are the intended
 # callers.
@@ -106,6 +123,9 @@ CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])
 
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
@@ -119,8 +139,26 @@ REST_FRAMEWORK = {
         # in Platform Blueprint Section 17; this is the per-client cap.
         "user": "1000/hour",
         "anon": "100/hour",
+        # OTP request is a real abuse target (SMS costs money once a real
+        # provider is behind it) — deliberately much stricter.
+        "otp_request": "5/hour",
     },
 }
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "UPDATE_LAST_LOGIN": True,
+}
+
+# OTP/magic-link delivery — no real SMS/email provider is set up yet, so
+# every environment defaults to logging instead of sending (see
+# apps/identity/channels.py). prod.py overrides this to a hard failure
+# rather than silently logging real users' codes.
+OTP_DELIVERY_CHANNEL = "apps.identity.channels.ConsoleOtpChannel"
+EMAIL_DELIVERY_CHANNEL = "apps.identity.channels.ConsoleEmailChannel"
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "AgriFlow API",

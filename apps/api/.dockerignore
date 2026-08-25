@@ -1,0 +1,12 @@
+# Never let host-specific files leak into the build context — this bit
+# us for real: a Mac-built .venv silently clobbered the image's Linux
+# one via `COPY . .`, since nothing excluded it.
+.venv
+__pycache__
+*.pyc
+.env
+.git
+.pytest_cache
+.ruff_cache
+staticfiles
+db.sqlite3
