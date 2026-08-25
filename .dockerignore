@@ -1,0 +1,15 @@
+# Applies to the apps/web build (its context is the repo root). Same
+# class of bug as apps/api/.dockerignore was written to fix: host
+# node_modules/.venv must never leak into an image via `COPY . .`.
+node_modules
+**/node_modules
+.venv
+**/.venv
+__pycache__
+**/__pycache__
+.git
+dist
+**/dist
+.env
+**/.env
+.turbo
