@@ -1,0 +1,91 @@
+/*
+ * AgriFlow design tokens.
+ *
+ * Not wired into apps/web yet — this package exists so the monorepo's
+ * workspace graph is real (Platform Blueprint, Section 15). Switching
+ * apps/web's src/index.css over to consume this is a deliberate, separate,
+ * low-risk follow-up once this file itself has been reviewed.
+ *
+ * Encodes the locked decisions from the Field & Signal exploration:
+ * teal platform chrome (Direction A), Manrope/DM Sans for the app,
+ * Fraunces/IBM Plex Sans for the public site, and a System/Light/Dark
+ * theme that defaults to the OS preference until a user overrides it.
+ */
+
+:root {
+  /* Platform primary: teal (replaces the prototype's green "brand" ramp) */
+  --color-primary-50: #e9f4f6;
+  --color-primary-100: #cee7eb;
+  --color-primary-200: #a0d0d8;
+  --color-primary-300: #6bb3bf;
+  --color-primary-400: #3b93a3;
+  --color-primary-500: #1d7688;
+  --color-primary-600: #0e5d71;
+  --color-primary-700: #0a4a5c;
+  --color-primary-800: #083b49;
+  --color-primary-900: #062e39;
+  --color-primary-950: #041d24;
+
+  /* Optional warm accent — used sparingly, never as the primary chrome color */
+  --color-accent: #f0af1a;
+  --color-accent-ink: #231603;
+
+  /* Neutral surface scale */
+  --color-surface: #ffffff;
+  --color-surface-sunken: #f5f7f7;
+  --color-ink-50: #f7f8f7;
+  --color-ink-100: #eef0ee;
+  --color-ink-200: #dde1dd;
+  --color-ink-300: #c1c8c1;
+  --color-ink-400: #9aa59b;
+  --color-ink-500: #78857a;
+  --color-ink-600: #5c6a5f;
+  --color-ink-700: #48544a;
+  --color-ink-800: #33403a;
+  --color-ink-900: #1a221d;
+  --color-ink-950: #101510;
+
+  /* Status */
+  --color-status-good: #2f8f5b;
+  --color-status-good-bg: #eaf6ef;
+  --color-status-warn: #b8791f;
+  --color-status-warn-bg: #fdf3e3;
+  --color-status-risk: #c14639;
+  --color-status-risk-bg: #fbeae8;
+  --color-status-info: #2b6ea8;
+  --color-status-info-bg: #eaf3fb;
+
+  /* Type: platform app (Manrope / DM Sans — unchanged from the prototype) */
+  --font-app-display: "Manrope", "Segoe UI", system-ui, sans-serif;
+  --font-app-body: "DM Sans", "Segoe UI", system-ui, sans-serif;
+
+  /* Type: public marketing site (Fraunces / IBM Plex Sans) */
+  --font-site-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-site-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+
+  --shadow-card: 0 1px 2px rgba(16, 21, 16, 0.04), 0 8px 24px -12px rgba(16, 21, 16, 0.12);
+  --shadow-card-hover: 0 2px 4px rgba(16, 21, 16, 0.06), 0 16px 32px -12px rgba(16, 21, 16, 0.16);
+}
+
+/* Dark theme — applies automatically when the OS prefers dark, unless the
+   user has explicitly chosen Light (data-theme="light" wins over system). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-surface: #10181a;
+    --color-surface-sunken: #16201f;
+    --color-ink-50: #101510;
+    --color-ink-100: #1a221d;
+    --color-ink-900: #eef0ee;
+    --color-ink-950: #f7f8f7;
+  }
+}
+
+/* Explicit user override to Dark, regardless of OS preference. */
+:root[data-theme="dark"] {
+  --color-surface: #10181a;
+  --color-surface-sunken: #16201f;
+  --color-ink-50: #101510;
+  --color-ink-100: #1a221d;
+  --color-ink-900: #eef0ee;
+  --color-ink-950: #f7f8f7;
+}
