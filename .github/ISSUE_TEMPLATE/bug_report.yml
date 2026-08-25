@@ -1,0 +1,37 @@
+name: Bug report
+description: Something in AgriFlow isn't working as expected
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you expect instead?
+    validations:
+      required: true
+  - type: dropdown
+    id: app
+    attributes:
+      label: Where?
+      options:
+        - apps/web (platform frontend)
+        - apps/api (backend)
+        - Infra / CI / Docker
+        - Not sure
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Log in as ...
+        2. Go to ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Anything else?
+      description: Screenshots, console errors, browser/OS, etc.

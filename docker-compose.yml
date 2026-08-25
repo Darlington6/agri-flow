@@ -1,0 +1,80 @@
+name: agriflow
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: agriflow
+      POSTGRES_PASSWORD: agriflow
+      POSTGRES_DB: agriflow
+    ports:
+      - "5433:5432"
+    volumes:
+      - agriflow_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agriflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: ./apps/api
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./apps/api:/app
+      - agriflow_api_venv:/app/.venv
+    ports:
+      - "8000:8000"
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.dev
+      DJANGO_SECRET_KEY: local-dev-only-not-a-real-secret
+      DJANGO_DEBUG: "True"
+      DJANGO_ALLOWED_HOSTS: "*"
+      DATABASE_URL: postgres://agriflow:agriflow@postgres:5432/agriflow
+      REDIS_URL: redis://redis:6379/0
+      CORS_ALLOWED_ORIGINS: http://localhost:5173
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  celery:
+    build:
+      context: ./apps/api
+    command: celery -A config worker -l info
+    volumes:
+      - ./apps/api:/app
+      - agriflow_api_venv:/app/.venv
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.dev
+      DJANGO_SECRET_KEY: local-dev-only-not-a-real-secret
+      DATABASE_URL: postgres://agriflow:agriflow@postgres:5432/agriflow
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    ports:
+      - "4173:80"
+
+volumes:
+  agriflow_postgres_data:
+  agriflow_api_venv:
