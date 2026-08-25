@@ -1,0 +1,31 @@
+name: Feature request
+description: Propose something new, or a change to existing behavior
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Ground it in the product — see the README's "The problem" section. What's the actual user need?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed approach
+      description: Rough shape is fine — this doesn't need to be a full design.
+    validations:
+      required: false
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where does this live?
+      options:
+        - apps/web (platform frontend)
+        - apps/api (backend)
+        - apps/site (public site, not built yet)
+        - apps/mobile (not built yet)
+        - Infra / CI / Docker
+        - Not sure
+    validations:
+      required: true
