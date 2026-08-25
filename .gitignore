@@ -12,6 +12,21 @@ dist
 dist-ssr
 *.local
 
+# Turborepo
+.turbo
+
+# Python / Django (apps/api)
+__pycache__
+*.pyc
+.venv
+staticfiles
+
+# Env files — real values never committed, only *.env.example
+.env
+.env.*
+!.env.example
+!*/.env.example
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
