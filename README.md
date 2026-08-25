@@ -166,15 +166,52 @@ adjacent features requested for a more complete pilot story:
 - Recharts
 - Lucide React icons
 
-## Running locally
+## Repo structure
 
-```bash
-npm install
-npm run dev      # start the dev server
-npm run build    # type-check and build for production
+This is a monorepo (pnpm workspaces + Turborepo), scaffolded per the Platform Blueprint as the first step
+of moving from prototype to real implementation:
+
+```
+apps/
+  web/   the frontend you're reading about below — moved here unchanged, still mock-data only
+  api/   Django + DRF backend — currently a bare skeleton (settings, one health endpoint), no
+         domain logic yet
+packages/
+  types/          shared domain types — hand-maintained today, generated from the API's OpenAPI
+                  schema once apps/api has real endpoints
+  design-tokens/  the locked visual-identity decisions (teal platform chrome, Fraunces/IBM Plex
+                  Sans for a future public site) — not yet wired into apps/web
+  ui/             empty stub — shared components migrate here deliberately, one at a time
+  config/         shared tsconfig/lint base
 ```
 
-No environment variables or external services are required — everything runs from local mock data.
+`apps/web` is still exactly the prototype described in this README — nothing below changed because of
+the restructure. `apps/api` and `packages/*` exist so the real build has somewhere to grow into; see the
+Platform Blueprint for the full architecture this is working toward.
+
+## Running locally
+
+**Just the prototype** (what this README otherwise describes):
+
+```bash
+pnpm install
+pnpm --filter @agriflow/web dev     # start the dev server
+pnpm --filter @agriflow/web run build
+```
+
+No environment variables or external services are required for this — everything runs from local mock
+data, same as always.
+
+**The full stack** (Postgres, Redis, the Django API, and a production build of the web app):
+
+```bash
+docker compose up
+# api:   http://localhost:8000/api/v1/health/
+# web:   http://localhost:4173
+```
+
+`apps/api` has no real domain endpoints yet — this proves the container and database wiring, nothing
+more. `cp apps/api/.env.example apps/api/.env` if you want to run the API outside Docker.
 
 ## Current prototype limitations
 
@@ -197,8 +234,13 @@ No environment variables or external services are required — everything runs f
 
 ## Planned production architecture
 
-- A Django REST Framework or Node/Express backend serving the same shapes defined in `src/types/`.
-- Real authentication and role-based access control in place of the demo session context.
+Decided and underway — see `apps/api` above and the Platform Blueprint for the full picture:
+
+- **Django + Django REST Framework**, serving the shapes currently hand-defined in `apps/web/src/types/`
+  (and mirrored in `packages/types/`) — those become generated from the API's OpenAPI schema rather than
+  hand-maintained, once real endpoints exist.
+- Real authentication (phone-number OTP + email magic links as first-class, not just password) and
+  server-side role-based access control, in place of the demo session context.
 - Integration with a weather/satellite data provider for `ClimateRisk` data.
 - Integration with MTN MoMo, Telecel Cash and AirtelTigo Money APIs for real payment processing.
 - An `LLMAIService` implementation of the existing `AIService` interface.
