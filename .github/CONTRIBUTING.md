@@ -32,7 +32,18 @@ See `apps/web/README.md` and `apps/api/README.md` for app-specific detail.
 
 ## Commits
 
-Plain, descriptive commit messages — what changed and why, not a diff summary. No `Co-Authored-By`
+[Conventional Commits](https://www.conventionalcommits.org/): `type(scope): summary`, body as bullet
+points explaining what changed and why — not a diff summary.
+
+```
+fix(api): reject expired OTP codes instead of silently accepting them
+
+- OtpCode.expires_at was being set but never checked in verify_otp()
+- Added the expiry check, plus a test covering it
+```
+
+Common types: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `ci`. Scope is usually the app or area
+touched (`api`, `web`, `identity`, `ci`, ...) — omit it for something repo-wide. No `Co-Authored-By`
 trailers for AI assistance; if a change was AI-assisted, that's a PR-description detail, not a commit
 trailer.
 
