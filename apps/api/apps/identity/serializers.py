@@ -19,6 +19,18 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ["id", "phone_number", "email", "display_name", "roles", "date_joined"]
 
 
+class UserUpdateSerializer(serializers.ModelSerializer):
+    """Self-service profile edits — deliberately narrow. display_name is
+    cosmetic and always editable; phone_number/email are identity, not
+    edited here; a legal name for KYC purposes belongs to the Compliance
+    context once it exists, not Identity.
+    """
+
+    class Meta:
+        model = get_user_model()
+        fields = ["display_name"]
+
+
 class OtpRequestSerializer(serializers.Serializer):
     phone_number = serializers.CharField()
 

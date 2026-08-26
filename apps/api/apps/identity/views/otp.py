@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -22,8 +23,12 @@ class OtpRequestView(APIView):
     def post(self, request):
         serializer = OtpRequestSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        request_otp(serializer.validated_data["phone_number"])
-        return Response(status=status.HTTP_202_ACCEPTED)
+        code = request_otp(serializer.validated_data["phone_number"])
+        # Dev-only convenience so the browser flow is testable without
+        # tailing logs — never present outside DEBUG (see dev.py vs.
+        # staging.py/prod.py).
+        body = {"debug_code": code} if settings.DEBUG else {}
+        return Response(body, status=status.HTTP_202_ACCEPTED)
 
 
 class OtpVerifyView(APIView):

@@ -80,6 +80,13 @@ export function LoginPage() {
       </div>
 
       <p className="mt-8 text-xs text-ink-400">This is a prototype environment. All data shown is simulated.</p>
+      <p className="mt-2 text-xs text-ink-400">
+        Have a real account?{' '}
+        <a href="/signin" className="text-brand-700 hover:underline">
+          Sign in with your phone
+        </a>
+        .
+      </p>
     </div>
   )
 }
