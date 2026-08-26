@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -14,11 +15,16 @@ class MagicLinkRequestView(APIView):
     def post(self, request):
         serializer = MagicLinkRequestSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        verify_base_url = request.build_absolute_uri("/api/v1/auth/magic-link/verify/")
-        request_magic_link(serializer.validated_data["email"], verify_base_url)
-        # Always 202 — whether or not the email belongs to an account,
-        # never leaked via the response (see services.request_magic_link).
-        return Response(status=status.HTTP_202_ACCEPTED)
+        # Points at the frontend, not this API — clicking the email link
+        # should land the user back in the SPA, which then calls
+        # GET /api/v1/auth/magic-link/verify/ itself (see AuthContext).
+        verify_base_url = f"{settings.FRONTEND_URL}/magic-link"
+        link = request_magic_link(serializer.validated_data["email"], verify_base_url)
+        # Always 202 regardless of whether the email belongs to an account
+        # (see services.request_magic_link) — debug_link is dev-only and
+        # simply absent when link is None, so it never hints at existence.
+        body = {"debug_link": link} if settings.DEBUG and link else {}
+        return Response(body, status=status.HTTP_202_ACCEPTED)
 
 
 class MagicLinkVerifyView(APIView):

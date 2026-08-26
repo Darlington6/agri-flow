@@ -51,3 +51,19 @@ def test_invalid_token_is_rejected():
     client = APIClient()
     response = client.get("/api/v1/auth/magic-link/verify/?token=not-a-real-token")
     assert response.status_code == 400
+
+
+def test_debug_link_present_when_debug_true(settings, email_channel):
+    settings.DEBUG = True
+    _make_user()
+    client = APIClient()
+    response = client.post("/api/v1/auth/magic-link/request/", {"email": EMAIL})
+    assert response.json()["debug_link"] == email_channel.last_link
+
+
+def test_debug_link_absent_when_debug_false(settings, email_channel):
+    settings.DEBUG = False
+    _make_user()
+    client = APIClient()
+    response = client.post("/api/v1/auth/magic-link/request/", {"email": EMAIL})
+    assert "debug_link" not in response.json()
