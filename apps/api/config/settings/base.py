@@ -116,6 +116,10 @@ LOGGING = {
     },
 }
 
+# Where apps/web lives — used to build links that need to land the user
+# back in the SPA (the magic-link email), not the API itself.
+FRONTEND_URL = env("FRONTEND_URL", default="http://localhost:5173")
+
 # CORS: explicit allow-list from the environment, never "allow all" outside
 # of DEBUG — apps/web (and later apps/site, apps/mobile) are the intended
 # callers.

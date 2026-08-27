@@ -55,3 +55,17 @@ def test_invalid_phone_number_is_rejected():
     client = APIClient()
     response = client.post("/api/v1/auth/otp/request/", {"phone_number": "not-a-phone"})
     assert response.status_code == 400
+
+
+def test_debug_code_present_when_debug_true(settings, otp_channel):
+    settings.DEBUG = True
+    client = APIClient()
+    response = client.post("/api/v1/auth/otp/request/", {"phone_number": PHONE})
+    assert response.json()["debug_code"] == otp_channel.last_code
+
+
+def test_debug_code_absent_when_debug_false(settings, otp_channel):
+    settings.DEBUG = False
+    client = APIClient()
+    response = client.post("/api/v1/auth/otp/request/", {"phone_number": PHONE})
+    assert "debug_code" not in response.json()

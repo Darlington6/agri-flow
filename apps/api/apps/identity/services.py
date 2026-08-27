@@ -21,7 +21,10 @@ def _hash(value: str) -> str:
     return hashlib.sha256(value.encode()).hexdigest()
 
 
-def request_otp(phone_number: str) -> None:
+def request_otp(phone_number: str) -> str:
+    """Returns the generated code — callers decide whether it's safe to
+    expose it (views.otp only does so when settings.DEBUG is true).
+    """
     code = f"{secrets.randbelow(1_000_000):06d}"
     OtpCode.objects.create(
         phone_number=phone_number,
@@ -29,6 +32,7 @@ def request_otp(phone_number: str) -> None:
         expires_at=timezone.now() + timedelta(minutes=OTP_TTL_MINUTES),
     )
     get_otp_channel().send(phone_number, code)
+    return code
 
 
 def verify_otp(phone_number: str, code: str):
@@ -61,16 +65,17 @@ def verify_otp(phone_number: str, code: str):
     return user
 
 
-def request_magic_link(email: str, verify_base_url: str) -> None:
+def request_magic_link(email: str, verify_base_url: str) -> str | None:
     """No-ops silently if the email doesn't belong to an existing user —
     magic link is a login path for an account that already has an email
     on file, not a second signup path (see the Blueprint discussion this
     mirrors). Never reveal whether an email exists via response timing/
-    shape either — this function's return is always the same either way.
+    shape either — the view's HTTP response is always the same either
+    way; the return value here is only for the view's own DEBUG-mode use.
     """
     user_model = get_user_model()
     if not user_model.objects.filter(email=email).exists():
-        return
+        return None
 
     token = secrets.token_urlsafe(32)
     MagicLinkToken.objects.create(
@@ -80,6 +85,7 @@ def request_magic_link(email: str, verify_base_url: str) -> None:
     )
     link = f"{verify_base_url}?token={token}"
     get_email_channel().send(email, link)
+    return link
 
 
 def verify_magic_link(token: str):
