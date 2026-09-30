@@ -18,9 +18,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 env = environ.Env()
 environ.Env.read_env(BASE_DIR / ".env")
 
-SECRET_KEY = env("DJANGO_SECRET_KEY", default="django-insecure-agriflow-fallback-secret-key-2026")
+SECRET_KEY = env(
+    "DJANGO_SECRET_KEY",
+    default="django-insecure-agriflow-fallback-secret-key-2026",
+)
 DEBUG = env.bool("DJANGO_DEBUG", default=False)
-ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=[".vercel.app", "localhost", "127.0.0.1", "*"])
+ALLOWED_HOSTS = env.list(
+    "DJANGO_ALLOWED_HOSTS",
+    default=[".vercel.app", "localhost", "127.0.0.1", "*"],
+)
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -161,8 +167,14 @@ SIMPLE_JWT = {
 # every environment defaults to logging instead of sending (see
 # apps/identity/channels.py). prod.py overrides this to a hard failure
 # rather than silently logging real users' codes.
-OTP_DELIVERY_CHANNEL = env("OTP_DELIVERY_CHANNEL", default="apps.identity.channels.ConsoleOtpChannel")
-EMAIL_DELIVERY_CHANNEL = env("EMAIL_DELIVERY_CHANNEL", default="apps.identity.channels.ConsoleEmailChannel")
+OTP_DELIVERY_CHANNEL = env(
+    "OTP_DELIVERY_CHANNEL",
+    default="apps.identity.channels.ConsoleOtpChannel",
+)
+EMAIL_DELIVERY_CHANNEL = env(
+    "EMAIL_DELIVERY_CHANNEL",
+    default="apps.identity.channels.ConsoleEmailChannel",
+)
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "AgriFlow API",
