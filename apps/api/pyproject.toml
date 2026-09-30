@@ -15,7 +15,7 @@ django-cors-headers = "^4.4"
 psycopg = { extras = ["binary"], version = "^3.2" }
 celery = "^5.4"
 redis = "^5.0"
-gunicorn = "^23.0"
+gunicorn = ">=23,<27"
 djangorestframework-simplejwt = "^5.5.1"
 phonenumbers = "^9.0.37"
 
