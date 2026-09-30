@@ -18,9 +18,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 env = environ.Env()
 environ.Env.read_env(BASE_DIR / ".env")
 
-SECRET_KEY = env("DJANGO_SECRET_KEY")
+SECRET_KEY = env("DJANGO_SECRET_KEY", default="django-insecure-agriflow-fallback-secret-key-2026")
 DEBUG = env.bool("DJANGO_DEBUG", default=False)
-ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=[])
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=[".vercel.app", "localhost", "127.0.0.1", "*"])
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -76,7 +76,7 @@ ASGI_APPLICATION = "config.asgi.application"
 
 # Database — DATABASE_URL, e.g. postgres://user:pass@host:5432/dbname
 DATABASES = {
-    "default": env.db("DATABASE_URL"),
+    "default": env.db("DATABASE_URL", default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"),
 }
 
 # Cache / Celery broker
@@ -118,12 +118,12 @@ LOGGING = {
 
 # Where apps/web lives — used to build links that need to land the user
 # back in the SPA (the magic-link email), not the API itself.
-FRONTEND_URL = env("FRONTEND_URL", default="http://localhost:5173")
+# Supports Vercel service binding WEB_URL injected automatically.
+FRONTEND_URL = env("FRONTEND_URL", default=env("WEB_URL", default="http://localhost:5173"))
 
-# CORS: explicit allow-list from the environment, never "allow all" outside
-# of DEBUG — apps/web (and later apps/site, apps/mobile) are the intended
-# callers.
+# CORS: explicit allow-list from the environment or allow all for prototype
 CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])
+CORS_ALLOW_ALL_ORIGINS = env.bool("CORS_ALLOW_ALL_ORIGINS", default=True)
 
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
@@ -161,8 +161,8 @@ SIMPLE_JWT = {
 # every environment defaults to logging instead of sending (see
 # apps/identity/channels.py). prod.py overrides this to a hard failure
 # rather than silently logging real users' codes.
-OTP_DELIVERY_CHANNEL = "apps.identity.channels.ConsoleOtpChannel"
-EMAIL_DELIVERY_CHANNEL = "apps.identity.channels.ConsoleEmailChannel"
+OTP_DELIVERY_CHANNEL = env("OTP_DELIVERY_CHANNEL", default="apps.identity.channels.ConsoleOtpChannel")
+EMAIL_DELIVERY_CHANNEL = env("EMAIL_DELIVERY_CHANNEL", default="apps.identity.channels.ConsoleEmailChannel")
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "AgriFlow API",

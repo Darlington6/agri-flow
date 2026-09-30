@@ -4,7 +4,7 @@
 // worthwhile once Network/Contracts bring real data-fetching-heavy
 // pages (Platform Blueprint, Section 5/10).
 
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
+const API_URL = import.meta.env.VITE_API_URL ?? (import.meta.env.DEV ? 'http://localhost:8000' : '')
 
 const ACCESS_KEY = 'agriflow.auth.access'
 const REFRESH_KEY = 'agriflow.auth.refresh'
