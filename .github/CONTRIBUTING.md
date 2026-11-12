@@ -11,7 +11,7 @@ hotfix/*  ──merge──▶  main, then back-merge main → staging and main 
 
 | Target    | Accepts PRs from                    | Merge method      |
 |-----------|-------------------------------------|-------------------|
-| `dev`     | any branch (feature, Dependabot, back-merges) | **Squash**  |
+| `dev`     | any branch (feature, Dependabot, back-merges) | **Squash** (merge commit for back-merges only) |
 | `staging` | `dev`, `main` (back-merge), `hotfix/*` | **Merge commit** |
 | `main`    | `staging`, `hotfix/*`               | **Merge commit**  |
 
@@ -33,15 +33,31 @@ hotfix/*  ──merge──▶  main, then back-merge main → staging and main 
 
 ### What's enforced
 
-The `protected-branches` ruleset on `dev`, `staging` and `main` (no bypass, admins included):
+Two rulesets (Settings → Rules → Rulesets), both active with no bypass, admins included:
 
-- No deletion, no force-push.
-- Changes only through pull requests.
-- Required status checks: `web (lint, typecheck, build)` and `api (lint, check, test)` from `ci.yml`, plus
-  `branch flow` and `conventional PR title` from `pr-policy.yml`.
-- `dev` additionally requires the PR branch to be up to date with `dev` before merging, so CI always ran
-  against what will actually land. This isn't required on `staging`/`main`: there it would force merging
-  `staging` back into `dev` through a branch that only accepts PRs.
+| Ruleset | Branches | Merge methods allowed | Branch must be up to date |
+|---|---|---|---|
+| `dev` | `dev` | squash, merge | yes |
+| `protected-branches (staging, main)` | `staging`, `main` | merge only | no |
+
+Both rulesets:
+
+- Block deletion and force-push.
+- Allow changes only through pull requests (0 approvals required while this is a single-maintainer repo).
+- Require four status checks: `web (lint, typecheck, build)` and `api (lint, check, test)` from `ci.yml`,
+  plus `branch flow` and `conventional PR title` from `pr-policy.yml`.
+
+Notes on those choices:
+
+- `dev` allows merge commits only because back-merges from `main` need them. Rulesets can't vary the
+  method by source branch, so feature PRs are squash-merged by convention, not enforcement.
+- "Up to date" on `dev` means CI always ran against what will actually land. It's off for `staging` and
+  `main`, because there it would force merging `staging` back into `dev` through a branch that only accepts
+  PRs.
+
+Repository merge settings: squash and merge commits both take the **PR title** as the commit title and the
+PR description as the body. That's why PR titles must be Conventional Commits; the default
+`Merge pull request #n from ...` title isn't one.
 
 Rulesets can require a PR but can't restrict which branch it comes from. `pr-policy.yml` closes that gap:
 `branch flow` fails a PR whose source isn't allowed for its target (table above).
