@@ -25,7 +25,15 @@ jobs:
         env:
           BASE: ${{ github.base_ref }}
           HEAD: ${{ github.head_ref }}
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          THIS_REPO: ${{ github.repository }}
         run: |
+          # A fork can name its branch "dev" or "staging"; only this repo's
+          # own branches count as promotions.
+          if [[ "$BASE" != "dev" && "$HEAD_REPO" != "$THIS_REPO" ]]; then
+            echo "::error::PRs from forks ($HEAD_REPO) can only target dev."
+            exit 1
+          fi
           case "$BASE" in
             # Production only takes promotions from staging, or urgent hotfixes.
             main)    allowed='^(staging|hotfix/.+)$' ;;
@@ -44,16 +52,43 @@ jobs:
   pr-title:
     name: conventional PR title
     runs-on: ubuntu-latest
+    # Write access only so promotion PRs can be retitled below. GitHub
+    # downgrades this to read-only for fork PRs, which are never promotions.
+    permissions:
+      pull-requests: write
     steps:
-      # PRs into dev are squash-merged, so the PR title becomes the commit
-      # message on dev — it has to be a Conventional Commit.
+      # Squash and merge commits both take the PR title as the commit title,
+      # so it has to be a Conventional Commit.
+      #
+      # Promotion and back-merge PRs are titled automatically: GitHub prefills
+      # the branch name ("Staging"), and the right title is always the same.
+      # The fix happens inside this job rather than in a separate one, because
+      # an edit made with GITHUB_TOKEN doesn't trigger a new workflow run, so
+      # the check would otherwise stay red.
       - name: Title follows Conventional Commits
         env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
           TITLE: ${{ github.event.pull_request.title }}
+          BASE: ${{ github.base_ref }}
+          HEAD: ${{ github.head_ref }}
         run: |
           pattern='^(feat|fix|chore|docs|refactor|test|ci|build|perf|style|revert)(\([a-z0-9._/-]+\))?!?: [^ ].*$'
           if [[ "$TITLE" =~ $pattern ]]; then
             echo "OK: $TITLE"
+            exit 0
+          fi
+          case "$HEAD -> $BASE" in
+            "dev -> staging")  fixed="chore(release): promote dev to staging" ;;
+            "staging -> main") fixed="chore(release): promote staging to main" ;;
+            "main -> dev")     fixed="chore: back-merge main into dev" ;;
+            "main -> staging") fixed="chore: back-merge main into staging" ;;
+            *)                 fixed="" ;;
+          esac
+          if [[ -n "$fixed" ]]; then
+            gh api -X PATCH "repos/$REPO/pulls/$PR" -f title="$fixed" > /dev/null
+            echo "::notice::Retitled promotion PR from '$TITLE' to '$fixed'."
             exit 0
           fi
           echo "::error::PR title '$TITLE' isn't a Conventional Commit. Expected 'type(scope): summary', e.g. 'feat(identity): add OTP resend'. Types: feat fix chore docs refactor test ci build perf style revert."
