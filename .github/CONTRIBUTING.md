@@ -74,8 +74,9 @@ Deployment is Vercel's Git integration, configured by [`vercel.json`](../vercel.
 - There is no GitHub Actions deploy workflow. Because `main` only accepts PRs that passed CI, everything
   Vercel deploys to production has already passed CI.
 
-Vercel installs the API from `apps/api/requirements.txt`, which CI keeps identical to `poetry.lock`
-(see `apps/api/README.md`). Python is pinned by `apps/api/.python-version`.
+Vercel installs the API from `apps/api/pyproject.toml` + `apps/api/uv.lock`, the same lock CI and the
+Dockerfile use, so production runs exactly the versions CI tested. Python is pinned by
+`apps/api/.python-version`.
 
 ## Dependencies (Dependabot)
 
@@ -94,23 +95,12 @@ Configured in [`dependabot.yml`](dependabot.yml), all targeting `dev`, weekly:
   | TypeScript major | 6.x | TypeScript 7 is the new native compiler |
   | `@types/node` major | follows Node | Must match the Node version that actually runs |
 
-  For a Django upgrade: raise the cap, `poetry lock`, regenerate `requirements.txt`, run the tests.
-- **API Dependabot PRs need `requirements.txt` regenerated.** Dependabot is told to skip
-  `requirements.txt` (`exclude-paths`), because it would otherwise bump those pins separately from
-  `poetry.lock` and the two drift. So every pip PR from Dependabot fails the `requirements.txt matches
-  poetry.lock` check until someone regenerates the file on its branch:
-
-  ```bash
-  gh pr checkout <number>
-  cd apps/api && poetry export --without-hashes --only main -f requirements.txt -o requirements.txt
-  git commit -am "build(deps): regenerate requirements.txt from poetry.lock" && git push
-  ```
-
-  Dependabot stops rebasing a PR once someone else has pushed to it; comment `@dependabot recreate` if
-  it falls behind, then regenerate again.
+  For a Django upgrade: raise the cap in `pyproject.toml`, `uv lock`, run the tests.
+- API updates come from Dependabot's `uv` ecosystem, which updates `pyproject.toml` and `uv.lock`
+  together. There's only one lock file, so nothing needs regenerating by hand.
 - A Dependabot PR that fails CI because of a version cap is closed, not merged around. Comment
   `@dependabot ignore this major version` (or `minor`) on it so it isn't reopened.
-- Merge passing grouped PRs as they come; if several conflict on `poetry.lock`/`pnpm-lock.yaml`, comment
+- Merge passing grouped PRs as they come; if several conflict on `uv.lock`/`pnpm-lock.yaml`, comment
   `@dependabot rebase` on the rest after each merge.
 
 ## Local setup
