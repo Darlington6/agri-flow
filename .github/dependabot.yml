@@ -35,7 +35,9 @@ updates:
         update-types: ["version-update:semver-major"]
     open-pull-requests-limit: 10
 
-  - package-ecosystem: "pip"
+  # uv: updates pyproject.toml and uv.lock together. uv.lock is the single
+  # lock that CI, the Dockerfile and Vercel all install from.
+  - package-ecosystem: "uv"
     directory: "/apps/api"
     target-branch: "dev"
     schedule:
@@ -44,12 +46,6 @@ updates:
       prefix: "build"
       prefix-development: "build"
       include: "scope"
-    # requirements.txt is exported from poetry.lock (for Vercel), not a
-    # manifest of its own. Left visible, Dependabot bumps its pins separately
-    # from the lock and the two drift apart. Regenerate it on Dependabot PRs
-    # instead (see CONTRIBUTING).
-    exclude-paths:
-      - "requirements.txt"
     groups:
       api-runtime:
         dependency-type: "production"
