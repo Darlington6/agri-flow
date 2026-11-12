@@ -82,10 +82,31 @@ Configured in [`dependabot.yml`](dependabot.yml), all targeting `dev`, weekly:
 
 - Minor and patch updates are **grouped**: one PR per ecosystem (web runtime, web dev, API runtime, API
   dev, GitHub Actions). Major updates still arrive one PR each, because they need a real look.
-- **Django majors are ignored** until a deliberate upgrade: `pyproject.toml` caps `django<6.0`, and DRF,
-  simplejwt, drf-spectacular and django-cors-headers all need to support the new major first. When it's
-  time, do it as a normal `feat/` or `chore/` branch: raise the cap, `poetry lock`, regenerate
-  `requirements.txt`, run the tests.
+- **Held for deliberate upgrades** (ignored by Dependabot, each done as its own `chore/` branch when
+  it's time):
+
+  | What | Held at | Why |
+  |---|---|---|
+  | Django major | 5.x | `pyproject.toml` caps `django<6.0`; DRF, simplejwt, drf-spectacular and django-cors-headers must support 6 first |
+  | Python (API Docker image) | 3.12 | Pinned in `.python-version`, CI and Vercel; moves everywhere at once |
+  | Node major (web Docker image) | 20 | Moves CI, Docker and `@types/node` together |
+  | TypeScript major | 6.x | TypeScript 7 is the new native compiler |
+  | `@types/node` major | follows Node | Must match the Node version that actually runs |
+
+  For a Django upgrade: raise the cap, `poetry lock`, regenerate `requirements.txt`, run the tests.
+- **API Dependabot PRs need `requirements.txt` regenerated.** Dependabot is told to skip
+  `requirements.txt` (`exclude-paths`), because it would otherwise bump those pins separately from
+  `poetry.lock` and the two drift. So every pip PR from Dependabot fails the `requirements.txt matches
+  poetry.lock` check until someone regenerates the file on its branch:
+
+  ```bash
+  gh pr checkout <number>
+  cd apps/api && poetry export --without-hashes --only main -f requirements.txt -o requirements.txt
+  git commit -am "build(deps): regenerate requirements.txt from poetry.lock" && git push
+  ```
+
+  Dependabot stops rebasing a PR once someone else has pushed to it; comment `@dependabot recreate` if
+  it falls behind, then regenerate again.
 - A Dependabot PR that fails CI because of a version cap is closed, not merged around. Comment
   `@dependabot ignore this major version` (or `minor`) on it so it isn't reopened.
 - Merge passing grouped PRs as they come; if several conflict on `poetry.lock`/`pnpm-lock.yaml`, comment

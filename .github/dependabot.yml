@@ -25,6 +25,14 @@ updates:
       web-dev:
         dependency-type: "development"
         update-types: ["minor", "patch"]
+    ignore:
+      # Deliberate upgrades, not Dependabot bumps:
+      # - TypeScript 7 is the new native compiler; it needs its own branch.
+      # - @types/node should match the Node major CI and Docker run (20).
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
     open-pull-requests-limit: 10
 
   - package-ecosystem: "pip"
@@ -36,6 +44,12 @@ updates:
       prefix: "build"
       prefix-development: "build"
       include: "scope"
+    # requirements.txt is exported from poetry.lock (for Vercel), not a
+    # manifest of its own. Left visible, Dependabot bumps its pins separately
+    # from the lock and the two drift apart. Regenerate it on Dependabot PRs
+    # instead (see CONTRIBUTING).
+    exclude-paths:
+      - "requirements.txt"
     groups:
       api-runtime:
         dependency-type: "production"
@@ -58,6 +72,12 @@ updates:
     commit-message:
       prefix: "build"
       include: "scope"
+    ignore:
+      # Python is pinned to 3.12 in .python-version, CI and Vercel. A new
+      # Python version (3.12 -> 3.15 is a "minor" tag bump) is a deliberate
+      # upgrade across all of those at once.
+      - dependency-name: "python"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
 
   - package-ecosystem: "docker"
     directory: "/apps/web"
@@ -67,6 +87,11 @@ updates:
     commit-message:
       prefix: "build"
       include: "scope"
+    ignore:
+      # Node major versions move CI, Docker and @types/node together, as one
+      # deliberate upgrade.
+      - dependency-name: "node"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "github-actions"
     directory: "/"
