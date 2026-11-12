@@ -2,21 +2,25 @@
 
 FROM python:3.12-slim AS base
 ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    POETRY_NO_INTERACTION=1 \
-    POETRY_VIRTUALENVS_IN_PROJECT=1
+    PYTHONUNBUFFERED=1
 WORKDIR /app
 RUN apt-get update \
     && apt-get install -y --no-install-recommends libpq5 \
     && rm -rf /var/lib/apt/lists/*
 
 FROM base AS builder
+# Keep the uv version in sync with .github/workflows/ci.yml.
+COPY --from=ghcr.io/astral-sh/uv:0.13.7 /uv /bin/uv
+# Use the image's Python (never download one), and copy packages into the
+# venv rather than hard-linking from a cache that won't exist at runtime.
+ENV UV_PYTHON_DOWNLOADS=never \
+    UV_LINK_MODE=copy \
+    UV_COMPILE_BYTECODE=1
 RUN apt-get update \
     && apt-get install -y --no-install-recommends build-essential libpq-dev \
-    && rm -rf /var/lib/apt/lists/* \
-    && pip install --no-cache-dir poetry==2.4.1
-COPY pyproject.toml poetry.lock ./
-RUN poetry install --without dev --no-root
+    && rm -rf /var/lib/apt/lists/*
+COPY pyproject.toml uv.lock .python-version ./
+RUN uv sync --locked --no-dev
 
 FROM base AS runtime
 RUN addgroup --system agriflow && adduser --system --ingroup agriflow agriflow
