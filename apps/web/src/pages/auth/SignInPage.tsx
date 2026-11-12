@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
-import { Leaf } from 'lucide-react'
+import { LogoMark } from '@/components/brand/LogoMark'
 import { useAuth } from '@/context/AuthContext'
 import { ApiError } from '@/lib/apiClient'
 import { brand } from '@/config/brand'
@@ -70,9 +70,7 @@ export function SignInPage() {
   return (
     <div className="flex min-h-svh flex-col items-center justify-center bg-ink-50 px-4 py-12">
       <div className="mb-8 flex flex-col items-center gap-3 text-center">
-        <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-700 text-white">
-          <Leaf className="h-6 w-6" />
-        </span>
+        <LogoMark className="h-14" />
         <h1 className="font-display text-2xl font-semibold text-ink-900">{brand.name}</h1>
         <DemoTag />
       </div>
