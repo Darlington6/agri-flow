@@ -5,7 +5,26 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ## [Unreleased]
 
+### Changed
+
+- `apps/api` moved to standard PEP 621 `pyproject.toml` metadata; Poetry 2.4.1 pinned in CI and the
+  Dockerfile; Python pinned via `apps/api/.python-version`.
+- `apps/api/requirements.txt` (what Vercel installs) is now generated from `poetry.lock` and CI fails if
+  it drifts. It previously omitted `celery`/`redis`, which Django imports at startup.
+- Dependabot: minor/patch updates grouped per ecosystem, Conventional Commit titles, Django majors held
+  until a deliberate upgrade.
+- CONTRIBUTING documents the full branch/merge/back-merge policy, Vercel deployments and dependency
+  handling.
+
 ### Added
+
+- `pr-policy.yml`: CI checks that PRs follow the promotion flow (`main` only from `staging`/`hotfix/*`,
+  `staging` only from `dev`/`main`/`hotfix/*`) and that PR titles are Conventional Commits.
+- `ruff format --check` in CI.
+
+### Removed
+
+- `deploy.yml`, a manual-only placeholder that always failed. Deployment is Vercel's Git integration.
 
 - Monorepo scaffold: `apps/web` (the prototype, moved unchanged), `apps/api` (Django + DRF skeleton,
   Dockerized, one health endpoint), `packages/types` / `packages/design-tokens` / `packages/ui` /
