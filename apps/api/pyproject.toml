@@ -1,23 +1,25 @@
-[tool.poetry]
+[project]
 name = "agriflow-api"
 version = "0.1.0"
 description = "AgriFlow API — Django + DRF backend (Platform Blueprint, Section 2)"
-authors = ["AgriFlow"]
-package-mode = false
+authors = [{ name = "AgriFlow" }]
+requires-python = ">=3.12,<4"
+dependencies = [
+    "django>=5.1,<6.0",
+    "djangorestframework>=3.15,<4.0",
+    "drf-spectacular>=0.28,<0.29",
+    "django-environ>=0.11,<0.12",
+    "django-cors-headers>=4.4,<5.0",
+    "psycopg[binary]>=3.2,<4.0",
+    "celery>=5.4,<6.0",
+    "redis>=5.0,<6.0",
+    "gunicorn>=23.0,<24.0",
+    "djangorestframework-simplejwt>=5.5.1,<6.0",
+    "phonenumbers>=9.0.37,<10.0",
+]
 
-[tool.poetry.dependencies]
-python = "^3.12"
-django = "^5.1"
-djangorestframework = "^3.15"
-drf-spectacular = "^0.28"
-django-environ = "^0.11"
-django-cors-headers = "^4.4"
-psycopg = { extras = ["binary"], version = "^3.2" }
-celery = "^5.4"
-redis = "^5.0"
-gunicorn = "^23.0"
-djangorestframework-simplejwt = "^5.5.1"
-phonenumbers = "^9.0.37"
+[tool.poetry]
+package-mode = false
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.7"
