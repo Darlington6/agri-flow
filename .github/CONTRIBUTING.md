@@ -19,6 +19,7 @@ hotfix/*  ──merge──▶  main, then back-merge main → staging and main 
   Conventional Commit type (`feat/`, `fix/`, `chore/`, `docs/`, ...).
 - Open your PR **against `dev`**. Promotions (`dev` → `staging` → `main`) are their own PRs, opened once
   what's on the source branch is ready to move forward. Never skip `staging`.
+  Promotion PRs get their title set automatically (see [Commits](#commits)).
 - **Why squash into `dev`:** one commit per feature, and the PR title becomes that commit's message, so
   PR titles must be Conventional Commits (checked by CI, see below).
 - **Why merge commits for promotions:** a squash or rebase would rewrite `dev`'s commits as new ones on
@@ -147,7 +148,19 @@ fix(api): reject expired OTP codes instead of silently accepting them
 Types: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `ci`, `build`, `perf`, `style`, `revert`.
 Scope is usually the app or area touched (`api`, `web`, `identity`, `ci`, `deps`, ...); omit it for
 something repo-wide. The same format applies to **PR titles**, since squash-merging into `dev` turns the
-title into the commit. Promotion PRs too, e.g. `chore(release): promote dev to staging`.
+title into the commit.
+
+Promotion and back-merge PRs are titled for you: open them with whatever title GitHub prefills (the
+branch name, e.g. "Staging") and the `conventional PR title` check renames them:
+
+| PR | Title set automatically |
+|---|---|
+| `dev` → `staging` | `chore(release): promote dev to staging` |
+| `staging` → `main` | `chore(release): promote staging to main` |
+| `main` → `dev` | `chore: back-merge main into dev` |
+| `main` → `staging` | `chore: back-merge main into staging` |
+
+A promotion PR that already has a Conventional Commit title (say, `chore(release): v0.2.0`) keeps it.
 
 No `Co-Authored-By` trailers for AI assistance; if a change was AI-assisted, that's a PR-description
 detail, not a commit trailer.
