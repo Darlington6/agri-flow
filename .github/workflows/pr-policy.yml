@@ -1,0 +1,60 @@
+name: PR policy
+
+# Enforces the promotion flow and commit conventions documented in
+# .github/CONTRIBUTING.md. GitHub rulesets can require a PR, but they can't
+# say which branch that PR has to come from — this workflow fills that gap.
+# Both jobs are required status checks on dev, staging and main.
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+    branches: [dev, staging, main]
+
+permissions: {}
+
+concurrency:
+  group: pr-policy-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  branch-flow:
+    name: branch flow
+    runs-on: ubuntu-latest
+    steps:
+      - name: Source branch is allowed for this target
+        env:
+          BASE: ${{ github.base_ref }}
+          HEAD: ${{ github.head_ref }}
+        run: |
+          case "$BASE" in
+            # Production only takes promotions from staging, or urgent hotfixes.
+            main)    allowed='^(staging|hotfix/.+)$' ;;
+            # Staging takes promotions from dev, hotfixes, and back-merges from main.
+            staging) allowed='^(dev|main|hotfix/.+)$' ;;
+            # dev is the integration branch: feature work, Dependabot, back-merges.
+            *)       echo "PRs into $BASE may come from any branch."; exit 0 ;;
+          esac
+          if [[ "$HEAD" =~ $allowed ]]; then
+            echo "OK: $HEAD -> $BASE"
+            exit 0
+          fi
+          echo "::error::'$HEAD' -> '$BASE' is not allowed. Flow is feature/* -> dev -> staging -> main (hotfix/* may target staging or main). See .github/CONTRIBUTING.md."
+          exit 1
+
+  pr-title:
+    name: conventional PR title
+    runs-on: ubuntu-latest
+    steps:
+      # PRs into dev are squash-merged, so the PR title becomes the commit
+      # message on dev — it has to be a Conventional Commit.
+      - name: Title follows Conventional Commits
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          pattern='^(feat|fix|chore|docs|refactor|test|ci|build|perf|style|revert)(\([a-z0-9._/-]+\))?!?: [^ ].*$'
+          if [[ "$TITLE" =~ $pattern ]]; then
+            echo "OK: $TITLE"
+            exit 0
+          fi
+          echo "::error::PR title '$TITLE' isn't a Conventional Commit. Expected 'type(scope): summary', e.g. 'feat(identity): add OTP resend'. Types: feat fix chore docs refactor test ci build perf style revert."
+          exit 1

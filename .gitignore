@@ -20,6 +20,12 @@ __pycache__
 *.pyc
 .venv
 staticfiles
+.pytest_cache
+.ruff_cache
+db.sqlite3
+
+# Vercel CLI local link/build output
+.vercel
 
 # Env files — real values never committed, only *.env.example
 .env
