@@ -18,17 +18,17 @@ dependencies = [
     "phonenumbers>=9.0.37,<10.0",
 ]
 
-[tool.poetry]
-package-mode = false
+[dependency-groups]
+dev = [
+    "ruff>=0.7,<0.8",
+    "pytest>=8.3,<9",
+    "pytest-django>=4.9,<5",
+]
 
-[tool.poetry.group.dev.dependencies]
-ruff = "^0.7"
-pytest = "^8.3"
-pytest-django = "^4.9"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[tool.uv]
+# An application, not a library: uv installs the dependencies and never
+# builds or installs the project itself.
+package = false
 
 [tool.ruff]
 line-length = 100
