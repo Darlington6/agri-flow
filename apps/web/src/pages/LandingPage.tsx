@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import {
-  Leaf,
   ArrowRight,
   ClipboardList,
   FileSignature,
@@ -15,6 +14,7 @@ import {
   Building2,
   ArrowDown,
 } from 'lucide-react'
+import { LogoMark } from '@/components/brand/LogoMark'
 import { brand } from '@/config/brand'
 import { DemoTag } from '@/components/ui'
 
@@ -67,9 +67,7 @@ export function LandingPage() {
       <header className="sticky top-0 z-30 border-b border-ink-100 bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6">
           <div className="flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-700 text-white">
-              <Leaf className="h-4 w-4" />
-            </span>
+            <LogoMark className="h-9" />
             <span className="font-display text-lg font-semibold text-ink-900">{brand.name}</span>
           </div>
           <nav className="hidden items-center gap-8 text-sm font-medium text-ink-600 md:flex">

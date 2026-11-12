@@ -1,5 +1,6 @@
 import { Navigate, useNavigate } from 'react-router-dom'
-import { Leaf, ShieldCheck, ShoppingCart, Sprout, UserCheck, Truck, Crown } from 'lucide-react'
+import { ShieldCheck, ShoppingCart, Sprout, UserCheck, Truck, Crown } from 'lucide-react'
+import { LogoMark } from '@/components/brand/LogoMark'
 import { useSession } from '@/context/SessionContext'
 import { brand } from '@/config/brand'
 import { Card, DemoTag } from '@/components/ui'
@@ -52,9 +53,7 @@ export function LoginPage() {
   return (
     <div className="flex min-h-svh flex-col items-center justify-center bg-ink-50 px-4 py-12">
       <div className="mb-8 flex flex-col items-center gap-3 text-center">
-        <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-700 text-white">
-          <Leaf className="h-6 w-6" />
-        </span>
+        <LogoMark className="h-14" />
         <h1 className="font-display text-2xl font-semibold text-ink-900">{brand.name}</h1>
         <DemoTag />
         <p className="max-w-sm text-sm text-ink-500">

@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom'
-import { Leaf, HelpCircle } from 'lucide-react'
+import { HelpCircle } from 'lucide-react'
 import clsx from 'clsx'
+import { LogoMark } from '@/components/brand/LogoMark'
 import { brand } from '@/config/brand'
 import { navForRole, secondaryNav } from './navigation'
 import { ComingSoonBadge } from '@/components/ui'
@@ -13,9 +14,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <div className="flex h-full w-64 shrink-0 flex-col border-r border-ink-100 bg-white">
       <div className="flex items-center gap-2 px-5 py-5">
-        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-700 text-white">
-          <Leaf className="h-5 w-5" />
-        </span>
+        <LogoMark className="h-10" />
         <div>
           <p className="font-display text-lg font-semibold leading-tight text-ink-900">{brand.name}</p>
           <p className="text-[11px] leading-tight text-ink-400">{brand.country} pilot</p>

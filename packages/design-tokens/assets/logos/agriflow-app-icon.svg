@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="AgriFlow">
+  <title>AgriFlow</title>
+  <rect width="1024" height="1024" fill="#F5F1E6"/>
+  <g transform="translate(250.85 174.08) scale(0.510068)">
+    <circle cx="512" cy="512" r="512" fill="#283F2F"/>
+    <circle cx="512" cy="541" r="331" fill="#B2934D"/>
+    <circle cx="360" cy="1069.5" r="255" fill="#93A281"/>
+  </g>
+</svg>
