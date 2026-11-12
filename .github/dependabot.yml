@@ -1,13 +1,30 @@
 version: 2
+
+# Everything targets dev, matching the feature -> dev -> staging -> main flow.
+#
+# Grouping keeps the PR count manageable: routine minor/patch bumps arrive as
+# one PR per ecosystem, while major versions still arrive one PR each, since
+# those are the ones that need a real look. Every PR title is a Conventional
+# Commit (build(deps): ... / build(deps-dev): ...) so it passes the PR policy
+# check and squash-merges cleanly into dev.
+
 updates:
   - package-ecosystem: "npm"
     directory: "/"
     target-branch: "dev"
     schedule:
       interval: "weekly"
+    commit-message:
+      prefix: "build"
+      prefix-development: "build"
+      include: "scope"
     groups:
-      dev-dependencies:
+      web-runtime:
+        dependency-type: "production"
+        update-types: ["minor", "patch"]
+      web-dev:
         dependency-type: "development"
+        update-types: ["minor", "patch"]
     open-pull-requests-limit: 10
 
   - package-ecosystem: "pip"
@@ -15,6 +32,22 @@ updates:
     target-branch: "dev"
     schedule:
       interval: "weekly"
+    commit-message:
+      prefix: "build"
+      prefix-development: "build"
+      include: "scope"
+    groups:
+      api-runtime:
+        dependency-type: "production"
+        update-types: ["minor", "patch"]
+      api-dev:
+        dependency-type: "development"
+    ignore:
+      # Django 6 is a deliberate upgrade (DRF, simplejwt, drf-spectacular and
+      # django-cors-headers all need to support it first), not a Dependabot
+      # bump. pyproject.toml caps django <6.0 until that upgrade happens.
+      - dependency-name: "django"
+        update-types: ["version-update:semver-major"]
     open-pull-requests-limit: 10
 
   - package-ecosystem: "docker"
@@ -22,15 +55,27 @@ updates:
     target-branch: "dev"
     schedule:
       interval: "weekly"
+    commit-message:
+      prefix: "build"
+      include: "scope"
 
   - package-ecosystem: "docker"
     directory: "/apps/web"
     target-branch: "dev"
     schedule:
       interval: "weekly"
+    commit-message:
+      prefix: "build"
+      include: "scope"
 
   - package-ecosystem: "github-actions"
     directory: "/"
     target-branch: "dev"
     schedule:
       interval: "weekly"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    groups:
+      github-actions:
+        patterns: ["*"]
