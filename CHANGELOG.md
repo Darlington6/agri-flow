@@ -7,6 +7,10 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Changed
 
+- `apps/api` moved from Poetry to **uv**. `uv.lock` (exact same versions as the old `poetry.lock`) is now
+  the single lock that CI, the Dockerfile and Vercel install from. `poetry.lock`, `poetry.toml` and the
+  generated `requirements.txt` are gone, and so is the manual regenerate step on Dependabot PRs.
+  Dependabot uses its `uv` ecosystem.
 - `apps/api` moved to standard PEP 621 `pyproject.toml` metadata; Poetry 2.4.1 pinned in CI and the
   Dockerfile; Python pinned via `apps/api/.python-version`.
 - `apps/api/requirements.txt` (what Vercel installs) is now generated from `poetry.lock` and CI fails if

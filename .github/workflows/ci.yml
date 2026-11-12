@@ -70,37 +70,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      # Poetry 2.x is required: pyproject.toml uses the standard PEP 621
-      # [project] table, which Poetry 1.x can't read. Keep this pin in sync
+      # uv reads the Python version from apps/api/.python-version and the
+      # exact dependency versions from apps/api/uv.lock, the same lock
+      # Vercel and the Dockerfile install from. Keep the uv version in sync
       # with apps/api/Dockerfile.
-      - run: pip install poetry==2.4.1 poetry-plugin-export==1.10.1
-
-      - uses: actions/cache@v6
+      - uses: astral-sh/setup-uv@v10.3.3
         with:
-          path: ~/.cache/pypoetry
-          key: poetry-${{ runner.os }}-${{ hashFiles('apps/api/poetry.lock') }}
+          version: "0.13.7"
+          working-directory: apps/api
+          enable-cache: true
+          cache-dependency-glob: apps/api/uv.lock
 
-      - run: poetry install
+      # --locked fails if uv.lock is out of date with pyproject.toml, so a
+      # dependency change without a re-lock can't get past CI.
+      - run: uv sync --locked
 
-      - run: poetry run ruff check .
+      - run: uv run --no-sync ruff check .
 
-      - run: poetry run ruff format --check .
+      - run: uv run --no-sync ruff format --check .
 
-      # requirements.txt is what Vercel installs from; it must be exactly
-      # what poetry.lock resolves to, or production silently runs different
-      # versions (or misses packages) compared to CI and Docker.
-      - name: requirements.txt matches poetry.lock
-        run: |
-          poetry export --without-hashes --only main -f requirements.txt -o /tmp/requirements.txt
-          diff -u requirements.txt /tmp/requirements.txt || {
-            echo "::error file=apps/api/requirements.txt::Out of sync with poetry.lock. Regenerate with: poetry export --without-hashes --only main -f requirements.txt -o requirements.txt"
-            exit 1
-          }
+      - run: uv run --no-sync python manage.py check
 
-      - run: poetry run python manage.py check
-
-      - run: poetry run pytest -q
+      - run: uv run --no-sync pytest -q
