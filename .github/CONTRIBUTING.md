@@ -27,8 +27,11 @@ hotfix/*  ──merge──▶  main, then back-merge main → staging and main 
   If you open one from the normal "New pull request" page instead, GitHub prefills the title with the
   branch name ("Dev"). That's fine: create it as is, and the `conventional PR title` check renames it
   within a few seconds (see [Commits](#commits)).
-- **Updating a PR branch:** on the PR page, "Update branch" merges `dev` into your branch. Its dropdown
-  also offers "Update with rebase". Either is fine: the squash merge collapses everything into one commit.
+- **Updating a PR branch:** on a PR into `dev`, "Update branch" merges `dev` into your branch (its dropdown
+  also offers "Update with rebase"). Either is fine: the squash merge collapses everything into one commit.
+  **Never click "Update branch" on a promotion PR** (`dev` → `staging`, `staging` → `main`). There it would
+  push `staging` into `dev` directly, which the `dev` ruleset rejects ("Changes must be made through a pull
+  request"). Promotions don't need it: `staging` and `main` don't require the branch to be up to date.
 - **Why squash into `dev`:** one commit per feature, and the PR title becomes that commit's message, so
   PR titles must be Conventional Commits (checked by CI, see below).
 - **Why merge commits for promotions:** a squash or rebase would rewrite `dev`'s commits as new ones on
@@ -126,6 +129,18 @@ docker compose up     # full stack: postgres, redis, api, celery, web
 ```
 
 See `apps/web/README.md` and `apps/api/README.md` for app-specific detail.
+
+## Definition of done
+
+Every change, before its PR is opened:
+
+- **Works on every device kind.** Phones, tablets and desktops (and later the PWA and mobile apps). Build
+  mobile-first and check at phone width (~375px) as well as desktop. Say which widths you checked in the
+  PR's Testing section.
+- **Has tests wherever tests belong.** New API endpoints and services get pytest tests (run against the
+  compose Postgres, like CI). New web logic gets tests too: `apps/web` has no test runner yet, so the first
+  change that adds testable web logic also sets one up.
+- **Docs updated** where behaviour or setup changed.
 
 ## Code style
 
