@@ -50,7 +50,8 @@ Everything Django imports at startup must be a runtime dependency. `config/__ini
 app, so `celery` and `redis` are runtime dependencies even where no worker runs.
 
 If `docker compose` serves stale packages after a dependency change, the API's virtualenv lives in the
-`agriflow_api_venv` volume: `docker volume rm agriflow_api_venv`, then `docker compose build api`.
+`agriflow_agriflow_api_venv` volume (Compose prefixes the project name): `docker compose down`, then
+`docker volume rm agriflow_agriflow_api_venv`, then `docker compose build api`.
 
 `DJANGO_SETTINGS_MODULE` selects the environment: `config.settings.dev` (default for `manage.py`),
 `.staging`, or `.prod` (default for `wsgi.py`/`asgi.py`). Never hardcode secrets — everything comes from
