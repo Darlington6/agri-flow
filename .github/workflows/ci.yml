@@ -15,13 +15,13 @@ jobs:
     name: web (lint, typecheck, build)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           version: 9.15.9
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 20
           cache: pnpm
@@ -68,7 +68,7 @@ jobs:
       DATABASE_URL: postgres://agriflow:agriflow@localhost:5432/agriflow
       REDIS_URL: redis://localhost:6379/0
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # uv reads the Python version from apps/api/.python-version and the
       # exact dependency versions from apps/api/uv.lock, the same lock
