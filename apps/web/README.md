@@ -10,11 +10,23 @@ pnpm --filter @agriflow/web run lint
 pnpm --filter @agriflow/web run typecheck
 ```
 
-Or from the repo root, via Turborepo: `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm typecheck`.
+Or from the repo root, via Turborepo: `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm test`.
 
-The platform screens run from `src/data/` mock fixtures and need no backend. Real sign-in (`/signin`, `/account`,
-`/magic-link`) calls the API at `VITE_API_URL` (see `.env.example`; defaults to `http://localhost:8000` in
-dev). Start it with `docker compose up -d postgres redis api` from the repo root.
+Use **Node 24** (`.nvmrc` at the repo root): `nvm use` or `fnm use`. Vitest doesn't start on Node 26 yet.
+
+## Tests
+
+[Vitest](https://vitest.dev/) with [Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
+and jsdom. Tests sit next to the code they test, named `*.test.ts` / `*.test.tsx`.
+
+```bash
+pnpm --filter @agriflow/web test             # run once (what CI runs)
+pnpm --filter @agriflow/web test:watch       # re-run on save
+pnpm --filter @agriflow/web coverage         # coverage report in apps/web/coverage/
+```
+
+- Test behaviour the user sees: query by role and accessible name (`getByRole('button', { name: … })`),
+  not by CSS class or test IDs.
 
 ## Building for every device
 

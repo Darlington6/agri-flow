@@ -32,6 +32,9 @@ hotfix/*  ──merge──▶  main, then back-merge main → staging and main 
   **Never click "Update branch" on a promotion PR** (`dev` → `staging`, `staging` → `main`). There it would
   push `staging` into `dev` directly, which the `dev` ruleset rejects ("Changes must be made through a pull
   request"). Promotions don't need it: `staging` and `main` don't require the branch to be up to date.
+- **Merge button greyed out on a promotion PR after checks pass?** Refresh the page. The title check
+  renames the PR while the page is open, and GitHub's merge box doesn't always update after that. A
+  reload shows the current state, and "Create a merge commit" becomes available.
 - **Why squash into `dev`:** one commit per feature, and the PR title becomes that commit's message, so
   PR titles must be Conventional Commits (checked by CI, see below).
 - **Why merge commits for promotions:** a squash or rebase would rewrite `dev`'s commits as new ones on
@@ -108,7 +111,7 @@ Configured in [`dependabot.yml`](dependabot.yml), all targeting `dev`, weekly:
   |---|---|---|
   | Django major | 5.x | `pyproject.toml` caps `django<6.0`; DRF, simplejwt, drf-spectacular and django-cors-headers must support 6 first |
   | Python (API Docker image) | 3.12 | Pinned in `.python-version`, CI and Vercel; moves everywhere at once |
-  | Node major (web Docker image) | 20 | Moves CI, Docker and `@types/node` together |
+  | Node major (web Docker image) | 24 | Moves `.nvmrc` (CI), the web Dockerfile, `engines` (Vercel) and `@types/node` together |
   | TypeScript major | 6.x | TypeScript 7 is the new native compiler |
   | `@types/node` major | follows Node | Must match the Node version that actually runs |
 
@@ -138,8 +141,8 @@ Every change, before its PR is opened:
   mobile-first and check at phone width (~375px) as well as desktop. Say which widths you checked in the
   PR's Testing section.
 - **Has tests wherever tests belong.** New API endpoints and services get pytest tests (run against the
-  compose Postgres, like CI). New web logic gets tests too: `apps/web` has no test runner yet, so the first
-  change that adds testable web logic also sets one up.
+  compose Postgres, like CI). New web logic and components get Vitest + Testing Library tests next to
+  the file they test (`thing.ts` → `thing.test.ts`). See `apps/web/README.md`.
 - **Docs updated** where behaviour or setup changed.
 
 ## Code style
@@ -147,7 +150,9 @@ Every change, before its PR is opened:
 - **Modularity is a hard rule, not a preference**: one file, one concern. A bounded context in `apps/api`
   is a folder of small, focused files, never one large `views.py`/`models.py` carrying everything for
   that context.
-- Frontend: `oxlint` (`pnpm lint`), TypeScript strict mode (`pnpm typecheck`).
+- Frontend: `oxlint` (`pnpm lint`), TypeScript strict mode (`pnpm typecheck`), Vitest (`pnpm test`).
+- Node version: **24**, pinned in `.nvmrc` (CI reads it) and `engines` (Vercel reads it). Use it locally
+  too (`nvm use`, `fnm use` or similar). Vitest doesn't start on Node 26 yet.
 - Backend: `ruff check` and `ruff format` (both enforced), Django's own `manage.py check`.
 - Everything runs in CI on every PR. Fix it locally before pushing, don't rely on CI to find it first.
   Run the API tests against Postgres (`docker compose up -d postgres redis`), the same as CI.
