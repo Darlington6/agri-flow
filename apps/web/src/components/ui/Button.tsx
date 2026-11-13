@@ -16,11 +16,11 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 // placed on a dark card needs `inverse`/`ghost-inverse`, not `primary` plus
 // a className color override.
 const VARIANT_CLASSES: Record<Variant, string> = {
-  primary: 'bg-brand-700 text-white hover:bg-brand-800 focus-visible:ring-brand-300',
-  secondary: 'bg-brand-50 text-brand-800 hover:bg-brand-100 focus-visible:ring-brand-200',
+  primary: 'bg-primary-600 text-white hover:bg-primary-700 focus-visible:ring-primary-300',
+  secondary: 'bg-primary-50 text-primary-800 hover:bg-primary-100 focus-visible:ring-primary-200',
   outline: 'border border-ink-200 text-ink-700 hover:bg-ink-50 focus-visible:ring-ink-200',
   ghost: 'text-ink-600 hover:bg-ink-100 focus-visible:ring-ink-200',
-  inverse: 'bg-white text-brand-800 hover:bg-brand-50 focus-visible:ring-white/50',
+  inverse: 'bg-white text-primary-800 hover:bg-primary-50 focus-visible:ring-white/50',
   'ghost-inverse': 'text-white hover:bg-white/10 focus-visible:ring-white/50',
 }
 

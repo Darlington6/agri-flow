@@ -87,7 +87,7 @@ export function BuyersPage() {
                     {isBuyer ? (
                       <p className="text-sm font-semibold text-ink-900">{buyer?.name}</p>
                     ) : (
-                      <Link to={`/buyers/${d.buyerId}`} className="text-sm font-semibold text-ink-900 hover:text-brand-700">
+                      <Link to={`/buyers/${d.buyerId}`} className="text-sm font-semibold text-ink-900 hover:text-primary-700">
                         {buyer?.name}
                       </Link>
                     )}

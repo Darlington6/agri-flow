@@ -31,7 +31,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
                 className={({ isActive }) =>
                   clsx(
                     'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors',
-                    isActive ? 'bg-brand-50 text-brand-800' : 'text-ink-600 hover:bg-ink-50 hover:text-ink-900',
+                    isActive ? 'bg-primary-50 text-primary-800' : 'text-ink-600 hover:bg-ink-50 hover:text-ink-900',
                   )
                 }
               >
@@ -53,7 +53,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
                 className={({ isActive }) =>
                   clsx(
                     'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors',
-                    isActive ? 'bg-brand-50 text-brand-800' : 'text-ink-600 hover:bg-ink-50 hover:text-ink-900',
+                    isActive ? 'bg-primary-50 text-primary-800' : 'text-ink-600 hover:bg-ink-50 hover:text-ink-900',
                   )
                 }
               >

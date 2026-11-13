@@ -56,7 +56,7 @@ export function MarketplacePage() {
             key={c.key}
             onClick={() => setCategory(c.key)}
             className={`flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition-colors ${
-              category === c.key ? 'border-brand-300 bg-brand-50 text-brand-800' : 'border-ink-200 text-ink-600 hover:bg-ink-50'
+              category === c.key ? 'border-primary-300 bg-primary-50 text-primary-800' : 'border-ink-200 text-ink-600 hover:bg-ink-50'
             }`}
           >
             <c.icon className="h-4 w-4" />
