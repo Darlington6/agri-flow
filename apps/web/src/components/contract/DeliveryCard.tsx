@@ -3,7 +3,8 @@ import { Card, Badge, inputClass } from '@/components/ui'
 import { usePlatformData } from '@/context/PlatformDataContext'
 import { useSession } from '@/context/SessionContext'
 import { isAdminRole } from '@/lib/permissions'
-import { rankPartnersForJob } from '@/lib/deliveryScore'
+import { recommendPartnersForJob } from '@/lib/deliveryScore'
+import { formatPlace } from '@/lib/places'
 import { deliveryPartners, deliveryPartnerById } from '@/data'
 import { formatDate } from '@/lib/date'
 import { formatGHSFull, formatTonnes } from '@/lib/format'
@@ -30,7 +31,7 @@ export function DeliveryCard({ contractId }: { contractId: string }) {
   if (!job) return null
   const partner = job.partnerId ? deliveryPartnerById(job.partnerId) : undefined
   const nextStatus = NEXT_STATUS[job.status]
-  const recommended = job.status === 'Unassigned' ? rankPartnersForJob(job, deliveryPartners).slice(0, 3) : []
+  const recommended = job.status === 'Unassigned' ? recommendPartnersForJob(job, deliveryPartners).slice(0, 3) : []
 
   return (
     <Card>
@@ -40,7 +41,7 @@ export function DeliveryCard({ contractId }: { contractId: string }) {
       </div>
       <div className="mt-3 flex items-center justify-between">
         <p className="text-sm text-ink-700">
-          {formatTonnes(job.quantityTonnes)} · {job.fromLocation} → {job.toLocation}
+          {formatTonnes(job.quantityTonnes)} · {formatPlace(job.from)} → {formatPlace(job.to)}
         </p>
         <Badge tone={STATUS_TONE[job.status]}>{job.status}</Badge>
       </div>
@@ -48,7 +49,7 @@ export function DeliveryCard({ contractId }: { contractId: string }) {
 
       {partner ? (
         <p className="mt-3 text-sm text-ink-700">
-          Booked by <span className="font-medium">{partner.name}</span> · {partner.vehicleType}
+          Booked by <span className="font-medium">{partner.name}</span> · {partner.vehicle.label}
         </p>
       ) : (
         <>
@@ -88,7 +89,7 @@ export function DeliveryCard({ contractId }: { contractId: string }) {
               </option>
               {deliveryPartners.map((p) => (
                 <option key={p.id} value={p.id}>
-                  {p.name} ({p.vehicleType})
+                  {p.name} ({p.vehicle.label})
                 </option>
               ))}
             </select>

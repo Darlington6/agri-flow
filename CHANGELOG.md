@@ -7,6 +7,10 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Changed
 
+- Delivery matching works in any country and is no longer a text-matching placeholder: jobs and
+  partners use structured places (area + ISO country code) and service areas, matched exactly. Scoring
+  (out of 100) weighs pickup coverage, drop-off coverage, trips needed from vehicle capacity, cold chain
+  for perishable crops, and rating. Partners covering neither end of a trip are no longer recommended.
 - Node 24 LTS for the web app (CI via `.nvmrc`, the web Dockerfile, `engines` for Vercel). Node 20 reached
   end of life in April 2026, and Vitest needs 22+.
 - `dev` is squash-only (one Conventional Commit per PR); promotions to `staging`/`main` stay merge
@@ -41,6 +45,8 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Fixed
 
+- Delivery matching: a partner covering "Bono" matched "Bono East" jobs, and one covering "Greater
+  Accra" didn't match jobs to "Accra". Loads far above a vehicle's capacity counted as a fit.
 - `addDays` / `daysBetween` returned a date one day early in time zones east of UTC (e.g. Kigali,
   Nairobi), shifting harvest and planting dates by up to two days. They now calculate in UTC.
 
