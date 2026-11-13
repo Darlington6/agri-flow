@@ -3,7 +3,7 @@ import { ShieldCheck, ShoppingCart, Sprout, UserCheck, Truck, Crown } from 'luci
 import { LogoMark } from '@/components/brand/LogoMark'
 import { useSession } from '@/context/SessionContext'
 import { brand } from '@/config/brand'
-import { Card, DemoTag } from '@/components/ui'
+import { CardButton, DemoTag } from '@/components/ui'
 import type { DemoRole } from '@/types'
 
 const ROLES: { role: DemoRole; description: string; icon: typeof ShieldCheck }[] = [
@@ -62,26 +62,28 @@ export function LoginPage() {
       </div>
 
       <div className="grid w-full max-w-3xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {ROLES.map(({ role, description, icon: Icon }) => (
-          <Card
-            key={role}
-            hoverable
-            className="cursor-pointer text-left transition-transform hover:-translate-y-0.5"
-            onClick={() => handleSelect(role)}
-          >
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-700">
-              <Icon className="h-5 w-5" />
-            </span>
-            <p className="mt-4 font-display text-base font-semibold text-ink-900">{role}</p>
-            <p className="mt-1 text-sm text-ink-500">{description}</p>
-          </Card>
-        ))}
+        {ROLES.map(({ role, description, icon: Icon }) => {
+          const id = `role-${role.toLowerCase().replace(/\s+/g, '-')}`
+          return (
+            <CardButton key={role} onClick={() => handleSelect(role)} aria-labelledby={`${id}-name`} aria-describedby={`${id}-description`}>
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-700" aria-hidden="true">
+                <Icon className="h-5 w-5" />
+              </span>
+              <span id={`${id}-name`} className="mt-4 block font-display text-base font-semibold text-ink-900">
+                {role}
+              </span>
+              <span id={`${id}-description`} className="mt-1 block text-sm text-ink-500">
+                {description}
+              </span>
+            </CardButton>
+          )
+        })}
       </div>
 
       <p className="mt-8 text-xs text-ink-400">This is a prototype environment. All data shown is simulated.</p>
       <p className="mt-2 text-xs text-ink-400">
         Have a real account?{' '}
-        <a href="/signin" className="text-brand-700 hover:underline">
+        <a href="/signin" className="text-primary-700 hover:underline">
           Sign in with your phone
         </a>
         .

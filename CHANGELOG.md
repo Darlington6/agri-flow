@@ -7,6 +7,9 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Changed
 
+- Palette (option A): teal `primary` for everything you can tap; the logo's forest, gold and sage for
+  identity, the pilot tag and soft surfaces. Status colours (KYC, risk, timeline) unchanged. The palette now
+  lives in one shared file, `packages/design-tokens/src/theme.css`, which `apps/web` imports.
 - Delivery matching works in any country and is no longer a text-matching placeholder: jobs and
   partners use structured places (area + ISO country code) and service areas, matched exactly. Scoring
   (out of 100) weighs pickup coverage, drop-off coverage, trips needed from vehicle capacity, cold chain
@@ -33,6 +36,8 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Added
 
+- Palette tests: `theme.css` and the JS mirror stay identical, the logo colours stay in the scales, and key
+  text/background pairings must meet WCAG AA contrast.
 - `apps/web` tests: Vitest + Testing Library + jsdom, run in CI. First suites cover role permissions,
   delivery scoring, date and number formatting, and the `LogoMark` component.
 - AgriFlow logo: SVG mark (standard + reversed), square app icon and the original artwork in
@@ -45,6 +50,12 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Fixed
 
+- Status badges (KYC, risk) and small grey text were below the 4.5:1 contrast standard for small text;
+  they now use slightly darker shades of the same colours. Badges no longer wrap onto two lines.
+- The demo login's role cards couldn't be used with a keyboard or screen reader; they're now real buttons
+  (a reusable `CardButton`).
+- Focus rings on buttons were too faint to see (as low as 1.3:1 against white); all buttons now use a ring
+  that meets the 3:1 minimum for non-text contrast.
 - Delivery matching: a partner covering "Bono" matched "Bono East" jobs, and one covering "Greater
   Accra" didn't match jobs to "Accra". Loads far above a vehicle's capacity counted as a fit.
 - `addDays` / `daysBetween` returned a date one day early in time zones east of UTC (e.g. Kigali,

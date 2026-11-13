@@ -99,7 +99,7 @@ export function FarmersPage() {
               {filtered.map((f) => (
                 <tr key={f.id} className="border-b border-ink-50 last:border-0 hover:bg-ink-50/60">
                   <td className="px-5 py-3">
-                    <Link to={`/farmers/${f.id}`} className="font-medium text-ink-800 hover:text-brand-700">
+                    <Link to={`/farmers/${f.id}`} className="font-medium text-ink-800 hover:text-primary-700">
                       {f.name}
                     </Link>
                     <p className="text-xs text-ink-400">{f.climateSmartScore}% climate-smart score</p>
@@ -111,10 +111,10 @@ export function FarmersPage() {
                   <td className="px-3 py-3">
                     <Badge tone="neutral">{cropById(f.primaryCropId)?.name}</Badge>
                   </td>
-                  <td className="px-3 py-3 text-ink-600">{f.farmSizeHectares} ha</td>
-                  <td className="px-3 py-3 text-ink-600">{formatTonnes(f.contractedQuantityTonnes)}</td>
+                  <td className="whitespace-nowrap px-3 py-3 text-ink-600">{f.farmSizeHectares} ha</td>
+                  <td className="whitespace-nowrap px-3 py-3 text-ink-600">{formatTonnes(f.contractedQuantityTonnes)}</td>
                   <td className="px-3 py-3 text-ink-600">{f.currentCropStage}</td>
-                  <td className="px-3 py-3 text-ink-600">{f.reliabilityScore}%</td>
+                  <td className="whitespace-nowrap px-3 py-3 text-ink-600">{f.reliabilityScore}%</td>
                   <td className="px-3 py-3">
                     <KycBadge status={resolveKycStatus(f.kycStatus, f.id, kycOverrides)} />
                   </td>

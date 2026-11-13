@@ -1,10 +1,12 @@
+import { brand } from '@agriflow/design-tokens'
+
 // Chart color roles, following the platform's dataviz method: identity colors
 // are used sparingly (one hue per series), status colors are reserved and
 // never reused as series colors, and reference/target lines use neutral ink
 // rather than a second hue.
 export const chartColors = {
-  actual: '#28583e', // brand-700 — the single identity hue used for "actual/supply" series
-  actualFill: 'rgba(40, 88, 62, 0.12)',
+  actual: brand[700], // the single identity hue used for "actual/supply" series
+  actualFill: `${brand[700]}1f`, // brand-700 at 12% opacity
   target: '#9aa59b', // ink-400 — neutral reference line (demand/target), not identity-coded
   grid: '#e1e0d9',
   axis: '#898781',

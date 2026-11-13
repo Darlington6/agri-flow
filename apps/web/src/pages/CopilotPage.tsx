@@ -32,7 +32,7 @@ function AssistantBubble({ message }: { message: AIChatMessage }) {
 function UserBubble({ message }: { message: AIChatMessage }) {
   return (
     <div className="flex justify-end">
-      <div className="max-w-[80%] rounded-2xl rounded-tr-sm bg-brand-700 px-4 py-3 text-sm text-white">
+      <div className="max-w-[80%] rounded-2xl rounded-tr-sm bg-chat-own px-4 py-3 text-sm text-white">
         {message.content}
       </div>
     </div>
@@ -92,7 +92,7 @@ export function CopilotPage() {
                     <button
                       key={p}
                       onClick={() => ask(p)}
-                      className="rounded-full border border-ink-200 px-3.5 py-2 text-xs font-medium text-ink-600 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-800"
+                      className="rounded-full border border-ink-200 px-3.5 py-2 text-xs font-medium text-ink-600 hover:border-primary-300 hover:bg-primary-50 hover:text-primary-800"
                     >
                       {p}
                     </button>

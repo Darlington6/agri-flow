@@ -193,7 +193,7 @@ export function SignInPage() {
 
       <p className="mt-8 text-xs text-ink-400">
         Exploring the platform instead?{' '}
-        <a href="/login" className="text-brand-700 hover:underline">
+        <a href="/login" className="text-primary-700 hover:underline">
           Use a demo role
         </a>
         .

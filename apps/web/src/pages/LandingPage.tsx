@@ -80,7 +80,7 @@ export function LandingPage() {
             </Link>
             <Link
               to="/login"
-              className="inline-flex h-10 items-center rounded-xl bg-brand-700 px-4 text-sm font-medium text-white hover:bg-brand-800"
+              className="inline-flex h-10 items-center rounded-xl bg-primary-600 px-4 text-sm font-medium text-white hover:bg-primary-700"
             >
               Explore the Platform
             </Link>
@@ -101,7 +101,7 @@ export function LandingPage() {
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               to="/login"
-              className="inline-flex h-11 items-center gap-2 rounded-xl bg-brand-700 px-5 text-sm font-medium text-white hover:bg-brand-800"
+              className="inline-flex h-11 items-center gap-2 rounded-xl bg-primary-600 px-5 text-sm font-medium text-white hover:bg-primary-700"
             >
               Explore the Platform
               <ArrowRight className="h-4 w-4" />
@@ -219,7 +219,7 @@ export function LandingPage() {
           </p>
           <Link
             to="/login"
-            className="mt-7 inline-flex h-11 items-center gap-2 rounded-xl bg-brand-700 px-5 text-sm font-medium text-white hover:bg-brand-800"
+            className="mt-7 inline-flex h-11 items-center gap-2 rounded-xl bg-primary-600 px-5 text-sm font-medium text-white hover:bg-primary-700"
           >
             Explore the Platform
             <ArrowRight className="h-4 w-4" />

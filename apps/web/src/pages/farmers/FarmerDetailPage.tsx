@@ -166,7 +166,7 @@ export function FarmerDetailPage() {
                     <Link
                       key={c.id}
                       to={`/contracts/${c.id}`}
-                      className="flex flex-wrap items-center justify-between gap-2 py-3 first:pt-0 last:pb-0 hover:text-brand-700"
+                      className="flex flex-wrap items-center justify-between gap-2 py-3 first:pt-0 last:pb-0 hover:text-primary-700"
                     >
                       {content}
                     </Link>
