@@ -7,6 +7,11 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Changed
 
+- `dev` is squash-only (one Conventional Commit per PR); promotions to `staging`/`main` stay merge
+  commits. Pre-filled promotion PR links and a promotion PR template.
+- Docs: README brought up to date (real sign-in, the API, uv, how to run web + API locally, where the
+  product is heading); CONTRIBUTING gains a definition of done (works on every device size, tests
+  written, docs updated) and a warning against "Update branch" on promotion PRs.
 - `apps/api` moved from Poetry to **uv**. `uv.lock` (exact same versions as the old `poetry.lock`) is now
   the single lock that CI, the Dockerfile and Vercel install from. `poetry.lock`, `poetry.toml` and the
   generated `requirements.txt` are gone, and so is the manual regenerate step on Dependabot PRs.
