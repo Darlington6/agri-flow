@@ -42,6 +42,24 @@ Two different things, handled differently:
   shows as 13:40 in Accra, 15:40 in Kigali and 16:40 in Nairobi; 23:40 UTC on Friday shows as 01:40
   Saturday in Kigali.
 
+## Colours
+
+The palette lives in `packages/design-tokens/src/theme.css` (imported by `src/index.css`); never define
+colours in this app. Pick colours by role, not by look:
+
+| Role | Use | Examples |
+|---|---|---|
+| `primary` (teal) | Anything you can tap | Buttons, links, selected nav/filters, focus rings |
+| `brand` (forest) | Identity | Icon chips, avatars, headings, dark cards, chart series |
+| `gold` | Warm highlight, sparingly | The pilot tag |
+| `sage` | Soft surfaces | Progress tracks, soft panels |
+| `ink` | Text, borders, backgrounds | Body text, dividers |
+| `chat-own` | Your own chat bubbles | Contract chat, AI Copilot (the original AgriFlow green, kept on purpose) |
+| `status-*` | Meaning: good, warning, risk, info | KYC badges, risk levels, timeline ticks: keep these conventional |
+
+The logo's gold and sage are too light for text on white; use them as fills and their `700`+ shades for
+text. `src/test/tokens.test.ts` fails if a palette change drops a key pairing below WCAG AA contrast.
+
 ## Places
 
 Locations are structured (`Place`: name, administrative area, ISO country code), never free text, so
