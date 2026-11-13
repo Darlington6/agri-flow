@@ -11,7 +11,7 @@ hotfix/*  ──merge──▶  main, then back-merge main → staging and main 
 
 | Target    | Accepts PRs from                    | Merge method      |
 |-----------|-------------------------------------|-------------------|
-| `dev`     | any branch (feature, Dependabot, back-merges) | **Squash** (merge commit for back-merges only) |
+| `dev`     | any branch (feature, Dependabot, back-merges) | **Squash only** (enforced) |
 | `staging` | `dev`, `main` (back-merge), `hotfix/*` | **Merge commit** |
 | `main`    | `staging`, `hotfix/*`               | **Merge commit**  |
 
@@ -19,16 +19,28 @@ hotfix/*  ──merge──▶  main, then back-merge main → staging and main 
   Conventional Commit type (`feat/`, `fix/`, `chore/`, `docs/`, ...).
 - Open your PR **against `dev`**. Promotions (`dev` → `staging` → `main`) are their own PRs, opened once
   what's on the source branch is ready to move forward. Never skip `staging`.
-  Promotion PRs get their title set automatically (see [Commits](#commits)).
+- **Opening a promotion:** use these links. They open the PR with the title and the promotion description
+  already filled in:
+  - [Promote `dev` → `staging`](https://github.com/Darlington6/agri-flow/compare/staging...dev?quick_pull=1&template=promotion.md&title=chore(release):%20promote%20dev%20to%20staging)
+  - [Promote `staging` → `main`](https://github.com/Darlington6/agri-flow/compare/main...staging?quick_pull=1&template=promotion.md&title=chore(release):%20promote%20staging%20to%20main)
+
+  If you open one from the normal "New pull request" page instead, GitHub prefills the title with the
+  branch name ("Dev"). That's fine: create it as is, and the `conventional PR title` check renames it
+  within a few seconds (see [Commits](#commits)).
+- **Updating a PR branch:** on the PR page, "Update branch" merges `dev` into your branch. Its dropdown
+  also offers "Update with rebase". Either is fine: the squash merge collapses everything into one commit.
 - **Why squash into `dev`:** one commit per feature, and the PR title becomes that commit's message, so
   PR titles must be Conventional Commits (checked by CI, see below).
 - **Why merge commits for promotions:** a squash or rebase would rewrite `dev`'s commits as new ones on
   `staging`/`main`, and the branches would then disagree about history on every later promotion. A merge
   commit keeps the same commits on all three branches.
 - **Back-merge after anything lands on `main` that didn't come through `dev`** (hotfixes, a stray direct
-  change): open a PR `main` → `dev` (and `main` → `staging` if staging also lacks it), merged with a merge
-  commit. Promotion merge commits alone don't need back-merging: they carry no content, so GitHub
-  showing `dev` as "behind" by only those merge commits is expected and harmless.
+  change): open a PR `main` → `dev` (and `main` → `staging` if staging also lacks it). A back-merge needs a
+  **merge commit**, not a squash, so that `dev` gets `main`'s actual commits. Because `dev` is squash-only,
+  for that one PR temporarily allow merge commits on the `dev` ruleset (Settings → Rules → Rulesets →
+  `dev` → Require a pull request → Allowed merge methods), merge it, then set it back to squash only.
+  Promotion merge commits alone don't need back-merging: they carry no content, so GitHub showing `dev` as
+  "behind" by only those merge commits is expected and harmless.
 - Merged head branches are deleted automatically. `dev`, `staging` and `main` can never be deleted (see
   below), so promotion PRs leave them in place.
 
@@ -38,7 +50,7 @@ Two rulesets (Settings → Rules → Rulesets), both active with no bypass, admi
 
 | Ruleset | Branches | Merge methods allowed | Branch must be up to date |
 |---|---|---|---|
-| `dev` | `dev` | squash, merge | yes |
+| `dev` | `dev` | squash only | yes |
 | `protected-branches (staging, main)` | `staging`, `main` | merge only | no |
 
 Both rulesets:
@@ -50,8 +62,10 @@ Both rulesets:
 
 Notes on those choices:
 
-- `dev` allows merge commits only because back-merges from `main` need them. Rulesets can't vary the
-  method by source branch, so feature PRs are squash-merged by convention, not enforcement.
+- `dev` is squash-only so every feature or Dependabot PR lands as exactly one commit, titled with its
+  Conventional Commit PR title. Merge commits there would also carry every intermediate commit and
+  "Merge branch 'dev' into ..." commit through to `staging` and `main`. The rare back-merge is the one
+  exception, handled by temporarily allowing merge commits (see above).
 - "Up to date" on `dev` means CI always ran against what will actually land. It's off for `staging` and
   `main`, because there it would force merging `staging` back into `dev` through a branch that only accepts
   PRs.
