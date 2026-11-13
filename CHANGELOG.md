@@ -39,6 +39,11 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
   `staging` only from `dev`/`main`/`hotfix/*`) and that PR titles are Conventional Commits.
 - `ruff format --check` in CI.
 
+### Fixed
+
+- `addDays` / `daysBetween` returned a date one day early in time zones east of UTC (e.g. Kigali,
+  Nairobi), shifting harvest and planting dates by up to two days. They now calculate in UTC.
+
 ### Removed
 
 - `deploy.yml`, a manual-only placeholder that always failed. Deployment is Vercel's Git integration.

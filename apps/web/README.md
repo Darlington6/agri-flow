@@ -27,6 +27,20 @@ pnpm --filter @agriflow/web coverage         # coverage report in apps/web/cover
 
 - Test behaviour the user sees: query by role and accessible name (`getByRole('button', { name: … })`),
   not by CSS class or test IDs.
+- Anything involving dates must hold in every time zone the product serves. `src/lib/date.test.ts`
+  runs its cases in UTC, West Africa, Rwanda and East Africa; follow that pattern.
+
+## Dates and times
+
+Two different things, handled differently:
+
+- **Calendar dates** (a harvest date, a delivery day) are the same day for everyone. Keep them as
+  `'YYYY-MM-DD'` strings and do arithmetic with `src/lib/date.ts`, which calculates in UTC so the device's
+  time zone can't shift the day.
+- **Moments** (a message sent, a payment made) are stored as full ISO timestamps in UTC (`…Z`), which is
+  what the API stores, and shown in the viewer's own time zone with `Intl.DateTimeFormat`. 13:40 UTC
+  shows as 13:40 in Accra, 15:40 in Kigali and 16:40 in Nairobi; 23:40 UTC on Friday shows as 01:40
+  Saturday in Kigali.
 
 ## Building for every device
 
