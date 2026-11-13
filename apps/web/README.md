@@ -50,9 +50,35 @@ format them with `src/lib/places.ts`; never match place names by substring.
 - Test files are type-checked by `tsconfig.test.json` (Node types available); app code by
   `tsconfig.app.json` (no Node types, so app code can't depend on Node by accident).
 
-The platform screens run from `src/data/` mock fixtures and need no backend. Real sign-in (`/signin`, `/account`,
-`/magic-link`) calls the API at `VITE_API_URL` (see `.env.example`; defaults to `http://localhost:8000` in
-dev). Start it with `docker compose up -d postgres redis api` from the repo root.
+Use **Node 24** (`.nvmrc` at the repo root): `nvm use` or `fnm use`. Vitest doesn't start on Node 26 yet.
+
+## Tests
+
+[Vitest](https://vitest.dev/) with [Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
+and jsdom. Tests sit next to the code they test, named `*.test.ts` / `*.test.tsx`.
+
+```bash
+pnpm --filter @agriflow/web test             # run once (what CI runs)
+pnpm --filter @agriflow/web test:watch       # re-run on save
+pnpm --filter @agriflow/web coverage         # coverage report in apps/web/coverage/
+```
+
+- Test behaviour the user sees: query by role and accessible name (`getByRole('button', { name: … })`),
+  not by CSS class or test IDs.
+- Anything involving dates must hold in every time zone the product serves. `src/lib/date.test.ts`
+  runs its cases in UTC, West Africa, Rwanda and East Africa; follow that pattern.
+
+## Dates and times
+
+Two different things, handled differently:
+
+- **Calendar dates** (a harvest date, a delivery day) are the same day for everyone. Keep them as
+  `'YYYY-MM-DD'` strings and do arithmetic with `src/lib/date.ts`, which calculates in UTC so the device's
+  time zone can't shift the day.
+- **Moments** (a message sent, a payment made) are stored as full ISO timestamps in UTC (`…Z`), which is
+  what the API stores, and shown in the viewer's own time zone with `Intl.DateTimeFormat`. 13:40 UTC
+  shows as 13:40 in Accra, 15:40 in Kigali and 16:40 in Nairobi; 23:40 UTC on Friday shows as 01:40
+  Saturday in Kigali.
 
 ## Building for every device
 
