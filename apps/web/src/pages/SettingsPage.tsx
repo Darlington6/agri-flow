@@ -130,7 +130,7 @@ export function SettingsPage() {
                 key={pref}
                 onClick={() => setContactPref(pref)}
                 className={`rounded-xl border px-3.5 py-2 text-sm font-medium transition-colors ${
-                  contactPref === pref ? 'border-brand-300 bg-brand-50 text-brand-800' : 'border-ink-200 text-ink-600 hover:bg-ink-50'
+                  contactPref === pref ? 'border-primary-300 bg-primary-50 text-primary-800' : 'border-ink-200 text-ink-600 hover:bg-ink-50'
                 }`}
               >
                 {pref}
@@ -154,7 +154,7 @@ export function SettingsPage() {
               </div>
               <button
                 onClick={() => setToggles((prev) => ({ ...prev, [t.key]: !prev[t.key] }))}
-                className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${toggles[t.key] ? 'bg-brand-700' : 'bg-ink-200'}`}
+                className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${toggles[t.key] ? 'bg-primary-600' : 'bg-ink-200'}`}
                 aria-pressed={toggles[t.key]}
                 aria-label={t.label}
               >

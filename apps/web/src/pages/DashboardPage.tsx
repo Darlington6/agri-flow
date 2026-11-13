@@ -128,7 +128,7 @@ export function DashboardPage() {
               <h3 className="font-display text-base font-semibold text-ink-900">Best-Matched Open Jobs</h3>
               <p className="text-xs text-ink-500">Ranked for {myPartner.name}'s regions and vehicle</p>
             </div>
-            <Link to="/delivery" className="text-xs font-medium text-brand-700 hover:text-brand-800">
+            <Link to="/delivery" className="text-xs font-medium text-primary-700 hover:text-primary-800">
               Open Job Board
             </Link>
           </div>
@@ -247,7 +247,7 @@ export function DashboardPage() {
                   const pct = (c.suppliedQuantityTonnes / c.contractedQuantityTonnes) * 100
                   const buyer = buyerById(c.buyerId)
                   return (
-                    <Link key={c.id} to={`/contracts/${c.id}`} className="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0 hover:text-brand-700">
+                    <Link key={c.id} to={`/contracts/${c.id}`} className="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0 hover:text-primary-700">
                       <div>
                         <p className="text-sm font-medium text-ink-800">
                           {c.id} · {cropById(c.cropId)?.name}
@@ -276,7 +276,7 @@ export function DashboardPage() {
                 {scopedFarmerList
                   .filter((f) => f.riskStatus === 'high' || !f.hasSubmittedLatestUpdate)
                   .map((f) => (
-                      <Link key={f.id} to={`/farmers/${f.id}`} className="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0 hover:text-brand-700">
+                      <Link key={f.id} to={`/farmers/${f.id}`} className="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0 hover:text-primary-700">
                         <div>
                           <p className="text-sm font-medium text-ink-800">{f.name}</p>
                           <p className="text-xs text-ink-400">
@@ -297,7 +297,7 @@ export function DashboardPage() {
                 <h3 className="font-display text-base font-semibold text-ink-900">Upcoming Harvests</h3>
                 <p className="text-xs text-ink-500">Next 60 days</p>
               </div>
-              <Link to="/harvest" className="text-xs font-medium text-brand-700 hover:text-brand-800">
+              <Link to="/harvest" className="text-xs font-medium text-primary-700 hover:text-primary-800">
                 View all
               </Link>
             </div>
@@ -321,7 +321,7 @@ export function DashboardPage() {
                     return (
                       <tr key={h.id} className="border-b border-ink-50 last:border-0 hover:bg-ink-50/60">
                         <td className="px-6 py-3">
-                          <Link to={`/farmers/${h.farmerId}`} className="font-medium text-ink-800 hover:text-brand-700">
+                          <Link to={`/farmers/${h.farmerId}`} className="font-medium text-ink-800 hover:text-primary-700">
                             {farmer?.name ?? h.farmerId}
                           </Link>
                         </td>
@@ -364,7 +364,7 @@ export function DashboardPage() {
                   <Link
                     key={contractId}
                     to={`/contracts/${contractId}`}
-                    className="text-xs font-medium text-brand-700 hover:text-brand-800"
+                    className="text-xs font-medium text-primary-700 hover:text-primary-800"
                   >
                     Review {contractId} →
                   </Link>
@@ -436,7 +436,7 @@ export function DashboardPage() {
               </div>
               <Link
                 to={`/farmers/${me.id}`}
-                className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-brand-700 hover:text-brand-800"
+                className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-primary-700 hover:text-primary-800"
               >
                 View my full profile
                 <ArrowRight className="h-3.5 w-3.5" />
@@ -451,7 +451,7 @@ export function DashboardPage() {
                 <p className="text-xs font-medium uppercase tracking-wide">Post-harvest snapshot</p>
               </div>
               <p className="mt-2 text-sm text-ink-600">Storage shortfall of 7 tonnes projected for next week's harvest.</p>
-              <Link to="/harvest" className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-brand-700 hover:text-brand-800">
+              <Link to="/harvest" className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-primary-700 hover:text-primary-800">
                 View post-harvest plan
                 <ArrowRight className="h-3.5 w-3.5" />
               </Link>
