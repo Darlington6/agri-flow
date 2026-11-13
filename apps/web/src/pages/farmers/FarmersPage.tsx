@@ -111,10 +111,10 @@ export function FarmersPage() {
                   <td className="px-3 py-3">
                     <Badge tone="neutral">{cropById(f.primaryCropId)?.name}</Badge>
                   </td>
-                  <td className="px-3 py-3 text-ink-600">{f.farmSizeHectares} ha</td>
-                  <td className="px-3 py-3 text-ink-600">{formatTonnes(f.contractedQuantityTonnes)}</td>
+                  <td className="whitespace-nowrap px-3 py-3 text-ink-600">{f.farmSizeHectares} ha</td>
+                  <td className="whitespace-nowrap px-3 py-3 text-ink-600">{formatTonnes(f.contractedQuantityTonnes)}</td>
                   <td className="px-3 py-3 text-ink-600">{f.currentCropStage}</td>
-                  <td className="px-3 py-3 text-ink-600">{f.reliabilityScore}%</td>
+                  <td className="whitespace-nowrap px-3 py-3 text-ink-600">{f.reliabilityScore}%</td>
                   <td className="px-3 py-3">
                     <KycBadge status={resolveKycStatus(f.kycStatus, f.id, kycOverrides)} />
                   </td>
