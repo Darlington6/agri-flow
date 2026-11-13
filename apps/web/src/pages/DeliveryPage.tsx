@@ -4,6 +4,7 @@ import { useSession } from '@/context/SessionContext'
 import { usePlatformData } from '@/context/PlatformDataContext'
 import { currentDeliveryPartner } from '@/lib/scope'
 import { rankJobsForPartner } from '@/lib/deliveryScore'
+import { formatPlace, formatServiceAreas } from '@/lib/places'
 import { cropById } from '@/data'
 import { formatDate } from '@/lib/date'
 import { formatGHSFull, formatTonnes } from '@/lib/format'
@@ -70,7 +71,7 @@ export function DeliveryPage() {
                       {cropById(job.cropId)?.name} · {formatTonnes(job.quantityTonnes)}
                     </p>
                     <p className="text-xs text-ink-400">
-                      {job.fromLocation} → {job.toLocation} · {formatDate(job.scheduledDate)} · fee {formatGHSFull(job.feeGHS)}
+                      {formatPlace(job.from)} → {formatPlace(job.to)} · {formatDate(job.scheduledDate)} · fee {formatGHSFull(job.feeGHS)}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
@@ -100,7 +101,7 @@ export function DeliveryPage() {
                         {cropById(job.cropId)?.name} · {formatTonnes(job.quantityTonnes)}
                       </p>
                       <p className="text-xs text-ink-400">
-                        {job.fromLocation} → {job.toLocation} · {formatDate(job.scheduledDate)}
+                        {formatPlace(job.from)} → {formatPlace(job.to)} · {formatDate(job.scheduledDate)}
                       </p>
                     </div>
                     <div className="flex items-center gap-2">
@@ -122,7 +123,7 @@ export function DeliveryPage() {
         <Card className="h-fit">
           <h2 className="font-display text-sm font-semibold text-ink-700">Your Profile</h2>
           <p className="mt-3 font-display text-base font-semibold text-ink-900">{partner.name}</p>
-          <p className="text-xs text-ink-500">{partner.type} · {partner.vehicleType}</p>
+          <p className="text-xs text-ink-500">{partner.type} · {partner.vehicle.label}</p>
           <div className="mt-3 flex items-center gap-1.5 text-sm text-ink-700">
             <Star className="h-4 w-4 fill-current text-status-warn" />
             {partner.rating.toFixed(1)} rating
@@ -130,7 +131,7 @@ export function DeliveryPage() {
           </div>
           <div className="mt-3 flex items-start gap-1.5 text-sm text-ink-700">
             <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-ink-400" />
-            <span>{partner.regions.join(', ')}</span>
+            <span>{formatServiceAreas(partner.serviceAreas)}</span>
           </div>
         </Card>
       </div>

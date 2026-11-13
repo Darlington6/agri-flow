@@ -36,6 +36,7 @@ import {
 } from '@/lib/scope'
 import { isAdminRole } from '@/lib/permissions'
 import { rankJobsForPartner } from '@/lib/deliveryScore'
+import { formatPlace } from '@/lib/places'
 import { OpenOpportunities } from '@/components/contract/OpenOpportunities'
 import { aiService } from '@/services/ai'
 import type { SupplyRiskSummary } from '@/services/ai'
@@ -139,7 +140,7 @@ export function DashboardPage() {
                     {cropById(job.cropId)?.name} · {formatTonnes(job.quantityTonnes)}
                   </p>
                   <p className="text-xs text-ink-400">
-                    {job.fromLocation} → {job.toLocation} · {formatDate(job.scheduledDate)}
+                    {formatPlace(job.from)} → {formatPlace(job.to)} · {formatDate(job.scheduledDate)}
                   </p>
                 </div>
                 {regionMatch && <Badge tone="good">Good match</Badge>}
