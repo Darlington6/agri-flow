@@ -7,6 +7,12 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Changed
 
+- Delivery matching works in any country and is no longer a text-matching placeholder: jobs and
+  partners use structured places (area + ISO country code) and service areas, matched exactly. Scoring
+  (out of 100) weighs pickup coverage, drop-off coverage, trips needed from vehicle capacity, cold chain
+  for perishable crops, and rating. Partners covering neither end of a trip are no longer recommended.
+- Node 24 LTS for the web app (CI via `.nvmrc`, the web Dockerfile, `engines` for Vercel). Node 20 reached
+  end of life in April 2026, and Vitest needs 22+.
 - `dev` is squash-only (one Conventional Commit per PR); promotions to `staging`/`main` stay merge
   commits. Pre-filled promotion PR links and a promotion PR template.
 - Docs: README brought up to date (real sign-in, the API, uv, how to run web + API locally, where the
@@ -27,6 +33,8 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Added
 
+- `apps/web` tests: Vitest + Testing Library + jsdom, run in CI. First suites cover role permissions,
+  delivery scoring, date and number formatting, and the `LogoMark` component.
 - AgriFlow logo: SVG mark (standard + reversed), square app icon and the original artwork in
   `packages/design-tokens/assets/logos/`; `LogoMark` component in `apps/web` replaces the placeholder leaf
   icon in the sidebar, landing header, demo login and sign-in pages; new favicon (SVG with dark-mode
@@ -34,6 +42,13 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 - `pr-policy.yml`: CI checks that PRs follow the promotion flow (`main` only from `staging`/`hotfix/*`,
   `staging` only from `dev`/`main`/`hotfix/*`) and that PR titles are Conventional Commits.
 - `ruff format --check` in CI.
+
+### Fixed
+
+- Delivery matching: a partner covering "Bono" matched "Bono East" jobs, and one covering "Greater
+  Accra" didn't match jobs to "Accra". Loads far above a vehicle's capacity counted as a fit.
+- `addDays` / `daysBetween` returned a date one day early in time zones east of UTC (e.g. Kigali,
+  Nairobi), shifting harvest and planting dates by up to two days. They now calculate in UTC.
 
 ### Removed
 

@@ -17,6 +17,25 @@ export type GhanaRegion =
 
 export type RiskLevel = 'low' | 'medium' | 'high'
 
+// --- Places (country-agnostic) ---
+// ISO 3166-1 alpha-2 country code, e.g. 'GH' (Ghana), 'RW' (Rwanda), 'KE' (Kenya).
+export type CountryCode = string
+
+// A named place inside a country's first-level administrative area: a region
+// in Ghana, a province in Rwanda, a county in Kenya. Matching uses the area
+// and country, never the free-text name.
+export interface Place {
+  name: string
+  area: string
+  countryCode: CountryCode
+}
+
+// Where a partner operates: a whole country (no `areas`), or listed areas in it.
+export interface ServiceArea {
+  countryCode: CountryCode
+  areas?: string[]
+}
+
 export type CropId = 'tomatoes' | 'onions' | 'peppers' | 'cassava'
 
 export interface Crop {
@@ -24,6 +43,8 @@ export interface Crop {
   name: string
   unit: 'tonnes'
   varietyNotes?: string
+  // Spoils quickly without cooling in transit (e.g. tomatoes, peppers).
+  perishable: boolean
 }
 
 export type BuyerType =
@@ -314,12 +335,18 @@ export interface MarketplaceListing {
 export type DeliveryPartnerType = 'Company' | 'Individual'
 export type DeliveryJobStatus = 'Unassigned' | 'Assigned' | 'In Transit' | 'Delivered'
 
+export interface Vehicle {
+  label: string
+  capacityTonnes: number
+  refrigerated: boolean
+}
+
 export interface DeliveryPartner {
   id: string
   name: string
   type: DeliveryPartnerType
-  vehicleType: string
-  regions: GhanaRegion[]
+  vehicle: Vehicle
+  serviceAreas: ServiceArea[]
   rating: number // 0-5, DEMO metric
   contactPhone: string
 }
@@ -330,8 +357,8 @@ export interface DeliveryJob {
   listingId?: string
   cropId: CropId
   quantityTonnes: number
-  fromLocation: string
-  toLocation: string
+  from: Place
+  to: Place
   scheduledDate: string
   status: DeliveryJobStatus
   partnerId?: string
