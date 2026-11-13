@@ -7,6 +7,10 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Changed
 
+- `apps/api` moved from Poetry to **uv**. `uv.lock` (exact same versions as the old `poetry.lock`) is now
+  the single lock that CI, the Dockerfile and Vercel install from. `poetry.lock`, `poetry.toml` and the
+  generated `requirements.txt` are gone, and so is the manual regenerate step on Dependabot PRs.
+  Dependabot uses its `uv` ecosystem.
 - `apps/api` moved to standard PEP 621 `pyproject.toml` metadata; Poetry 2.4.1 pinned in CI and the
   Dockerfile; Python pinned via `apps/api/.python-version`.
 - `apps/api/requirements.txt` (what Vercel installs) is now generated from `poetry.lock` and CI fails if
@@ -18,6 +22,10 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Added
 
+- AgriFlow logo: SVG mark (standard + reversed), square app icon and the original artwork in
+  `packages/design-tokens/assets/logos/`; `LogoMark` component in `apps/web` replaces the placeholder leaf
+  icon in the sidebar, landing header, demo login and sign-in pages; new favicon (SVG with dark-mode
+  variant, ICO fallback) and Apple touch icon.
 - `pr-policy.yml`: CI checks that PRs follow the promotion flow (`main` only from `staging`/`hotfix/*`,
   `staging` only from `dev`/`main`/`hotfix/*`) and that PR titles are Conventional Commits.
 - `ruff format --check` in CI.
