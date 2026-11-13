@@ -2,9 +2,16 @@
 
 **Climate-Smart Demand-to-Farm Platform.** Turn agricultural demand into reliable, climate-smart supply.
 
-This is an early-stage, high-fidelity **prototype**. It has no backend, no real users, and no live data —
-every farmer, buyer, contract, climate figure and financial number in this app is simulated demonstration
+This is an early-stage product moving from **prototype** to real implementation. Real accounts already
+work: sign-in by phone OTP or email magic link runs against the Django API. Everything else in the app
+(every farmer, buyer, contract, climate figure and financial number) is still simulated demonstration
 data, built to tell one coherent, connected story end to end.
+
+**Live:** production deploys from `main` on Vercel. See [Deployments](.github/CONTRIBUTING.md#deployments).
+
+**Where it's heading:** one API as the shared data layer behind every client: a public marketing site, a
+PWA, and mobile apps (Android and iOS), all using the same account. Prices will show in the user's local
+currency.
 
 ## The problem
 
@@ -160,11 +167,12 @@ adjacent features requested for a more complete pilot story:
 
 ## Technology stack
 
-- React + TypeScript + Vite
-- Tailwind CSS v4
-- React Router
-- Recharts
-- Lucide React icons
+**Web (`apps/web`):** React + TypeScript + Vite, Tailwind CSS v4, React Router, Recharts, Lucide icons.
+
+**API (`apps/api`):** Django + Django REST Framework, JWT auth (simplejwt), drf-spectacular (OpenAPI),
+Postgres, Redis + Celery. Python 3.12, dependencies managed with [uv](https://docs.astral.sh/uv/).
+
+**Tooling:** pnpm workspaces + Turborepo, GitHub Actions CI, Dependabot, Vercel (web + API as two services).
 
 ## Repo structure
 
@@ -173,50 +181,57 @@ of moving from prototype to real implementation:
 
 ```
 apps/
-  web/   the frontend you're reading about below — moved here unchanged, still mock-data only
-  api/   Django + DRF backend — currently a bare skeleton (settings, one health endpoint), no
-         domain logic yet
+  web/   the frontend described in this README: platform screens on mock data, plus real sign-in
+  api/   Django + DRF backend: identity (users, roles, phone OTP, email magic links, JWT, /me),
+         health check, OpenAPI schema and docs at /api/v1/docs/
 packages/
-  types/          shared domain types — hand-maintained today, generated from the API's OpenAPI
-                  schema once apps/api has real endpoints
-  design-tokens/  the locked visual-identity decisions (teal platform chrome, Fraunces/IBM Plex
-                  Sans for a future public site) — not yet wired into apps/web
-  ui/             empty stub — shared components migrate here deliberately, one at a time
+  types/          shared domain types, hand-maintained today; generated from the API's OpenAPI
+                  schema as more endpoints land
+  design-tokens/  visual identity: colour/type tokens (not yet wired into apps/web) and the AgriFlow
+                  logo files in assets/logos/, which apps/web already uses
+  ui/             empty stub; shared components migrate here deliberately, one at a time
   config/         shared tsconfig/lint base
 ```
 
-`apps/web` is still exactly the prototype described in this README — nothing below changed because of
-the restructure. `apps/api` and `packages/*` exist so the real build has somewhere to grow into; see the
-Platform Blueprint for the full architecture this is working toward.
+See the Platform Blueprint for the full architecture this is working toward.
 
 ## Running locally
 
-**Just the prototype** (what this README otherwise describes):
+**Just the web app** (demo roles on mock data; no backend needed):
 
 ```bash
 pnpm install
-pnpm --filter @agriflow/web dev     # start the dev server
-pnpm --filter @agriflow/web run build
+pnpm --filter @agriflow/web dev     # http://localhost:5173 — pick a demo role at /login
 ```
 
-No environment variables or external services are required for this — everything runs from local mock
-data, same as always.
-
-**The full stack** (Postgres, Redis, the Django API, and a production build of the web app):
+**Web app + API** (adds real sign-in at `/signin`):
 
 ```bash
-docker compose up
-# api:   http://localhost:8000/api/v1/health/
-# web:   http://localhost:4173
+docker compose up -d postgres redis api   # API on http://localhost:8000 (docs at /api/v1/docs/)
+docker compose exec api python manage.py migrate   # first run, and after pulling new migrations
+pnpm --filter @agriflow/web dev           # VITE_API_URL defaults to http://localhost:8000 in dev
+docker compose down                       # when you're done
 ```
 
-`apps/api` has no real domain endpoints yet — this proves the container and database wiring, nothing
-more. `cp apps/api/.env.example apps/api/.env` if you want to run the API outside Docker.
+Locally, OTP codes and magic links aren't sent anywhere. The API prints them to its log
+(`docker compose logs api`).
+
+**Everything in containers** (Postgres, Redis, API, Celery worker, production build of the web app):
+
+```bash
+docker compose up        # api: http://localhost:8000/api/v1/health/   web: http://localhost:4173
+```
+
+To run the API outside Docker with uv, see [apps/api/README.md](apps/api/README.md).
 
 ## Current prototype limitations
 
-- No real authentication — `/login` is a role picker that sets a local session, nothing more.
-- No backend — all data lives in `PlatformDataContext`, seeded from `src/data/`, and resets on reload. New
+- Two ways in: `/signin` is **real** authentication (phone OTP or email magic link, JWT, against the API),
+  while `/login` is still the demo role picker that sets a local session. The platform screens behind it
+  use the demo session and mock data; they aren't connected to real accounts yet.
+- **No real SMS or email provider yet.** OTP codes and magic links are written to the API's log instead of
+  being sent, in production too. Connecting a real provider is required before real users sign up.
+- No backend for platform data: all data lives in `PlatformDataContext`, seeded from `src/data/`, and resets on reload. New
   demand requests, confirmed matches, chat messages, marketplace listings, delivery assignments and KYC
   status changes all persist for the session (they behave identically across every page while you're using
   the app) but are lost on refresh, just like the pattern already noted for demand request creation.
@@ -234,13 +249,16 @@ more. `cp apps/api/.env.example apps/api/.env` if you want to run the API outsid
 
 ## Planned production architecture
 
-Decided and underway — see `apps/api` above and the Platform Blueprint for the full picture:
+Decided and underway; see `apps/api` above and the Platform Blueprint for the full picture:
 
-- **Django + Django REST Framework**, serving the shapes currently hand-defined in `apps/web/src/types/`
-  (and mirrored in `packages/types/`) — those become generated from the API's OpenAPI schema rather than
-  hand-maintained, once real endpoints exist.
-- Real authentication (phone-number OTP + email magic links as first-class, not just password) and
-  server-side role-based access control, in place of the demo session context.
+- **Django + Django REST Framework** (in place), serving the shapes currently hand-defined in
+  `apps/web/src/types/` (and mirrored in `packages/types/`). Those become generated from the API's OpenAPI
+  schema as domain endpoints land.
+- **Authentication** (done: phone OTP + email magic links, JWT, roles). Next: a real SMS/email provider,
+  and server-side role-based access control replacing the demo session behind the platform screens.
+- **Clients:** this web app becomes the public marketing site; the platform itself moves to a PWA and
+  mobile apps, all on the same API and the same accounts.
+- **Multi-currency:** money stored as amount + currency code, shown in the user's local currency.
 - Integration with a weather/satellite data provider for `ClimateRisk` data.
 - Integration with MTN MoMo, Telecel Cash and AirtelTigo Money APIs for real payment processing.
 - An `LLMAIService` implementation of the existing `AIService` interface.
