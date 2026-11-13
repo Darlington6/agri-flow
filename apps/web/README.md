@@ -55,10 +55,12 @@ colours in this app. Pick colours by role, not by look:
 | `sage` | Soft surfaces | Progress tracks, soft panels |
 | `ink` | Text, borders, backgrounds | Body text, dividers |
 | `chat-own` | Your own chat bubbles | Contract chat, AI Copilot (the original AgriFlow green, kept on purpose) |
-| `status-*` | Meaning: good, warning, risk, info | KYC badges, risk levels, timeline ticks: keep these conventional |
+| `status-*` | Meaning: good, warning, risk, info | Dots, icons, timeline ticks: keep these conventional |
+| `status-*-text` | Text on a `status-*-bg` badge | Same hues, darkened to 4.5:1 for small text (`Badge` uses these) |
 
 The logo's gold and sage are too light for text on white; use them as fills and their `700`+ shades for
-text. `src/test/tokens.test.ts` fails if a palette change drops a key pairing below WCAG AA contrast.
+text. Pick-one-of-these choices (like the demo roles) use `CardButton`, a real button, never a clickable `<div>`.
+`src/test/tokens.test.ts` fails if a palette change drops a key pairing below WCAG AA contrast.
 
 ## Places
 

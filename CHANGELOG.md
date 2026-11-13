@@ -50,6 +50,10 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Fixed
 
+- Status badges (KYC, risk) and small grey text were below the 4.5:1 contrast standard for small text;
+  they now use slightly darker shades of the same colours. Badges no longer wrap onto two lines.
+- The demo login's role cards couldn't be used with a keyboard or screen reader; they're now real buttons
+  (a reusable `CardButton`).
 - Focus rings on buttons were too faint to see (as low as 1.3:1 against white); all buttons now use a ring
   that meets the 3:1 minimum for non-text contrast.
 - Delivery matching: a partner covering "Bono" matched "Bono East" jobs, and one covering "Greater
