@@ -34,6 +34,7 @@ jobs:
       # typecheck + build in one step.
       - run: pnpm run build
 
+      - run: pnpm run test
 
   api:
     name: api (lint, check, test)
