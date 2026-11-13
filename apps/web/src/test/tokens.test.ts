@@ -40,6 +40,10 @@ describe('palette files', () => {
     expect(color('status-warn')).toBe(status.warn)
     expect(color('status-risk')).toBe(status.risk)
     expect(color('status-info')).toBe(status.info)
+    expect(color('status-good-text')).toBe(status.goodText)
+    expect(color('status-warn-text')).toBe(status.warnText)
+    expect(color('status-risk-text')).toBe(status.riskText)
+    expect(color('status-info-text')).toBe(status.infoText)
   })
 
   it('theme.css and index.ts agree on the chat bubble colour', () => {
@@ -81,6 +85,12 @@ describe('contrast (WCAG AA)', () => {
     ['your chat bubbles: white on chat-own', WHITE, 'chat-own'],
     ['dark cards: brand-100 on brand-950', 'brand-100', 'brand-950'],
     ['secondary text: ink-600 on white', 'ink-600', WHITE],
+    ['small grey text: ink-500 on white', 'ink-500', WHITE],
+    ['small grey text: ink-500 on the ink-50 page', 'ink-500', 'ink-50'],
+    ['KYC Verified / Low risk badge', 'status-good-text', 'status-good-bg'],
+    ['KYC Pending / Medium risk badge', 'status-warn-text', 'status-warn-bg'],
+    ['High risk badge', 'status-risk-text', 'status-risk-bg'],
+    ['info badge', 'status-info-text', 'status-info-bg'],
   ])('%s', (_label, fg, bg) => {
     const ratio = contrast(fg.startsWith('#') ? fg : color(fg), bg.startsWith('#') ? bg : color(bg))
     expect(ratio).toBeGreaterThanOrEqual(4.5)

@@ -64,7 +64,7 @@ export const ink = {
   200: "#dde1dd",
   300: "#c1c8c1",
   400: "#9aa59b",
-  500: "#78857a",
+  500: "#677369",
   600: "#5c6a5f",
   700: "#48544a",
   800: "#33403a",
@@ -87,6 +87,11 @@ export const status = {
   riskBg: "#fbeae8",
   info: "#2b6ea8",
   infoBg: "#eaf3fb",
+  // Badge text on the matching *Bg: same hues, 4.5:1 for small text.
+  goodText: "#157d4a",
+  warnText: "#9d6000",
+  riskText: "#ba4033",
+  infoText: "#2b6ea8",
 } as const;
 
 /** Your own chat message bubbles: the original AgriFlow green, kept by request. */

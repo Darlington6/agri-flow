@@ -80,7 +80,7 @@
   --color-ink-200: #dde1dd;
   --color-ink-300: #c1c8c1;
   --color-ink-400: #9aa59b;
-  --color-ink-500: #78857a;
+  --color-ink-500: #677369; /* was #78857a (3.9:1); darkened so small grey text meets 4.5:1 */
   --color-ink-600: #5c6a5f;
   --color-ink-700: #48544a;
   --color-ink-800: #33403a;
@@ -96,6 +96,12 @@
   --color-status-risk-bg: #fbeae8;
   --color-status-info: #2b6ea8;
   --color-status-info-bg: #eaf3fb;
+  /* Text on the matching -bg (badges). Same hues, dark enough for small text
+     (4.5:1). The base colours above stay for dots, icons and timeline ticks. */
+  --color-status-good-text: #157d4a;
+  --color-status-warn-text: #9d6000;
+  --color-status-risk-text: #ba4033;
+  --color-status-info-text: #2b6ea8;
 
   /* Chat: your own message bubbles keep the original AgriFlow green (2026-11-13 decision) */
   --color-chat-own: #28583e;

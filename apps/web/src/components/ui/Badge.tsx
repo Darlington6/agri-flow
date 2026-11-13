@@ -5,10 +5,10 @@ import type { RiskLevel } from '@/types'
 type Tone = 'good' | 'warn' | 'risk' | 'info' | 'neutral'
 
 const TONE_CLASSES: Record<Tone, string> = {
-  good: 'bg-status-good-bg text-status-good',
-  warn: 'bg-status-warn-bg text-status-warn',
-  risk: 'bg-status-risk-bg text-status-risk',
-  info: 'bg-status-info-bg text-status-info',
+  good: 'bg-status-good-bg text-status-good-text',
+  warn: 'bg-status-warn-bg text-status-warn-text',
+  risk: 'bg-status-risk-bg text-status-risk-text',
+  info: 'bg-status-info-bg text-status-info-text',
   neutral: 'bg-ink-100 text-ink-600',
 }
 
