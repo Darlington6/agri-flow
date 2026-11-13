@@ -1,0 +1,108 @@
+/*
+ * AgriFlow colour palette: the single source for every app.
+ *
+ * Tailwind v4 theme: `@import "@agriflow/design-tokens/theme.css";` after
+ * `@import "tailwindcss";` makes these available as utilities (bg-primary-600,
+ * text-brand-800, ...). Values are mirrored in src/index.ts for code that
+ * needs raw colours (charts, canvas); a test in apps/web keeps them in sync
+ * and checks contrast.
+ *
+ * Roles (option A, approved 2026-11-13):
+ *   primary  teal    anything you can tap: buttons, links, focus, selected state
+ *   brand    forest  identity: icon chips, headings, dark surfaces, charts (logo ring = 800)
+ *   gold             warm highlight: the pilot tag, accents (logo centre = 400)
+ *   sage             soft panels, tags, progress tracks (logo lower circle = 400)
+ *   ink              text, borders, backgrounds
+ *   status           good / warn / risk / info. Conventional meanings people
+ *                    already know (KYC Verified, risk levels, timeline ticks):
+ *                    never restyle these to match the brand.
+ *
+ * Logo gold and sage are too light for text on white (2.9:1, 2.7:1); use
+ * them as fills and their 700+ shades for text.
+ */
+
+@theme {
+  /* Primary (teal): actions */
+  --color-primary-50: #e9f4f6;
+  --color-primary-100: #cee7eb;
+  --color-primary-200: #a0d0d8;
+  --color-primary-300: #6bb3bf;
+  --color-primary-400: #3b93a3;
+  --color-primary-500: #1d7688;
+  --color-primary-600: #0e5d71;
+  --color-primary-700: #0a4a5c;
+  --color-primary-800: #083b49;
+  --color-primary-900: #062e39;
+  --color-primary-950: #041d24;
+
+  /* Brand (forest): identity. 800 is the logo ring #283f2f */
+  --color-brand-50: #f4f8f5;
+  --color-brand-100: #e9eeea;
+  --color-brand-200: #d4ded6;
+  --color-brand-300: #b6c6ba;
+  --color-brand-400: #93a898;
+  --color-brand-500: #728a79;
+  --color-brand-600: #58705e;
+  --color-brand-700: #435949;
+  --color-brand-800: #283f2f;
+  --color-brand-900: #222f26;
+  --color-brand-950: #151d17;
+
+  /* Gold: warm highlight. 400 is the logo centre #b2934d */
+  --color-gold-50: #faf6ee;
+  --color-gold-100: #f2ecdf;
+  --color-gold-200: #e5dac1;
+  --color-gold-300: #d1bf98;
+  --color-gold-400: #b2934d;
+  --color-gold-500: #9c7f3c;
+  --color-gold-600: #81641b;
+  --color-gold-700: #684e08;
+  --color-gold-800: #4e3a02;
+  --color-gold-900: #382903;
+  --color-gold-950: #221904;
+
+  /* Sage: soft panels and tracks. 400 is the logo circle #93a281 */
+  --color-sage-50: #f6f8f3;
+  --color-sage-100: #ebeee7;
+  --color-sage-200: #d7ddd1;
+  --color-sage-300: #bcc5b1;
+  --color-sage-400: #93a281;
+  --color-sage-500: #7b896a;
+  --color-sage-600: #616f50;
+  --color-sage-700: #4c573d;
+  --color-sage-800: #38412c;
+  --color-sage-900: #272e1e;
+  --color-sage-950: #181c13;
+
+  /* Ink: neutrals, slightly green-tinted */
+  --color-ink-50: #f7f8f7;
+  --color-ink-100: #eef0ee;
+  --color-ink-200: #dde1dd;
+  --color-ink-300: #c1c8c1;
+  --color-ink-400: #9aa59b;
+  --color-ink-500: #677369; /* was #78857a (3.9:1); darkened so small grey text meets 4.5:1 */
+  --color-ink-600: #5c6a5f;
+  --color-ink-700: #48544a;
+  --color-ink-800: #33403a;
+  --color-ink-900: #1a221d;
+  --color-ink-950: #101510;
+
+  /* Status: conventional meanings, kept independent of the brand */
+  --color-status-good: #2f8f5b;
+  --color-status-good-bg: #eaf6ef;
+  --color-status-warn: #b8791f;
+  --color-status-warn-bg: #fdf3e3;
+  --color-status-risk: #c14639;
+  --color-status-risk-bg: #fbeae8;
+  --color-status-info: #2b6ea8;
+  --color-status-info-bg: #eaf3fb;
+  /* Text on the matching -bg (badges). Same hues, dark enough for small text
+     (4.5:1). The base colours above stay for dots, icons and timeline ticks. */
+  --color-status-good-text: #157d4a;
+  --color-status-warn-text: #9d6000;
+  --color-status-risk-text: #ba4033;
+  --color-status-info-text: #2b6ea8;
+
+  /* Chat: your own message bubbles keep the original AgriFlow green (2026-11-13 decision) */
+  --color-chat-own: #28583e;
+}

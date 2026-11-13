@@ -46,7 +46,7 @@ export function ContractMessages({
           const mine = m.senderRole === myRole
           return (
             <div key={m.id} className={mine ? 'flex justify-end' : 'flex justify-start'}>
-              <div className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm ${mine ? 'rounded-tr-sm bg-brand-700 text-white' : 'rounded-tl-sm bg-ink-50 text-ink-800'}`}>
+              <div className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm ${mine ? 'rounded-tr-sm bg-chat-own text-white' : 'rounded-tl-sm bg-ink-50 text-ink-800'}`}>
                 {!mine && <p className="mb-0.5 text-[11px] font-semibold uppercase tracking-wide text-ink-400">{m.senderName}</p>}
                 <p>{m.text}</p>
               </div>

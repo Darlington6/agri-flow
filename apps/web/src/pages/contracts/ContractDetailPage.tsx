@@ -62,7 +62,7 @@ export function ContractDetailPage() {
           title={`Contract ${contract.id}`}
           subtitle={
             <span>
-              <Link to={`/buyers/${buyer?.id}`} className="font-medium text-ink-700 hover:text-brand-700">
+              <Link to={`/buyers/${buyer?.id}`} className="font-medium text-ink-700 hover:text-primary-700">
                 {buyer?.name}
               </Link>{' '}
               · {crop?.name} · {contract.deliveryLocation}
@@ -128,7 +128,7 @@ export function ContractDetailPage() {
                   <Link
                     key={f.id}
                     to={`/farmers/${f.id}`}
-                    className="flex flex-wrap items-center justify-between gap-2 py-3 first:pt-0 last:pb-0 hover:text-brand-700"
+                    className="flex flex-wrap items-center justify-between gap-2 py-3 first:pt-0 last:pb-0 hover:text-primary-700"
                   >
                     <div>
                       <p className="text-sm font-medium text-ink-800">{f.name}</p>

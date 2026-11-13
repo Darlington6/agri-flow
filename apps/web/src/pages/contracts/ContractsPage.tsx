@@ -63,10 +63,10 @@ export function ContractsPage() {
             onClick={() => setStageFilter('all')}
             className={clsx(
               'flex flex-1 flex-col items-center gap-1 rounded-xl px-3 py-3 text-center transition-colors',
-              stageFilter === 'all' ? 'bg-brand-50' : 'hover:bg-ink-50',
+              stageFilter === 'all' ? 'bg-primary-50' : 'hover:bg-ink-50',
             )}
           >
-            <span className={clsx('font-display text-lg font-semibold', stageFilter === 'all' ? 'text-brand-800' : 'text-ink-800')}>
+            <span className={clsx('font-display text-lg font-semibold', stageFilter === 'all' ? 'text-primary-800' : 'text-ink-800')}>
               {contracts.length}
             </span>
             <span className="text-[11px] font-medium text-ink-500">All contracts</span>
@@ -78,10 +78,10 @@ export function ContractsPage() {
                 onClick={() => setStageFilter(stage)}
                 className={clsx(
                   'flex flex-col items-center gap-1 rounded-xl px-3 py-3 text-center transition-colors',
-                  stageFilter === stage ? 'bg-brand-50' : 'hover:bg-ink-50',
+                  stageFilter === stage ? 'bg-primary-50' : 'hover:bg-ink-50',
                 )}
               >
-                <span className={clsx('font-display text-lg font-semibold', stageFilter === stage ? 'text-brand-800' : 'text-ink-800')}>
+                <span className={clsx('font-display text-lg font-semibold', stageFilter === stage ? 'text-primary-800' : 'text-ink-800')}>
                   {stageCounts.get(stage) ?? 0}
                 </span>
                 <span className="w-24 text-[11px] font-medium leading-tight text-ink-500">
@@ -113,7 +113,7 @@ export function ContractsPage() {
               {filtered.map((c) => (
                 <tr key={c.id} className="border-b border-ink-50 last:border-0 hover:bg-ink-50/60">
                   <td className="px-5 py-3">
-                    <Link to={`/contracts/${c.id}`} className="font-medium text-brand-700 hover:text-brand-800">
+                    <Link to={`/contracts/${c.id}`} className="font-medium text-primary-700 hover:text-primary-800">
                       {c.id}
                     </Link>
                   </td>

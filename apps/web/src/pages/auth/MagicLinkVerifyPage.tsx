@@ -50,7 +50,7 @@ export function MagicLinkVerifyPage() {
         {status === 'error' && (
           <>
             <p className="text-sm text-status-risk">{error}</p>
-            <a href="/signin" className="mt-3 inline-block text-sm text-brand-700 hover:underline">
+            <a href="/signin" className="mt-3 inline-block text-sm text-primary-700 hover:underline">
               Back to sign in
             </a>
           </>

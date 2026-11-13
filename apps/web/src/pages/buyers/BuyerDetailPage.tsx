@@ -97,7 +97,7 @@ export function BuyerDetailPage() {
                     {contracts.map((c) => (
                       <tr key={c.id} className="border-b border-ink-50 last:border-0 hover:bg-ink-50/60">
                         <td className="px-5 py-3">
-                          <Link to={`/contracts/${c.id}`} className="font-medium text-brand-700 hover:text-brand-800">
+                          <Link to={`/contracts/${c.id}`} className="font-medium text-primary-700 hover:text-primary-800">
                             {c.id}
                           </Link>
                         </td>

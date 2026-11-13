@@ -118,7 +118,7 @@ export function ProductionPage() {
                 return (
                   <tr key={c.id} className="border-b border-ink-50 last:border-0 hover:bg-ink-50/60">
                     <td className="px-5 py-3">
-                      <Link to={`/farmers/${c.farmerId}`} className="font-medium text-ink-800 hover:text-brand-700">
+                      <Link to={`/farmers/${c.farmerId}`} className="font-medium text-ink-800 hover:text-primary-700">
                         {farmer?.name}
                       </Link>
                     </td>
