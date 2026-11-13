@@ -1,7 +1,8 @@
 import { Truck } from 'lucide-react'
 import { Card, Badge, inputClass } from '@/components/ui'
 import { usePlatformData } from '@/context/PlatformDataContext'
-import { rankPartnersForJob } from '@/lib/deliveryScore'
+import { recommendPartnersForJob } from '@/lib/deliveryScore'
+import { formatPlace } from '@/lib/places'
 import { deliveryPartners, deliveryPartnerById, cropById } from '@/data'
 import { formatDate } from '@/lib/date'
 import { formatGHSFull, formatTonnes } from '@/lib/format'
@@ -39,7 +40,7 @@ export function DeliveryCoordination() {
         {deliveryJobs.map((job) => {
           const partner = job.partnerId ? deliveryPartnerById(job.partnerId) : undefined
           const nextStatus = NEXT_STATUS[job.status]
-          const bestMatch = job.status === 'Unassigned' ? rankPartnersForJob(job, deliveryPartners)[0] : undefined
+          const bestMatch = job.status === 'Unassigned' ? recommendPartnersForJob(job, deliveryPartners)[0] : undefined
           return (
             <div key={job.id} className="py-3 first:pt-0 last:pb-0">
               <div className="flex flex-wrap items-start justify-between gap-2">
@@ -48,7 +49,7 @@ export function DeliveryCoordination() {
                     {cropById(job.cropId)?.name} · {formatTonnes(job.quantityTonnes)}
                   </p>
                   <p className="text-xs text-ink-400">
-                    {job.fromLocation} → {job.toLocation} · {formatDate(job.scheduledDate)}
+                    {formatPlace(job.from)} → {formatPlace(job.to)} · {formatDate(job.scheduledDate)}
                   </p>
                 </div>
                 <Badge tone={STATUS_TONE[job.status]}>{job.status}</Badge>
@@ -74,7 +75,7 @@ export function DeliveryCoordination() {
                       </option>
                       {deliveryPartners.map((p) => (
                         <option key={p.id} value={p.id}>
-                          {p.name} ({p.vehicleType})
+                          {p.name} ({p.vehicle.label})
                         </option>
                       ))}
                     </select>

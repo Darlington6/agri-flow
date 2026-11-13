@@ -42,6 +42,18 @@ Two different things, handled differently:
   shows as 13:40 in Accra, 15:40 in Kigali and 16:40 in Nairobi; 23:40 UTC on Friday shows as 01:40
   Saturday in Kigali.
 
+## Places
+
+Locations are structured (`Place`: name, administrative area, ISO country code), never free text, so
+matching works across countries: regions in Ghana, provinces in Rwanda, counties in Kenya. Compare and
+format them with `src/lib/places.ts`; never match place names by substring.
+- Test files are type-checked by `tsconfig.test.json` (Node types available); app code by
+  `tsconfig.app.json` (no Node types, so app code can't depend on Node by accident).
+
+The platform screens run from `src/data/` mock fixtures and need no backend. Real sign-in (`/signin`, `/account`,
+`/magic-link`) calls the API at `VITE_API_URL` (see `.env.example`; defaults to `http://localhost:8000` in
+dev). Start it with `docker compose up -d postgres redis api` from the repo root.
+
 ## Building for every device
 
 Every screen has to work on phones, tablets and desktops. Build mobile-first (base styles for small
