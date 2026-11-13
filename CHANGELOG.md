@@ -22,6 +22,10 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Added
 
+- AgriFlow logo: SVG mark (standard + reversed), square app icon and the original artwork in
+  `packages/design-tokens/assets/logos/`; `LogoMark` component in `apps/web` replaces the placeholder leaf
+  icon in the sidebar, landing header, demo login and sign-in pages; new favicon (SVG with dark-mode
+  variant, ICO fallback) and Apple touch icon.
 - `pr-policy.yml`: CI checks that PRs follow the promotion flow (`main` only from `staging`/`hotfix/*`,
   `staging` only from `dev`/`main`/`hotfix/*`) and that PR titles are Conventional Commits.
 - `ruff format --check` in CI.
