@@ -7,6 +7,8 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Changed
 
+- Node 24 LTS for the web app (CI via `.nvmrc`, the web Dockerfile, `engines` for Vercel). Node 20 reached
+  end of life in April 2026, and Vitest needs 22+.
 - `dev` is squash-only (one Conventional Commit per PR); promotions to `staging`/`main` stay merge
   commits. Pre-filled promotion PR links and a promotion PR template.
 - Docs: README brought up to date (real sign-in, the API, uv, how to run web + API locally, where the
@@ -27,6 +29,8 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Added
 
+- `apps/web` tests: Vitest + Testing Library + jsdom, run in CI. First suites cover role permissions,
+  delivery scoring, date and number formatting, and the `LogoMark` component.
 - AgriFlow logo: SVG mark (standard + reversed), square app icon and the original artwork in
   `packages/design-tokens/assets/logos/`; `LogoMark` component in `apps/web` replaces the placeholder leaf
   icon in the sidebar, landing header, demo login and sign-in pages; new favicon (SVG with dark-mode
