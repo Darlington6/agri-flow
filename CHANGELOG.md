@@ -36,6 +36,18 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Added
 
+- `apps/site`: the public website, built with Astro. Nine pages (Home, How it works, For buyers, For farmers,
+  For partners, About, Request a demo, Privacy and Terms drafts) pre-rendered as HTML, with per-page titles,
+  descriptions, canonical URLs, hreflang, social previews, JSON-LD and a sitemap. Built for English, French,
+  Kinyarwanda, Swahili and Twi: English, French and Swahili live; Kinyarwanda and Twi await native-speaker
+  translation.
+  Search indexing stays off until the real domain is live. The home page is one long scroll with a section for
+  each menu item (the menu jumps to them and highlights the one in view), photo sections with a crossfading
+  hero, photo headers on the detail pages, "Log in" / "Create account" links into the app (`PUBLIC_APP_URL`), and the
+  glowing logo with field stripes as a backdrop. Link-sharing preview images in each language (`og-en.jpg`, `og-fr.jpg`, `og-sw.jpg`, rendered by `pnpm og`) with the same look. Buttons take the logo's colours: forest (its outer circle) for the header's "Request a demo" and the form, gold (its centre) on the dark photo sections. Licensed photos (Unsplash, Pexels, AI-generated placeholders for people we don't have photos of yet), each with its source recorded and checked by a test. The phone menu and language picker close on a click outside. "Coming soon" App Store / Google Play
+  placeholders, drawn hero artwork until licensed media arrives, and a demo request form ready for the API
+  endpoint. Tests check the built HTML: metadata, links, alt text, headings, an axe accessibility scan and a
+  20 KB JavaScript budget per page.
 - Palette tests: `theme.css` and the JS mirror stay identical, the logo colours stay in the scales, and key
   text/background pairings must meet WCAG AA contrast.
 - `apps/web` tests: Vitest + Testing Library + jsdom, run in CI. First suites cover role permissions,
