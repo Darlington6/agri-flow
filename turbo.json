@@ -17,6 +17,10 @@
     },
     "test": {
       "outputs": []
+    },
+    "@agriflow/site#test": {
+      "dependsOn": ["build"],
+      "outputs": []
     }
   }
 }
