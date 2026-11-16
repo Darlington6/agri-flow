@@ -169,10 +169,13 @@ adjacent features requested for a more complete pilot story:
 
 **Web (`apps/web`):** React + TypeScript + Vite, Tailwind CSS v4, React Router, Recharts, Lucide icons.
 
+**Public site (`apps/site`):** Astro (static, pre-rendered HTML), Tailwind CSS v4, built-in i18n.
+
 **API (`apps/api`):** Django + Django REST Framework, JWT auth (simplejwt), drf-spectacular (OpenAPI),
 Postgres, Redis + Celery. Python 3.12, dependencies managed with [uv](https://docs.astral.sh/uv/).
 
-**Tooling:** pnpm workspaces + Turborepo, GitHub Actions CI, Dependabot, Vercel (web + API as two services).
+**Tooling:** pnpm workspaces + Turborepo, GitHub Actions CI, Dependabot, Vercel (web + API as two services;
+the public site as its own project).
 
 ## Repo structure
 
@@ -181,14 +184,16 @@ of moving from prototype to real implementation:
 
 ```
 apps/
+  site/  the public website (Astro): every page pre-rendered for search engines; English now, with
+         French, Kinyarwanda, Swahili and Twi ready to add. See apps/site/README.md
   web/   the frontend described in this README: platform screens on mock data, plus real sign-in
   api/   Django + DRF backend: identity (users, roles, phone OTP, email magic links, JWT, /me),
          health check, OpenAPI schema and docs at /api/v1/docs/
 packages/
   types/          shared domain types, hand-maintained today; generated from the API's OpenAPI
                   schema as more endpoints land
-  design-tokens/  visual identity: colour/type tokens (not yet wired into apps/web) and the AgriFlow
-                  logo files in assets/logos/, which apps/web already uses
+  design-tokens/  visual identity: the shared colour palette (theme.css, used by apps/web and
+                  apps/site), type tokens, and the AgriFlow logo files in assets/logos/
   ui/             empty stub; shared components migrate here deliberately, one at a time
   config/         shared tsconfig/lint base
 ```
@@ -196,6 +201,13 @@ packages/
 See the Platform Blueprint for the full architecture this is working toward.
 
 ## Running locally
+
+**The public website** (static; no backend needed):
+
+```bash
+pnpm install
+pnpm --filter @agriflow/site dev    # http://localhost:4321
+```
 
 **Just the web app** (demo roles on mock data; no backend needed):
 

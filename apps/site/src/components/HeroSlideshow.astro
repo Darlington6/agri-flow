@@ -1,0 +1,70 @@
+---
+// Hero background: the field photos crossfade with a slow pan-and-zoom
+// ("Ken Burns"), which feels like video without the download cost of one.
+// Purely decorative (the headline carries the meaning), so images have empty
+// alt text. With reduced motion, only the first photo shows, still.
+// Without any photo files, the drawn artwork stands in.
+import Photo from './Photo.astro'
+import HeroArt from './HeroArt.astro'
+import { HERO_SLIDES, photoImage } from '../media/manifest'
+
+interface Props {
+  artLabel: string
+}
+const { artLabel } = Astro.props
+const slides = HERO_SLIDES.filter((s) => photoImage(s) !== undefined)
+const cycle = slides.length * 7
+---
+
+{
+  slides.length === 0 ? (
+    <HeroArt label={artLabel} />
+  ) : (
+    <div class="hero-slides absolute inset-0" style={`--cycle: ${cycle}s`} aria-hidden="true">
+      {slides.map((slot, i) => (
+        <div class="hero-slide absolute inset-0" style={`z-index: ${slides.length - i}; animation-delay: ${i === 0 ? 0 : -(cycle - i * 7)}s`}>
+          <Photo slot={slot} alt="" sizes="100vw" priority={i === 0} background />
+        </div>
+      ))}
+    </div>
+  )
+}
+
+<style>
+  .hero-slide {
+    /* Each photo gets 7s of the cycle (7s × number of photos): fully visible
+       for 30% of the cycle (longer than its turn, with three or more photos),
+       slowly zooming, then it fades out to reveal the next one underneath. */
+    animation: hero-cycle var(--cycle) linear infinite;
+    will-change: opacity, transform;
+  }
+  @keyframes hero-cycle {
+    0% {
+      opacity: 1;
+      transform: scale(1.02);
+    }
+    30% {
+      opacity: 1;
+    }
+    37% {
+      opacity: 0;
+      transform: scale(1.1);
+    }
+    94% {
+      opacity: 0;
+      transform: scale(1.02);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1.02);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-slide {
+      animation: none;
+    }
+    .hero-slide:not(:first-child) {
+      display: none;
+    }
+  }
+</style>

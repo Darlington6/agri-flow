@@ -1,0 +1,46 @@
+@import "tailwindcss";
+/* The shared AgriFlow palette: primary (teal) for actions, brand (forest),
+   gold, sage, ink and status. Same file the web app uses. */
+@import "@agriflow/design-tokens/theme.css";
+
+@theme {
+  /* Public site typefaces (design-tokens: Fraunces display, IBM Plex Sans body). */
+  --font-display: "Fraunces Variable", Georgia, "Times New Roman", serif;
+  --font-sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --color-cream: #f5f1e6;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-white text-ink-800 antialiased;
+  }
+  :where(h1, h2, h3) {
+    font-family: var(--font-display);
+    text-wrap: balance;
+    @apply text-ink-900;
+  }
+  ::selection {
+    @apply bg-gold-200 text-brand-950;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary-500;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
