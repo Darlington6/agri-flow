@@ -1,0 +1,34 @@
+---
+// Decorative hills with crop-row stripes, from the original hero artwork, for
+// the bottom of dark sections. Place inside a `relative overflow-hidden` parent.
+interface Props {
+  /** Unique per page: prefixes the SVG pattern ids. */
+  id: string
+  class?: string
+}
+const { id, class: className = 'h-[60%] opacity-70' } = Astro.props
+const far = `${id}-rows`
+const near = `${id}-rows-near`
+---
+
+<svg
+  aria-hidden="true"
+  class:list={['pointer-events-none absolute inset-x-0 bottom-0 w-full', className]}
+  viewBox="0 0 1600 320"
+  preserveAspectRatio="xMidYMin slice"
+>
+  <defs>
+    <pattern id={far} width="22" height="22" patternUnits="userSpaceOnUse" patternTransform="rotate(-8)">
+      <path d="M0 11 H22" stroke="#93a281" stroke-opacity="0.28" stroke-width="3" stroke-linecap="round"></path>
+    </pattern>
+    <pattern id={near} width="30" height="30" patternUnits="userSpaceOnUse" patternTransform="rotate(6)">
+      <path d="M0 15 H30" stroke="#b2934d" stroke-opacity="0.35" stroke-width="4" stroke-linecap="round"></path>
+    </pattern>
+  </defs>
+  <path d="M0 90 C280 50 520 60 800 82 C1080 104 1320 60 1600 46 V320 H0 Z" fill="#38412c"></path>
+  <path d="M0 90 C280 50 520 60 800 82 C1080 104 1320 60 1600 46 V320 H0 Z" fill={`url(#${far})`}></path>
+  <path d="M0 152 C340 112 660 132 940 158 C1180 180 1400 152 1600 132 V320 H0 Z" fill="#4c573d"></path>
+  <path d="M0 152 C340 112 660 132 940 158 C1180 180 1400 152 1600 132 V320 H0 Z" fill={`url(#${far})`}></path>
+  <path d="M0 222 C300 190 600 200 900 230 C1180 258 1400 230 1600 212 V320 H0 Z" fill="#283f2f"></path>
+  <path d="M0 222 C300 190 600 200 900 230 C1180 258 1400 230 1600 212 V320 H0 Z" fill={`url(#${near})`}></path>
+</svg>

@@ -1,0 +1,35 @@
+---
+// The illuminated logo as a decorative backdrop for dark sections: the same
+// sun as the original hero artwork (HeroArt.astro), in four layers: soft glow,
+// light ring, gold sun, sage circle. The box is centred on the gold sun, so
+// centring the box on something (e.g. a button) centres the sun on it.
+// Place inside a `relative overflow-hidden` parent.
+interface Props {
+  /** Position and size; default: partly off the right edge. */
+  class?: string
+}
+const { class: className = '-right-24 top-1/2 h-[26rem] w-[26rem] -translate-y-1/2 sm:-right-10 sm:h-[32rem] sm:w-[32rem]' } = Astro.props
+---
+
+<div aria-hidden="true" class:list={['logo-glow pointer-events-none absolute', className]}>
+  <div class="absolute left-[2.78%] top-[1.11%] h-[94.44%] w-[94.44%] rounded-full bg-[radial-gradient(circle_closest-side,rgba(209,191,152,0.55),rgba(209,191,152,0))]"></div>
+  <div class="absolute left-[26.11%] top-[24.44%] h-[47.78%] w-[47.78%] rounded-full bg-cream/[0.12]"></div>
+  <div class="absolute left-[33.89%] top-[33.89%] h-[32.22%] w-[32.22%] rounded-full bg-gold-400"></div>
+  <div class="absolute left-[32.22%] top-[60%] h-[16.67%] w-[16.67%] rounded-full bg-sage-400"></div>
+</div>
+
+<style>
+  .logo-glow > div {
+    animation: breathe 9s ease-in-out infinite;
+  }
+  @keyframes breathe {
+    50% {
+      transform: scale(1.03);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .logo-glow > div {
+      animation: none;
+    }
+  }
+</style>
