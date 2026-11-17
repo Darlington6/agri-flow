@@ -1,0 +1,87 @@
+---
+import '@fontsource-variable/fraunces'
+import '@fontsource/ibm-plex-sans/400.css'
+import '@fontsource/ibm-plex-sans/500.css'
+import '@fontsource/ibm-plex-sans/600.css'
+import '../styles/global.css'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import { absoluteUrl, alternates, dictionaryFor, LOCALES, type Locale, type PageKey } from '../i18n'
+import { indexingAllowed } from '../lib/seo'
+
+interface Props {
+  locale: Locale
+  page: PageKey | 'notFound'
+  title: string
+  description: string
+  /** Extra JSON-LD objects for this page. */
+  structuredData?: Record<string, unknown>[]
+}
+
+const { locale, page, title, description, structuredData = [] } = Astro.props
+const t = dictionaryFor(locale)
+const site = Astro.site ?? new URL('http://localhost:4321')
+const isRealPage = page !== 'notFound'
+const canonical = isRealPage ? absoluteUrl(site, locale, page) : undefined
+const hreflangs = isRealPage ? alternates(site, page) : []
+const fullTitle = page === 'home' ? title : `${title} | ${t.meta.siteName}`
+const ogImage = new URL(`/og-${LOCALES[locale].code}.jpg`, site).href
+const robots = indexingAllowed() && isRealPage ? 'index, follow' : 'noindex, nofollow'
+const ld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: fullTitle,
+    description,
+    inLanguage: LOCALES[locale].code,
+    ...(canonical ? { url: canonical } : {}),
+  },
+  ...structuredData,
+]
+---
+
+<!doctype html>
+<html lang={LOCALES[locale].code} dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
+    {canonical && <link rel="canonical" href={canonical} />}
+    {hreflangs.map((alt) => <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />)}
+    <meta name="theme-color" content="#283f2f" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={t.meta.siteName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content={LOCALES[locale].code} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${t.meta.siteName}: ${t.meta.tagline}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(ld.length === 1 ? ld[0] : ld)} />
+  </head>
+  <body class="flex min-h-svh flex-col">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-ink-900 focus:shadow-lg"
+    >
+      {t.a11y.skipToContent}
+    </a>
+    <Header locale={locale} current={isRealPage ? page : undefined} />
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+    <Footer locale={locale} />
+  </body>
+</html>

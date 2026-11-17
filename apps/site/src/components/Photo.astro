@@ -1,0 +1,54 @@
+---
+// A responsive photo: AVIF/WebP at several widths, cropped to fill its box
+// (object-cover) around the slot's focus point. Falls back to a drawn
+// placeholder when the slot's file isn't present.
+import { Picture } from 'astro:assets'
+import { PHOTOS, photoImage, type PhotoSlot } from '../media/manifest'
+
+interface Props {
+  slot: PhotoSlot
+  /** Describes the photo; pass "" only for purely decorative backgrounds. */
+  alt: string
+  /** How wide it renders, for choosing the right file: e.g. "(min-width: 768px) 50vw, 100vw". */
+  sizes: string
+  class?: string
+  priority?: boolean
+  /**
+   * A full-width background under a dark wash: the wash hides fine detail, so
+   * use a lower quality and at most 1600px. Roughly halves the download.
+   */
+  background?: boolean
+}
+const { slot, alt, sizes, class: className, priority = false, background = false } = Astro.props
+const image = photoImage(slot)
+const focus = PHOTOS[slot].focus ?? '50% 50%'
+// Never generate files wider than the original (that only adds blur and bytes).
+const maxWidth = background ? 1600 : 1920
+const widths = image ? [480, 768, 1024, 1440, 1600, 1920].filter((w) => w <= Math.min(image.width, maxWidth)) : []
+if (image && widths.length === 0) widths.push(image.width)
+---
+
+{
+  image ? (
+    <Picture
+      src={image}
+      alt={alt}
+      formats={['avif', 'webp']}
+      widths={widths}
+      sizes={sizes}
+      quality={background ? 50 : 72}
+      loading={priority ? 'eager' : 'lazy'}
+      fetchpriority={priority ? 'high' : 'auto'}
+      decoding="async"
+      class:list={['h-full w-full object-cover', className]}
+      style={`object-position: ${focus}`}
+    />
+  ) : (
+    <div
+      role={alt ? 'img' : undefined}
+      aria-label={alt || undefined}
+      aria-hidden={alt ? undefined : 'true'}
+      class:list={['h-full w-full bg-gradient-to-br from-sage-200 via-gold-100 to-sage-300', className]}
+    />
+  )
+}

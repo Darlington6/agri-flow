@@ -1,0 +1,37 @@
+{
+  "name": "@agriflow/site",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "lint": "oxlint src tests",
+    "typecheck": "astro check",
+    "test": "vitest run",
+    "og": "node scripts/og-images.mjs"
+  },
+  "dependencies": {
+    "@agriflow/design-tokens": "workspace:*",
+    "@astrojs/sitemap": "3.7.4",
+    "@fontsource-variable/fraunces": "5.3.0",
+    "@fontsource/ibm-plex-sans": "5.3.0",
+    "@tailwindcss/vite": "4.3.5",
+    "astro": "7.4.4",
+    "tailwindcss": "4.3.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "@types/jsdom": "30.0.0",
+    "axe-core": "4.14.0",
+    "jsdom": "31.0.0",
+    "oxlint": "^1.93.0",
+    "puppeteer-core": "25.16.0",
+    "typescript": "~6.0.2",
+    "vitest": "5.1.0"
+  }
+}

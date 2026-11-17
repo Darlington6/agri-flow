@@ -94,6 +94,12 @@ Deployment is Vercel's Git integration, configured by [`vercel.json`](../vercel.
 - There is no GitHub Actions deploy workflow. Because `main` only accepts PRs that passed CI, everything
   Vercel deploys to production has already passed CI.
 
+**The public site (`apps/site`) is a separate Vercel project** (Root Directory `apps/site`), so it can take
+the main domain while the app moves to `app.<domain>`. Same Git flow: `main` → Production, other branches
+→ Preview. Setup steps and its environment variables (`SITE_URL`, `PUBLIC_APP_URL`,
+`PUBLIC_API_URL`, `PUBLIC_ALLOW_INDEXING`) are in `apps/site/README.md`. Search indexing stays off until
+the real domain is live.
+
 Vercel installs the API from `apps/api/pyproject.toml` + `apps/api/uv.lock`, the same lock CI and the
 Dockerfile use, so production runs exactly the versions CI tested. Python is pinned by
 `apps/api/.python-version`.

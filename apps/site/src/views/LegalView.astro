@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import PageHero from '../components/PageHero.astro'
+import { dictionaryFor, type Locale } from '../i18n'
+
+interface Props {
+  locale: Locale
+  doc: 'privacy' | 'terms'
+}
+const { locale, doc } = Astro.props
+const t = dictionaryFor(locale)
+const content = t[doc]
+---
+
+<BaseLayout locale={locale} page={doc} title={content.title} description={content.description}>
+  <PageHero title={content.title} lede={content.description} />
+  <section class="mx-auto max-w-3xl px-4 py-14 sm:px-6">
+    <p class="rounded-2xl border border-gold-300 bg-gold-50 px-5 py-4 text-ink-800">{content.draftNotice}</p>
+    <div class="mt-10 grid gap-8">
+      {
+        content.sections.map((s) => (
+          <div>
+            <h2 class="text-2xl font-semibold">{s.title}</h2>
+            <p class="mt-2 text-lg leading-relaxed text-ink-700">{s.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
