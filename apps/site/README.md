@@ -129,7 +129,11 @@ The site deploys as its **own Vercel project**, separate from the web app and AP
 domain later while the app moves to `app.<domain>`:
 
 1. Vercel → Add New → Project → import this repository.
-2. Root Directory: `apps/site`. Framework preset: Astro (detected).
-3. Environment variables: `PUBLIC_API_URL` (the API's Vercel URL). Leave `PUBLIC_ALLOW_INDEXING` unset.
+2. Root Directory: `apps/site`. Framework preset: Astro (detected). Build Command: `pnpm build`. Output
+   Directory: `dist`. Leave the Install Command as it is: Vercel sees the pnpm lockfile at the repo root and
+   installs the whole workspace, which the site needs for `@agriflow/design-tokens`.
+3. Environment variables: `PUBLIC_APP_URL`, the app's address only (e.g. `https://agri-flow-eight.vercel.app`;
+   the site adds `/signin`). Leave `PUBLIC_API_URL` unset until the demo request endpoint exists and the API's
+   `CORS_ALLOWED_ORIGINS` includes the site's address. Leave `PUBLIC_ALLOW_INDEXING` unset.
 4. Deploy. When the domain is ready: add it to this project, set `SITE_URL` to it and
    `PUBLIC_ALLOW_INDEXING=true`, then redeploy.
