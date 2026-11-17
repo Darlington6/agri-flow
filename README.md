@@ -174,8 +174,8 @@ adjacent features requested for a more complete pilot story:
 **API (`apps/api`):** Django + Django REST Framework, JWT auth (simplejwt), drf-spectacular (OpenAPI),
 Postgres, Redis + Celery. Python 3.12, dependencies managed with [uv](https://docs.astral.sh/uv/).
 
-**Tooling:** pnpm workspaces + Turborepo, GitHub Actions CI, Dependabot, Vercel (web + API as two services;
-the public site as its own project).
+**Tooling:** pnpm workspaces + Turborepo, GitHub Actions CI, Dependabot, Vercel (the web app and the public site as
+two projects; the API joins the web project as a second service once it's deployed).
 
 ## Repo structure
 

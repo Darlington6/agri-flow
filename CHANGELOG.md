@@ -62,6 +62,9 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Fixed
 
+- Reloading any page of the deployed app other than the home page (a refresh, or coming back to a tab the
+  browser had unloaded) showed Vercel's 404. `apps/web/vercel.json` now answers every address with the app, which
+  shows the right screen or its own "page not found". This also fixes the site's "Log in" link.
 - Status badges (KYC, risk) and small grey text were below the 4.5:1 contrast standard for small text;
   they now use slightly darker shades of the same colours. Badges no longer wrap onto two lines.
 - The demo login's role cards couldn't be used with a keyboard or screen reader; they're now real buttons

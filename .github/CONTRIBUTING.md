@@ -85,8 +85,12 @@ Rulesets can require a PR but can't restrict which branch it comes from. `pr-pol
 
 ## Deployments
 
-Deployment is Vercel's Git integration, configured by [`vercel.json`](../vercel.json) at the repo root
-(two services: `apps/api` as Django, `apps/web` as Vite; `/api/*` and `/admin*` route to the API).
+Deployment is Vercel's Git integration. The `agri-flow` project has its Root Directory set to `apps/web`, so
+it deploys the web app only, configured by [`apps/web/vercel.json`](../apps/web/vercel.json) (every address
+serves the app, so reloading `/dashboard` works). **The API isn't deployed yet:** the repo-root
+[`vercel.json`](../vercel.json) describes the planned two-service setup (`apps/api` as Django, `apps/web` as
+Vite; `/api/*` and `/admin*` to the API), but Vercel only reads it once the Root Directory is cleared, and
+the API first needs its production database and secrets.
 
 - Push to `main` → **Production** deployment.
 - Push to any other branch, including `staging` and `dev` → **Preview** deployment, with a per-branch URL
