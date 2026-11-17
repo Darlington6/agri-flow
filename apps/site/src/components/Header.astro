@@ -21,6 +21,11 @@ const links: { section: SectionKey; label: string }[] = [
   { section: 'about', label: t.nav.about },
 ]
 const hrefFor = (section: SectionKey) => `${home}#${SECTIONS[section]}`
+// Menu words never wrap. Long menus (Swahili's are about 40% longer than English) only fit beside the
+// logo and buttons from 1280px, so below that they use the Menu button instead.
+const longMenu = links.reduce((n, l) => n + l.label.length, 0) > 60
+const navClass = longMenu ? 'hidden xl:block' : 'hidden lg:block'
+const menuButtonClass = longMenu ? 'group relative xl:hidden' : 'group relative lg:hidden'
 const signIn = signInUrl()
 const createAccount = createAccountUrl()
 ---
@@ -32,7 +37,7 @@ const createAccount = createAccountUrl()
       <span class="font-display text-xl font-semibold tracking-tight text-brand-900">{t.meta.siteName}</span>
     </a>
 
-    <nav aria-label={t.a11y.mainNav} class="hidden lg:block">
+    <nav aria-label={t.a11y.mainNav} class={navClass}>
       <ul class="flex items-center gap-1">
         {
           links.map(({ section, label }) => (
@@ -40,7 +45,7 @@ const createAccount = createAccountUrl()
               <a
                 href={hrefFor(section)}
                 data-section-link={SECTIONS[section]}
-                class="rounded-lg px-3 py-2 text-[15px] font-medium text-ink-700 hover:bg-ink-50 hover:text-ink-900 aria-[current=true]:bg-primary-50 aria-[current=true]:font-semibold aria-[current=true]:text-primary-800"
+                class="whitespace-nowrap rounded-lg px-3 py-2 text-[15px] font-medium text-ink-700 hover:bg-ink-50 hover:text-ink-900 aria-[current=true]:bg-primary-50 aria-[current=true]:font-semibold aria-[current=true]:text-primary-800"
               >
                 {label}
               </a>
@@ -54,19 +59,19 @@ const createAccount = createAccountUrl()
       <LanguageSwitcher locale={locale} current={current} />
       {
         signIn && (
-          <a href={signIn} data-app-link="log-in" class="hidden min-h-11 items-center rounded-full px-4 text-[15px] font-semibold text-ink-800 hover:bg-ink-50 xl:inline-flex">
+          <a href={signIn} data-app-link="log-in" class="hidden min-h-11 items-center whitespace-nowrap rounded-full px-4 text-[15px] font-semibold text-ink-800 hover:bg-ink-50 xl:inline-flex">
             {t.nav.logIn}
           </a>
         )
       }
       <a
         href={localizedPath(locale, 'requestDemo')}
-        class="hidden min-h-11 items-center rounded-full bg-brand-800 px-5 text-[15px] font-semibold text-cream hover:bg-brand-700 sm:inline-flex"
+        class="hidden min-h-11 items-center whitespace-nowrap rounded-full bg-brand-800 px-5 text-[15px] font-semibold text-cream hover:bg-brand-700 sm:inline-flex"
       >
         {t.cta.requestDemo}
       </a>
 
-      <details class="group relative lg:hidden" data-dismissable>
+      <details class={menuButtonClass} data-dismissable>
         <summary
           class="flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-full border border-ink-200 px-4 text-[15px] font-medium text-ink-800 marker:hidden [&::-webkit-details-marker]:hidden"
         >
