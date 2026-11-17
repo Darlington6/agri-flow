@@ -1,0 +1,58 @@
+---
+import reversedMark from '@agriflow/design-tokens/assets/logos/agriflow-mark-reversed.svg'
+import AppStoreBadges from './AppStoreBadges.astro'
+import { dictionaryFor, localizedPath, type Locale, type PageKey } from '../i18n'
+
+interface Props {
+  locale: Locale
+}
+const { locale } = Astro.props
+const t = dictionaryFor(locale)
+const links: { page: PageKey; label: string }[] = [
+  { page: 'howItWorks', label: t.nav.howItWorks },
+  { page: 'buyers', label: t.nav.buyers },
+  { page: 'farmers', label: t.nav.farmers },
+  { page: 'partners', label: t.nav.partners },
+  { page: 'about', label: t.nav.about },
+  { page: 'requestDemo', label: t.nav.requestDemo },
+]
+const year = new Date().getUTCFullYear()
+---
+
+<footer class="bg-brand-950 text-cream">
+  <div class="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-[1.2fr_1fr]">
+    <div class="grid content-start gap-5">
+      <a href={localizedPath(locale, 'home')} class="flex w-fit items-center gap-2.5 rounded-lg" aria-label={t.a11y.home}>
+        <img src={reversedMark.src} width="26" height="34" alt="" class="h-8 w-auto" />
+        <span class="font-display text-xl font-semibold">{t.meta.siteName}</span>
+      </a>
+      <p class="max-w-sm text-sm text-sage-200">{t.meta.tagline}</p>
+      <div class="grid gap-3">
+        <p class="text-sm font-semibold">{t.apps.title}</p>
+        <AppStoreBadges locale={locale} tone="dark" />
+      </div>
+    </div>
+    <nav aria-label={t.a11y.footerNav}>
+      <ul class="grid gap-1 sm:grid-cols-2">
+        {
+          links.map(({ page, label }) => (
+            <li>
+              <a href={localizedPath(locale, page)} class="inline-flex min-h-11 items-center text-[15px] text-sage-100 hover:text-white hover:underline">
+                {label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+  <div class="border-t border-white/10">
+    <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-5 text-sm text-sage-200 sm:px-6">
+      <p>© {year} {t.footer.rights}</p>
+      <ul class="flex gap-5">
+        <li><a href={localizedPath(locale, 'privacy')} class="inline-flex min-h-11 items-center hover:text-white hover:underline">{t.footer.privacy}</a></li>
+        <li><a href={localizedPath(locale, 'terms')} class="inline-flex min-h-11 items-center hover:text-white hover:underline">{t.footer.terms}</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>

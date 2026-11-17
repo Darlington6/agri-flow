@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { DEFAULT_LOCALE, dictionaryFor, localizedPath } from '../i18n'
+const locale = DEFAULT_LOCALE
+const t = dictionaryFor(locale)
+---
+
+<BaseLayout locale={locale} page="notFound" title={t.notFound.title} description={t.notFound.body}>
+  <section class="mx-auto grid max-w-2xl justify-items-start gap-5 px-4 py-24 sm:px-6">
+    <p class="font-display text-7xl font-semibold text-gold-400" aria-hidden="true">404</p>
+    <h1 class="text-4xl font-semibold">{t.notFound.title}</h1>
+    <p class="text-lg text-ink-700">{t.notFound.body}</p>
+    <a href={localizedPath(locale, 'home')} class="inline-flex min-h-12 items-center rounded-full bg-brand-800 px-7 font-semibold text-cream hover:bg-brand-700">
+      {t.notFound.home}
+    </a>
+  </section>
+</BaseLayout>

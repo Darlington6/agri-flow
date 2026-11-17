@@ -16,6 +16,15 @@ dist-ssr
 # Turborepo
 .turbo
 
+# Astro (apps/site): generated types
+.astro
+
+# apps/site/assets/: raw downloads and photos we may not use (unlicensed or
+# retired). This repo is public, so committing them would republish them.
+# Only photos the site uses live in apps/site/src/assets/media/, each with its
+# source and licence in src/media/manifest.ts (a test enforces it).
+apps/site/assets/
+
 # Python / Django (apps/api)
 __pycache__
 *.pyc

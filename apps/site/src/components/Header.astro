@@ -1,0 +1,148 @@
+---
+import mark from '@agriflow/design-tokens/assets/logos/agriflow-mark.svg'
+import LanguageSwitcher from './LanguageSwitcher.astro'
+import { dictionaryFor, localizedPath, type Locale, type PageKey } from '../i18n'
+import { SECTIONS, type SectionKey } from '../lib/sections'
+import { createAccountUrl, signInUrl } from '../lib/app'
+
+interface Props {
+  locale: Locale
+  current?: PageKey
+}
+const { locale, current } = Astro.props
+const t = dictionaryFor(locale)
+// Menu items jump to their section on the home page, from any page.
+const home = localizedPath(locale, 'home')
+const links: { section: SectionKey; label: string }[] = [
+  { section: 'howItWorks', label: t.nav.howItWorks },
+  { section: 'buyers', label: t.nav.buyers },
+  { section: 'farmers', label: t.nav.farmers },
+  { section: 'partners', label: t.nav.partners },
+  { section: 'about', label: t.nav.about },
+]
+const hrefFor = (section: SectionKey) => `${home}#${SECTIONS[section]}`
+const signIn = signInUrl()
+const createAccount = createAccountUrl()
+---
+
+<header class="sticky top-0 z-40 border-b border-ink-100 bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/80">
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+    <a href={localizedPath(locale, 'home')} class="flex items-center gap-2.5 rounded-lg" aria-label={t.a11y.home}>
+      <img src={mark.src} width="26" height="34" alt="" class="h-8 w-auto" />
+      <span class="font-display text-xl font-semibold tracking-tight text-brand-900">{t.meta.siteName}</span>
+    </a>
+
+    <nav aria-label={t.a11y.mainNav} class="hidden lg:block">
+      <ul class="flex items-center gap-1">
+        {
+          links.map(({ section, label }) => (
+            <li>
+              <a
+                href={hrefFor(section)}
+                data-section-link={SECTIONS[section]}
+                class="rounded-lg px-3 py-2 text-[15px] font-medium text-ink-700 hover:bg-ink-50 hover:text-ink-900 aria-[current=true]:bg-primary-50 aria-[current=true]:font-semibold aria-[current=true]:text-primary-800"
+              >
+                {label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <LanguageSwitcher locale={locale} current={current} />
+      {
+        signIn && (
+          <a href={signIn} data-app-link="log-in" class="hidden min-h-11 items-center rounded-full px-4 text-[15px] font-semibold text-ink-800 hover:bg-ink-50 xl:inline-flex">
+            {t.nav.logIn}
+          </a>
+        )
+      }
+      <a
+        href={localizedPath(locale, 'requestDemo')}
+        class="hidden min-h-11 items-center rounded-full bg-brand-800 px-5 text-[15px] font-semibold text-cream hover:bg-brand-700 sm:inline-flex"
+      >
+        {t.cta.requestDemo}
+      </a>
+
+      <details class="group relative lg:hidden" data-dismissable>
+        <summary
+          class="flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-full border border-ink-200 px-4 text-[15px] font-medium text-ink-800 marker:hidden [&::-webkit-details-marker]:hidden"
+        >
+          <svg aria-hidden="true" viewBox="0 0 20 20" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <path d="M3 6h14M3 10h14M3 14h14" class="group-open:hidden"></path>
+            <path d="M5 5l10 10M15 5L5 15" class="hidden group-open:block"></path>
+          </svg>
+          {t.a11y.openMenu}
+        </summary>
+        <nav
+          aria-label={t.a11y.mainNav}
+          class="absolute right-0 top-[calc(100%+0.5rem)] w-[min(20rem,calc(100vw-2rem))] rounded-2xl border border-ink-100 bg-white p-2 shadow-xl"
+        >
+          <ul class="grid">
+            {
+              links.map(({ section, label }) => (
+                <li>
+                  <a
+                    href={hrefFor(section)}
+                    class="flex min-h-12 items-center rounded-xl px-4 text-base font-medium text-ink-800 hover:bg-ink-50"
+                  >
+                    {label}
+                  </a>
+                </li>
+              ))
+            }
+            <li class="mt-1 border-t border-ink-100 pt-2">
+              <a
+                href={localizedPath(locale, 'requestDemo')}
+                class="flex min-h-12 items-center justify-center rounded-xl bg-brand-800 px-4 text-base font-semibold text-cream hover:bg-brand-700"
+              >
+                {t.cta.requestDemo}
+              </a>
+            </li>
+            {
+              signIn && createAccount && (
+                <li class="mt-2 grid grid-cols-2 gap-2">
+                  <a href={createAccount} class="flex min-h-12 items-center justify-center rounded-xl border border-ink-200 px-3 text-[15px] font-semibold text-ink-800 hover:bg-ink-50">
+                    {t.cta.createAccount}
+                  </a>
+                  <a href={signIn} class="flex min-h-12 items-center justify-center rounded-xl border border-ink-200 px-3 text-[15px] font-semibold text-ink-800 hover:bg-ink-50">
+                    {t.cta.logIn}
+                  </a>
+                </li>
+              )
+            }
+          </ul>
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>
+
+<script>
+  import { dismissPopovers } from '../lib/popovers'
+  dismissPopovers()
+
+  // On the home page, highlight the menu item for the section in view.
+  const links = new Map<string, HTMLElement>()
+  document.querySelectorAll<HTMLElement>('[data-section-link]').forEach((a) => links.set(a.dataset.sectionLink ?? '', a))
+  const sections = [...links.keys()].map((id) => document.getElementById(id)).filter((s): s is HTMLElement => s !== null)
+  if (sections.length > 0 && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            links.forEach((a) => a.removeAttribute('aria-current'))
+            links.get(entry.target.id)?.setAttribute('aria-current', 'true')
+          } else if (entry.target === sections[0] && entry.boundingClientRect.top > 0) {
+            // Scrolled back above the first section (e.g. to the hero): nothing is current.
+            links.forEach((a) => a.removeAttribute('aria-current'))
+          }
+        }
+      },
+      { rootMargin: '-45% 0px -50% 0px' },
+    )
+    sections.forEach((s) => observer.observe(s))
+  }
+</script>

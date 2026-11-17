@@ -1,0 +1,72 @@
+---
+// Placeholder hero artwork, drawn in code, until licensed photography and
+// video arrive (see src/media/manifest.ts). Fields with crop rows under a sun
+// made from the logo's circles. Motion is subtle and disabled under
+// prefers-reduced-motion.
+interface Props {
+  label: string
+  class?: string
+}
+const { label, class: className } = Astro.props
+---
+
+<svg class:list={['hero-art block h-full w-full', className]} viewBox="0 0 800 560" preserveAspectRatio="xMidYMax slice" role="img" aria-label={label}>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#151d17"></stop>
+      <stop offset="0.55" stop-color="#283f2f"></stop>
+      <stop offset="1" stop-color="#435949"></stop>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#d1bf98" stop-opacity="0.55"></stop>
+      <stop offset="1" stop-color="#d1bf98" stop-opacity="0"></stop>
+    </radialGradient>
+    <pattern id="rows" width="22" height="22" patternUnits="userSpaceOnUse" patternTransform="rotate(-8)">
+      <path d="M0 11 H22" stroke="#93a281" stroke-opacity="0.28" stroke-width="3" stroke-linecap="round"></path>
+    </pattern>
+    <pattern id="rows-near" width="30" height="30" patternUnits="userSpaceOnUse" patternTransform="rotate(6)">
+      <path d="M0 15 H30" stroke="#b2934d" stroke-opacity="0.35" stroke-width="4" stroke-linecap="round"></path>
+    </pattern>
+  </defs>
+
+  <rect width="800" height="560" fill="url(#sky)"></rect>
+
+  <g class="sun">
+    <circle cx="560" cy="210" r="170" fill="url(#glow)"></circle>
+    <circle cx="560" cy="210" r="86" fill="#f5f1e6" fill-opacity="0.12"></circle>
+    <circle cx="560" cy="216" r="58" fill="#b2934d"></circle>
+    <circle cx="526" cy="282" r="30" fill="#93a281"></circle>
+  </g>
+
+  <g class="hills">
+    <path d="M0 330 C140 290 260 300 400 322 C540 344 660 300 800 286 V560 H0 Z" fill="#38412c"></path>
+    <path d="M0 330 C140 290 260 300 400 322 C540 344 660 300 800 286 V560 H0 Z" fill="url(#rows)"></path>
+    <path d="M0 392 C170 352 330 372 470 398 C590 420 700 392 800 372 V560 H0 Z" fill="#4c573d"></path>
+    <path d="M0 392 C170 352 330 372 470 398 C590 420 700 392 800 372 V560 H0 Z" fill="url(#rows)"></path>
+    <path d="M0 462 C150 430 300 440 450 470 C590 498 700 470 800 452 V560 H0 Z" fill="#283f2f"></path>
+    <path d="M0 462 C150 430 300 440 450 470 C590 498 700 470 800 452 V560 H0 Z" fill="url(#rows-near)"></path>
+  </g>
+</svg>
+
+<style>
+  .hero-art .sun {
+    transform-origin: 560px 216px;
+    animation: rise 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) both, breathe 9s ease-in-out 1.6s infinite;
+  }
+  @keyframes rise {
+    from {
+      transform: translateY(40px);
+      opacity: 0;
+    }
+  }
+  @keyframes breathe {
+    50% {
+      transform: scale(1.03);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-art .sun {
+      animation: none;
+    }
+  }
+</style>

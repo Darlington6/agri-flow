@@ -1,0 +1,127 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import PageHero from '../components/PageHero.astro'
+import { dictionaryFor, LOCALES, localizedPath, type Locale } from '../i18n'
+import { countryOptions, demoRequestEndpoint } from '../lib/countries'
+
+interface Props {
+  locale: Locale
+}
+const { locale } = Astro.props
+const t = dictionaryFor(locale)
+const f = t.requestDemo.form
+const countries = countryOptions(LOCALES[locale].code)
+const endpoint = demoRequestEndpoint(import.meta.env.PUBLIC_API_URL)
+const roles = Object.entries(f.roles) as [keyof typeof f.roles, string][]
+const field = 'block w-full rounded-xl border border-ink-300 bg-white px-4 py-3 text-base text-ink-900 placeholder:text-ink-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-200'
+const label = 'mb-1.5 block text-sm font-semibold text-ink-800'
+---
+
+<BaseLayout locale={locale} page="requestDemo" title={t.requestDemo.title} description={t.requestDemo.description}>
+  <PageHero title={t.requestDemo.title} lede={t.requestDemo.lede} photo="pageRequestDemo" />
+  <section class="mx-auto max-w-2xl px-4 py-14 sm:px-6 md:py-20">
+    <form
+      id="demo-request"
+      class="grid gap-5"
+      method="post"
+      novalidate={false}
+      data-endpoint={endpoint ?? ''}
+      data-locale={LOCALES[locale].code}
+      data-msg-sending={f.sending}
+      data-msg-success={f.success}
+      data-msg-error={f.error}
+    >
+      <div class="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label for="name" class={label}>{f.name}</label>
+          <input id="name" name="name" required autocomplete="name" maxlength="120" class={field} />
+        </div>
+        <div>
+          <label for="organisation" class={label}>{f.organisation}</label>
+          <input id="organisation" name="organisation" required autocomplete="organization" maxlength="160" class={field} />
+        </div>
+      </div>
+
+      <div class="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label for="role" class={label}>{f.role}</label>
+          <select id="role" name="role" required class={field}>
+            {roles.map(([value, text]) => <option value={value}>{text}</option>)}
+          </select>
+        </div>
+        <div>
+          <label for="country" class={label}>{f.country}</label>
+          <select id="country" name="country" required class={field}>
+            <option value="">{f.chooseCountry}</option>
+            {countries.map((c) => <option value={c.code}>{c.name}</option>)}
+            <option value="other">{f.roles.other}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label for="email" class={label}>{f.email}</label>
+          <input id="email" name="email" type="email" required autocomplete="email" inputmode="email" maxlength="200" class={field} />
+        </div>
+        <div>
+          <label for="phone" class={label}>{f.phone}</label>
+          <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="40" class={field} />
+        </div>
+      </div>
+
+      <div>
+        <label for="message" class={label}>{f.message}</label>
+        <textarea id="message" name="message" rows="4" maxlength="2000" class={field}></textarea>
+      </div>
+
+      <!-- Spam trap: hidden from people (and screen readers); bots tend to fill it. -->
+      <div class="absolute -left-[10000px] h-px w-px overflow-hidden" aria-hidden="true">
+        <label for="website">{f.honeypot}</label>
+        <input id="website" name="website" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <div class="flex items-start gap-3">
+        <input id="consent" name="consent" type="checkbox" required class="mt-1 h-5 w-5 shrink-0 accent-primary-600" />
+        <label for="consent" class="text-[15px] text-ink-700">
+          {f.consent}
+          <a href={localizedPath(locale, 'privacy')} class="font-medium text-primary-700 underline hover:text-primary-800">{f.privacyLink}</a>
+        </label>
+      </div>
+
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
+        <button
+          type="submit"
+          class="inline-flex min-h-12 items-center justify-center rounded-full bg-brand-800 px-8 text-base font-semibold text-cream hover:bg-brand-700 disabled:cursor-wait disabled:opacity-70"
+        >
+          {f.submit}
+        </button>
+        <p id="demo-request-status" role="status" aria-live="polite" class="text-[15px] font-medium text-ink-700"></p>
+      </div>
+      <noscript><p class="text-ink-700">{f.error}</p></noscript>
+    </form>
+  </section>
+</BaseLayout>
+
+<script>
+  import { submitDemoRequest } from '../lib/demoRequest'
+
+  const form = document.querySelector<HTMLFormElement>('#demo-request')
+  const status = document.querySelector<HTMLElement>('#demo-request-status')
+  if (form && status) {
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault()
+      if (!form.reportValidity()) return
+      const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')
+      button?.setAttribute('disabled', '')
+      status.textContent = form.dataset.msgSending ?? ''
+      const result = await submitDemoRequest(form.dataset.endpoint || undefined, new FormData(form), form.dataset.locale ?? 'en')
+      // A filled spam trap ('ignored') looks like success, so bots learn nothing.
+      const ok = result !== 'failed'
+      status.textContent = (ok ? form.dataset.msgSuccess : form.dataset.msgError) ?? ''
+      status.className = `text-[15px] font-medium ${ok ? 'text-status-good-text' : 'text-status-risk-text'}`
+      if (ok) form.reset()
+      button?.removeAttribute('disabled')
+    })
+  }
+</script>

@@ -1,0 +1,56 @@
+---
+// Home-page section: a pair of photos beside a heading, intro and points.
+// Photos and text swap sides with `reverse`; on phones they stack (photos first).
+import Photo from './Photo.astro'
+import type { PhotoSlot } from '../media/manifest'
+
+interface Props {
+  id: string
+  title: string
+  lede: string
+  points: readonly { title: string; body: string }[]
+  photo: { slot: PhotoSlot; alt: string }
+  detail: { slot: PhotoSlot; alt: string }
+  learnMore: { href: string; label: string }
+  reverse?: boolean
+  tone?: string
+}
+const { id, title, lede, points, photo, detail, learnMore, reverse = false, tone = 'bg-white' } = Astro.props
+---
+
+<section id={id} class:list={['scroll-mt-20', tone]} aria-labelledby={`${id}-title`}>
+  <div class="mx-auto grid max-w-6xl items-center gap-10 px-4 py-20 sm:px-6 md:grid-cols-2 md:gap-14 md:py-24">
+    <div class:list={['relative', reverse && 'md:order-2']}>
+      <div class="aspect-[4/3] overflow-hidden rounded-[2rem] shadow-[0_24px_60px_-28px_rgba(16,21,16,0.45)]">
+        <Photo slot={photo.slot} alt={photo.alt} sizes="(min-width: 768px) 560px, 100vw" />
+      </div>
+      <div
+        class:list={[
+          'absolute -bottom-8 hidden aspect-square w-40 overflow-hidden rounded-3xl border-4 border-white shadow-xl sm:block md:w-44',
+          reverse ? '-left-6' : '-right-6',
+        ]}
+      >
+        <Photo slot={detail.slot} alt={detail.alt} sizes="176px" />
+      </div>
+    </div>
+    <div>
+      <h2 id={`${id}-title`} class="text-3xl font-semibold leading-tight sm:text-4xl">{title}</h2>
+      <p class="mt-4 text-lg leading-relaxed text-ink-700">{lede}</p>
+      <ul class="mt-8 grid gap-5 sm:grid-cols-2">
+        {
+          points.map((p) => (
+            <li class="border-l-2 border-gold-400 pl-4">
+              <h3 class="font-sans text-base font-semibold text-ink-900">{p.title}</h3>
+              <p class="mt-1 text-[15px] text-ink-700">{p.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <a href={learnMore.href} class="mt-8 inline-flex min-h-11 items-center gap-2 font-semibold text-primary-700 hover:text-primary-800 hover:underline">
+        {learnMore.label}
+        <span class="sr-only">: {title}</span>
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+</section>
