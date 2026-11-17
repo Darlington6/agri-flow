@@ -220,6 +220,14 @@ describe('every page', () => {
     }
   })
 
+  it('never wraps header menu words, and shows long menus (Swahili) beside the logo only from 1280px', () => {
+    for (const p of pages) {
+      const nav = p.doc.querySelector('header nav') // the desktop menu; the phone menu's rows may wrap
+      for (const a of nav?.querySelectorAll('a') ?? []) expect(a.className, p.path).toContain('whitespace-nowrap')
+      expect(nav?.className, p.path).toBe(langOf(p.path) === 'sw' ? 'hidden xl:block' : 'hidden lg:block')
+    }
+  })
+
   it(`ships at most ${JS_BUDGET_BYTES / 1024} KB of JavaScript`, () => {
     for (const p of pages) {
       let bytes = 0
