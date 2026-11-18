@@ -8,6 +8,7 @@ environment (django-environ), never hardcoded — see ../../.env.example
 for the variables this file expects.
 """
 
+import os
 from datetime import timedelta
 from pathlib import Path
 
@@ -16,7 +17,11 @@ import environ
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 env = environ.Env()
-environ.Env.read_env(BASE_DIR / ".env")
+# A local .env is for running on your own machine only: it's never read
+# when the settings module is staging or prod, so a stray file can't
+# quietly supply a deployed server's secrets or database.
+if os.environ.get("DJANGO_SETTINGS_MODULE", "config.settings.dev").endswith(".dev"):
+    environ.Env.read_env(BASE_DIR / ".env")
 
 SECRET_KEY = env(
     "DJANGO_SECRET_KEY",
@@ -124,8 +129,7 @@ LOGGING = {
 
 # Where apps/web lives — used to build links that need to land the user
 # back in the SPA (the magic-link email), not the API itself.
-# Supports Vercel service binding WEB_URL injected automatically.
-FRONTEND_URL = env("FRONTEND_URL", default=env("WEB_URL", default="http://localhost:5173"))
+FRONTEND_URL = env("FRONTEND_URL", default="http://localhost:5173")
 
 # CORS: explicit allow-list from the environment or allow all for prototype
 CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])
@@ -175,6 +179,12 @@ EMAIL_DELIVERY_CHANNEL = env(
     "EMAIL_DELIVERY_CHANNEL",
     default="apps.identity.channels.ConsoleEmailChannel",
 )
+
+# Outgoing email. Locally it's printed to the console; staging and prod
+# send through Brevo via django-anymail (see deployed.py), so switching
+# provider later is a settings change, not a code change.
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="AgriFlow <no-reply@localhost>")
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "AgriFlow API",
