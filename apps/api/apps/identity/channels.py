@@ -23,7 +23,23 @@ class OtpDeliveryChannel(Protocol):
 
 
 class EmailDeliveryChannel(Protocol):
-    def send(self, email: str, link: str) -> None: ...
+    # kind: "sign_in" (the account exists), "sign_up" (the link creates
+    # it) or "confirm_email" (a signed-in user is adding this address).
+    def send(self, email: str, link: str, kind: str) -> None: ...
+
+
+# Subject, then what the link does; each email ends the same way.
+EMAIL_WORDING = {
+    "sign_in": ("Your AgriFlow sign-in link", "Use this link to sign in to AgriFlow:"),
+    "sign_up": (
+        "Finish creating your AgriFlow account",
+        "Use this link to finish creating your AgriFlow account:",
+    ),
+    "confirm_email": (
+        "Confirm your email for AgriFlow",
+        "Use this link to add this email to your AgriFlow account:",
+    ),
+}
 
 
 class ConsoleOtpChannel:
@@ -36,8 +52,8 @@ class ConsoleOtpChannel:
 class ConsoleEmailChannel:
     """Dev-only: logs the magic link instead of sending an email."""
 
-    def send(self, email: str, link: str) -> None:
-        logger.info("Magic link for %s: %s", email, link)
+    def send(self, email: str, link: str, kind: str) -> None:
+        logger.info("Email link (%s) for %s: %s", kind, email, link)
 
 
 class DeliveryUnavailable(Exception):
@@ -52,28 +68,26 @@ class DjangoEmailChannel:
     settings, not here.
     """
 
-    def send(self, email: str, link: str) -> None:
+    def send(self, email: str, link: str, kind: str) -> None:
         minutes = 15  # services.MAGIC_LINK_TTL_MINUTES; not imported, to avoid a cycle
+        subject, intro = EMAIL_WORDING[kind]
         try:
             send_mail(
-                subject="Your AgriFlow sign-in link",
+                subject=subject,
                 message=(
-                    "Hello,\n\n"
-                    "Use this link to sign in to AgriFlow:\n\n"
-                    f"{link}\n\n"
-                    f"It works once, for the next {minutes} minutes. If you didn't ask to "
-                    "sign in, you can ignore this email.\n\n"
+                    f"Hello,\n\n{intro}\n\n{link}\n\n"
+                    f"It works once, for the next {minutes} minutes. If this wasn't you, "
+                    "you can ignore this email.\n\n"
                     "AgriFlow"
                 ),
                 from_email=None,  # DEFAULT_FROM_EMAIL
                 recipient_list=[email],
             )
         except Exception:
-            # Logged, never raised: the request must answer the same way
+            # Logged, never raised: the request answers the same way
             # whether or not the email has an account (see
-            # services.request_magic_link), and a send is only attempted
-            # for addresses that do.
-            logger.exception("Couldn't send the magic link email")
+            # services.request_magic_link), so a failure mustn't show.
+            logger.exception("Couldn't send the %s email", kind)
 
 
 class UnconfiguredOtpChannel:
@@ -86,7 +100,7 @@ class UnconfiguredOtpChannel:
 
 
 class UnconfiguredEmailChannel:
-    def send(self, email: str, link: str) -> None:
+    def send(self, email: str, link: str, kind: str) -> None:
         raise DeliveryUnavailable("Email sign-in isn't available yet.")
 
 

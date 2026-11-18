@@ -27,11 +27,14 @@ def test_magic_link_happy_path(email_channel):
     assert "access" in body
 
 
-def test_magic_link_does_not_reveal_unknown_email(email_channel):
+def test_unknown_email_gets_a_sign_up_link_and_the_same_answer(email_channel):
+    _make_user()
     client = APIClient()
-    response = client.post("/api/v1/auth/magic-link/request/", {"email": "nobody@example.com"})
-    assert response.status_code == 202
-    assert email_channel.sent == []
+    known = client.post("/api/v1/auth/magic-link/request/", {"email": EMAIL})
+    unknown = client.post("/api/v1/auth/magic-link/request/", {"email": "nobody@example.com"})
+    assert known.status_code == unknown.status_code == 202
+    assert known.json() == unknown.json() == {}
+    assert [kind for _, _, kind in email_channel.sent] == ["sign_in", "sign_up"]
 
 
 def test_magic_link_token_is_single_use(email_channel):

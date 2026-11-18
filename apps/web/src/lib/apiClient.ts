@@ -14,9 +14,10 @@ export interface Role {
   name: string
 }
 
+// An account has a phone number, an email, or both (never neither).
 export interface AuthUser {
   id: number
-  phone_number: string
+  phone_number: string | null
   email: string | null
   display_name: string
   roles: Role[]
@@ -27,6 +28,8 @@ export interface AuthTokens {
   access: string
   refresh: string
   user: AuthUser
+  /** True when this sign-in also created the account. */
+  created: boolean
 }
 
 export function getStoredTokens(): { access: string; refresh: string } | null {
@@ -74,7 +77,10 @@ async function request<T>(path: string, init: RequestInit = {}, retry = true): P
   const response = await fetch(`${API_URL}${path}`, { ...init, headers })
 
   if (response.status === 401 && tokens && retry) {
-    const refreshed = await tryRefresh(tokens.refresh)
+    // Another request may have refreshed while this one was in flight:
+    // then just retry with the new tokens rather than spend the old one.
+    const current = getStoredTokens()
+    const refreshed = current ? current.refresh !== tokens.refresh || (await tryRefresh(current.refresh)) : false
     if (refreshed) return request<T>(path, init, false)
     clearTokens()
   }
@@ -87,19 +93,47 @@ async function request<T>(path: string, init: RequestInit = {}, retry = true): P
   return (await response.json()) as T
 }
 
-async function tryRefresh(refresh: string): Promise<boolean> {
+// Each refresh token works once: the API answers with a new pair and
+// retires the old refresh token. So both are saved, and requests that hit
+// 401 at the same moment share one refresh instead of each spending the
+// same token (the second would fail and sign the user out).
+let refreshing: Promise<boolean> | null = null
+
+function tryRefresh(refresh: string): Promise<boolean> {
+  refreshing ??= (async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/v1/auth/token/refresh/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refresh }),
+      })
+      if (!response.ok) return false
+      const body = (await response.json()) as { access: string; refresh: string }
+      storeTokens(body.access, body.refresh)
+      return true
+    } catch {
+      return false
+    } finally {
+      refreshing = null
+    }
+  })()
+  return refreshing
+}
+
+/** Retires the refresh token on the server, then forgets both tokens.
+ * Signs out locally even if the API can't be reached. */
+export async function logout() {
+  const tokens = getStoredTokens()
+  clearTokens()
+  if (!tokens) return
   try {
-    const response = await fetch(`${API_URL}/api/v1/auth/token/refresh/`, {
+    await fetch(`${API_URL}/api/v1/auth/token/logout/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ refresh }),
+      body: JSON.stringify({ refresh: tokens.refresh }),
     })
-    if (!response.ok) return false
-    const body = (await response.json()) as { access: string }
-    localStorage.setItem(ACCESS_KEY, body.access)
-    return true
   } catch {
-    return false
+    // Offline: the token still expires on its own.
   }
 }
 
@@ -136,6 +170,34 @@ export function updateMe(displayName: string) {
   return request<AuthUser>('/api/v1/auth/me/', {
     method: 'PATCH',
     body: JSON.stringify({ display_name: displayName }),
+  })
+}
+
+export function requestEmailAdd(email: string) {
+  return request<{ debug_link?: string }>('/api/v1/auth/me/email/', {
+    method: 'POST',
+    body: JSON.stringify({ email }),
+  })
+}
+
+export function confirmEmail(token: string) {
+  return request<{ email: string }>('/api/v1/auth/email/confirm/', {
+    method: 'POST',
+    body: JSON.stringify({ token }),
+  })
+}
+
+export function requestPhoneAdd(phoneNumber: string) {
+  return request<{ debug_code?: string }>('/api/v1/auth/me/phone/', {
+    method: 'POST',
+    body: JSON.stringify({ phone_number: phoneNumber }),
+  })
+}
+
+export function confirmPhoneAdd(phoneNumber: string, code: string) {
+  return request<AuthUser>('/api/v1/auth/me/phone/confirm/', {
+    method: 'POST',
+    body: JSON.stringify({ phone_number: phoneNumber, code }),
   })
 }
 

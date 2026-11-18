@@ -1,10 +1,15 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import {
   clearTokens,
+  confirmEmail,
+  confirmPhoneAdd,
   getMe,
   getStoredTokens,
   requestMagicLink,
+  logout as logoutFromApi,
+  requestEmailAdd,
   requestOtp,
+  requestPhoneAdd,
   storeTokens,
   updateMe,
   verifyMagicLink,
@@ -27,10 +32,24 @@ interface AuthContextValue {
   requestMagicLink: (email: string) => Promise<{ debugLink?: string }>
   verifyMagicLink: (token: string) => Promise<void>
   updateDisplayName: (displayName: string) => Promise<void>
-  logout: () => void
+  /** Sends a confirmation link; the email is only added once it's used. */
+  requestEmailAdd: (email: string) => Promise<{ debugLink?: string }>
+  /** Uses that link (works signed in or not, on any device). */
+  confirmEmail: (token: string) => Promise<string>
+  /** Texts a code; the number is only added once it's confirmed. */
+  requestPhoneAdd: (phoneNumber: string) => Promise<{ debugCode?: string }>
+  confirmPhoneAdd: (phoneNumber: string, code: string) => Promise<void>
+  logout: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
+
+// Local development only: the API returns the code or link (it does so only
+// in DEBUG, never in staging or production), so it's also printed in the
+// browser console. The API's own terminal prints them too.
+function logForDev(what: string, value: string | undefined) {
+  if (value) console.info(`[AgriFlow dev] ${what}: ${value}`)
+}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null)
@@ -52,6 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     loading,
     async requestOtp(phoneNumber) {
       const { debug_code } = await requestOtp(phoneNumber)
+      logForDev(`Code for ${phoneNumber}`, debug_code)
       return { debugCode: debug_code }
     },
     async verifyOtp(phoneNumber, code) {
@@ -61,6 +81,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     async requestMagicLink(email) {
       const { debug_link } = await requestMagicLink(email)
+      logForDev(`Sign-in link for ${email}`, debug_link)
       return { debugLink: debug_link }
     },
     async verifyMagicLink(token) {
@@ -72,9 +93,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const updated = await updateMe(displayName)
       setUser(updated)
     },
-    logout() {
-      clearTokens()
+    async requestEmailAdd(email) {
+      const { debug_link } = await requestEmailAdd(email)
+      logForDev(`Confirmation link for ${email}`, debug_link)
+      return { debugLink: debug_link }
+    },
+    async confirmEmail(token) {
+      const { email } = await confirmEmail(token)
+      // Signed in here too: show the new email straight away.
+      if (getStoredTokens()) setUser(await getMe())
+      return email
+    },
+    async requestPhoneAdd(phoneNumber) {
+      const { debug_code } = await requestPhoneAdd(phoneNumber)
+      logForDev(`Code for ${phoneNumber}`, debug_code)
+      return { debugCode: debug_code }
+    },
+    async confirmPhoneAdd(phoneNumber, code) {
+      setUser(await confirmPhoneAdd(phoneNumber, code))
+    },
+    async logout() {
       setUser(null)
+      await logoutFromApi()
     },
   }
 
