@@ -31,13 +31,13 @@ def test_magic_link_is_emailed(settings):
     assert "https://app.example.com/magic-link?token=" in sent.body
 
 
-def test_unknown_email_gets_no_email(settings):
+def test_unknown_email_gets_a_sign_up_email(settings):
     settings.EMAIL_DELIVERY_CHANNEL = EMAIL_CHANNEL
 
-    response = APIClient().post("/api/v1/auth/magic-link/request/", {"email": "nobody@example.com"})
+    response = APIClient().post("/api/v1/auth/magic-link/request/", {"email": "new@example.com"})
 
     assert response.status_code == 202
-    assert mail.outbox == []
+    assert mail.outbox[0].subject == "Finish creating your AgriFlow account"
 
 
 def test_failed_send_is_logged_not_shown(settings, monkeypatch, caplog):
@@ -55,7 +55,7 @@ def test_failed_send_is_logged_not_shown(settings, monkeypatch, caplog):
 
     assert response.status_code == 202
     assert response.json() == {}
-    assert "Couldn't send the magic link email" in caplog.text
+    assert "Couldn't send the sign_in email" in caplog.text
 
 
 def test_phone_sign_in_says_unavailable_without_sms(settings):
