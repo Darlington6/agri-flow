@@ -16,6 +16,8 @@ dependencies = [
     "gunicorn>=23.0,<27.0",
     "djangorestframework-simplejwt>=5.5.1,<6.0",
     "phonenumbers>=9.0.37,<10.0",
+    "django-anymail[brevo]>=13,<16",
+    "whitenoise>=6.8,<7",
 ]
 
 [dependency-groups]

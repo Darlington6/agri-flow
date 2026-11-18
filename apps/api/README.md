@@ -14,7 +14,7 @@ curl http://localhost:8000/api/v1/health/
 ## Run it locally (needs [uv](https://docs.astral.sh/uv/))
 
 uv installs Python 3.12 itself if needed (pinned in `.python-version`) and the exact dependency versions in
-`uv.lock`. CI, the Dockerfile and Vercel all install from that same lock.
+`uv.lock`. CI and the Dockerfile (which Render deploys) install from that same lock.
 
 ```bash
 cp .env.example .env         # DATABASE_URL points at the compose Postgres on localhost:5433
@@ -55,4 +55,15 @@ If `docker compose` serves stale packages after a dependency change, the API's v
 
 `DJANGO_SETTINGS_MODULE` selects the environment: `config.settings.dev` (default for `manage.py`),
 `.staging`, or `.prod` (default for `wsgi.py`/`asgi.py`). Never hardcode secrets — everything comes from
-the environment; see `.env.example` for what's expected.
+the environment; see `.env.example` for what's expected. A local `.env` is only read with the dev settings.
+
+## Deployed (staging and prod)
+
+Both build on `config/settings/deployed.py`, which has no fallbacks: the server refuses to start if a
+secret, the database, the allowed origins or the email settings are missing. Magic links go out by email
+through Brevo (django-anymail); phone sign-in answers 503 until there's an SMS provider. The image collects
+the admin's static files at build time and serves them with WhiteNoise; `scripts/serve.sh` runs `migrate`
+and then gunicorn on `$PORT`.
+
+Hosting (Render, `render.yaml` in the repo root), the variables to set, and first-time setup are in the
+Deployments section of [CONTRIBUTING](../../.github/CONTRIBUTING.md#deployments).

@@ -27,7 +27,12 @@ RUN addgroup --system agriflow && adduser --system --ingroup agriflow agriflow
 COPY --from=builder /app/.venv /app/.venv
 ENV PATH="/app/.venv/bin:$PATH"
 COPY . .
+# The admin's CSS and JS, served by WhiteNoise. Collected with the dev
+# settings because they need no secrets; the files are the same.
+RUN DJANGO_SETTINGS_MODULE=config.settings.dev python manage.py collectstatic --noinput
 RUN chown -R agriflow:agriflow /app
 USER agriflow
 EXPOSE 8000
-CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
+# Migrates, then starts gunicorn on $PORT (see scripts/serve.sh).
+# docker-compose overrides this with runserver for local development.
+CMD ["./scripts/serve.sh"]
