@@ -7,6 +7,10 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Changed
 
+- API staging and production settings (`config/settings/deployed.py`) no longer fall back to a public secret
+  key, a SQLite database, every host, or every origin: the server refuses to start if a value is missing. Only
+  the app and the site may call the API from a browser. A local `.env` is only read with the dev settings.
+
 - Palette (option A): teal `primary` for everything you can tap; the logo's forest, gold and sage for
   identity, the pilot tag and soft surfaces. Status colours (KYC, risk, timeline) unchanged. The palette now
   lives in one shared file, `packages/design-tokens/src/theme.css`, which `apps/web` imports.
@@ -35,6 +39,14 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
   handling.
 
 ### Added
+
+- API hosting on Render (`render.yaml`): production from `main` and staging from `staging`, both built from
+  `apps/api/Dockerfile` in Frankfurt on the free plan, with Neon Postgres. Each start runs `migrate`, then
+  gunicorn (`apps/api/scripts/serve.sh`); the admin's CSS and JS are served by WhiteNoise. The app finds the
+  API through `VITE_API_URL`. Setup steps: Deployments in CONTRIBUTING.
+- API: magic links are emailed through Brevo (django-anymail) in staging and production. A failed send is
+  logged; the answer stays the same, so it never reveals whether an email has an account. Phone sign-in
+  answers "not available yet" (503) there until an SMS provider is set up.
 
 - `apps/site`: the public website, built with Astro. Nine pages (Home, How it works, For buyers, For farmers,
   For partners, About, Request a demo, Privacy and Terms drafts) pre-rendered as HTML, with per-page titles,
@@ -80,6 +92,8 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Removed
 
+- The repo-root `vercel.json` (the API as a second Vercel service): the API is hosted on Render instead, which
+  can later run Celery workers and long-lived connections. The app's own `apps/web/vercel.json` stays.
 - `deploy.yml`, a manual-only placeholder that always failed. Deployment is Vercel's Git integration.
 
 - Monorepo scaffold: `apps/web` (the prototype, moved unchanged), `apps/api` (Django + DRF skeleton,

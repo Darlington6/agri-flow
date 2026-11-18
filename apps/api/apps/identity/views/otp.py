@@ -6,6 +6,7 @@ from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from ..channels import DeliveryUnavailable
 from ..serializers import OtpRequestSerializer, OtpVerifySerializer, UserSerializer
 from ..services import request_otp, verify_otp
 
@@ -23,7 +24,10 @@ class OtpRequestView(APIView):
     def post(self, request):
         serializer = OtpRequestSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        code = request_otp(serializer.validated_data["phone_number"])
+        try:
+            code = request_otp(serializer.validated_data["phone_number"])
+        except DeliveryUnavailable as exc:
+            return Response({"detail": str(exc)}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
         # Dev-only convenience so the browser flow is testable without
         # tailing logs — never present outside DEBUG (see dev.py vs.
         # staging.py/prod.py).

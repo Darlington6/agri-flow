@@ -74,7 +74,7 @@ jobs:
 
       # uv reads the Python version from apps/api/.python-version and the
       # exact dependency versions from apps/api/uv.lock, the same lock
-      # Vercel and the Dockerfile install from. Keep the uv version in sync
+      # the Dockerfile (deployed on Render) installs from. Keep the uv version in sync
       # with apps/api/Dockerfile.
       - uses: astral-sh/setup-uv@v10.3.3
         with:

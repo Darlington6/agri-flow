@@ -7,7 +7,7 @@ work: sign-in by phone OTP or email magic link runs against the Django API. Ever
 (every farmer, buyer, contract, climate figure and financial number) is still simulated demonstration
 data, built to tell one coherent, connected story end to end.
 
-**Live:** production deploys from `main` on Vercel. See [Deployments](.github/CONTRIBUTING.md#deployments).
+**Live:** production deploys from `main`: the app and site on Vercel, the API on Render. See [Deployments](.github/CONTRIBUTING.md#deployments).
 
 **Where it's heading:** one API as the shared data layer behind every client: a public marketing site, a
 PWA, and mobile apps (Android and iOS), all using the same account. Prices will show in the user's local
@@ -174,8 +174,8 @@ adjacent features requested for a more complete pilot story:
 **API (`apps/api`):** Django + Django REST Framework, JWT auth (simplejwt), drf-spectacular (OpenAPI),
 Postgres, Redis + Celery. Python 3.12, dependencies managed with [uv](https://docs.astral.sh/uv/).
 
-**Tooling:** pnpm workspaces + Turborepo, GitHub Actions CI, Dependabot, Vercel (the web app and the public site as
-two projects; the API joins the web project as a second service once it's deployed).
+**Tooling:** pnpm workspaces + Turborepo, GitHub Actions CI, Dependabot. Hosting: Vercel for the web app and the
+public site (two projects), Render for the API (Docker, Frankfurt) with Neon Postgres and Brevo for email.
 
 ## Repo structure
 

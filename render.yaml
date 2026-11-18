@@ -1,0 +1,83 @@
+# Render Blueprint: the API, built from apps/api/Dockerfile, in Frankfurt
+# (the closest Render region to Rwanda). The app and the marketing site stay
+# on Vercel. Setup steps: "Deployments" in .github/CONTRIBUTING.md.
+#
+# Values marked `sync: false` are secrets or addresses you type into the
+# Render dashboard when the Blueprint is first applied; they're never
+# committed. Deployed settings refuse to start if any of them is missing
+# (apps/api/config/settings/deployed.py).
+#
+# Both services use the free plan: they sleep after 15 minutes without
+# requests, and the next request takes about a minute to wake them.
+
+services:
+  # Production: deploys from main.
+  - type: web
+    name: agriflow-api
+    runtime: docker
+    plan: free
+    region: frankfurt
+    branch: main
+    dockerfilePath: ./apps/api/Dockerfile
+    dockerContext: ./apps/api
+    healthCheckPath: /api/v1/health/
+    # Deploy only once the commit's GitHub checks have passed, and only
+    # when the API (or this file) changed.
+    autoDeployTrigger: checksPass
+    buildFilter:
+      paths:
+        - apps/api/**
+        - render.yaml
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings.prod
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL # Neon, production branch (pooled connection string)
+        sync: false
+      - key: FRONTEND_URL # where magic links land
+        value: https://agri-flow-eight.vercel.app
+      - key: CORS_ALLOWED_ORIGINS # the app and the marketing site
+        value: https://agri-flow-eight.vercel.app,https://agri-flow-site.vercel.app
+      - key: BREVO_API_KEY
+        sync: false
+      - key: DEFAULT_FROM_EMAIL # the sender address verified in Brevo, e.g. AgriFlow <you@gmail.com>
+        sync: false
+      - key: WEB_CONCURRENCY # gunicorn workers; two fit in the free plan's 512 MB
+        value: "2"
+
+  # Staging: deploys from staging. Vercel's preview deployments of the app
+  # call this one, with its own Neon database, so tests never touch real users.
+  - type: web
+    name: agriflow-api-staging
+    runtime: docker
+    plan: free
+    region: frankfurt
+    branch: staging
+    dockerfilePath: ./apps/api/Dockerfile
+    dockerContext: ./apps/api
+    healthCheckPath: /api/v1/health/
+    autoDeployTrigger: checksPass
+    buildFilter:
+      paths:
+        - apps/api/**
+        - render.yaml
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings.staging
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL # Neon, staging branch (pooled connection string)
+        sync: false
+      - key: FRONTEND_URL # the app's staging address on Vercel
+        sync: false
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://agri-flow-site.vercel.app
+      - key: CORS_ALLOWED_ORIGIN_REGEXES # every preview of the app, e.g. ^https://agri-flow-[a-z0-9-]+-<your-vercel-team>\.vercel\.app$
+        sync: false
+      - key: BREVO_API_KEY
+        sync: false
+      - key: DEFAULT_FROM_EMAIL
+        sync: false
+      - key: WEB_CONCURRENCY
+        value: "2"
