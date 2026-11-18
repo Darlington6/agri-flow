@@ -50,12 +50,17 @@ class Role(models.Model):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    """Phone number is the primary identifier — no username. `roles` is
+    """An account has a phone number, an email, or both, but always at
+    least one: people sign up with either and can add the other later
+    (confirmed by a code or a link, see services.py). Phone stays the
+    login for Django Admin, so staff accounts need one. `roles` is
     many-to-many (not a single FK) so an admin grant is additive: a Buyer
     promoted to Platform Admin gets a second Role row, never a role swap.
     """
 
-    phone_number = models.CharField(max_length=20, unique=True)
+    # Blank values are stored as NULL (see save()), so many accounts can
+    # be without one while each real number or address stays unique.
+    phone_number = models.CharField(max_length=20, unique=True, null=True, blank=True)
     email = models.EmailField(unique=True, null=True, blank=True)
     display_name = models.CharField(max_length=150, blank=True)
     roles = models.ManyToManyField(Role, blank=True, related_name="users")
@@ -70,10 +75,21 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     class Meta:
-        ordering = ["phone_number"]
+        ordering = ["date_joined"]
+        constraints = [
+            models.CheckConstraint(
+                condition=models.Q(phone_number__isnull=False) | models.Q(email__isnull=False),
+                name="user_has_phone_or_email",
+            )
+        ]
+
+    def save(self, *args, **kwargs):
+        self.phone_number = self.phone_number or None
+        self.email = self.email.strip().lower() if self.email else None
+        super().save(*args, **kwargs)
 
     def __str__(self) -> str:
-        return self.display_name or self.phone_number
+        return self.display_name or self.phone_number or self.email or f"User {self.pk}"
 
     def is_admin_role(self) -> bool:
         """Mirrors src/lib/permissions.ts's isAdminRole() — Platform Admin
@@ -85,9 +101,18 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class OtpCode(models.Model):
-    """Codes are hashed at rest (see services.py) — never stored plain."""
+    """Codes are hashed at rest (see services.py) — never stored plain.
+    A code either signs someone in (creating the account on first use) or
+    confirms a phone number a signed-in user is adding (`user` set).
+    """
+
+    class Purpose(models.TextChoices):
+        SIGN_IN = "sign_in", "Sign in or sign up"
+        ADD_PHONE = "add_phone", "Add a phone number"
 
     phone_number = models.CharField(max_length=20)
+    purpose = models.CharField(max_length=20, choices=Purpose.choices, default=Purpose.SIGN_IN)
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
     code_hash = models.CharField(max_length=64)
     expires_at = models.DateTimeField()
     consumed_at = models.DateTimeField(null=True, blank=True)
@@ -99,7 +124,18 @@ class OtpCode(models.Model):
 
 
 class MagicLinkToken(models.Model):
+    """Hashed at rest, like OtpCode. A link either signs someone in
+    (creating the account on first use) or confirms an email a signed-in
+    user is adding (`user` set).
+    """
+
+    class Purpose(models.TextChoices):
+        SIGN_IN = "sign_in", "Sign in or sign up"
+        ADD_EMAIL = "add_email", "Add an email"
+
     email = models.EmailField()
+    purpose = models.CharField(max_length=20, choices=Purpose.choices, default=Purpose.SIGN_IN)
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
     token_hash = models.CharField(max_length=64, unique=True)
     expires_at = models.DateTimeField()
     consumed_at = models.DateTimeField(null=True, blank=True)

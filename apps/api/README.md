@@ -57,11 +57,30 @@ If `docker compose` serves stale packages after a dependency change, the API's v
 `.staging`, or `.prod` (default for `wsgi.py`/`asgi.py`). Never hardcode secrets — everything comes from
 the environment; see `.env.example` for what's expected. A local `.env` is only read with the dev settings.
 
+## Sign-up and sign-in (`/api/v1/auth/`)
+
+An account has a phone number, an email, or both, never neither. The first successful sign-in creates it.
+
+| Endpoint | What it does |
+| --- | --- |
+| `POST otp/request/`, `POST otp/verify/` | Text a code; the code signs in (or signs up). |
+| `POST magic-link/request/`, `GET magic-link/verify/?token=` | Email a link; the link signs in (or signs up). The answer is the same whether or not the email has an account. |
+| `POST me/email/`, `POST email/confirm/` | Add an email: a link is sent to it, and the email is saved once the link is used (signed in or not). |
+| `POST me/phone/`, `POST me/phone/confirm/` | Add a phone number: a code is texted to it and must be confirmed. |
+| `POST token/refresh/` | New access + refresh tokens; each refresh token works once. |
+| `POST token/logout/` | Retires the refresh token. |
+| `GET`/`PATCH me/` | The signed-in user. |
+
+Sign-in responses carry `access`, `refresh`, `user` and `created` (true when this sign-in created the
+account). Adding a phone number or email that another account uses answers 409. Anything that sends a
+text or an email is limited to 5 an hour per caller, and one address gets at most 5 emails an hour.
+
 ## Deployed (staging and prod)
 
 Both build on `config/settings/deployed.py`, which has no fallbacks: the server refuses to start if a
-secret, the database, the allowed origins or the email settings are missing. Magic links go out by email
-through Brevo (django-anymail); phone sign-in answers 503 until there's an SMS provider. The image collects
+secret, the database, the allowed origins or the email settings are missing. Email links (sign in, sign up,
+confirm an added email) go out through Brevo (django-anymail); phone codes answer 503 until there's an
+SMS provider. The image collects
 the admin's static files at build time and serves them with WhiteNoise; `scripts/serve.sh` runs `migrate`
 and then gunicorn on `$PORT`.
 

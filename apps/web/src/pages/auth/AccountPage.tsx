@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '@/context/AuthContext'
 import { Button, Card, DemoTag, Field, inputClass } from '@/components/ui'
+import { AddEmail, AddPhone } from './AddContact'
 
 export function AccountPage() {
   const { user, loading, updateDisplayName, logout } = useAuth()
   const [displayName, setDisplayName] = useState(user?.display_name ?? '')
   const [saved, setSaved] = useState(false)
   const [busy, setBusy] = useState(false)
+  const [adding, setAdding] = useState<'phone' | 'email' | null>(null)
 
   // user loads asynchronously (a fresh page load has no user yet until
   // the /me refetch resolves) — sync the draft field once it arrives,
@@ -39,11 +41,35 @@ export function AccountPage() {
       </div>
 
       <Card className="w-full max-w-md">
-        <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
-          <dt className="text-ink-500">Phone</dt>
-          <dd className="text-ink-900">{user.phone_number}</dd>
-          <dt className="text-ink-500">Email</dt>
-          <dd className="text-ink-900">{user.email ?? '—'}</dd>
+        {/* You can sign in with either. Whichever you signed up without can be added here. */}
+        <dl className="flex flex-col gap-3 text-sm">
+          {(
+            [
+              ['phone', 'Phone', user.phone_number, 'Add phone number'],
+              ['email', 'Email', user.email, 'Add email'],
+            ] as const
+          ).map(([kind, label, value, addLabel]) => (
+            <div key={kind} className="flex flex-col gap-2">
+              <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+                <dt className="text-ink-500">{label}</dt>
+                <dd className="min-w-0 break-all text-ink-900">
+                  {value ??
+                    (adding === kind ? null : (
+                      <Button variant="outline" size="sm" onClick={() => setAdding(kind)}>
+                        {addLabel}
+                      </Button>
+                    ))}
+                </dd>
+              </div>
+              {!value &&
+                adding === kind &&
+                (kind === 'phone' ? (
+                  <AddPhone onDone={() => setAdding(null)} />
+                ) : (
+                  <AddEmail onDone={() => setAdding(null)} />
+                ))}
+            </div>
+          ))}
         </dl>
 
         <form className="mt-6 flex flex-col gap-3 border-t border-ink-100 pt-6" onSubmit={handleSave}>
@@ -81,7 +107,7 @@ export function AccountPage() {
           )}
         </div>
 
-        <Button variant="outline" size="sm" className="mt-6" onClick={logout}>
+        <Button variant="outline" size="sm" className="mt-6" onClick={() => void logout()}>
           Sign out
         </Button>
       </Card>

@@ -3,7 +3,8 @@
 **Climate-Smart Demand-to-Farm Platform.** Turn agricultural demand into reliable, climate-smart supply.
 
 This is an early-stage product moving from **prototype** to real implementation. Real accounts already
-work: sign-in by phone OTP or email magic link runs against the Django API. Everything else in the app
+work: people sign up and sign in with a phone number (a texted code) or an email (a link), against the
+Django API, and can add the other one later. Everything else in the app
 (every farmer, buyer, contract, climate figure and financial number) is still simulated demonstration
 data, built to tell one coherent, connected story end to end.
 
@@ -187,7 +188,7 @@ apps/
   site/  the public website (Astro): every page pre-rendered for search engines; English now, with
          French, Kinyarwanda, Swahili and Twi ready to add. See apps/site/README.md
   web/   the frontend described in this README: platform screens on mock data, plus real sign-in
-  api/   Django + DRF backend: identity (users, roles, phone OTP, email magic links, JWT, /me),
+  api/   Django + DRF backend: identity (users, roles, sign-up/sign-in by phone code or email link, JWT, /me),
          health check, OpenAPI schema and docs at /api/v1/docs/
 packages/
   types/          shared domain types, hand-maintained today; generated from the API's OpenAPI
@@ -225,8 +226,9 @@ pnpm --filter @agriflow/web dev           # VITE_API_URL defaults to http://loca
 docker compose down                       # when you're done
 ```
 
-Locally, OTP codes and magic links aren't sent anywhere. The API prints them to its log
-(`docker compose logs api`).
+Locally, phone codes and email links aren't sent anywhere. The API prints them in its terminal
+(`docker compose logs -f api`), the sign-in screen shows them in a "Dev mode" box, and the browser's
+developer console logs them too. None of that happens in staging or production.
 
 **Everything in containers** (Postgres, Redis, API, Celery worker, production build of the web app):
 
@@ -238,11 +240,12 @@ To run the API outside Docker with uv, see [apps/api/README.md](apps/api/README.
 
 ## Current prototype limitations
 
-- Two ways in: `/signin` is **real** authentication (phone OTP or email magic link, JWT, against the API),
+- Two ways in: `/signin` is **real** sign-up and sign-in (phone code or email link, JWT, against the API),
   while `/login` is still the demo role picker that sets a local session. The platform screens behind it
   use the demo session and mock data; they aren't connected to real accounts yet.
-- **No real SMS or email provider yet.** OTP codes and magic links are written to the API's log instead of
-  being sent, in production too. Connecting a real provider is required before real users sign up.
+- **No SMS provider yet.** Email links are sent through Brevo in staging and production, but phone codes
+  can't be texted there: phone sign-up and adding a phone number answer "not available yet" until an SMS
+  provider (e.g. Africa's Talking) is connected. Locally, codes and links are written to the API's log.
 - No backend for platform data: all data lives in `PlatformDataContext`, seeded from `src/data/`, and resets on reload. New
   demand requests, confirmed matches, chat messages, marketplace listings, delivery assignments and KYC
   status changes all persist for the session (they behave identically across every page while you're using
@@ -266,7 +269,8 @@ Decided and underway; see `apps/api` above and the Platform Blueprint for the fu
 - **Django + Django REST Framework** (in place), serving the shapes currently hand-defined in
   `apps/web/src/types/` (and mirrored in `packages/types/`). Those become generated from the API's OpenAPI
   schema as domain endpoints land.
-- **Authentication** (done: phone OTP + email magic links, JWT, roles). Next: a real SMS/email provider,
+- **Authentication** (done: sign-up and sign-in by phone code or email link, adding the other later, JWT
+  with server-side logout, roles; email through Brevo). Next: an SMS provider,
   and server-side role-based access control replacing the demo session behind the platform screens.
 - **Clients:** this web app becomes the public marketing site; the platform itself moves to a PWA and
   mobile apps, all on the same API and the same accounts.

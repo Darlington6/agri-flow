@@ -8,6 +8,7 @@ import { LoginPage } from '@/pages/LoginPage'
 import { SignInPage } from '@/pages/auth/SignInPage'
 import { AccountPage } from '@/pages/auth/AccountPage'
 import { MagicLinkVerifyPage } from '@/pages/auth/MagicLinkVerifyPage'
+import { ConfirmEmailPage } from '@/pages/auth/ConfirmEmailPage'
 import { DashboardPage } from '@/pages/DashboardPage'
 import { BuyersPage } from '@/pages/buyers/BuyersPage'
 import { BuyerDetailPage } from '@/pages/buyers/BuyerDetailPage'
@@ -38,6 +39,7 @@ function App() {
               <Route path="/signin" element={<SignInPage />} />
               <Route path="/account" element={<AccountPage />} />
               <Route path="/magic-link" element={<MagicLinkVerifyPage />} />
+              <Route path="/confirm-email" element={<ConfirmEmailPage />} />
 
               <Route element={<AppLayout />}>
                 <Route path="/dashboard" element={<DashboardPage />} />

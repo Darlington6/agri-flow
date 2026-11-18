@@ -156,6 +156,9 @@ REST_FRAMEWORK = {
         # OTP request is a real abuse target (SMS costs money once a real
         # provider is behind it) — deliberately much stricter.
         "otp_request": "5/hour",
+        # Email links: anyone can type any address, so the same strict cap
+        # per caller (services.py also caps emails per address).
+        "email_link": "5/hour",
     },
 }
 

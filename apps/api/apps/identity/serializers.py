@@ -31,19 +31,24 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         fields = ["display_name"]
 
 
+def normalize_phone_number(value: str) -> str:
+    """Accepts international format and returns E.164 (+250788123456)."""
+    try:
+        parsed = phonenumbers.parse(value, None)
+    except phonenumbers.NumberParseException as exc:
+        raise serializers.ValidationError(
+            "Enter a phone number in international format, e.g. +250788123456."
+        ) from exc
+    if not phonenumbers.is_valid_number(parsed):
+        raise serializers.ValidationError("That doesn't look like a valid phone number.")
+    return phonenumbers.format_number(parsed, phonenumbers.PhoneNumberFormat.E164)
+
+
 class OtpRequestSerializer(serializers.Serializer):
     phone_number = serializers.CharField()
 
     def validate_phone_number(self, value: str) -> str:
-        try:
-            parsed = phonenumbers.parse(value, None)
-        except phonenumbers.NumberParseException as exc:
-            raise serializers.ValidationError(
-                "Enter a phone number in international format, e.g. +233241234567."
-            ) from exc
-        if not phonenumbers.is_valid_number(parsed):
-            raise serializers.ValidationError("That doesn't look like a valid phone number.")
-        return phonenumbers.format_number(parsed, phonenumbers.PhoneNumberFormat.E164)
+        return normalize_phone_number(value)
 
 
 class OtpVerifySerializer(serializers.Serializer):
@@ -51,5 +56,17 @@ class OtpVerifySerializer(serializers.Serializer):
     code = serializers.CharField(min_length=6, max_length=6)
 
 
-class MagicLinkRequestSerializer(serializers.Serializer):
+class PhoneConfirmSerializer(OtpVerifySerializer):
+    def validate_phone_number(self, value: str) -> str:
+        return normalize_phone_number(value)
+
+
+class EmailSerializer(serializers.Serializer):
     email = serializers.EmailField()
+
+    def validate_email(self, value: str) -> str:
+        return value.strip().lower()
+
+
+class TokenSerializer(serializers.Serializer):
+    token = serializers.CharField()
