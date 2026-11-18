@@ -7,6 +7,10 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Changed
 
+- API: phone numbers are optional (an account needs a phone number or an email); emails are stored in lower
+  case. Email links are limited to 5 an hour per caller, and one address gets at most 5 emails an hour.
+  Sign-in responses say whether the account was just created (`created`).
+
 - API staging and production settings (`config/settings/deployed.py`) no longer fall back to a public secret
   key, a SQLite database, every host, or every origin: the server refuses to start if a value is missing. Only
   the app and the site may call the API from a browser. A local `.env` is only read with the dev settings.
@@ -39,6 +43,13 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
   handling.
 
 ### Added
+
+- Sign up with a phone number or an email. Signing in by email no longer needs an existing account: an
+  unknown email gets a "finish creating your account" link, and the account is created when it's used (so
+  a mistyped address never creates one). The answer is the same either way.
+- Add the other one later from the account page: an email (confirmed by a link, which works on any device)
+  or a phone number (confirmed by a texted code). A number or email another account uses is refused.
+- Logging out also retires the refresh token on the API (`POST /api/v1/auth/token/logout/`).
 
 - API hosting on Render (`render.yaml`): production from `main` and staging from `staging`, both built from
   `apps/api/Dockerfile` in Frankfurt on the free plan, with Neon Postgres. Each start runs `migrate`, then
@@ -73,6 +84,10 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 - `ruff format --check` in CI.
 
 ### Fixed
+
+- App: people were signed out about an hour after signing in. Each refresh hands out a new refresh token and
+  retires the old one, but the app kept the old one, so the second refresh failed. It now keeps the new one,
+  and requests that expire together share one refresh instead of spending the same token twice.
 
 - Reloading any page of the deployed app other than the home page (a refresh, or coming back to a tab the
   browser had unloaded) showed Vercel's 404. `apps/web/vercel.json` now answers every address with the app, which

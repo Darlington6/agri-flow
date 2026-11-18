@@ -80,14 +80,16 @@ export function SignInPage() {
           <form className="flex flex-col gap-4" onSubmit={handleRequestCode}>
             <div>
               <h2 className="font-display text-base font-semibold text-ink-900">Sign in with your phone</h2>
-              <p className="mt-1 text-sm text-ink-500">We'll text you a 6-digit code.</p>
+              <p className="mt-1 text-sm text-ink-500">
+                We'll text you a 6-digit code. New here? The code creates your account.
+              </p>
             </div>
             <Field label="Phone number">
               <input
                 className={inputClass}
                 type="tel"
                 required
-                placeholder="+233241234567"
+                placeholder="+250788123456"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
               />
@@ -111,7 +113,7 @@ export function SignInPage() {
             <div>
               <h2 className="font-display text-base font-semibold text-ink-900">Sign in with email</h2>
               <p className="mt-1 text-sm text-ink-500">
-                We'll send a sign-in link — this only works if an account already has this email on file.
+                We'll email you a link. New here? The link creates your account.
               </p>
             </div>
             <Field label="Email">
@@ -142,7 +144,8 @@ export function SignInPage() {
           <div className="flex flex-col gap-3 text-center">
             <h2 className="font-display text-base font-semibold text-ink-900">Check your email</h2>
             <p className="text-sm text-ink-500">
-              If {email} has an account, a sign-in link is on its way.
+              We've sent a link to {email}. It works once, for 15 minutes. Can't find it? Check your spam
+              folder.
             </p>
             {debugLink && (
               <a

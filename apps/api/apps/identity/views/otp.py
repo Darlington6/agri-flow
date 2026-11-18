@@ -2,22 +2,19 @@ from django.conf import settings
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
 
 from ..channels import DeliveryUnavailable
-from ..serializers import OtpRequestSerializer, OtpVerifySerializer, UserSerializer
+from ..serializers import OtpRequestSerializer, OtpVerifySerializer
 from ..services import request_otp, verify_otp
-
-
-class OtpRequestThrottle(AnonRateThrottle):
-    # A real abuse target even in dev — deliberately stricter than the
-    # default anon rate (see REST_FRAMEWORK.DEFAULT_THROTTLE_RATES).
-    scope = "otp_request"
+from ..throttles import OtpRequestThrottle
+from .tokens import signed_in
 
 
 class OtpRequestView(APIView):
+    """Sign in or sign up by phone: the first correct code creates the
+    account."""
+
     permission_classes = [AllowAny]
     throttle_classes = [OtpRequestThrottle]
 
@@ -42,15 +39,7 @@ class OtpVerifyView(APIView):
         serializer = OtpVerifySerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         try:
-            user = verify_otp(**serializer.validated_data)
+            user, created = verify_otp(**serializer.validated_data)
         except ValueError as exc:
             return Response({"detail": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-
-        refresh = RefreshToken.for_user(user)
-        return Response(
-            {
-                "access": str(refresh.access_token),
-                "refresh": str(refresh),
-                "user": UserSerializer(user).data,
-            }
-        )
+        return Response(signed_in(user, created))

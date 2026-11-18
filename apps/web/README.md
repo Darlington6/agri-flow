@@ -70,8 +70,8 @@ format them with `src/lib/places.ts`; never match place names by substring.
 - Test files are type-checked by `tsconfig.test.json` (Node types available); app code by
   `tsconfig.app.json` (no Node types, so app code can't depend on Node by accident).
 
-The platform screens run from `src/data/` mock fixtures and need no backend. Real sign-in (`/signin`, `/account`,
-`/magic-link`) calls the API at `VITE_API_URL` (see `.env.example`; defaults to `http://localhost:8000` in
+The platform screens run from `src/data/` mock fixtures and need no backend. Real sign-up and sign-in (`/signin`, `/account`,
+`/magic-link`, `/confirm-email`) calls the API at `VITE_API_URL` (see `.env.example`; defaults to `http://localhost:8000` in
 dev). Start it with `docker compose up -d postgres redis api` from the repo root.
 
 ## Building for every device

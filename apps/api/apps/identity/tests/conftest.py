@@ -18,14 +18,22 @@ class RecordingOtpChannel:
 
 class RecordingEmailChannel:
     def __init__(self):
-        self.sent: list[tuple[str, str]] = []
+        self.sent: list[tuple[str, str, str]] = []
 
-    def send(self, email: str, link: str) -> None:
-        self.sent.append((email, link))
+    def send(self, email: str, link: str, kind: str) -> None:
+        self.sent.append((email, link, kind))
 
     @property
     def last_link(self) -> str:
         return self.sent[-1][1]
+
+    @property
+    def last_token(self) -> str:
+        return self.last_link.split("token=")[-1]
+
+    @property
+    def last_kind(self) -> str:
+        return self.sent[-1][2]
 
 
 @pytest.fixture(autouse=True)

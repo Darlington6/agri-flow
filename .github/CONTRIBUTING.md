@@ -167,8 +167,9 @@ cd apps/api
 DATABASE_URL='<the Neon connection string>' uv run python manage.py createsuperuser
 ```
 
-Accounts are keyed by phone number. Email sign-in only works for accounts with an email on file, so add
-pilot users' emails in the admin until SMS sign-in exists.
+People sign up with an email (or, once SMS exists, a phone number) and can add the other later from their
+account page. Admin accounts sign in to `/admin/` with a phone number and password, so they need a phone
+number.
 
 ## Dependencies (Dependabot)
 
