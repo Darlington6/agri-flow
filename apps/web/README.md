@@ -62,6 +62,23 @@ The logo's gold and sage are too light for text on white; use them as fills and 
 text. Pick-one-of-these choices (like the demo roles) use `CardButton`, a real button, never a clickable `<div>`.
 `src/test/tokens.test.ts` fails if a palette change drops a key pairing below WCAG AA contrast.
 
+## Phone numbers
+
+Type phone numbers with `PhoneInput` and `usePhoneField` (`src/components/ui/`), never a bare `<input type="tel">`.
+It pairs a country picker (flag and dialling code, a native `<select>`, so phones show their own list) with the
+local number, and gives the page the number in international form (E.164) to send. `src/lib/phone.ts` does the
+work with `libphonenumber-js`: it guesses the starting country (the account's, then the device's time zone, then
+a region in its language setting, then Rwanda), reads a local number with its leading 0, and writes numbers out
+for people (`formatPhone`). The API checks every number again.
+
+## Photos
+
+The entry pages (sign-in, demo roles) use `AuthLayout`, a photo beside the content (a band on top on phones and
+tablets). Photos come from `packages/media`, shared with the site and its licence register. The app has no image
+pipeline, so the photos it uses (`APP_PHOTOS` there) are sized ahead of time into `packages/media/app/`; after
+changing them, run `pnpm --filter @agriflow/media app-images`. `src/lib/appPhotos.test.ts` fails if a copy is
+missing or left over.
+
 ## Places
 
 Locations are structured (`Place`: name, administrative area, ISO country code), never free text, so
