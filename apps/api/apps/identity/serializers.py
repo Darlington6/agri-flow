@@ -1,8 +1,8 @@
-import phonenumbers
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from .models import Role
+from .phone import InvalidPhoneNumber, to_e164
 
 
 class RoleSerializer(serializers.ModelSerializer):
@@ -34,14 +34,9 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 def normalize_phone_number(value: str) -> str:
     """Accepts international format and returns E.164 (+250788123456)."""
     try:
-        parsed = phonenumbers.parse(value, None)
-    except phonenumbers.NumberParseException as exc:
-        raise serializers.ValidationError(
-            "Enter a phone number in international format, e.g. +250788123456."
-        ) from exc
-    if not phonenumbers.is_valid_number(parsed):
-        raise serializers.ValidationError("That doesn't look like a valid phone number.")
-    return phonenumbers.format_number(parsed, phonenumbers.PhoneNumberFormat.E164)
+        return to_e164(value)
+    except InvalidPhoneNumber as exc:
+        raise serializers.ValidationError(str(exc)) from exc
 
 
 class OtpRequestSerializer(serializers.Serializer):

@@ -1,5 +1,7 @@
 from django.contrib.auth.base_user import BaseUserManager
 
+from .phone import tidy
+
 
 class UserManager(BaseUserManager):
     """No username, and no password for regular users: they sign up with a
@@ -10,6 +12,11 @@ class UserManager(BaseUserManager):
     """
 
     use_in_migrations = True
+
+    def get_by_natural_key(self, username):
+        # The admin login: "+250 793 440 734" finds the same account as
+        # "+250793440734" (numbers are stored in E.164, see phone.py).
+        return super().get_by_natural_key(tidy(username) if username else username)
 
     def _create_user(self, phone_number: str | None = None, **extra_fields):
         if not phone_number and not extra_fields.get("email"):
