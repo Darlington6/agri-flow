@@ -94,7 +94,7 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 - Light and dark themes for the app: **System** (follows the device), **Light** or **Dark**, chosen in Settings or
   on the account page and remembered in the browser. Colours are named roles (`surface`, `canvas`, `action`,
   `accent`, chart colours) plus the ink scale, which flips in dark mode; dark values live in
-  `apps/web/src/index.css`. Dark mode is a neutral near-black (page `#0b0e11`, cards `#181a20`). Buttons turn gold in dark mode (like the site's dark sections), the logo switches to
+  `apps/web/src/index.css`. Dark mode is a neutral charcoal (page `#181a20`, cards and menus a step lighter at `#1e2329`, so they read as raised; grey text at 6.8:1 on cards). Buttons turn gold in dark mode (like the site's dark sections), the logo switches to
   its cream-ringed version, and charts follow the theme. A small script (`public/theme-init.js`) applies the
   saved theme before the page draws, so dark mode never flashes white. Contrast tests check the dark palette.
 
