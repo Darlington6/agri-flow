@@ -41,16 +41,16 @@ export function ConfirmEmailPage() {
   const next = user ? { href: '/account', label: 'Go to your account' } : { href: '/signin', label: 'Sign in' }
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center bg-ink-50 px-4 py-12">
+    <div className="flex min-h-svh flex-col items-center justify-center bg-cream px-4 py-12">
       <div className="mb-8 flex flex-col items-center gap-2 text-center">
         <DemoTag />
       </div>
       <Card className="w-full max-w-sm text-center">
-        {status === 'confirming' && <p className="text-sm text-ink-500">Confirming your email…</p>}
+        {status === 'confirming' && <p className="text-sm text-ink-600">Confirming your email…</p>}
         {status === 'done' && (
           <>
             <h1 className="font-display text-base font-semibold text-ink-900">Email added</h1>
-            <p className="mt-2 text-sm break-all text-ink-500">
+            <p className="mt-2 text-sm break-all text-ink-600">
               You can now sign in with {message} as well as your phone number.
             </p>
           </>

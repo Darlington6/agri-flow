@@ -66,7 +66,7 @@ export function FarmersPage() {
 
       <div className="flex flex-wrap items-center gap-3">
         <div className="relative max-w-sm min-w-[220px] flex-1">
-          <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-ink-400" />
+          <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-ink-500" />
           <input
             className={`${inputClass} pl-9`}
             placeholder="Search name or community…"
@@ -106,7 +106,7 @@ export function FarmersPage() {
         <div className="overflow-x-auto">
           <table className="w-full min-w-[920px] text-left text-sm">
             <thead>
-              <tr className="border-b border-ink-100 text-xs font-medium tracking-wide text-ink-400 uppercase">
+              <tr className="border-b border-ink-100 text-xs font-medium tracking-wide text-ink-500 uppercase">
                 <th className="px-5 py-3 font-medium">Farmer</th>
                 <th className="px-3 py-3 font-medium">Region / Community</th>
                 <th className="px-3 py-3 font-medium">Crop</th>
@@ -125,11 +125,11 @@ export function FarmersPage() {
                     <Link to={`/farmers/${f.id}`} className="font-medium text-ink-800 hover:text-primary-700">
                       {f.name}
                     </Link>
-                    <p className="text-xs text-ink-400">{f.climateSmartScore}% climate-smart score</p>
+                    <p className="text-xs text-ink-500">{f.climateSmartScore}% climate-smart score</p>
                   </td>
                   <td className="px-3 py-3 text-ink-600">
                     {f.region}
-                    <p className="text-xs text-ink-400">{f.community}</p>
+                    <p className="text-xs text-ink-500">{f.community}</p>
                   </td>
                   <td className="px-3 py-3">
                     <Badge tone="neutral">{cropById(f.primaryCropId)?.name}</Badge>

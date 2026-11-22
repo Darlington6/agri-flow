@@ -15,10 +15,10 @@ export function MatchRequestsPanel({ contractId }: { contractId: string }) {
   return (
     <Card>
       <div className="flex items-center gap-2">
-        <UserPlus className="h-4 w-4 text-ink-500" />
+        <UserPlus className="h-4 w-4 text-ink-600" />
         <h2 className="font-display text-sm font-semibold text-ink-700">Farmer Supply Requests</h2>
       </div>
-      <p className="mt-1 text-xs text-ink-500">Farmers offering to fulfill part of this contract's remaining volume.</p>
+      <p className="mt-1 text-xs text-ink-600">Farmers offering to fulfill part of this contract's remaining volume.</p>
 
       <div className="mt-4 flex flex-col divide-y divide-ink-50">
         {pending.map((m) => {
@@ -28,7 +28,7 @@ export function MatchRequestsPanel({ contractId }: { contractId: string }) {
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div>
                   <p className="text-sm font-medium text-ink-800">{farmer?.name ?? m.farmerId}</p>
-                  <p className="text-xs text-ink-400">
+                  <p className="text-xs text-ink-500">
                     {farmer?.community}, {farmer?.region} · offering {formatTonnes(m.proposedQuantityTonnes)} ·{' '}
                     {formatDate(m.createdAt)}
                   </p>
@@ -58,7 +58,7 @@ export function MatchRequestsPanel({ contractId }: { contractId: string }) {
             <div key={m.id} className="flex items-center justify-between py-2.5 first:pt-0 last:pb-0">
               <div>
                 <p className="text-sm text-ink-700">{farmer?.name ?? m.farmerId}</p>
-                <p className="text-xs text-ink-400">
+                <p className="text-xs text-ink-500">
                   {formatTonnes(m.proposedQuantityTonnes)} · {m.decidedAt ? formatDate(m.decidedAt) : ''}
                 </p>
               </div>

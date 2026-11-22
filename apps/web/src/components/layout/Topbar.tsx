@@ -2,7 +2,6 @@ import { useState, useRef, useEffect, useMemo } from 'react'
 import { Menu, Bell, ChevronDown, LogOut } from 'lucide-react'
 import { useSession } from '@/context/SessionContext'
 import { scopedNotifications } from '@/lib/scope'
-import { DemoTag } from '@/components/ui'
 
 export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
   const { session, logout } = useSession()
@@ -26,19 +25,18 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
       <div className="flex items-center gap-3">
         <button
           onClick={onMenuClick}
-          className="rounded-lg p-2 text-ink-500 hover:bg-ink-50 lg:hidden"
+          className="rounded-lg p-2 text-ink-600 hover:bg-ink-50 lg:hidden"
           aria-label="Open navigation"
         >
           <Menu className="h-5 w-5" />
         </button>
-        <DemoTag className="hidden sm:inline-flex" />
       </div>
 
       <div className="flex items-center gap-2">
         <div className="relative" ref={notifRef}>
           <button
             onClick={() => setNotifOpen((v) => !v)}
-            className="relative rounded-lg p-2 text-ink-500 hover:bg-ink-50"
+            className="relative rounded-lg p-2 text-ink-600 hover:bg-ink-50"
             aria-label="Notifications"
           >
             <Bell className="h-5 w-5" />
@@ -48,17 +46,17 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
           </button>
           {notifOpen && (
             <div className="absolute right-0 z-20 mt-2 w-80 rounded-2xl border border-ink-100 bg-white p-2 shadow-[var(--shadow-card-hover)]">
-              <p className="px-2 py-1.5 text-xs font-semibold tracking-wide text-ink-400 uppercase">
+              <p className="px-2 py-1.5 text-xs font-semibold tracking-wide text-ink-500 uppercase">
                 Risk alerts &amp; notifications
               </p>
               <div className="max-h-80 scrollbar-thin overflow-y-auto">
                 {unread.map((n) => (
                   <div key={n.id} className="rounded-xl px-2 py-2 hover:bg-ink-50">
                     <p className="text-sm font-medium text-ink-800">{n.title}</p>
-                    <p className="mt-0.5 text-xs text-ink-500">{n.message}</p>
+                    <p className="mt-0.5 text-xs text-ink-600">{n.message}</p>
                   </div>
                 ))}
-                {unread.length === 0 && <p className="px-2 py-3 text-sm text-ink-400">No alerts for you right now.</p>}
+                {unread.length === 0 && <p className="px-2 py-3 text-sm text-ink-500">No alerts for you right now.</p>}
               </div>
             </div>
           )}
@@ -74,9 +72,9 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
             </span>
             <span className="hidden text-left sm:block">
               <span className="block text-sm leading-tight font-medium text-ink-800">{session?.name}</span>
-              <span className="block text-[11px] leading-tight text-ink-400">{session?.role}</span>
+              <span className="block text-[11px] leading-tight text-ink-500">{session?.role}</span>
             </span>
-            <ChevronDown className="h-4 w-4 text-ink-400" />
+            <ChevronDown className="h-4 w-4 text-ink-500" />
           </button>
           {menuOpen && (
             <div className="absolute right-0 z-20 mt-2 w-48 rounded-2xl border border-ink-100 bg-white p-1.5 shadow-[var(--shadow-card-hover)]">

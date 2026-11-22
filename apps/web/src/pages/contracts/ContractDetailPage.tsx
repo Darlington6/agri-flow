@@ -56,7 +56,7 @@ export function ContractDetailPage() {
       <div>
         <Link
           to="/contracts"
-          className="mb-3 inline-flex items-center gap-1 text-xs font-medium text-ink-500 hover:text-ink-800"
+          className="mb-3 inline-flex items-center gap-1 text-xs font-medium text-ink-600 hover:text-ink-800"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           Contracts
@@ -77,23 +77,23 @@ export function ContractDetailPage() {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
         <Card>
-          <p className="text-xs text-ink-500">Contracted</p>
+          <p className="text-xs text-ink-600">Contracted</p>
           <p className="mt-1 font-display text-xl font-semibold text-ink-900">
             {formatTonnes(contract.contractedQuantityTonnes)}
           </p>
         </Card>
         <Card>
-          <p className="text-xs text-ink-500">Expected delivery</p>
+          <p className="text-xs text-ink-600">Expected delivery</p>
           <p className="mt-1 font-display text-xl font-semibold text-ink-900">
             {formatDate(contract.expectedDeliveryDate)}
           </p>
         </Card>
         <Card>
-          <p className="text-xs text-ink-500">Contract value</p>
+          <p className="text-xs text-ink-600">Contract value</p>
           <p className="mt-1 font-display text-xl font-semibold text-ink-900">{formatGHSFull(contract.valueGHS)}</p>
         </Card>
         <Card>
-          <p className="text-xs text-ink-500">Stage</p>
+          <p className="text-xs text-ink-600">Stage</p>
           <p className="mt-1 font-display text-xl font-semibold text-ink-900">{contract.stage}</p>
         </Card>
       </div>
@@ -106,7 +106,7 @@ export function ContractDetailPage() {
               <span className="font-display text-2xl font-semibold text-ink-900">
                 {formatTonnes(contract.suppliedQuantityTonnes)} / {formatTonnes(contract.contractedQuantityTonnes)}
               </span>
-              <span className="font-medium text-ink-500">{pct.toFixed(0)}%</span>
+              <span className="font-medium text-ink-600">{pct.toFixed(0)}%</span>
             </div>
             <ProgressBar
               value={pct}
@@ -131,10 +131,10 @@ export function ContractDetailPage() {
                     {i < contract.timeline.length - 1 && <span className="mt-1 h-full w-px flex-1 bg-ink-100" />}
                   </div>
                   <div className="pb-4">
-                    <p className={event.done ? 'text-sm font-medium text-ink-800' : 'text-sm font-medium text-ink-400'}>
+                    <p className={event.done ? 'text-sm font-medium text-ink-800' : 'text-sm font-medium text-ink-500'}>
                       {event.label}
                     </p>
-                    <p className="text-xs text-ink-400">{formatDate(event.date)}</p>
+                    <p className="text-xs text-ink-500">{formatDate(event.date)}</p>
                   </div>
                 </li>
               ))}
@@ -144,7 +144,7 @@ export function ContractDetailPage() {
           <Card>
             <h2 className="font-display text-sm font-semibold text-ink-700">Farmers Supplying This Contract</h2>
             {farmers.length === 0 ? (
-              <p className="mt-3 text-sm text-ink-500">No farmers matched yet.</p>
+              <p className="mt-3 text-sm text-ink-600">No farmers matched yet.</p>
             ) : (
               <div className="mt-3 flex flex-col divide-y divide-ink-50">
                 {farmers.map((f) => (
@@ -155,11 +155,11 @@ export function ContractDetailPage() {
                   >
                     <div>
                       <p className="text-sm font-medium text-ink-800">{f.name}</p>
-                      <p className="text-xs text-ink-400">
+                      <p className="text-xs text-ink-500">
                         {f.community}, {f.region} · {f.currentCropStage}
                       </p>
                     </div>
-                    <div className="flex flex-col items-end gap-1 text-right text-xs text-ink-500">
+                    <div className="flex flex-col items-end gap-1 text-right text-xs text-ink-600">
                       <p>{formatTonnes(matchedQuantityByFarmer.get(f.id) ?? f.contractedQuantityTonnes)} contracted</p>
                       <div className="flex items-center gap-1.5">
                         <KycBadge status={f.kycStatus} />
@@ -204,14 +204,14 @@ export function ContractDetailPage() {
           <Card>
             <h2 className="font-display text-sm font-semibold text-ink-700">Payments</h2>
             {payments.length === 0 ? (
-              <p className="mt-3 text-sm text-ink-500">No payments recorded yet.</p>
+              <p className="mt-3 text-sm text-ink-600">No payments recorded yet.</p>
             ) : (
               <div className="mt-3 flex flex-col divide-y divide-ink-50">
                 {payments.map((p) => (
                   <div key={p.id} className="flex items-center justify-between py-2.5 first:pt-0 last:pb-0">
                     <div>
                       <p className="text-sm font-medium text-ink-800">{p.counterpartyName}</p>
-                      <p className="text-xs text-ink-400">
+                      <p className="text-xs text-ink-500">
                         {p.direction} · {p.method}
                       </p>
                     </div>

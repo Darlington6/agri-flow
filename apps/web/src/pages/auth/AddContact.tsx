@@ -46,7 +46,7 @@ export function AddEmail({ onDone }: { onDone: () => void }) {
             Dev mode — click here to confirm (never shown outside DEBUG)
           </a>
         )}
-        <button type="button" className="self-start text-xs text-ink-500 hover:text-ink-700" onClick={onDone}>
+        <button type="button" className="self-start text-xs text-ink-600 hover:text-ink-700" onClick={onDone}>
           Close
         </button>
       </div>
@@ -71,7 +71,7 @@ export function AddEmail({ onDone }: { onDone: () => void }) {
         <Button type="submit" size="sm" disabled={busy}>
           {busy ? 'Sending…' : 'Send link'}
         </Button>
-        <button type="button" className="text-xs text-ink-500 hover:text-ink-700" onClick={onDone}>
+        <button type="button" className="text-xs text-ink-600 hover:text-ink-700" onClick={onDone}>
           Cancel
         </button>
       </div>
@@ -143,7 +143,7 @@ export function AddPhone({ onDone }: { onDone: () => void }) {
           <Button type="submit" size="sm" disabled={busy}>
             {busy ? 'Confirming…' : 'Confirm'}
           </Button>
-          <button type="button" className="text-xs text-ink-500 hover:text-ink-700" onClick={() => setCodeSent(false)}>
+          <button type="button" className="text-xs text-ink-600 hover:text-ink-700" onClick={() => setCodeSent(false)}>
             Use a different number
           </button>
         </div>
@@ -169,7 +169,7 @@ export function AddPhone({ onDone }: { onDone: () => void }) {
         <Button type="submit" size="sm" disabled={busy}>
           {busy ? 'Sending…' : 'Send code'}
         </Button>
-        <button type="button" className="text-xs text-ink-500 hover:text-ink-700" onClick={onDone}>
+        <button type="button" className="text-xs text-ink-600 hover:text-ink-700" onClick={onDone}>
           Cancel
         </button>
       </div>

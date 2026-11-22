@@ -71,7 +71,7 @@ export function DeliveryPage() {
           <Card padded={false}>
             <div className="px-6 pt-6">
               <h2 className="font-display text-sm font-semibold text-ink-900">Available Jobs</h2>
-              <p className="text-xs text-ink-500">Ranked for your regions and vehicle — book the ones that fit.</p>
+              <p className="text-xs text-ink-600">Ranked for your regions and vehicle — book the ones that fit.</p>
             </div>
             <div className="mt-4 flex flex-col divide-y divide-ink-50 px-6 pb-6">
               {rankedAvailable.map(({ job, regionMatch }) => (
@@ -83,7 +83,7 @@ export function DeliveryPage() {
                     <p className="text-sm font-medium text-ink-800">
                       {cropById(job.cropId)?.name} · {formatTonnes(job.quantityTonnes)}
                     </p>
-                    <p className="text-xs text-ink-400">
+                    <p className="text-xs text-ink-500">
                       {formatPlace(job.from)} → {formatPlace(job.to)} · {formatDate(job.scheduledDate)} · fee{' '}
                       {formatGHSFull(job.feeGHS)}
                     </p>
@@ -97,7 +97,7 @@ export function DeliveryPage() {
                 </div>
               ))}
               {rankedAvailable.length === 0 && (
-                <p className="py-3 text-sm text-ink-400">No open jobs right now — check back soon.</p>
+                <p className="py-3 text-sm text-ink-500">No open jobs right now — check back soon.</p>
               )}
             </div>
           </Card>
@@ -105,7 +105,7 @@ export function DeliveryPage() {
           <Card padded={false}>
             <div className="px-6 pt-6">
               <h2 className="font-display text-sm font-semibold text-ink-900">My Jobs</h2>
-              <p className="text-xs text-ink-500">Jobs you've booked, at any stage.</p>
+              <p className="text-xs text-ink-600">Jobs you've booked, at any stage.</p>
             </div>
             <div className="mt-4 flex flex-col divide-y divide-ink-50 px-6 pb-6">
               {myJobs.map((job) => {
@@ -119,7 +119,7 @@ export function DeliveryPage() {
                       <p className="text-sm font-medium text-ink-800">
                         {cropById(job.cropId)?.name} · {formatTonnes(job.quantityTonnes)}
                       </p>
-                      <p className="text-xs text-ink-400">
+                      <p className="text-xs text-ink-500">
                         {formatPlace(job.from)} → {formatPlace(job.to)} · {formatDate(job.scheduledDate)}
                       </p>
                     </div>
@@ -134,7 +134,7 @@ export function DeliveryPage() {
                   </div>
                 )
               })}
-              {myJobs.length === 0 && <p className="py-3 text-sm text-ink-400">You haven't booked any jobs yet.</p>}
+              {myJobs.length === 0 && <p className="py-3 text-sm text-ink-500">You haven't booked any jobs yet.</p>}
             </div>
           </Card>
         </div>
@@ -142,16 +142,16 @@ export function DeliveryPage() {
         <Card className="h-fit">
           <h2 className="font-display text-sm font-semibold text-ink-700">Your Profile</h2>
           <p className="mt-3 font-display text-base font-semibold text-ink-900">{partner.name}</p>
-          <p className="text-xs text-ink-500">
+          <p className="text-xs text-ink-600">
             {partner.type} · {partner.vehicle.label}
           </p>
           <div className="mt-3 flex items-center gap-1.5 text-sm text-ink-700">
             <Star className="h-4 w-4 fill-current text-status-warn" />
             {partner.rating.toFixed(1)} rating
-            <span className="text-xs text-ink-400">· DEMO metric</span>
+            <span className="text-xs text-ink-500">· DEMO metric</span>
           </div>
           <div className="mt-3 flex items-start gap-1.5 text-sm text-ink-700">
-            <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-ink-400" />
+            <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-ink-500" />
             <span>{formatServiceAreas(partner.serviceAreas)}</span>
           </div>
         </Card>

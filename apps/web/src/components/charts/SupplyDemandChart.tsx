@@ -22,7 +22,7 @@ export function SupplyDemandChart() {
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h3 className="font-display text-base font-semibold text-ink-900">Supply vs Demand</h3>
-          <p className="text-xs text-ink-500">Next 12 weeks, tonnes</p>
+          <p className="text-xs text-ink-600">Next 12 weeks, tonnes</p>
         </div>
         <div className="flex gap-1 rounded-xl bg-ink-50 p-1">
           {crops.map((c) => (
@@ -30,7 +30,7 @@ export function SupplyDemandChart() {
               key={c.id}
               onClick={() => setCropId(c.id)}
               className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-                cropId === c.id ? 'bg-white text-primary-800 shadow-sm' : 'text-ink-500 hover:text-ink-800'
+                cropId === c.id ? 'bg-white text-primary-800 shadow-sm' : 'text-ink-600 hover:text-ink-800'
               }`}
             >
               {c.name}
