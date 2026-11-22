@@ -22,7 +22,15 @@ import { useSession } from '@/context/SessionContext'
 import { usePlatformData } from '@/context/PlatformDataContext'
 import { PageHeader, Card, StatCard, Button, RiskBadge, Badge } from '@/components/ui'
 import { SupplyDemandChart } from '@/components/charts/SupplyDemandChart'
-import { dashboardMetrics, buyerById, cropById, farmerById, regionClimateRiskByRegion, upcomingHarvests, productionByFarmer } from '@/data'
+import {
+  dashboardMetrics,
+  buyerById,
+  cropById,
+  farmerById,
+  regionClimateRiskByRegion,
+  upcomingHarvests,
+  productionByFarmer,
+} from '@/data'
 import {
   scopedContracts,
   scopedFarmers,
@@ -88,7 +96,10 @@ export function DashboardPage() {
     [session, liveProductionCycles, liveContracts],
   )
   const alerts = useMemo(
-    () => scopedNotifications(session, liveContracts).filter((n) => !n.read).slice(0, 4),
+    () =>
+      scopedNotifications(session, liveContracts)
+        .filter((n) => !n.read)
+        .slice(0, 4),
     [session, liveContracts],
   )
   const regions = useMemo(() => scopedRegions(session, liveContracts), [session, liveContracts])
@@ -116,9 +127,22 @@ export function DashboardPage() {
         <PageHeader title={`Good morning, ${session?.name ?? 'there'}`} subtitle={SUBTITLE[role]} />
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard label="Available Jobs" value={String(available.length)} icon={Truck} hint="Open to book, network-wide" />
-          <StatCard label="My Active Jobs" value={String(mine.filter((j) => j.status !== 'Delivered').length)} icon={Truck} />
-          <StatCard label="Completed Deliveries" value={String(mine.filter((j) => j.status === 'Delivered').length)} icon={Truck} />
+          <StatCard
+            label="Available Jobs"
+            value={String(available.length)}
+            icon={Truck}
+            hint="Open to book, network-wide"
+          />
+          <StatCard
+            label="My Active Jobs"
+            value={String(mine.filter((j) => j.status !== 'Delivered').length)}
+            icon={Truck}
+          />
+          <StatCard
+            label="Completed Deliveries"
+            value={String(mine.filter((j) => j.status === 'Delivered').length)}
+            icon={Truck}
+          />
           <StatCard label="Fees Earned" value={formatGHSFull(earnedGHS)} icon={Star} hint="From completed deliveries" />
         </div>
 
@@ -159,18 +183,54 @@ export function DashboardPage() {
 
       {isAdminRole(role) && (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard label="Contracted Demand" value={formatGHS(dashboardMetrics.contractedDemandGHS)} icon={Wallet} hint="Active contracted value, network-wide" />
-          <StatCard label="Expected Supply" value={formatTonnes(dashboardMetrics.expectedSupplyTonnes)} icon={Sprout} hint="Projected across active contracts" />
-          <StatCard label="Active Farmers" value={dashboardMetrics.activeFarmers.toLocaleString()} icon={Users} hint="Across 9 regions" />
-          <StatCard label="At-Risk Contracts" value={String(dashboardMetrics.atRiskContracts)} icon={AlertTriangle} tone="risk" hint="Medium or high risk of shortfall" />
+          <StatCard
+            label="Contracted Demand"
+            value={formatGHS(dashboardMetrics.contractedDemandGHS)}
+            icon={Wallet}
+            hint="Active contracted value, network-wide"
+          />
+          <StatCard
+            label="Expected Supply"
+            value={formatTonnes(dashboardMetrics.expectedSupplyTonnes)}
+            icon={Sprout}
+            hint="Projected across active contracts"
+          />
+          <StatCard
+            label="Active Farmers"
+            value={dashboardMetrics.activeFarmers.toLocaleString()}
+            icon={Users}
+            hint="Across 9 regions"
+          />
+          <StatCard
+            label="At-Risk Contracts"
+            value={String(dashboardMetrics.atRiskContracts)}
+            icon={AlertTriangle}
+            tone="risk"
+            hint="Medium or high risk of shortfall"
+          />
         </div>
       )}
 
       {role === 'Buyer' && (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard label="Your Contracted Value" value={formatGHS(contracts.reduce((s, c) => s + c.valueGHS, 0))} icon={Wallet} hint={`Across ${contracts.length} contract(s)`} />
-          <StatCard label="Your Expected Supply" value={formatTonnes(harvestForecasts.reduce((s, h) => s + h.expectedQuantityTonnes, 0))} icon={Sprout} hint="Forecast across your contracts" />
-          <StatCard label="Active Suppliers" value={String(scopedFarmerList.length)} icon={Users} hint="Farmers fulfilling your orders" />
+          <StatCard
+            label="Your Contracted Value"
+            value={formatGHS(contracts.reduce((s, c) => s + c.valueGHS, 0))}
+            icon={Wallet}
+            hint={`Across ${contracts.length} contract(s)`}
+          />
+          <StatCard
+            label="Your Expected Supply"
+            value={formatTonnes(harvestForecasts.reduce((s, h) => s + h.expectedQuantityTonnes, 0))}
+            icon={Sprout}
+            hint="Forecast across your contracts"
+          />
+          <StatCard
+            label="Active Suppliers"
+            value={String(scopedFarmerList.length)}
+            icon={Users}
+            hint="Farmers fulfilling your orders"
+          />
           <StatCard
             label="At-Risk Contracts"
             value={String(contracts.filter((c) => c.riskLevel !== 'low').length)}
@@ -183,10 +243,17 @@ export function DashboardPage() {
 
       {role === 'Field Agent' && (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard label="Assigned Farmers" value={String(scopedFarmerList.length)} icon={Users} hint={`Across ${regions.length} region(s)`} />
+          <StatCard
+            label="Assigned Farmers"
+            value={String(scopedFarmerList.length)}
+            icon={Users}
+            hint={`Across ${regions.length} region(s)`}
+          />
           <StatCard
             label="Needing Attention"
-            value={String(scopedFarmerList.filter((f) => f.riskStatus === 'high' || !f.hasSubmittedLatestUpdate).length)}
+            value={String(
+              scopedFarmerList.filter((f) => f.riskStatus === 'high' || !f.hasSubmittedLatestUpdate).length,
+            )}
             icon={AlertTriangle}
             tone="risk"
             hint="High risk or missing crop update"
@@ -208,7 +275,12 @@ export function DashboardPage() {
 
       {role === 'Farmer' && me && (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard label="Contracted Quantity" value={formatTonnes(me.contractedQuantityTonnes)} icon={Sprout} hint={cropById(me.primaryCropId)?.name} />
+          <StatCard
+            label="Contracted Quantity"
+            value={formatTonnes(me.contractedQuantityTonnes)}
+            icon={Sprout}
+            hint={cropById(me.primaryCropId)?.name}
+          />
           <StatCard
             label="Expected Harvest"
             value={myCycle ? formatShortDate(myCycle.expectedHarvestDate) : '—'}
@@ -247,13 +319,20 @@ export function DashboardPage() {
                   const pct = (c.suppliedQuantityTonnes / c.contractedQuantityTonnes) * 100
                   const buyer = buyerById(c.buyerId)
                   return (
-                    <Link key={c.id} to={`/contracts/${c.id}`} className="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0 hover:text-primary-700">
+                    <Link
+                      key={c.id}
+                      to={`/contracts/${c.id}`}
+                      className="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0 hover:text-primary-700"
+                    >
                       <div>
                         <p className="text-sm font-medium text-ink-800">
                           {c.id} · {cropById(c.cropId)?.name}
                           {role === 'Farmer' && buyer ? ` · ${buyer.name}` : ''}
                         </p>
-                        <p className="text-xs text-ink-400">{formatTonnes(c.suppliedQuantityTonnes)} / {formatTonnes(c.contractedQuantityTonnes)} · {pct.toFixed(0)}%</p>
+                        <p className="text-xs text-ink-400">
+                          {formatTonnes(c.suppliedQuantityTonnes)} / {formatTonnes(c.contractedQuantityTonnes)} ·{' '}
+                          {pct.toFixed(0)}%
+                        </p>
                       </div>
                       <RiskBadge level={c.riskLevel} />
                     </Link>
@@ -276,17 +355,21 @@ export function DashboardPage() {
                 {scopedFarmerList
                   .filter((f) => f.riskStatus === 'high' || !f.hasSubmittedLatestUpdate)
                   .map((f) => (
-                      <Link key={f.id} to={`/farmers/${f.id}`} className="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0 hover:text-primary-700">
-                        <div>
-                          <p className="text-sm font-medium text-ink-800">{f.name}</p>
-                          <p className="text-xs text-ink-400">
-                            {f.community}, {f.region}
-                            {!f.hasSubmittedLatestUpdate ? ' · no update in 2+ weeks' : ''}
-                          </p>
-                        </div>
-                        <RiskBadge level={f.riskStatus} />
-                      </Link>
-                    ))}
+                    <Link
+                      key={f.id}
+                      to={`/farmers/${f.id}`}
+                      className="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0 hover:text-primary-700"
+                    >
+                      <div>
+                        <p className="text-sm font-medium text-ink-800">{f.name}</p>
+                        <p className="text-xs text-ink-400">
+                          {f.community}, {f.region}
+                          {!f.hasSubmittedLatestUpdate ? ' · no update in 2+ weeks' : ''}
+                        </p>
+                      </div>
+                      <RiskBadge level={f.riskStatus} />
+                    </Link>
+                  ))}
               </div>
             </Card>
           )}
@@ -304,7 +387,7 @@ export function DashboardPage() {
             <div className="mt-4 overflow-x-auto">
               <table className="w-full min-w-[640px] text-left text-sm">
                 <thead>
-                  <tr className="border-y border-ink-100 text-xs font-medium uppercase tracking-wide text-ink-400">
+                  <tr className="border-y border-ink-100 text-xs font-medium tracking-wide text-ink-400 uppercase">
                     <th className="px-6 py-2.5 font-medium">Farmer</th>
                     <th className="px-3 py-2.5 font-medium">Crop</th>
                     <th className="px-3 py-2.5 font-medium">Expected Qty</th>
@@ -321,7 +404,10 @@ export function DashboardPage() {
                     return (
                       <tr key={h.id} className="border-b border-ink-50 last:border-0 hover:bg-ink-50/60">
                         <td className="px-6 py-3">
-                          <Link to={`/farmers/${h.farmerId}`} className="font-medium text-ink-800 hover:text-primary-700">
+                          <Link
+                            to={`/farmers/${h.farmerId}`}
+                            className="font-medium text-ink-800 hover:text-primary-700"
+                          >
                             {farmer?.name ?? h.farmerId}
                           </Link>
                         </td>
@@ -382,7 +468,9 @@ export function DashboardPage() {
                   <div key={a.id} className="flex gap-3 rounded-xl border border-ink-100 p-3">
                     <span
                       className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${
-                        a.severity === 'risk' ? 'bg-status-risk-bg text-status-risk' : 'bg-status-warn-bg text-status-warn'
+                        a.severity === 'risk'
+                          ? 'bg-status-risk-bg text-status-risk'
+                          : 'bg-status-warn-bg text-status-warn'
                       }`}
                     >
                       <Icon className="h-3.5 w-3.5" />
@@ -448,10 +536,15 @@ export function DashboardPage() {
             <Card className="border-dashed">
               <div className="flex items-center gap-2 text-ink-500">
                 <Warehouse className="h-4 w-4" />
-                <p className="text-xs font-medium uppercase tracking-wide">Post-harvest snapshot</p>
+                <p className="text-xs font-medium tracking-wide uppercase">Post-harvest snapshot</p>
               </div>
-              <p className="mt-2 text-sm text-ink-600">Storage shortfall of 7 tonnes projected for next week's harvest.</p>
-              <Link to="/harvest" className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-primary-700 hover:text-primary-800">
+              <p className="mt-2 text-sm text-ink-600">
+                Storage shortfall of 7 tonnes projected for next week's harvest.
+              </p>
+              <Link
+                to="/harvest"
+                className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-primary-700 hover:text-primary-800"
+              >
                 View post-harvest plan
                 <ArrowRight className="h-3.5 w-3.5" />
               </Link>
@@ -469,7 +562,10 @@ export function DashboardPage() {
               <p className="mt-3 text-sm leading-relaxed text-brand-100">
                 Take rate, revenue by source and network growth — the numbers Platform Admin doesn't need day to day.
               </p>
-              <Link to="/executive" className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-white hover:text-brand-100">
+              <Link
+                to="/executive"
+                className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-white hover:text-brand-100"
+              >
                 Open Executive view
                 <ArrowRight className="h-3.5 w-3.5" />
               </Link>

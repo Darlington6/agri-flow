@@ -26,7 +26,9 @@ export function StatCard({ label, value, hint, icon: Icon, tone = 'default' }: S
           </span>
         )}
       </div>
-      <div className={clsx('font-display text-3xl font-semibold', tone === 'risk' ? 'text-status-risk' : 'text-ink-900')}>
+      <div
+        className={clsx('font-display text-3xl font-semibold', tone === 'risk' ? 'text-status-risk' : 'text-ink-900')}
+      >
         {value}
       </div>
       {hint && <p className="text-xs text-ink-500">{hint}</p>}

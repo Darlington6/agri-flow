@@ -15,20 +15,18 @@ const t = dictionaryFor(locale)
   <PageHero title={t.howItWorks.title} lede={t.howItWorks.lede} photo="pageHowItWorks" />
   <section class="mx-auto max-w-4xl px-4 py-16 sm:px-6 md:py-24">
     <ol class="relative grid gap-10 border-l-2 border-sage-200 pl-8 sm:pl-12">
-      {
-        t.howItWorks.steps.map((step, i) => (
-          <li class="relative">
-            <span
-              aria-hidden="true"
-              class="absolute -left-[3.05rem] top-0 grid h-11 w-11 place-items-center rounded-full bg-brand-800 font-display text-lg font-semibold text-cream sm:-left-[4.05rem]"
-            >
-              {i + 1}
-            </span>
-            <h2 class="text-2xl font-semibold">{step.title}</h2>
-            <p class="mt-2 text-lg leading-relaxed text-ink-700">{step.body}</p>
-          </li>
-        ))
-      }
+      {t.howItWorks.steps.map((step, i) => (
+        <li class="relative">
+          <span
+            aria-hidden="true"
+            class="absolute -left-[3.05rem] top-0 grid h-11 w-11 place-items-center rounded-full bg-brand-800 font-display text-lg font-semibold text-cream sm:-left-[4.05rem]"
+          >
+            {i + 1}
+          </span>
+          <h2 class="text-2xl font-semibold">{step.title}</h2>
+          <p class="mt-2 text-lg leading-relaxed text-ink-700">{step.body}</p>
+        </li>
+      ))}
     </ol>
   </section>
   <CtaBand locale={locale} title={t.home.finalCta.title} body={t.home.finalCta.body} />

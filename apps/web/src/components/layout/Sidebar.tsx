@@ -16,12 +16,12 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
       <div className="flex items-center gap-2 px-5 py-5">
         <LogoMark className="h-10" />
         <div>
-          <p className="font-display text-lg font-semibold leading-tight text-ink-900">{brand.name}</p>
+          <p className="font-display text-lg leading-tight font-semibold text-ink-900">{brand.name}</p>
           <p className="text-[11px] leading-tight text-ink-400">{brand.country} pilot</p>
         </div>
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-3 py-2 scrollbar-thin">
+      <nav className="flex-1 scrollbar-thin overflow-y-auto px-3 py-2">
         <ul className="flex flex-col gap-0.5">
           {primaryNav.map((item) => (
             <li key={item.to}>

@@ -90,11 +90,10 @@ export function AccountPage() {
         </form>
 
         <div className="mt-6 border-t border-ink-100 pt-6">
-          <p className="text-xs font-medium uppercase tracking-wide text-ink-400">Roles</p>
+          <p className="text-xs font-medium tracking-wide text-ink-400 uppercase">Roles</p>
           {user.roles.length === 0 ? (
             <p className="mt-2 text-sm text-ink-500">
-              No role assigned yet — this becomes available once farmer/buyer/etc. profiles exist on the
-              platform.
+              No role assigned yet — this becomes available once farmer/buyer/etc. profiles exist on the platform.
             </p>
           ) : (
             <ul className="mt-2 flex flex-wrap gap-2">

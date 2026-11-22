@@ -109,8 +109,7 @@ export const contracts: Contract[] = [
     riskLevel: 'low',
     deliveryLocation: 'Accra',
     createdAt: '2026-07-02',
-    aiAssessment:
-      'All six farms are matched and tracking to plan. No supply gap projected for this contract.',
+    aiAssessment: 'All six farms are matched and tracking to plan. No supply gap projected for this contract.',
     timeline: [
       { date: '2026-07-02', label: 'Demand created', done: true },
       { date: '2026-07-14', label: 'Farmers matched', done: true },
@@ -244,7 +243,8 @@ export const contracts: Contract[] = [
 ]
 
 export const contractById = (id: string, list: Contract[] = contracts) => list.find((c) => c.id === id)
-export const contractsByBuyer = (buyerId: string, list: Contract[] = contracts) => list.filter((c) => c.buyerId === buyerId)
+export const contractsByBuyer = (buyerId: string, list: Contract[] = contracts) =>
+  list.filter((c) => c.buyerId === buyerId)
 export const contractsByFarmer = (farmerId: string, list: Contract[] = contracts) =>
   list.filter((c) => c.farmerIds.includes(farmerId))
 

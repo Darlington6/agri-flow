@@ -8,7 +8,9 @@ import { DEFAULT_LOCALE, LOCALES, PUBLISHED_LOCALES } from './src/i18n/locales'
 // provides its production URL, and local builds use localhost.
 const site =
   process.env.SITE_URL ??
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : 'http://localhost:4321')
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : 'http://localhost:4321')
 
 const published = PUBLISHED_LOCALES.map((l) => LOCALES[l].code)
 
@@ -37,7 +39,7 @@ export default defineConfig({
         "img-src 'self' data: https://vercel.live https://vercel.com",
         "font-src 'self' https://vercel.live https://assets.vercel.com",
         "connect-src 'self' https://*.onrender.com https://vercel.live wss://ws-us3.pusher.com",
-        "frame-src https://vercel.live",
+        'frame-src https://vercel.live',
         "base-uri 'self'",
         "form-action 'self'",
         "object-src 'none'",

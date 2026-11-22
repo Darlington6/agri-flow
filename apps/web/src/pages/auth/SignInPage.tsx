@@ -98,11 +98,7 @@ export function SignInPage() {
             <Button type="submit" disabled={busy}>
               {busy ? 'Sending…' : 'Send code'}
             </Button>
-            <button
-              type="button"
-              className="text-xs text-ink-500 hover:text-ink-700"
-              onClick={() => setStep('email')}
-            >
+            <button type="button" className="text-xs text-ink-500 hover:text-ink-700" onClick={() => setStep('email')}>
               Sign in with email instead
             </button>
           </form>
@@ -130,11 +126,7 @@ export function SignInPage() {
             <Button type="submit" disabled={busy}>
               {busy ? 'Sending…' : 'Send link'}
             </Button>
-            <button
-              type="button"
-              className="text-xs text-ink-500 hover:text-ink-700"
-              onClick={() => setStep('phone')}
-            >
+            <button type="button" className="text-xs text-ink-500 hover:text-ink-700" onClick={() => setStep('phone')}>
               Use my phone instead
             </button>
           </form>
@@ -144,8 +136,7 @@ export function SignInPage() {
           <div className="flex flex-col gap-3 text-center">
             <h2 className="font-display text-base font-semibold text-ink-900">Check your email</h2>
             <p className="text-sm text-ink-500">
-              We've sent a link to {email}. It works once, for 15 minutes. Can't find it? Check your spam
-              folder.
+              We've sent a link to {email}. It works once, for 15 minutes. Can't find it? Check your spam folder.
             </p>
             {debugLink && (
               <a
@@ -183,11 +174,7 @@ export function SignInPage() {
             <Button type="submit" disabled={busy}>
               {busy ? 'Verifying…' : 'Verify'}
             </Button>
-            <button
-              type="button"
-              className="text-xs text-ink-500 hover:text-ink-700"
-              onClick={() => setStep('phone')}
-            >
+            <button type="button" className="text-xs text-ink-500 hover:text-ink-700" onClick={() => setStep('phone')}>
               Use a different number
             </button>
           </form>

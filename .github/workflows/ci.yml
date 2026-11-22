@@ -30,6 +30,9 @@ jobs:
 
       - run: pnpm run lint
 
+      # Prettier (config in .prettierrc.json). Fix locally with `pnpm format`.
+      - run: pnpm run format:check
+
       # apps/web's build script runs `tsc -b` first, so this covers
       # typecheck + build in one step.
       - run: pnpm run build

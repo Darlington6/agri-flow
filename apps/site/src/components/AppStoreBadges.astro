@@ -16,24 +16,30 @@ const surface = tone === 'dark' ? 'border-white/25 bg-white/5 text-cream' : 'bor
 ---
 
 <ul class="flex flex-wrap gap-3">
-  {
-    stores.map((name) => (
-      <li>
-        <span
-          role="img"
-          aria-label={`${name}: ${t.apps.notYetAvailable}`}
-          class:list={['inline-flex min-h-14 min-w-44 items-center gap-3 rounded-2xl border px-4 py-2', surface]}
+  {stores.map((name) => (
+    <li>
+      <span
+        role="img"
+        aria-label={`${name}: ${t.apps.notYetAvailable}`}
+        class:list={['inline-flex min-h-14 min-w-44 items-center gap-3 rounded-2xl border px-4 py-2', surface]}
+      >
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+          class="h-6 w-6 shrink-0"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
         >
-          <svg aria-hidden="true" viewBox="0 0 24 24" class="h-6 w-6 shrink-0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-            <rect x="6.5" y="2.75" width="11" height="18.5" rx="2.5"></rect>
-            <path d="M10.5 18h3"></path>
-          </svg>
-          <span class="grid leading-tight">
-            <span class="text-[11px] font-medium uppercase tracking-wider opacity-80">{t.apps.comingSoon}</span>
-            <span class="text-base font-semibold">{name}</span>
-          </span>
+          <rect x="6.5" y="2.75" width="11" height="18.5" rx="2.5"></rect>
+          <path d="M10.5 18h3"></path>
+        </svg>
+        <span class="grid leading-tight">
+          <span class="text-[11px] font-medium uppercase tracking-wider opacity-80">{t.apps.comingSoon}</span>
+          <span class="text-base font-semibold">{name}</span>
         </span>
-      </li>
-    ))
-  }
+      </span>
+    </li>
+  ))}
 </ul>

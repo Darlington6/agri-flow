@@ -8,15 +8,7 @@
 // and backend can't silently drift apart.
 
 export type GhanaRegion =
-  | 'Ashanti'
-  | 'Bono'
-  | 'Bono East'
-  | 'Northern'
-  | 'Upper West'
-  | 'Upper East'
-  | 'Greater Accra'
-  | 'Eastern'
-  | 'Volta'
+  'Ashanti' | 'Bono' | 'Bono East' | 'Northern' | 'Upper West' | 'Upper East' | 'Greater Accra' | 'Eastern' | 'Volta'
 
 export type RiskLevel = 'low' | 'medium' | 'high'
 
@@ -29,13 +21,7 @@ export interface Crop {
   varietyNotes?: string
 }
 
-export type BuyerType =
-  | 'Food Processor'
-  | 'Hotel'
-  | 'Restaurant'
-  | 'Supermarket'
-  | 'Aggregator'
-  | 'Exporter'
+export type BuyerType = 'Food Processor' | 'Hotel' | 'Restaurant' | 'Supermarket' | 'Aggregator' | 'Exporter'
 
 export type KycStatus = 'Unverified' | 'Pending' | 'Verified'
 
@@ -82,14 +68,7 @@ export type ClimateSmartPractice =
   | 'Appropriate fertilizer use'
   | 'Water conservation'
 
-export type CropStage =
-  | 'Planned'
-  | 'Planted'
-  | 'Growing'
-  | 'Flowering'
-  | 'Maturing'
-  | 'Harvest Ready'
-  | 'Harvested'
+export type CropStage = 'Planned' | 'Planted' | 'Growing' | 'Flowering' | 'Maturing' | 'Harvest Ready' | 'Harvested'
 
 export interface FarmerRisk {
   rainfallExposure: RiskLevel
@@ -226,11 +205,7 @@ export interface PostHarvestCapacity {
 
 export type PaymentDirection = 'Farmer Payment' | 'Buyer Payment'
 export type PaymentStatus = 'Pending' | 'Processing' | 'Paid'
-export type PaymentMethod =
-  | 'MTN Mobile Money'
-  | 'Telecel Cash'
-  | 'AirtelTigo Money'
-  | 'Bank Transfer'
+export type PaymentMethod = 'MTN Mobile Money' | 'Telecel Cash' | 'AirtelTigo Money' | 'Bank Transfer'
 
 export interface Payment {
   id: string

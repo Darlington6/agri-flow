@@ -27,27 +27,97 @@ export interface Photo {
 
 export const PHOTOS = {
   // Hero background slideshow (decorative: the headline carries the meaning).
-  heroMaizeSunset: { file: 'hero-maize-low-sun.jpg', focus: '50% 60%', source: 'https://unsplash.com/photos/fAIhALzeOjk', licence: UNSPLASH },
-  heroRowsSunrise: { file: 'hero-rows-hills-sunset.jpg', focus: '50% 40%', source: 'https://unsplash.com/photos/0_fhco1lRqo', licence: UNSPLASH },
-  heroMaizeTrees: { file: 'hero-maize-trees-sunset.jpg', focus: '50% 55%', source: 'https://unsplash.com/photos/gI_Eig6em8A', licence: UNSPLASH },
-  heroFieldPath: { file: 'hero-field-path-sunset.jpg', focus: '50% 55%', source: 'https://unsplash.com/photos/ZtLRT4j_lOA', licence: UNSPLASH },
+  heroMaizeSunset: {
+    file: 'hero-maize-low-sun.jpg',
+    focus: '50% 60%',
+    source: 'https://unsplash.com/photos/fAIhALzeOjk',
+    licence: UNSPLASH,
+  },
+  heroRowsSunrise: {
+    file: 'hero-rows-hills-sunset.jpg',
+    focus: '50% 40%',
+    source: 'https://unsplash.com/photos/0_fhco1lRqo',
+    licence: UNSPLASH,
+  },
+  heroMaizeTrees: {
+    file: 'hero-maize-trees-sunset.jpg',
+    focus: '50% 55%',
+    source: 'https://unsplash.com/photos/gI_Eig6em8A',
+    licence: UNSPLASH,
+  },
+  heroFieldPath: {
+    file: 'hero-field-path-sunset.jpg',
+    focus: '50% 55%',
+    source: 'https://unsplash.com/photos/ZtLRT4j_lOA',
+    licence: UNSPLASH,
+  },
   // Section photos.
-  buyers: { file: 'market-produce.jpg', focus: '40% 50%', source: 'https://unsplash.com/photos/cXvqCw0m5WE', licence: UNSPLASH },
-  buyersDetail: { file: 'market-peppers-tomatoes.jpg', focus: '55% 50%', source: 'https://unsplash.com/photos/ac8665AKFD8', licence: UNSPLASH },
-  farmers: { file: 'farmer-basket-harvest.jpg', focus: '40% 40%', source: 'https://www.pexels.com/photo/15897036/', licence: PEXELS },
-  farmersDetail: { file: 'farmer-tomatoes-smiling.jpg', focus: '40% 40%', source: 'https://www.pexels.com/photo/34705724/', licence: PEXELS },
+  buyers: {
+    file: 'market-produce.jpg',
+    focus: '40% 50%',
+    source: 'https://unsplash.com/photos/cXvqCw0m5WE',
+    licence: UNSPLASH,
+  },
+  buyersDetail: {
+    file: 'market-peppers-tomatoes.jpg',
+    focus: '55% 50%',
+    source: 'https://unsplash.com/photos/ac8665AKFD8',
+    licence: UNSPLASH,
+  },
+  farmers: {
+    file: 'farmer-basket-harvest.jpg',
+    focus: '40% 40%',
+    source: 'https://www.pexels.com/photo/15897036/',
+    licence: PEXELS,
+  },
+  farmersDetail: {
+    file: 'farmer-tomatoes-smiling.jpg',
+    focus: '40% 40%',
+    source: 'https://www.pexels.com/photo/34705724/',
+    licence: PEXELS,
+  },
   // AI-generated until we have our own photos from the pilot.
   partners: { file: 'agent-phone-farmer.jpg', focus: '35% 40%', source: GEMINI, licence: GEMINI_TERMS },
   partnersDetail: { file: 'truck-loading-produce.jpg', focus: '72% 50%', source: GEMINI, licence: GEMINI_TERMS },
   // Climate section background (decorative).
-  climate: { file: 'seedling-soil-sunrise.jpg', focus: '60% 40%', source: 'https://unsplash.com/photos/zHvyaZ6Gscc', licence: UNSPLASH },
+  climate: {
+    file: 'seedling-soil-sunrise.jpg',
+    focus: '60% 40%',
+    source: 'https://unsplash.com/photos/zHvyaZ6Gscc',
+    licence: UNSPLASH,
+  },
   // Page header backgrounds (decorative), for the pages behind "Learn more" and request a demo.
-  pageHowItWorks: { file: 'irrigation-dusk-mountains.jpg', focus: '50% 60%', source: 'https://unsplash.com/photos/-QQlSZBTiF4', licence: UNSPLASH },
-  pageBuyers: { file: 'market-stall-evening.jpg', focus: '50% 50%', source: 'https://unsplash.com/photos/APetw1y9_mY', licence: UNSPLASH },
-  pageFarmers: { file: 'farmer-potato-rows.jpg', focus: '45% 55%', source: 'https://www.pexels.com/photo/11588032/', licence: PEXELS },
+  pageHowItWorks: {
+    file: 'irrigation-dusk-mountains.jpg',
+    focus: '50% 60%',
+    source: 'https://unsplash.com/photos/-QQlSZBTiF4',
+    licence: UNSPLASH,
+  },
+  pageBuyers: {
+    file: 'market-stall-evening.jpg',
+    focus: '50% 50%',
+    source: 'https://unsplash.com/photos/APetw1y9_mY',
+    licence: UNSPLASH,
+  },
+  pageFarmers: {
+    file: 'farmer-potato-rows.jpg',
+    focus: '45% 55%',
+    source: 'https://www.pexels.com/photo/11588032/',
+    licence: PEXELS,
+  },
   pagePartners: { file: 'field-agents-terraces.jpg', focus: '70% 45%', source: GEMINI, licence: GEMINI_TERMS },
-  pageAbout: { file: 'field-lone-tree.jpg', focus: '60% 50%', source: 'https://unsplash.com/photos/5gzZo_nQBIM', licence: UNSPLASH },
-  pageRequestDemo: { file: 'sunflower-field.jpg', focus: '50% 55%', source: 'https://unsplash.com/photos/DljZW8nrgv8', licence: UNSPLASH },
+  pageAbout: {
+    file: 'field-lone-tree.jpg',
+    focus: '60% 50%',
+    source: 'https://unsplash.com/photos/5gzZo_nQBIM',
+    licence: UNSPLASH,
+  },
+  pageRequestDemo: {
+    file: 'sunflower-field.jpg',
+    focus: '50% 55%',
+    source: 'https://unsplash.com/photos/DljZW8nrgv8',
+    licence: UNSPLASH,
+  },
 } satisfies Record<string, Photo>
 
 export type PhotoSlot = keyof typeof PHOTOS
@@ -58,4 +128,3 @@ export const HERO_SLIDES: PhotoSlot[] = ['heroMaizeSunset', 'heroRowsSunrise', '
 export function photoImage(slot: PhotoSlot): ImageMetadata | undefined {
   return files[`../assets/media/${PHOTOS[slot].file}`]?.default
 }
-

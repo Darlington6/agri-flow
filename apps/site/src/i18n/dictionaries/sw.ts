@@ -70,7 +70,10 @@ export const sw: Dictionary = {
       steps: [
         { title: 'Mahitaji', body: 'Mnunuzi anaeleza anachohitaji, kiasi gani na lini.' },
         { title: 'Mikataba', body: 'Wakulima wanajitolea kukilima, kwa masharti yaliyokubaliwa mapema.' },
-        { title: 'Uzalishaji', body: 'Maafisa ugani wanafuatilia maendeleo na mbinu za kilimo kinachostahimili tabianchi.' },
+        {
+          title: 'Uzalishaji',
+          body: 'Maafisa ugani wanafuatilia maendeleo na mbinu za kilimo kinachostahimili tabianchi.',
+        },
         { title: 'Makadirio', body: 'Taarifa za hali ya hewa na za shambani huboresha makadirio ya mavuno.' },
         { title: 'Usafirishaji', body: 'Kila mzigo hupangiwa usafiri unaofaa, pamoja na mnyororo wa ubaridi.' },
         { title: 'Malipo', body: 'Usafirishaji ukithibitishwa, malipo hutolewa na kumbukumbu kuhifadhiwa.' },
@@ -90,42 +93,73 @@ export const sw: Dictionary = {
   },
   howItWorks: {
     title: 'Jinsi AgriFlow inavyofanya kazi',
-    description: 'Kutoka mahitaji yaliyothibitishwa ya mnunuzi hadi malipo ya mkulima: hatua sita za msimu wa AgriFlow.',
+    description:
+      'Kutoka mahitaji yaliyothibitishwa ya mnunuzi hadi malipo ya mkulima: hatua sita za msimu wa AgriFlow.',
     lede: 'Kwenye AgriFlow, msimu huanza na mahitaji, si kupanda. Hiki ndicho kinachotokea katika kila hatua, na nani anafanya nini.',
     steps: [
-      { title: 'Mnunuzi anathibitisha mahitaji', body: 'Mnunuzi anaweka zao, kiasi, ubora na kipindi cha kupokea. Hakuna kinacholimwa kwa kubahatisha.' },
-      { title: 'Wakulima wanaingia mkataba wa kuyatimiza', body: 'Wakulima wanaomba sehemu ya oda. Pande zote mbili zikikubali, mkataba unawekwa, pamoja na mpango wa uzalishaji wa kila mkulima.' },
-      { title: 'Uzalishaji unafuatiliwa shambani', body: 'Maafisa ugani hutembelea mashamba, hukagua mbinu za kilimo kinachostahimili tabianchi na kuandika maendeleo, ili matatizo yaonekane mapema.' },
-      { title: 'Tabianchi huongoza makadirio', body: 'Taarifa za hali ya hewa na tabianchi, pamoja na taarifa za shambani, huweka makadirio ya mavuno kuwa ya kweli kwa wote.' },
-      { title: 'Usafirishaji unaratibiwa', body: 'Kila mzigo hupangiwa msafirishaji kulingana na eneo, uwezo wa gari na, kwa mazao yanayoharibika haraka, mnyororo wa ubaridi.' },
-      { title: 'Malipo, kisha sifa njema', body: 'Usafirishaji uliothibitishwa huachilia malipo. Kila mkataba uliotimizwa hujenga kumbukumbu inayoleta imani kwa mkataba unaofuata.' },
+      {
+        title: 'Mnunuzi anathibitisha mahitaji',
+        body: 'Mnunuzi anaweka zao, kiasi, ubora na kipindi cha kupokea. Hakuna kinacholimwa kwa kubahatisha.',
+      },
+      {
+        title: 'Wakulima wanaingia mkataba wa kuyatimiza',
+        body: 'Wakulima wanaomba sehemu ya oda. Pande zote mbili zikikubali, mkataba unawekwa, pamoja na mpango wa uzalishaji wa kila mkulima.',
+      },
+      {
+        title: 'Uzalishaji unafuatiliwa shambani',
+        body: 'Maafisa ugani hutembelea mashamba, hukagua mbinu za kilimo kinachostahimili tabianchi na kuandika maendeleo, ili matatizo yaonekane mapema.',
+      },
+      {
+        title: 'Tabianchi huongoza makadirio',
+        body: 'Taarifa za hali ya hewa na tabianchi, pamoja na taarifa za shambani, huweka makadirio ya mavuno kuwa ya kweli kwa wote.',
+      },
+      {
+        title: 'Usafirishaji unaratibiwa',
+        body: 'Kila mzigo hupangiwa msafirishaji kulingana na eneo, uwezo wa gari na, kwa mazao yanayoharibika haraka, mnyororo wa ubaridi.',
+      },
+      {
+        title: 'Malipo, kisha sifa njema',
+        body: 'Usafirishaji uliothibitishwa huachilia malipo. Kila mkataba uliotimizwa hujenga kumbukumbu inayoleta imani kwa mkataba unaofuata.',
+      },
     ],
   },
   buyers: {
     title: 'AgriFlow kwa wanunuzi wa chakula',
-    description: 'Pata ugavi unaotabirika na unaofuatilika kutoka kwa wakulima wadogo, ukiona kila kitu kuanzia mkataba hadi usafirishaji.',
+    description:
+      'Pata ugavi unaotabirika na unaofuatilika kutoka kwa wakulima wadogo, ukiona kila kitu kuanzia mkataba hadi usafirishaji.',
     lede: 'Viwanda vya usindikaji, hoteli, migahawa, maduka makubwa, wakusanyaji na wasafirishaji nje: pata kiasi unachohitaji, wakati unapohitaji, kutoka mashamba unayoyaona.',
     points: [
-      { title: 'Ugavi unaoweza kupangia', body: 'Weka mikataba ya kiasi kabla ya kupanda na fuatilia utekelezaji wiki kwa wiki.' },
-      { title: 'Tahadhari ya mapema', body: 'Taarifa za tabianchi na za shambani huonyesha upungufu wakati bado kuna muda wa kuchukua hatua.' },
+      {
+        title: 'Ugavi unaoweza kupangia',
+        body: 'Weka mikataba ya kiasi kabla ya kupanda na fuatilia utekelezaji wiki kwa wiki.',
+      },
+      {
+        title: 'Tahadhari ya mapema',
+        body: 'Taarifa za tabianchi na za shambani huonyesha upungufu wakati bado kuna muda wa kuchukua hatua.',
+      },
       { title: 'Inafuatilika kutoka shambani', body: 'Jua ni mashamba gani yamelima oda yako, na kwa namna gani.' },
       { title: 'Usafirishaji wa kuaminika', body: 'Usafiri unaolingana na kila mzigo, pamoja na mnyororo wa ubaridi.' },
     ],
   },
   farmers: {
     title: 'AgriFlow kwa wakulima',
-    description: 'Lima kwa ajili ya mnunuzi aliyethibitishwa, ukipata ushauri wa kilimo kinachostahimili tabianchi msimu mzima na malipo ya uhakika mwishoni.',
+    description:
+      'Lima kwa ajili ya mnunuzi aliyethibitishwa, ukipata ushauri wa kilimo kinachostahimili tabianchi msimu mzima na malipo ya uhakika mwishoni.',
     lede: 'Jua nani atanunua mavuno yako kabla hujapanda, na upate msaada kuanzia shambani hadi malipo.',
     points: [
       { title: 'Mnunuzi kabla ya kupanda', body: 'Chagua oda zilizo wazi na ukubaliane masharti mapema.' },
       { title: 'Ushauri msimu mzima', body: 'Maafisa ugani na tahadhari za hali ya hewa hukusaidia kulinda zao lako.' },
-      { title: 'Msaada wakati wa mavuno', body: 'Usafiri hupangwa kwa mazao yako, pamoja na mnyororo wa ubaridi inapohitajika.' },
+      {
+        title: 'Msaada wakati wa mavuno',
+        body: 'Usafiri hupangwa kwa mazao yako, pamoja na mnyororo wa ubaridi inapohitajika.',
+      },
       { title: 'Malipo ya uhakika', body: 'Unalipwa usafirishaji ukithibitishwa, na kumbukumbu inayojenga sifa yako.' },
     ],
   },
   partners: {
     title: 'AgriFlow kwa maafisa ugani na wasafirishaji',
-    description: 'Maafisa ugani hufuatilia uzalishaji katika maeneo yao; wasafirishaji huchagua kazi za usafirishaji zinazolingana na njia na magari yao.',
+    description:
+      'Maafisa ugani hufuatilia uzalishaji katika maeneo yao; wasafirishaji huchagua kazi za usafirishaji zinazolingana na njia na magari yao.',
     lede: 'Watu wanaoufanya msimu usonge mbele: kazi iliyo wazi, inayolingana na mahali ulipo na gari unaloendesha.',
     agents: {
       title: 'Maafisa ugani',
@@ -138,7 +172,8 @@ export const sw: Dictionary = {
   },
   about: {
     title: 'Kuhusu AgriFlow',
-    description: 'AgriFlow inajenga mfumo wa uratibu kati ya wanunuzi wa chakula na wakulima wadogo barani Afrika, ikianzia na mahitaji yaliyothibitishwa.',
+    description:
+      'AgriFlow inajenga mfumo wa uratibu kati ya wanunuzi wa chakula na wakulima wadogo barani Afrika, ikianzia na mahitaji yaliyothibitishwa.',
     lede: 'Tunajenga mfumo wa uratibu kati ya wanunuzi wa chakula na wakulima wadogo kote Afrika.',
     sections: [
       {
@@ -186,20 +221,31 @@ export const sw: Dictionary = {
   },
   privacy: {
     title: 'Taarifa ya faragha',
-    description: 'Jinsi AgriFlow inavyokusanya, kutumia na kulinda taarifa binafsi unazotupa, ikiwemo maombi ya onyesho.',
+    description:
+      'Jinsi AgriFlow inavyokusanya, kutumia na kulinda taarifa binafsi unazotupa, ikiwemo maombi ya onyesho.',
     draftNotice: 'Rasimu: taarifa hii inaandaliwa kwa ushauri wa kisheria na itakamilishwa kabla ya kuzinduliwa.',
     sections: [
-      { title: 'Tunachokusanya', body: 'Unapoomba onyesho, tunakusanya taarifa unazoweka: jina, taasisi, nafasi yako, nchi, barua pepe, na ukipenda, namba ya simu na ujumbe.' },
-      { title: 'Kwa nini', body: 'Ni kwa ajili ya kujibu ombi lako na kupanga onyesho tu. Hatuuzi taarifa zako wala kuzitumia kwa matangazo mengine.' },
+      {
+        title: 'Tunachokusanya',
+        body: 'Unapoomba onyesho, tunakusanya taarifa unazoweka: jina, taasisi, nafasi yako, nchi, barua pepe, na ukipenda, namba ya simu na ujumbe.',
+      },
+      {
+        title: 'Kwa nini',
+        body: 'Ni kwa ajili ya kujibu ombi lako na kupanga onyesho tu. Hatuuzi taarifa zako wala kuzitumia kwa matangazo mengine.',
+      },
       { title: 'Mawasiliano', body: 'Kwa maswali kuhusu taarifa zako, tumia fomu ya ombi nasi tutakujibu.' },
     ],
   },
   terms: {
     title: 'Masharti ya matumizi',
-    description: 'Masharti yanayotumika unapotumia tovuti ya AgriFlow, ikiwemo jinsi ya kuelewa taarifa kuhusu huduma zinazoendelea kuundwa.',
+    description:
+      'Masharti yanayotumika unapotumia tovuti ya AgriFlow, ikiwemo jinsi ya kuelewa taarifa kuhusu huduma zinazoendelea kuundwa.',
     draftNotice: 'Rasimu: masharti haya yanaandaliwa kwa ushauri wa kisheria na yatakamilishwa kabla ya kuzinduliwa.',
     sections: [
-      { title: 'Tovuti hii', body: 'Tovuti hii inaeleza AgriFlow, ambayo bado inaundwa. Huduma zilizoelezwa zinaweza kubadilika kabla ya kuzinduliwa.' },
+      {
+        title: 'Tovuti hii',
+        body: 'Tovuti hii inaeleza AgriFlow, ambayo bado inaundwa. Huduma zilizoelezwa zinaweza kubadilika kabla ya kuzinduliwa.',
+      },
     ],
   },
   notFound: {

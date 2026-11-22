@@ -50,7 +50,7 @@ export function ConfirmEmailPage() {
         {status === 'done' && (
           <>
             <h1 className="font-display text-base font-semibold text-ink-900">Email added</h1>
-            <p className="mt-2 break-all text-sm text-ink-500">
+            <p className="mt-2 text-sm break-all text-ink-500">
               You can now sign in with {message} as well as your phone number.
             </p>
           </>

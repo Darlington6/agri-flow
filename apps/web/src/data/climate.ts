@@ -84,8 +84,7 @@ export const regionClimateRisks: RegionClimateRisk[] = [
   },
 ]
 
-export const regionClimateRiskByRegion = (region: string) =>
-  regionClimateRisks.find((r) => r.region === region)
+export const regionClimateRiskByRegion = (region: string) => regionClimateRisks.find((r) => r.region === region)
 
 export interface ClimateSnapshot {
   rainfallRisk: RiskLevel

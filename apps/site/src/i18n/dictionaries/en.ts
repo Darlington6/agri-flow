@@ -94,28 +94,54 @@ export const en = {
     description: 'From a buyer’s confirmed demand to a farmer’s payment: the six steps of an AgriFlow season.',
     lede: 'A season on AgriFlow starts with demand, not with planting. Here’s what happens at each step, and who does what.',
     steps: [
-      { title: 'A buyer confirms demand', body: 'The buyer sets the crop, quantity, quality and delivery window. Nothing is grown on guesswork.' },
-      { title: 'Farmers contract to supply it', body: 'Farmers request a share of the order. Once both sides confirm, the contract is set, and each farmer’s production plan with it.' },
-      { title: 'Production is followed in the field', body: 'Field agents visit farms, check climate-smart practices and log progress, so issues surface early.' },
-      { title: 'Climate risk shapes the forecast', body: 'Weather and climate signals, together with field updates, keep the harvest forecast honest for everyone.' },
-      { title: 'Delivery is coordinated', body: 'Each load is matched with a transporter by area, capacity and, for perishable crops, cold chain.' },
-      { title: 'Payment, then a track record', body: 'Confirmed delivery releases payment. Every completed contract builds a record that earns trust for the next one.' },
+      {
+        title: 'A buyer confirms demand',
+        body: 'The buyer sets the crop, quantity, quality and delivery window. Nothing is grown on guesswork.',
+      },
+      {
+        title: 'Farmers contract to supply it',
+        body: 'Farmers request a share of the order. Once both sides confirm, the contract is set, and each farmer’s production plan with it.',
+      },
+      {
+        title: 'Production is followed in the field',
+        body: 'Field agents visit farms, check climate-smart practices and log progress, so issues surface early.',
+      },
+      {
+        title: 'Climate risk shapes the forecast',
+        body: 'Weather and climate signals, together with field updates, keep the harvest forecast honest for everyone.',
+      },
+      {
+        title: 'Delivery is coordinated',
+        body: 'Each load is matched with a transporter by area, capacity and, for perishable crops, cold chain.',
+      },
+      {
+        title: 'Payment, then a track record',
+        body: 'Confirmed delivery releases payment. Every completed contract builds a record that earns trust for the next one.',
+      },
     ],
   },
   buyers: {
     title: 'AgriFlow for food buyers',
-    description: 'Secure predictable, traceable supply from smallholder farmers, with visibility from contract to delivery.',
+    description:
+      'Secure predictable, traceable supply from smallholder farmers, with visibility from contract to delivery.',
     lede: 'Processors, hotels, restaurants, supermarkets, aggregators and exporters: get the volumes you need, when you need them, from farms you can see.',
     points: [
-      { title: 'Supply you can plan around', body: 'Contract volumes before planting and follow fulfilment week by week.' },
-      { title: 'Early warning on risk', body: 'Climate and field signals flag shortfalls while there’s still time to act.' },
+      {
+        title: 'Supply you can plan around',
+        body: 'Contract volumes before planting and follow fulfilment week by week.',
+      },
+      {
+        title: 'Early warning on risk',
+        body: 'Climate and field signals flag shortfalls while there’s still time to act.',
+      },
       { title: 'Traceable from the farm', body: 'Know which farms grew your order and how.' },
       { title: 'Delivery you can count on', body: 'Transport matched to each load, cold chain included.' },
     ],
   },
   farmers: {
     title: 'AgriFlow for farmers',
-    description: 'Grow for a confirmed buyer, with climate-smart guidance through the season and reliable payment at the end.',
+    description:
+      'Grow for a confirmed buyer, with climate-smart guidance through the season and reliable payment at the end.',
     lede: 'Know who will buy your harvest before you plant, and get support from the field to the payment.',
     points: [
       { title: 'A buyer before you plant', body: 'Choose open orders and agree terms up front.' },
@@ -126,7 +152,8 @@ export const en = {
   },
   partners: {
     title: 'AgriFlow for field agents and transporters',
-    description: 'Field agents follow production in their area; transporters book delivery jobs matched to their routes and vehicles.',
+    description:
+      'Field agents follow production in their area; transporters book delivery jobs matched to their routes and vehicles.',
     lede: 'The people who keep a season moving: clear work, matched to where you are and what you drive.',
     agents: {
       title: 'Field agents',
@@ -139,7 +166,8 @@ export const en = {
   },
   about: {
     title: 'About AgriFlow',
-    description: 'AgriFlow is building the coordination layer between African food buyers and smallholder farmers, starting from verified demand.',
+    description:
+      'AgriFlow is building the coordination layer between African food buyers and smallholder farmers, starting from verified demand.',
     lede: 'We’re building the coordination layer between food buyers and smallholder farmers across Africa.',
     sections: [
       {
@@ -187,20 +215,31 @@ export const en = {
   },
   privacy: {
     title: 'Privacy notice',
-    description: 'How AgriFlow collects, uses and protects the personal information you share with us, including demo requests.',
+    description:
+      'How AgriFlow collects, uses and protects the personal information you share with us, including demo requests.',
     draftNotice: 'Draft: this notice is being prepared with legal advice and will be completed before launch.',
     sections: [
-      { title: 'What we collect', body: 'When you request a demo we collect the details you enter: your name, organisation, role, country, email, and optionally your phone number and message.' },
-      { title: 'Why', body: 'Only to respond to your request and arrange a demo. We don’t sell your information or use it for unrelated marketing.' },
+      {
+        title: 'What we collect',
+        body: 'When you request a demo we collect the details you enter: your name, organisation, role, country, email, and optionally your phone number and message.',
+      },
+      {
+        title: 'Why',
+        body: 'Only to respond to your request and arrange a demo. We don’t sell your information or use it for unrelated marketing.',
+      },
       { title: 'Contact', body: 'Questions about your information: use the request form and we’ll respond.' },
     ],
   },
   terms: {
     title: 'Terms of use',
-    description: 'The terms that apply when you use the AgriFlow website, including how to read information about features in development.',
+    description:
+      'The terms that apply when you use the AgriFlow website, including how to read information about features in development.',
     draftNotice: 'Draft: these terms are being prepared with legal advice and will be completed before launch.',
     sections: [
-      { title: 'This website', body: 'This site describes AgriFlow, which is in development. Features described may change before launch.' },
+      {
+        title: 'This website',
+        body: 'This site describes AgriFlow, which is in development. Features described may change before launch.',
+      },
     ],
   },
   notFound: {
@@ -216,5 +255,9 @@ export const en = {
 }
 
 /** The shape every language must match: same keys, string values. */
-type Widen<T> = T extends string ? string : T extends readonly (infer U)[] ? readonly Widen<U>[] : { [K in keyof T]: Widen<T[K]> }
+type Widen<T> = T extends string
+  ? string
+  : T extends readonly (infer U)[]
+    ? readonly Widen<U>[]
+    : { [K in keyof T]: Widen<T[K]> }
 export type Dictionary = Widen<typeof en>

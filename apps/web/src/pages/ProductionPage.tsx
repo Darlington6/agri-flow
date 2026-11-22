@@ -12,7 +12,17 @@ import { formatTonnes } from '@/lib/format'
 
 const LIFECYCLE_STAGES: CropStage[] = ['Planned', 'Planted', 'Growing', 'Flowering', 'Maturing', 'Harvest Ready']
 
-const ALL_REGIONS: GhanaRegion[] = ['Ashanti', 'Bono', 'Bono East', 'Northern', 'Upper West', 'Upper East', 'Greater Accra', 'Eastern', 'Volta']
+const ALL_REGIONS: GhanaRegion[] = [
+  'Ashanti',
+  'Bono',
+  'Bono East',
+  'Northern',
+  'Upper West',
+  'Upper East',
+  'Greater Accra',
+  'Eastern',
+  'Volta',
+]
 const CROP_IDS: CropId[] = ['tomatoes', 'onions', 'peppers', 'cassava']
 const RISKS: RiskLevel[] = ['low', 'medium', 'high']
 
@@ -79,21 +89,57 @@ export function ProductionPage() {
       </Card>
 
       <div className="flex flex-wrap items-center gap-3">
-        <select className={inputClass} style={{ width: 170 }} value={region} onChange={(e) => setRegion(e.target.value as typeof region)}>
+        <select
+          className={inputClass}
+          style={{ width: 170 }}
+          value={region}
+          onChange={(e) => setRegion(e.target.value as typeof region)}
+        >
           <option value="all">All regions</option>
-          {availableRegions.map((r) => <option key={r} value={r}>{r}</option>)}
+          {availableRegions.map((r) => (
+            <option key={r} value={r}>
+              {r}
+            </option>
+          ))}
         </select>
-        <select className={inputClass} style={{ width: 150 }} value={crop} onChange={(e) => setCrop(e.target.value as typeof crop)}>
+        <select
+          className={inputClass}
+          style={{ width: 150 }}
+          value={crop}
+          onChange={(e) => setCrop(e.target.value as typeof crop)}
+        >
           <option value="all">All crops</option>
-          {CROP_IDS.map((c) => <option key={c} value={c}>{cropById(c)?.name}</option>)}
+          {CROP_IDS.map((c) => (
+            <option key={c} value={c}>
+              {cropById(c)?.name}
+            </option>
+          ))}
         </select>
-        <select className={inputClass} style={{ width: 200 }} value={buyerId} onChange={(e) => setBuyerId(e.target.value)}>
+        <select
+          className={inputClass}
+          style={{ width: 200 }}
+          value={buyerId}
+          onChange={(e) => setBuyerId(e.target.value)}
+        >
           <option value="all">All buyers</option>
-          {buyers.map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}
+          {buyers.map((b) => (
+            <option key={b.id} value={b.id}>
+              {b.name}
+            </option>
+          ))}
         </select>
-        <select className={inputClass} style={{ width: 140 }} value={risk} onChange={(e) => setRisk(e.target.value as typeof risk)}>
+        <select
+          className={inputClass}
+          style={{ width: 140 }}
+          value={risk}
+          onChange={(e) => setRisk(e.target.value as typeof risk)}
+        >
           <option value="all">All risk levels</option>
-          {RISKS.map((r) => <option key={r} value={r} className="capitalize">{r}</option>)}
+          {RISKS.map((r) => (
+            <option key={r} value={r} className="capitalize">
+              {r}
+            </option>
+          ))}
         </select>
       </div>
 
@@ -101,7 +147,7 @@ export function ProductionPage() {
         <div className="overflow-x-auto">
           <table className="w-full min-w-[880px] text-left text-sm">
             <thead>
-              <tr className="border-b border-ink-100 text-xs font-medium uppercase tracking-wide text-ink-400">
+              <tr className="border-b border-ink-100 text-xs font-medium tracking-wide text-ink-400 uppercase">
                 <th className="px-5 py-3 font-medium">Farmer</th>
                 <th className="px-3 py-3 font-medium">Region</th>
                 <th className="px-3 py-3 font-medium">Crop</th>

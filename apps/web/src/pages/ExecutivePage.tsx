@@ -7,22 +7,35 @@ import { formatGHS, formatGHSFull } from '@/lib/format'
 
 export function ExecutivePage() {
   const { deliveryJobs } = usePlatformData()
-  const deliveryCommission = deliveryJobs.filter((j) => j.status !== 'Unassigned').reduce((s, j) => s + j.commissionGHS, 0)
+  const deliveryCommission = deliveryJobs
+    .filter((j) => j.status !== 'Unassigned')
+    .reduce((s, j) => s + j.commissionGHS, 0)
 
   const latest = networkGrowthTrend[networkGrowthTrend.length - 1]
   const first = networkGrowthTrend[0]
   const takeRatePct = platformRevenueMetrics.transactionFeeRateBps / 100
   const transactionFeeRevenue = latest.contractedValueGHS * (platformRevenueMetrics.transactionFeeRateBps / 10_000)
   const totalRevenue =
-    transactionFeeRevenue + platformRevenueMetrics.subscriptionRevenueGHS + deliveryCommission + platformRevenueMetrics.financingReferralRevenueGHS
+    transactionFeeRevenue +
+    platformRevenueMetrics.subscriptionRevenueGHS +
+    deliveryCommission +
+    platformRevenueMetrics.financingReferralRevenueGHS
 
   const farmerGrowthPct = Math.round(((latest.farmers - first.farmers) / first.farmers) * 100)
 
   const revenueRows = [
     { label: 'Transaction fees', amountGHS: transactionFeeRevenue, note: `${takeRatePct}% of contracted value` },
-    { label: 'Buyer subscriptions', amountGHS: platformRevenueMetrics.subscriptionRevenueGHS, note: 'Demo monthly recurring revenue' },
+    {
+      label: 'Buyer subscriptions',
+      amountGHS: platformRevenueMetrics.subscriptionRevenueGHS,
+      note: 'Demo monthly recurring revenue',
+    },
     { label: 'Delivery commission', amountGHS: deliveryCommission, note: 'Live — from booked delivery jobs' },
-    { label: 'Financing referrals', amountGHS: platformRevenueMetrics.financingReferralRevenueGHS, note: 'Not live yet' },
+    {
+      label: 'Financing referrals',
+      amountGHS: platformRevenueMetrics.financingReferralRevenueGHS,
+      note: 'Not live yet',
+    },
   ]
   const maxRow = Math.max(...revenueRows.map((r) => r.amountGHS), 1)
 
@@ -35,10 +48,30 @@ export function ExecutivePage() {
       />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Gross Contracted Value" value={formatGHS(latest.contractedValueGHS)} icon={Wallet} hint="This month, network-wide" />
-        <StatCard label="Platform Revenue" value={formatGHS(totalRevenue)} icon={TrendingUp} hint="All sources, this month" />
-        <StatCard label="Take Rate" value={`${takeRatePct}%`} icon={Percent} hint="Transaction fee on contracted value" />
-        <StatCard label="Delivery Commission" value={formatGHS(deliveryCommission)} icon={Truck} hint="Earned on coordinated logistics" />
+        <StatCard
+          label="Gross Contracted Value"
+          value={formatGHS(latest.contractedValueGHS)}
+          icon={Wallet}
+          hint="This month, network-wide"
+        />
+        <StatCard
+          label="Platform Revenue"
+          value={formatGHS(totalRevenue)}
+          icon={TrendingUp}
+          hint="All sources, this month"
+        />
+        <StatCard
+          label="Take Rate"
+          value={`${takeRatePct}%`}
+          icon={Percent}
+          hint="Transaction fee on contracted value"
+        />
+        <StatCard
+          label="Delivery Commission"
+          value={formatGHS(deliveryCommission)}
+          icon={Truck}
+          hint="Earned on coordinated logistics"
+        />
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -65,7 +98,10 @@ export function ExecutivePage() {
                   <span className="text-ink-700">{formatGHSFull(r.amountGHS)}</span>
                 </div>
                 <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-ink-100">
-                  <div className="h-full rounded-full bg-brand-600" style={{ width: `${(r.amountGHS / maxRow) * 100}%` }} />
+                  <div
+                    className="h-full rounded-full bg-brand-600"
+                    style={{ width: `${(r.amountGHS / maxRow) * 100}%` }}
+                  />
                 </div>
                 <p className="mt-0.5 text-xs text-ink-400">{r.note}</p>
               </div>

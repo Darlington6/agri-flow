@@ -65,8 +65,16 @@ export function LoginPage() {
         {ROLES.map(({ role, description, icon: Icon }) => {
           const id = `role-${role.toLowerCase().replace(/\s+/g, '-')}`
           return (
-            <CardButton key={role} onClick={() => handleSelect(role)} aria-labelledby={`${id}-name`} aria-describedby={`${id}-description`}>
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-700" aria-hidden="true">
+            <CardButton
+              key={role}
+              onClick={() => handleSelect(role)}
+              aria-labelledby={`${id}-name`}
+              aria-describedby={`${id}-description`}
+            >
+              <span
+                className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-700"
+                aria-hidden="true"
+              >
                 <Icon className="h-5 w-5" />
               </span>
               <span id={`${id}-name`} className="mt-4 block font-display text-base font-semibold text-ink-900">
