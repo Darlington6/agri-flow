@@ -18,6 +18,7 @@ dependencies = [
     "phonenumbers>=9.0.37,<10.0",
     "django-anymail[brevo]>=13,<16",
     "whitenoise>=6.8,<7",
+    "sentry-sdk>=2.40,<3",
 ]
 
 [dependency-groups]
