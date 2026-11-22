@@ -5,7 +5,9 @@ import { LogoMark } from '@/components/brand/LogoMark'
 import { useAuth } from '@/context/AuthContext'
 import { ApiError } from '@/lib/apiClient'
 import { brand } from '@/config/brand'
-import { Button, Card, DemoTag, Field, inputClass, OrDivider } from '@/components/ui'
+import { Button, Card, DemoTag, Field, inputClass, OrDivider, PhoneInput, usePhoneField } from '@/components/ui'
+import { AuthLayout } from '@/components/layout/AuthLayout'
+import { formatPhone } from '@/lib/phone'
 
 type Step = 'phone' | 'code' | 'email' | 'email-sent'
 
@@ -16,7 +18,8 @@ export function SignInPage() {
   // Email first: phone codes need an SMS provider, which staging and
   // production don't have yet. Phone stays one tap away.
   const [step, setStep] = useState<Step>('email')
-  const [phoneNumber, setPhoneNumber] = useState('')
+  // No account yet, so the country starts from the device; always one tap to change.
+  const phone = usePhoneField()
   const [code, setCode] = useState('')
   const [email, setEmail] = useState('')
   const [debugCode, setDebugCode] = useState<string | null>(null)
@@ -46,7 +49,7 @@ export function SignInPage() {
     setError(null)
     setBusy(true)
     try {
-      const { debugCode: code } = await requestOtp(phoneNumber)
+      const { debugCode: code } = await requestOtp(phone.value)
       setDebugCode(code ?? null)
       setStep('code')
     } catch (err) {
@@ -61,7 +64,7 @@ export function SignInPage() {
     setError(null)
     setBusy(true)
     try {
-      await verifyOtp(phoneNumber, code)
+      await verifyOtp(phone.value, code)
       navigate('/account')
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Something went wrong. Try again.')
@@ -71,7 +74,7 @@ export function SignInPage() {
   }
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center bg-canvas px-4 py-12">
+    <AuthLayout photo="signIn">
       <div className="mb-8 flex flex-col items-center gap-3 text-center">
         <LogoMark className="h-14" />
         <h1 className="font-display text-2xl font-semibold text-ink-900">{brand.name}</h1>
@@ -87,16 +90,7 @@ export function SignInPage() {
                 We'll text you a 6-digit code. New here? The code creates your account.
               </p>
             </div>
-            <Field label="Phone number">
-              <input
-                className={inputClass}
-                type="tel"
-                required
-                placeholder="+250788123456"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-              />
-            </Field>
+            <PhoneInput field={phone} />
             {error && <p className="text-sm text-status-risk">{error}</p>}
             <Button type="submit" disabled={busy}>
               {busy ? 'Sending…' : 'Send code'}
@@ -160,7 +154,7 @@ export function SignInPage() {
           <form className="flex flex-col gap-4" onSubmit={handleVerifyCode}>
             <div>
               <h2 className="font-display text-base font-semibold text-ink-900">Enter the code</h2>
-              <p className="mt-1 text-sm text-ink-600">Sent to {phoneNumber}.</p>
+              <p className="mt-1 text-sm text-ink-600">Sent to {formatPhone(phone.value)}.</p>
               {debugCode && (
                 <p className="mt-2 rounded-lg bg-status-info-bg px-3 py-2 text-xs text-status-info">
                   Dev mode — code is {debugCode} (never shown outside DEBUG).
@@ -200,6 +194,6 @@ export function SignInPage() {
         </a>
         .
       </p>
-    </div>
+    </AuthLayout>
   )
 }

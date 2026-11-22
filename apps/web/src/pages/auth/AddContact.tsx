@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
 import { ApiError } from '@/lib/apiClient'
-import { Button, Field, inputClass } from '@/components/ui'
+import { Button, Field, inputClass, PhoneInput, usePhoneField } from '@/components/ui'
+import { formatPhone } from '@/lib/phone'
 
 // Adding the second way to sign in from the account page. Nothing is saved
 // until it's confirmed: a link emailed to the address, or a code texted to
@@ -81,7 +82,9 @@ export function AddEmail({ onDone }: { onDone: () => void }) {
 
 export function AddPhone({ onDone }: { onDone: () => void }) {
   const { requestPhoneAdd, confirmPhoneAdd } = useAuth()
-  const [phoneNumber, setPhoneNumber] = useState('')
+  // Accounts don't record a country yet; when they do, pass it here so the
+  // picker starts on it. Until then the device decides.
+  const phone = usePhoneField()
   const [code, setCode] = useState('')
   const [codeSent, setCodeSent] = useState(false)
   const [debugCode, setDebugCode] = useState<string | null>(null)
@@ -103,7 +106,7 @@ export function AddPhone({ onDone }: { onDone: () => void }) {
   function handleRequest(event: React.FormEvent) {
     event.preventDefault()
     void run(async () => {
-      const { debugCode } = await requestPhoneAdd(phoneNumber)
+      const { debugCode } = await requestPhoneAdd(phone.value)
       setDebugCode(debugCode ?? null)
       setCodeSent(true)
     })
@@ -112,7 +115,7 @@ export function AddPhone({ onDone }: { onDone: () => void }) {
   function handleConfirm(event: React.FormEvent) {
     event.preventDefault()
     void run(async () => {
-      await confirmPhoneAdd(phoneNumber, code)
+      await confirmPhoneAdd(phone.value, code)
       onDone()
     })
   }
@@ -120,7 +123,7 @@ export function AddPhone({ onDone }: { onDone: () => void }) {
   if (codeSent) {
     return (
       <form className="flex flex-col gap-3" onSubmit={handleConfirm}>
-        <p className="text-sm text-ink-700">Enter the code we texted to {phoneNumber}.</p>
+        <p className="text-sm text-ink-700">Enter the code we texted to {formatPhone(phone.value)}.</p>
         {debugCode && (
           <p className="rounded-lg bg-status-info-bg px-3 py-2 text-xs text-status-info">
             Dev mode — code is {debugCode} (never shown outside DEBUG).
@@ -153,17 +156,7 @@ export function AddPhone({ onDone }: { onDone: () => void }) {
 
   return (
     <form className="flex flex-col gap-3" onSubmit={handleRequest}>
-      <Field label="Phone number">
-        <input
-          className={inputClass}
-          type="tel"
-          required
-          autoFocus
-          placeholder="+250788123456"
-          value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-        />
-      </Field>
+      <PhoneInput field={phone} autoFocus />
       {error && <p className="text-sm text-status-risk">{error}</p>}
       <div className="flex flex-wrap items-center gap-3">
         <Button type="submit" size="sm" disabled={busy}>

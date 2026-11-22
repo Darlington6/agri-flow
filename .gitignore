@@ -21,8 +21,8 @@ dist-ssr
 
 # apps/site/assets/: raw downloads and photos we may not use (unlicensed or
 # retired). This repo is public, so committing them would republish them.
-# Only photos the site uses live in apps/site/src/assets/media/, each with its
-# source and licence in src/media/manifest.ts (a test enforces it).
+# Only photos we ship live in packages/media/photos/, each with its source and
+# licence in packages/media/src/index.ts (tests enforce it).
 apps/site/assets/
 
 # Python / Django (apps/api)

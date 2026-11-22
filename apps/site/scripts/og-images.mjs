@@ -28,7 +28,7 @@ const MAX_BYTES = 300 * 1024 // WhatsApp often skips larger previews.
 
 if (!existsSync(DIST)) throw new Error('dist/ not found: run `pnpm --filter @agriflow/site build` first.')
 const css = readFileSync(join(DIST, 'index.html'), 'utf8').match(/href="(\/_astro\/[^"]+\.css)"/)?.[1]
-const photo = `data:image/jpeg;base64,${readFileSync(join(ROOT, 'src/assets/media/hero-maize-low-sun.jpg')).toString('base64')}`
+const photo = `data:image/jpeg;base64,${readFileSync(join(ROOT, '../../packages/media/photos/hero-maize-low-sun.jpg')).toString('base64')}`
 const mark = readFileSync(join(ROOT, '../../packages/design-tokens/assets/logos/agriflow-mark-reversed.svg'), 'utf8')
   .replace(/<title>.*?<\/title>/, '')
   .replace('<svg', '<svg width="46" height="60" aria-hidden="true"')

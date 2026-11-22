@@ -195,6 +195,8 @@ packages/
                   schema as more endpoints land
   design-tokens/  visual identity: the shared colour palette (theme.css, used by apps/web and
                   apps/site), type tokens, and the AgriFlow logo files in assets/logos/
+  media/          every photo we ship (photos/) and its licence (src/index.ts), shared by the site
+                  and the app; app/ holds the app's copies, sized ahead of time
   ui/             empty stub; shared components migrate here deliberately, one at a time
   config/         shared tsconfig/lint base
 ```
