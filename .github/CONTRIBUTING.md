@@ -168,6 +168,11 @@ by id. What's collected and scrubbed is in `apps/api/config/observability.py` an
 each with tests; keep the two in step. Only errors are reported from the app for now: no performance tracing,
 and no session replay (it would record what people type).
 
+**Checking that reports arrive:** for the app, open it, then in the browser console run
+`setTimeout(() => { throw new Error('Sentry test') })`. For the API, sign in at `<api address>/admin/` with
+a staff account, then open `<api address>/api/v1/debug/sentry-error/`: it fails on purpose (a server error page)
+and the error appears in Sentry within a minute. For anyone who isn't staff, that address doesn't exist.
+
 Magic links are emailed through Brevo (via django-anymail, so another provider is a settings change).
 Brevo sends from one verified address without a domain of our own, but mail from a Gmail address sent
 through Brevo can land in spam. Verify a domain in Brevo once we have one. There's no SMS provider yet, so
@@ -232,9 +237,18 @@ Configured in [`dependabot.yml`](dependabot.yml), all targeting `dev`, weekly:
 
 ```bash
 pnpm install
-pnpm dev              # apps/web dev server
-docker compose up     # full stack: postgres, redis, api, celery, web
+docker compose up -d --build postgres redis mailpit api   # the API, with a local inbox at http://localhost:8025
+npm run dev           # the site (:4321) and the app (:5173)
+docker compose down   # when you're done
 ```
+
+`docker compose up` (no service names) runs everything in containers instead, including a production build of
+the app on :4173.
+
+**The `.vscode` folder is committed on purpose**, but only two files: `extensions.json` (recommended
+extensions; VS Code offers to install them) and `settings.json` (format on save with Prettier, ruff for
+Python). Everything else in `.vscode` stays out of git (see `.gitignore`), so personal editor settings are
+never pushed. Other editors are unaffected; just run `pnpm format` before pushing.
 
 See `apps/web/README.md` and `apps/api/README.md` for app-specific detail.
 
@@ -259,7 +273,8 @@ Every change, before its PR is opened:
 - Formatting: **Prettier** for TypeScript, Astro, CSS, JSON, YAML and Markdown (`.prettierrc.json`: no
   semicolons, single quotes, 120 columns; Tailwind classes sorted by `prettier-plugin-tailwindcss`). Run
   `pnpm format` before pushing; CI runs `pnpm format:check`. In VS Code, install the recommended extensions
-  and files format on save (`.vscode/settings.json`). The API (Python) is formatted by ruff instead.
+  and files format on save (`.vscode/settings.json`). The API (Python) is formatted by ruff instead. The one-time reformat is listed in `.git-blame-ignore-revs`, which GitHub's blame
+  view skips; for `git blame` locally, run `git config blame.ignoreRevsFile .git-blame-ignore-revs` once.
 - Node version: **24**, pinned in `.nvmrc` (CI reads it) and `engines` (Vercel reads it). Use it locally
   too (`nvm use`, `fnm use` or similar). Vitest doesn't start on Node 26 yet.
 - Backend: `ruff check` and `ruff format` (both enforced), Django's own `manage.py check`.
