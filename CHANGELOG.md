@@ -73,6 +73,13 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Added
 
+- Light and dark themes for the app: **System** (follows the device), **Light** or **Dark**, chosen in Settings or
+  on the account page and remembered in the browser. Colours are named roles (`surface`, `canvas`, `action`,
+  `accent`, chart colours) plus the ink scale, which flips in dark mode; dark values live in
+  `apps/web/src/index.css`. Dark mode is a neutral near-black (page `#0b0e11`, cards `#181a20`). Buttons turn gold in dark mode (like the site's dark sections), the logo switches to
+  its cream-ringed version, and charts follow the theme. A small script (`public/theme-init.js`) applies the
+  saved theme before the page draws, so dark mode never flashes white. Contrast tests check the dark palette.
+
 - Emails redesigned to match the site: a forest-green header with the logo (a PNG hosted on the website at
   `/email/`, since email apps don't show SVG), a gold label, a serif heading, a pill button, the "works once"
   note in a panel, a sign-off ("Thanks for growing with us, The AgriFlow team"), and Website and Privacy links. The

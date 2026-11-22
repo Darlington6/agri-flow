@@ -4,6 +4,7 @@ import { useSession } from '@/context/SessionContext'
 import { usePlatformData, resolveKycStatus } from '@/context/PlatformDataContext'
 import { brand } from '@/config/brand'
 import { PageHeader, Card, Field, inputClass, Button, KycBadge, Badge } from '@/components/ui'
+import { ThemeSwitcher } from '@/components/theme/ThemeSwitcher'
 import { farmerById, buyerById, farmers, buyers } from '@/data'
 import { isAdminRole } from '@/lib/permissions'
 
@@ -40,6 +41,12 @@ export function SettingsPage() {
   return (
     <div className="flex max-w-3xl flex-col gap-6">
       <PageHeader title="Settings" subtitle="Organization details and preferences for this workspace." />
+
+      <Card>
+        <h2 className="font-display text-sm font-semibold text-ink-700">Appearance</h2>
+        <p className="mt-1 text-sm text-ink-600">Light, dark, or follow this device's setting.</p>
+        <ThemeSwitcher className="mt-4" />
+      </Card>
 
       <Card>
         <div className="flex items-center gap-2">
@@ -157,7 +164,7 @@ export function SettingsPage() {
               </div>
               <button
                 onClick={() => setToggles((prev) => ({ ...prev, [t.key]: !prev[t.key] }))}
-                className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${toggles[t.key] ? 'bg-brand-800' : 'bg-ink-200'}`}
+                className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${toggles[t.key] ? 'bg-action' : 'bg-ink-200'}`}
                 aria-pressed={toggles[t.key]}
                 aria-label={t.label}
               >

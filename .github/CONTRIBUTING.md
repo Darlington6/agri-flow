@@ -270,6 +270,11 @@ Every change, before its PR is opened:
   is a folder of small, focused files, never one large `views.py`/`models.py` carrying everything for
   that context.
 - Frontend: `oxlint` (`pnpm lint`), TypeScript strict mode (`pnpm typecheck`), Vitest (`pnpm test`).
+- Colours in the app: use the **named roles** (`bg-surface` for cards and panels, `bg-canvas` for entry pages,
+  `bg-action`/`text-on-action` for filled controls, `text-accent` for green text) and the **ink scale** for greys,
+  text and borders. They follow the light/dark theme. Avoid `bg-white` and fixed dark shades for anything that
+  should adapt; add a role in `apps/web/src/index.css` (with its dark value) instead. The contrast tests
+  (`src/test/tokens.test.ts`) check both themes.
 - Formatting: **Prettier** for TypeScript, Astro, CSS, JSON, YAML and Markdown (`.prettierrc.json`: no
   semicolons, single quotes, 120 columns; Tailwind classes sorted by `prettier-plugin-tailwindcss`). Run
   `pnpm format` before pushing; CI runs `pnpm format:check`. In VS Code, install the recommended extensions
