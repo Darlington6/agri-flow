@@ -134,6 +134,10 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Fixed
 
+- Phone numbers are always stored one way (+250788123456), however they're typed. An admin made with
+  `createsuperuser` as "+250 793 440 734" used to be a different account from "+250793440734", and could only log
+  in with the spaces. The admin login now accepts either, and a migration tidies numbers already saved.
+
 - Local API: it no longer fails to start with "No module named …" after a dependency is added. Its packages
   live in the image (`/opt/venv`) instead of a saved Docker volume that kept old ones; `docker compose up
 --build` picks up changes.
