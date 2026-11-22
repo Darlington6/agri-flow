@@ -81,7 +81,7 @@ export function ProductionPage() {
               {i > 0 && <span className="mx-1 text-ink-200">→</span>}
               <div className="flex flex-col items-center gap-1 rounded-xl px-4 py-3 text-center">
                 <span className="font-display text-lg font-semibold text-ink-800">{stageCounts.get(stage) ?? 0}</span>
-                <span className="text-[11px] font-medium text-ink-500">{stage}</span>
+                <span className="text-[11px] font-medium text-ink-600">{stage}</span>
               </div>
             </div>
           ))}
@@ -147,7 +147,7 @@ export function ProductionPage() {
         <div className="overflow-x-auto">
           <table className="w-full min-w-[880px] text-left text-sm">
             <thead>
-              <tr className="border-b border-ink-100 text-xs font-medium tracking-wide text-ink-400 uppercase">
+              <tr className="border-b border-ink-100 text-xs font-medium tracking-wide text-ink-500 uppercase">
                 <th className="px-5 py-3 font-medium">Farmer</th>
                 <th className="px-3 py-3 font-medium">Region</th>
                 <th className="px-3 py-3 font-medium">Crop</th>

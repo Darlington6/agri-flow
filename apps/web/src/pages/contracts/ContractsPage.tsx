@@ -74,7 +74,7 @@ export function ContractsPage() {
             >
               {contracts.length}
             </span>
-            <span className="text-[11px] font-medium text-ink-500">All contracts</span>
+            <span className="text-[11px] font-medium text-ink-600">All contracts</span>
           </button>
           {CONTRACT_PIPELINE_STAGES.map((stage, i) => (
             <div key={stage} className="flex items-center">
@@ -94,7 +94,7 @@ export function ContractsPage() {
                 >
                   {stageCounts.get(stage) ?? 0}
                 </span>
-                <span className="w-24 text-[11px] leading-tight font-medium text-ink-500">
+                <span className="w-24 text-[11px] leading-tight font-medium text-ink-600">
                   {String(i + 1).padStart(2, '0')}. {stage}
                 </span>
               </button>
@@ -107,7 +107,7 @@ export function ContractsPage() {
         <div className="overflow-x-auto">
           <table className="w-full min-w-[840px] text-left text-sm">
             <thead>
-              <tr className="border-b border-ink-100 text-xs font-medium tracking-wide text-ink-400 uppercase">
+              <tr className="border-b border-ink-100 text-xs font-medium tracking-wide text-ink-500 uppercase">
                 <th className="px-5 py-3 font-medium">Contract</th>
                 <th className="px-3 py-3 font-medium">Buyer</th>
                 <th className="px-3 py-3 font-medium">Crop</th>

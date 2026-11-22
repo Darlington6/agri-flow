@@ -3,8 +3,17 @@
 @import '@agriflow/design-tokens/theme.css';
 
 @theme {
-  --font-display: 'Manrope', 'Segoe UI', system-ui, sans-serif;
-  --font-sans: 'DM Sans', 'Segoe UI', system-ui, sans-serif;
+  /* The site's typefaces, self-hosted (imported in main.tsx): Fraunces for
+     headings, IBM Plex Sans for everything else. */
+  --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+  --font-sans: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif;
+
+  /* Plex reads smaller than the old font at the same size, so the two small
+     steps go up a pixel: text-xs 13px, text-sm 15px (Tailwind: 12, 14). */
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.25rem;
+  --text-sm: 0.9375rem;
+  --text-sm--line-height: 1.375rem;
 
   --shadow-card: 0 1px 2px rgba(16, 21, 16, 0.04), 0 8px 24px -12px rgba(16, 21, 16, 0.12);
   --shadow-card-hover: 0 2px 4px rgba(16, 21, 16, 0.06), 0 16px 32px -12px rgba(16, 21, 16, 0.16);

@@ -60,11 +60,11 @@ export function BuyersPage() {
                     </div>
                   </div>
                   <p className="mt-3 font-display text-sm font-semibold text-ink-900">{b.name}</p>
-                  <p className="mt-1 flex items-center gap-1 text-xs text-ink-500">
+                  <p className="mt-1 flex items-center gap-1 text-xs text-ink-600">
                     <MapPin className="h-3 w-3" />
                     {b.location}
                   </p>
-                  <p className="mt-3 text-xs text-ink-400">{b.activeContractIds.length} active contract(s)</p>
+                  <p className="mt-3 text-xs text-ink-500">{b.activeContractIds.length} active contract(s)</p>
                 </Card>
               </Link>
             ))}
@@ -94,39 +94,39 @@ export function BuyersPage() {
                         {buyer?.name}
                       </Link>
                     )}
-                    <p className="text-xs text-ink-500">
+                    <p className="text-xs text-ink-600">
                       {crop?.name} · {d.qualityGrade}
                     </p>
                   </div>
                   <Badge tone={STATUS_TONE[d.status]}>{d.status}</Badge>
                 </div>
 
-                <div className="mt-4 flex items-baseline justify-between text-xs text-ink-500">
+                <div className="mt-4 flex items-baseline justify-between text-xs text-ink-600">
                   <span>
                     <span className="font-semibold text-ink-800">{formatTonnes(d.contractedTonnes)}</span> contracted
                   </span>
                   <span>{formatTonnes(d.quantityTonnes)} required</span>
                 </div>
                 <ProgressBar value={pct} className="mt-1.5" />
-                <p className="mt-1.5 text-xs text-ink-400">{formatTonnes(remaining)} remaining</p>
+                <p className="mt-1.5 text-xs text-ink-500">{formatTonnes(remaining)} remaining</p>
 
                 <dl className="mt-4 grid grid-cols-2 gap-y-1.5 text-xs">
-                  <dt className="text-ink-400">Delivery</dt>
+                  <dt className="text-ink-500">Delivery</dt>
                   <dd className="text-right text-ink-700">{formatDate(d.requiredDeliveryDate)}</dd>
-                  <dt className="text-ink-400">Location</dt>
+                  <dt className="text-ink-500">Location</dt>
                   <dd className="text-right text-ink-700">{d.deliveryLocation}</dd>
-                  <dt className="text-ink-400">Target price</dt>
+                  <dt className="text-ink-500">Target price</dt>
                   <dd className="text-right text-ink-700">GHS {d.targetPriceGHSPerTonne.toLocaleString()}/t</dd>
-                  <dt className="text-ink-400">Frequency</dt>
+                  <dt className="text-ink-500">Frequency</dt>
                   <dd className="text-right text-ink-700">{d.frequency}</dd>
                 </dl>
                 {d.specialRequirements && (
-                  <p className="mt-3 rounded-lg bg-ink-50 px-2.5 py-2 text-xs text-ink-500">{d.specialRequirements}</p>
+                  <p className="mt-3 rounded-lg bg-ink-50 px-2.5 py-2 text-xs text-ink-600">{d.specialRequirements}</p>
                 )}
               </Card>
             )
           })}
-          {demands.length === 0 && <p className="text-sm text-ink-400">No demand requests yet.</p>}
+          {demands.length === 0 && <p className="text-sm text-ink-500">No demand requests yet.</p>}
         </div>
       </div>
 

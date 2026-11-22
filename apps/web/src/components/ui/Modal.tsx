@@ -10,7 +10,7 @@ export function Modal({ title, onClose, children }: { title: string; onClose: ()
           <h2 className="font-display text-lg font-semibold text-ink-900">{title}</h2>
           <button
             onClick={onClose}
-            className="rounded-lg p-1.5 text-ink-400 hover:bg-ink-50 hover:text-ink-700"
+            className="rounded-lg p-1.5 text-ink-500 hover:bg-ink-50 hover:text-ink-700"
             aria-label="Close"
           >
             <X className="h-5 w-5" />

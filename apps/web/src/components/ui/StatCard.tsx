@@ -14,7 +14,7 @@ export function StatCard({ label, value, hint, icon: Icon, tone = 'default' }: S
   return (
     <Card className="flex flex-col gap-3">
       <div className="flex items-start justify-between">
-        <span className="text-sm font-medium text-ink-500">{label}</span>
+        <span className="text-sm font-medium text-ink-600">{label}</span>
         {Icon && (
           <span
             className={clsx(
@@ -31,7 +31,7 @@ export function StatCard({ label, value, hint, icon: Icon, tone = 'default' }: S
       >
         {value}
       </div>
-      {hint && <p className="text-xs text-ink-500">{hint}</p>}
+      {hint && <p className="text-xs text-ink-600">{hint}</p>}
     </Card>
   )
 }

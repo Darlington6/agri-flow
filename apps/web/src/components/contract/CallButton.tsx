@@ -29,7 +29,7 @@ export function CallButton({
           <div className="flex flex-col items-center gap-4 py-4 text-center">
             <span
               className={`flex h-16 w-16 items-center justify-center rounded-full ${
-                calling ? 'animate-pulse bg-brand-50 text-brand-700' : 'bg-ink-100 text-ink-400'
+                calling ? 'animate-pulse bg-brand-50 text-brand-700' : 'bg-ink-100 text-ink-500'
               }`}
             >
               {calling ? <Phone className="h-7 w-7" /> : <PhoneOff className="h-7 w-7" />}
@@ -39,7 +39,7 @@ export function CallButton({
             ) : (
               <div>
                 <p className="text-sm font-medium text-ink-800">In-app voice calling is coming soon.</p>
-                <p className="mt-2 text-sm text-ink-500">
+                <p className="mt-2 text-sm text-ink-600">
                   For now, reach {counterpartyName} directly at{' '}
                   <span className="font-medium text-ink-700">{counterpartyPhone}</span>.
                 </p>

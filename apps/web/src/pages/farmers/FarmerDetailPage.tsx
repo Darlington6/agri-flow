@@ -40,7 +40,7 @@ export function FarmerDetailPage() {
         {session?.role !== 'Farmer' && (
           <Link
             to="/farmers"
-            className="mb-3 inline-flex items-center gap-1 text-xs font-medium text-ink-500 hover:text-ink-800"
+            className="mb-3 inline-flex items-center gap-1 text-xs font-medium text-ink-600 hover:text-ink-800"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             Farmer Network
@@ -78,7 +78,7 @@ export function FarmerDetailPage() {
           <Card>
             <h2 className="font-display text-sm font-semibold text-ink-700">Production</h2>
             {cycles.length === 0 ? (
-              <p className="mt-3 text-sm text-ink-500">No active production cycle.</p>
+              <p className="mt-3 text-sm text-ink-600">No active production cycle.</p>
             ) : (
               <div className="mt-4 flex flex-col gap-4">
                 {cycles.map((c) => (
@@ -89,19 +89,19 @@ export function FarmerDetailPage() {
                     </div>
                     <dl className="mt-3 grid grid-cols-2 gap-y-2 text-xs sm:grid-cols-4">
                       <div>
-                        <dt className="text-ink-400">Planting date</dt>
+                        <dt className="text-ink-500">Planting date</dt>
                         <dd className="text-ink-700">{formatDate(c.plantingDate)}</dd>
                       </div>
                       <div>
-                        <dt className="text-ink-400">Expected harvest</dt>
+                        <dt className="text-ink-500">Expected harvest</dt>
                         <dd className="text-ink-700">{formatDate(c.expectedHarvestDate)}</dd>
                       </div>
                       <div>
-                        <dt className="text-ink-400">Expected yield</dt>
+                        <dt className="text-ink-500">Expected yield</dt>
                         <dd className="text-ink-700">{formatTonnes(c.expectedYieldTonnes)}</dd>
                       </div>
                       <div>
-                        <dt className="text-ink-400">Latest estimate</dt>
+                        <dt className="text-ink-500">Latest estimate</dt>
                         <dd className="text-ink-700">{formatTonnes(c.latestYieldEstimateTonnes)}</dd>
                       </div>
                     </dl>
@@ -124,7 +124,7 @@ export function FarmerDetailPage() {
               </div>
               <div>
                 <p className="text-sm font-medium text-ink-800">Climate-Smart Practice Score</p>
-                <p className="text-xs text-ink-400">DEMO metric · adoption of recommended practices</p>
+                <p className="text-xs text-ink-500">DEMO metric · adoption of recommended practices</p>
               </div>
             </div>
             <ul className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -137,7 +137,7 @@ export function FarmerDetailPage() {
                     ) : (
                       <Circle className="h-4 w-4 shrink-0 text-ink-300" />
                     )}
-                    <span className={adopted ? 'text-ink-800' : 'text-ink-400'}>{p}</span>
+                    <span className={adopted ? 'text-ink-800' : 'text-ink-500'}>{p}</span>
                   </li>
                 )
               })}
@@ -147,7 +147,7 @@ export function FarmerDetailPage() {
           <Card>
             <h2 className="font-display text-sm font-semibold text-ink-700">Contract History</h2>
             {contracts.length === 0 ? (
-              <p className="mt-3 text-sm text-ink-500">No contracts yet.</p>
+              <p className="mt-3 text-sm text-ink-600">No contracts yet.</p>
             ) : (
               <div className="mt-3 flex flex-col divide-y divide-ink-50">
                 {contracts.map((c) => {
@@ -158,7 +158,7 @@ export function FarmerDetailPage() {
                         <p className="text-sm font-medium text-ink-800">
                           {c.id} · {buyer?.name}
                         </p>
-                        <p className="text-xs text-ink-400">
+                        <p className="text-xs text-ink-500">
                           {cropById(c.cropId)?.name} · {formatGHSFull(c.valueGHS)}
                         </p>
                       </div>
@@ -192,25 +192,25 @@ export function FarmerDetailPage() {
             <h2 className="font-display text-sm font-semibold text-ink-700">Risk</h2>
             <dl className="mt-3 flex flex-col gap-2.5 text-sm">
               <div className="flex items-center justify-between">
-                <dt className="text-ink-500">Rainfall exposure</dt>
+                <dt className="text-ink-600">Rainfall exposure</dt>
                 <dd>
                   <RiskBadge level={farmer.risk.rainfallExposure} />
                 </dd>
               </div>
               <div className="flex items-center justify-between">
-                <dt className="text-ink-500">Drought exposure</dt>
+                <dt className="text-ink-600">Drought exposure</dt>
                 <dd>
                   <RiskBadge level={farmer.risk.droughtExposure} />
                 </dd>
               </div>
               <div className="flex items-center justify-between">
-                <dt className="text-ink-500">Pest risk</dt>
+                <dt className="text-ink-600">Pest risk</dt>
                 <dd>
                   <RiskBadge level={farmer.risk.pestRisk} />
                 </dd>
               </div>
               <div className="flex items-center justify-between">
-                <dt className="text-ink-500">Expected yield risk</dt>
+                <dt className="text-ink-600">Expected yield risk</dt>
                 <dd>
                   <RiskBadge level={farmer.risk.yieldRisk} />
                 </dd>
@@ -220,7 +220,7 @@ export function FarmerDetailPage() {
 
           <Card>
             <div className="flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-ink-500" />
+              <ShieldCheck className="h-4 w-4 text-ink-600" />
               <h2 className="font-display text-sm font-semibold text-ink-700">Financing &amp; Insurance</h2>
             </div>
             <div className="mt-3 flex items-center gap-3">
@@ -229,7 +229,7 @@ export function FarmerDetailPage() {
               </div>
               <div>
                 <p className="text-sm font-medium text-ink-800">Production Readiness Score</p>
-                <p className="text-xs text-ink-400">DEMO metric · reliability + climate-smart adoption</p>
+                <p className="text-xs text-ink-500">DEMO metric · reliability + climate-smart adoption</p>
               </div>
             </div>
             <div className="mt-3 flex items-center justify-between rounded-lg bg-ink-50 px-3 py-2">
@@ -239,7 +239,7 @@ export function FarmerDetailPage() {
               </Badge>
             </div>
             <div className="mt-2 flex items-center justify-between">
-              <span className="text-xs text-ink-500">Input / working-capital financing</span>
+              <span className="text-xs text-ink-600">Input / working-capital financing</span>
               <ComingSoonBadge />
             </div>
           </Card>
@@ -247,14 +247,14 @@ export function FarmerDetailPage() {
           <Card>
             <h2 className="font-display text-sm font-semibold text-ink-700">Payment History</h2>
             {paymentHistory.length === 0 ? (
-              <p className="mt-3 text-sm text-ink-500">No payments recorded yet.</p>
+              <p className="mt-3 text-sm text-ink-600">No payments recorded yet.</p>
             ) : (
               <div className="mt-3 flex flex-col divide-y divide-ink-50">
                 {paymentHistory.map((p) => (
                   <div key={p.id} className="flex items-center justify-between py-2.5 first:pt-0 last:pb-0">
                     <div>
                       <p className="text-sm font-medium text-ink-800">{formatGHSFull(p.amountGHS)}</p>
-                      <p className="text-xs text-ink-400">
+                      <p className="text-xs text-ink-500">
                         {p.method} · {formatDate(p.date)}
                       </p>
                     </div>

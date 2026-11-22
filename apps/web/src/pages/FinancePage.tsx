@@ -104,7 +104,7 @@ export function FinancePage() {
         <Card padded={false} className="lg:col-span-2">
           <div className="px-6 pt-6">
             <h2 className="font-display text-sm font-semibold text-ink-900">Payments</h2>
-            <p className="text-xs text-ink-500">
+            <p className="text-xs text-ink-600">
               {isBuyer
                 ? 'Payments tied to your contracts'
                 : 'Farmer payouts and buyer settlements across active contracts'}
@@ -113,7 +113,7 @@ export function FinancePage() {
           <div className="mt-4 overflow-x-auto">
             <table className="w-full min-w-[640px] text-left text-sm">
               <thead>
-                <tr className="border-y border-ink-100 text-xs font-medium tracking-wide text-ink-400 uppercase">
+                <tr className="border-y border-ink-100 text-xs font-medium tracking-wide text-ink-500 uppercase">
                   <th className="px-6 py-2.5 font-medium">Counterparty</th>
                   <th className="px-3 py-2.5 font-medium">Contract</th>
                   <th className="px-3 py-2.5 font-medium">Method</th>
@@ -129,12 +129,12 @@ export function FinancePage() {
                     <tr key={p.id} className="border-b border-ink-50 last:border-0 hover:bg-ink-50/60">
                       <td className="px-6 py-3">
                         <p className="font-medium text-ink-800">{p.counterpartyName}</p>
-                        <p className="text-xs text-ink-400">{p.direction}</p>
+                        <p className="text-xs text-ink-500">{p.direction}</p>
                       </td>
                       <td className="px-3 py-3 text-ink-600">{p.contractId}</td>
                       <td className="px-3 py-3 text-ink-600">
                         <span className="inline-flex items-center gap-1.5">
-                          <Icon className="h-3.5 w-3.5 text-ink-400" />
+                          <Icon className="h-3.5 w-3.5 text-ink-500" />
                           {p.method}
                         </span>
                       </td>
@@ -150,7 +150,7 @@ export function FinancePage() {
                 })}
                 {payments.length === 0 && (
                   <tr>
-                    <td colSpan={6} className="px-6 py-6 text-center text-sm text-ink-400">
+                    <td colSpan={6} className="px-6 py-6 text-center text-sm text-ink-500">
                       No payments recorded yet.
                     </td>
                   </tr>
@@ -164,14 +164,14 @@ export function FinancePage() {
         <div className="flex flex-col gap-6">
           <Card>
             <h2 className="font-display text-sm font-semibold text-ink-700">Payment Channels</h2>
-            <p className="mt-1 text-xs text-ink-500">
+            <p className="mt-1 text-xs text-ink-600">
               Planned integrations — not yet processing live payments in this prototype.
             </p>
             <div className="mt-4 grid grid-cols-2 gap-3">
               {['MTN Mobile Money', 'Telecel Cash', 'AirtelTigo Money', 'Bank Transfer'].map((m) => (
                 <div
                   key={m}
-                  className="flex items-center gap-2 rounded-xl border border-dashed border-ink-200 px-3 py-2.5 text-xs font-medium text-ink-500"
+                  className="flex items-center gap-2 rounded-xl border border-dashed border-ink-200 px-3 py-2.5 text-xs font-medium text-ink-600"
                 >
                   {m === 'Bank Transfer' ? <Landmark className="h-4 w-4" /> : <Smartphone className="h-4 w-4" />}
                   {m}
@@ -187,7 +187,7 @@ export function FinancePage() {
                 <h2 className="font-display text-sm font-semibold text-ink-800">Finance Intelligence</h2>
                 <ComingSoonBadge />
               </div>
-              <p className="mt-2 text-xs leading-relaxed text-ink-500">
+              <p className="mt-2 text-xs leading-relaxed text-ink-600">
                 Production-based financing insights — recommending working-capital or input-financing amounts from
                 contracted volume and delivery reliability — are planned for a future release.
               </p>
@@ -201,7 +201,7 @@ export function FinancePage() {
                 <h2 className="font-display text-sm font-semibold text-ink-800">Climate-Smart Insurance</h2>
                 <ComingSoonBadge />
               </div>
-              <p className="mt-2 text-xs leading-relaxed text-ink-500">
+              <p className="mt-2 text-xs leading-relaxed text-ink-600">
                 Farmers with a strong Production Readiness Score (see their profile) will be able to apply for
                 climate-smart insurance coverage directly from the platform.
               </p>

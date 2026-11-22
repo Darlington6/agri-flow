@@ -19,6 +19,19 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Changed
 
+- The app takes on the public site's look: Fraunces headings and IBM Plex Sans text (self-hosted, so the app
+  no longer loads Google Fonts and its security policy drops them), pill buttons in the logo's forest green
+  with cream text (gold on dark surfaces), and the site's cream background on the entry pages (sign-in, email
+  link, confirm email, account, demo roles, not found). Teal stays for links and focus rings. Grey text that
+  sits directly on cream is darker (ink-600), and contrast tests cover the new pairings.
+- Easier to read: small text is a pixel larger (13 and 15px), and grey text across the app is one step darker
+  (no grey text below 4.5:1 any more).
+- The pilot badge is forest green with a green dot, and only the sidebar shows it inside the platform.
+- Sign-in opens on email (phone codes need an SMS provider that staging and production don't have yet), and
+  switching between email and phone is a clear button instead of small grey text.
+- The public demo no longer offers the Platform Admin and Super Admin roles; they still appear locally and on
+  preview deployments for development.
+
 - Prettier formats the web app, the site and the shared packages (no semicolons, single quotes, 120
   columns, sorted Tailwind classes), checked in CI. The one-time reformat is its own commit, with no other
   changes.

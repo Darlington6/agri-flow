@@ -77,7 +77,7 @@ export function ExecutivePage() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <h2 className="font-display text-sm font-semibold text-ink-700">Gross Contracted Value — 6 months</h2>
-          <p className="text-xs text-ink-500">Network-wide, DEMO trend</p>
+          <p className="text-xs text-ink-600">Network-wide, DEMO trend</p>
           <div className="mt-2">
             <GrowthTrendChart />
           </div>
@@ -89,7 +89,7 @@ export function ExecutivePage() {
 
         <Card>
           <h2 className="font-display text-sm font-semibold text-ink-700">Revenue by Source</h2>
-          <p className="text-xs text-ink-500">This month</p>
+          <p className="text-xs text-ink-600">This month</p>
           <div className="mt-4 flex flex-col gap-3">
             {revenueRows.map((r) => (
               <div key={r.label}>
@@ -103,7 +103,7 @@ export function ExecutivePage() {
                     style={{ width: `${(r.amountGHS / maxRow) * 100}%` }}
                   />
                 </div>
-                <p className="mt-0.5 text-xs text-ink-400">{r.note}</p>
+                <p className="mt-0.5 text-xs text-ink-500">{r.note}</p>
               </div>
             ))}
           </div>

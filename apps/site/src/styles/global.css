@@ -7,7 +7,6 @@
   /* Public site typefaces (design-tokens: Fraunces display, IBM Plex Sans body). */
   --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
   --font-sans: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif;
-  --color-cream: #f5f1e6;
 }
 
 @layer base {

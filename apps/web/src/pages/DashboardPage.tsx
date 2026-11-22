@@ -150,7 +150,7 @@ export function DashboardPage() {
           <div className="flex items-center justify-between px-6 pt-6">
             <div>
               <h3 className="font-display text-base font-semibold text-ink-900">Best-Matched Open Jobs</h3>
-              <p className="text-xs text-ink-500">Ranked for {myPartner.name}'s regions and vehicle</p>
+              <p className="text-xs text-ink-600">Ranked for {myPartner.name}'s regions and vehicle</p>
             </div>
             <Link to="/delivery" className="text-xs font-medium text-primary-700 hover:text-primary-800">
               Open Job Board
@@ -163,14 +163,14 @@ export function DashboardPage() {
                   <p className="text-sm font-medium text-ink-800">
                     {cropById(job.cropId)?.name} · {formatTonnes(job.quantityTonnes)}
                   </p>
-                  <p className="text-xs text-ink-400">
+                  <p className="text-xs text-ink-500">
                     {formatPlace(job.from)} → {formatPlace(job.to)} · {formatDate(job.scheduledDate)}
                   </p>
                 </div>
                 {regionMatch && <Badge tone="good">Good match</Badge>}
               </div>
             ))}
-            {rankedAvailable.length === 0 && <p className="py-3 text-sm text-ink-400">No open jobs right now.</p>}
+            {rankedAvailable.length === 0 && <p className="py-3 text-sm text-ink-500">No open jobs right now.</p>}
           </div>
         </Card>
       </div>
@@ -312,7 +312,7 @@ export function DashboardPage() {
                 <h3 className="font-display text-base font-semibold text-ink-900">
                   {role === 'Buyer' ? 'Your Contracts' : 'My Contract'}
                 </h3>
-                <p className="text-xs text-ink-500">Progress against contracted volume</p>
+                <p className="text-xs text-ink-600">Progress against contracted volume</p>
               </div>
               <div className="mt-4 flex flex-col divide-y divide-ink-50 px-6 pb-6">
                 {contracts.map((c) => {
@@ -329,7 +329,7 @@ export function DashboardPage() {
                           {c.id} · {cropById(c.cropId)?.name}
                           {role === 'Farmer' && buyer ? ` · ${buyer.name}` : ''}
                         </p>
-                        <p className="text-xs text-ink-400">
+                        <p className="text-xs text-ink-500">
                           {formatTonnes(c.suppliedQuantityTonnes)} / {formatTonnes(c.contractedQuantityTonnes)} ·{' '}
                           {pct.toFixed(0)}%
                         </p>
@@ -338,7 +338,7 @@ export function DashboardPage() {
                     </Link>
                   )
                 })}
-                {contracts.length === 0 && <p className="py-3 text-sm text-ink-400">No contract yet.</p>}
+                {contracts.length === 0 && <p className="py-3 text-sm text-ink-500">No contract yet.</p>}
               </div>
             </Card>
           )}
@@ -349,7 +349,7 @@ export function DashboardPage() {
             <Card padded={false}>
               <div className="px-6 pt-6">
                 <h3 className="font-display text-base font-semibold text-ink-900">Farms Needing Attention</h3>
-                <p className="text-xs text-ink-500">High risk or missing a crop update</p>
+                <p className="text-xs text-ink-600">High risk or missing a crop update</p>
               </div>
               <div className="mt-4 flex flex-col divide-y divide-ink-50 px-6 pb-6">
                 {scopedFarmerList
@@ -362,7 +362,7 @@ export function DashboardPage() {
                     >
                       <div>
                         <p className="text-sm font-medium text-ink-800">{f.name}</p>
-                        <p className="text-xs text-ink-400">
+                        <p className="text-xs text-ink-500">
                           {f.community}, {f.region}
                           {!f.hasSubmittedLatestUpdate ? ' · no update in 2+ weeks' : ''}
                         </p>
@@ -378,7 +378,7 @@ export function DashboardPage() {
             <div className="flex items-center justify-between px-6 pt-6">
               <div>
                 <h3 className="font-display text-base font-semibold text-ink-900">Upcoming Harvests</h3>
-                <p className="text-xs text-ink-500">Next 60 days</p>
+                <p className="text-xs text-ink-600">Next 60 days</p>
               </div>
               <Link to="/harvest" className="text-xs font-medium text-primary-700 hover:text-primary-800">
                 View all
@@ -387,7 +387,7 @@ export function DashboardPage() {
             <div className="mt-4 overflow-x-auto">
               <table className="w-full min-w-[640px] text-left text-sm">
                 <thead>
-                  <tr className="border-y border-ink-100 text-xs font-medium tracking-wide text-ink-400 uppercase">
+                  <tr className="border-y border-ink-100 text-xs font-medium tracking-wide text-ink-500 uppercase">
                     <th className="px-6 py-2.5 font-medium">Farmer</th>
                     <th className="px-3 py-2.5 font-medium">Crop</th>
                     <th className="px-3 py-2.5 font-medium">Expected Qty</th>
@@ -423,7 +423,7 @@ export function DashboardPage() {
                   })}
                   {harvests.length === 0 && (
                     <tr>
-                      <td colSpan={6} className="px-6 py-6 text-center text-sm text-ink-400">
+                      <td colSpan={6} className="px-6 py-6 text-center text-sm text-ink-500">
                         No upcoming harvests in this window.
                       </td>
                     </tr>
@@ -477,12 +477,12 @@ export function DashboardPage() {
                     </span>
                     <div>
                       <p className="text-sm font-medium text-ink-800">{a.title}</p>
-                      <p className="mt-0.5 text-xs text-ink-500">{a.message}</p>
+                      <p className="mt-0.5 text-xs text-ink-600">{a.message}</p>
                     </div>
                   </div>
                 )
               })}
-              {alerts.length === 0 && <p className="text-sm text-ink-400">No active alerts for you right now.</p>}
+              {alerts.length === 0 && <p className="text-sm text-ink-500">No active alerts for you right now.</p>}
             </div>
           </Card>
 
@@ -519,7 +519,7 @@ export function DashboardPage() {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-ink-800">Climate-Smart Practice Score</p>
-                  <p className="text-xs text-ink-400">{me.climateSmartPractices.length} of 6 practices adopted</p>
+                  <p className="text-xs text-ink-500">{me.climateSmartPractices.length} of 6 practices adopted</p>
                 </div>
               </div>
               <Link
@@ -534,7 +534,7 @@ export function DashboardPage() {
 
           {role !== 'Field Agent' && role !== 'Farmer' && (
             <Card className="border-dashed">
-              <div className="flex items-center gap-2 text-ink-500">
+              <div className="flex items-center gap-2 text-ink-600">
                 <Warehouse className="h-4 w-4" />
                 <p className="text-xs font-medium tracking-wide uppercase">Post-harvest snapshot</p>
               </div>
