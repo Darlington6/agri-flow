@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { ArrowLeft, Mail, Smartphone } from 'lucide-react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { LogoMark } from '@/components/brand/LogoMark'
+import { GrowingSprout } from '@/components/brand/GrowingSprout'
 import { useAuth } from '@/context/AuthContext'
 import { ApiError } from '@/lib/apiClient'
 import { brand } from '@/config/brand'
@@ -134,7 +135,8 @@ export function SignInPage() {
         )}
 
         {step === 'email-sent' && (
-          <div className="flex flex-col gap-3 text-center">
+          <div className="flex flex-col items-center gap-3 text-center">
+            <GrowingSprout />
             <h2 className="font-display text-base font-semibold text-ink-900">Check your email</h2>
             <p className="text-sm text-ink-600">
               We've sent a link to {email}. It works once, for 15 minutes. Can't find it? Check your spam folder.
@@ -152,7 +154,8 @@ export function SignInPage() {
 
         {step === 'code' && (
           <form className="flex flex-col gap-4" onSubmit={handleVerifyCode}>
-            <div>
+            <div className="text-center">
+              <GrowingSprout className="mx-auto mb-1" />
               <h2 className="font-display text-base font-semibold text-ink-900">Enter the code</h2>
               <p className="mt-1 text-sm text-ink-600">Sent to {formatPhone(phone.value)}.</p>
               {debugCode && (

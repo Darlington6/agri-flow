@@ -53,6 +53,8 @@ describe('SignInPage', () => {
 
     expect(bodies).toContainEqual({ phone_number: '+250788123456' })
     expect(await screen.findByText('Sent to +250 788 123 456.')).toBeInTheDocument()
+    // The seedling grows while the code is on its way; it's decoration, hidden from screen readers.
+    expect(screen.getByTestId('growing-sprout')).toHaveAttribute('aria-hidden', 'true')
     vi.unstubAllGlobals()
   })
 
