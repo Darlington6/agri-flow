@@ -3,6 +3,9 @@
 # then serves. Migrations run here, on every start, because Render's free
 # plan has no separate pre-deploy step; with one instance there's no race.
 # PORT comes from the host (Render sets it); 8000 otherwise.
+# --no-control-socket: gunicorn's optional admin socket lives in $HOME, which
+# the container user doesn't have; without the flag every start logs a
+# "Permission denied" error. Nothing here uses the socket.
 set -e
 python manage.py migrate --noinput
-exec gunicorn config.wsgi:application --bind "0.0.0.0:${PORT:-8000}"
+exec gunicorn config.wsgi:application --bind "0.0.0.0:${PORT:-8000}" --no-control-socket
