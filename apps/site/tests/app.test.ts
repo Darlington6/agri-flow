@@ -3,9 +3,10 @@ import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 import { appUrl } from '../src/lib/app'
-import { HERO_SLIDES, PHOTOS, type Photo } from '../src/media/manifest'
+import { APP_PHOTOS, PHOTOS as REGISTER, type PhotoRecord } from '@agriflow/media'
+import { HERO_SLIDES, PHOTOS } from '../src/media/manifest'
 
-const MEDIA = resolve(dirname(fileURLToPath(import.meta.url)), '../src/assets/media')
+const MEDIA = resolve(dirname(fileURLToPath(import.meta.url)), '../../../packages/media/photos')
 
 describe('appUrl', () => {
   it('builds links on the configured app address', () => {
@@ -25,7 +26,7 @@ describe('appUrl', () => {
 
 describe('photo manifest', () => {
   it('uses web-safe, descriptive file names', () => {
-    for (const p of Object.values(PHOTOS)) expect(p.file).toMatch(/^[a-z0-9-]+\.(jpg|jpeg|png|webp)$/)
+    for (const file of Object.keys(REGISTER)) expect(file).toMatch(/^[a-z0-9-]+\.(jpg|jpeg|png|webp)$/)
   })
 
   it('has at least three hero slides (the crossfade timing needs three or more)', () => {
@@ -34,15 +35,19 @@ describe('photo manifest', () => {
 
   // This repository is public: a photo committed here is republished.
   it('records a source and licence for every photo', () => {
-    for (const [slot, p] of Object.entries(PHOTOS) as [string, Photo][]) {
-      expect(p.source, `${slot}: source`).toBeTruthy()
-      expect(p.licence, `${slot}: licence`).toBeTruthy()
+    for (const [file, p] of Object.entries(REGISTER) as [string, PhotoRecord][]) {
+      expect(p.source, `${file}: source`).toBeTruthy()
+      expect(p.licence, `${file}: licence`).toBeTruthy()
     }
   })
 
-  it('keeps only photos the site uses in src/assets/media (others belong in the ignored apps/site/assets/)', () => {
-    if (!existsSync(MEDIA)) return
-    const used = new Set(Object.values(PHOTOS).map((p) => p.file))
-    for (const file of readdirSync(MEDIA).filter((f) => !f.startsWith('.'))) expect(used.has(file), file).toBe(true)
+  it('commits only registered photos that the site or the app uses (others belong in the ignored apps/site/assets/)', () => {
+    const used = new Set([...Object.values(PHOTOS), ...Object.values(APP_PHOTOS)].map((p) => p.file))
+    const files = readdirSync(MEDIA).filter((f) => !f.startsWith('.'))
+    for (const file of files) {
+      expect(file in REGISTER, `${file}: in the register`).toBe(true)
+      expect(used.has(file as keyof typeof REGISTER), `${file}: used`).toBe(true)
+    }
+    for (const file of Object.keys(REGISTER)) expect(existsSync(resolve(MEDIA, file)), `${file}: committed`).toBe(true)
   })
 })

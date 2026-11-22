@@ -26,6 +26,9 @@ importers:
       '@agriflow/design-tokens':
         specifier: workspace:*
         version: link:../../packages/design-tokens
+      '@agriflow/media':
+        specifier: workspace:*
+        version: link:../../packages/media
       '@astrojs/sitemap':
         specifier: 3.7.4
         version: 3.7.4
@@ -78,6 +81,9 @@ importers:
       '@agriflow/design-tokens':
         specifier: workspace:*
         version: link:../../packages/design-tokens
+      '@agriflow/media':
+        specifier: workspace:*
+        version: link:../../packages/media
       '@fontsource-variable/fraunces':
         specifier: 5.3.0
         version: 5.3.0
@@ -90,6 +96,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      libphonenumber-js:
+        specifier: 1.13.15
+        version: 1.13.15
       lucide-react:
         specifier: ^1.70.0
         version: 1.70.0(@types/react@19.3.0)(react@19.3.1)
@@ -161,6 +170,12 @@ importers:
   packages/config: {}
 
   packages/design-tokens: {}
+
+  packages/media:
+    devDependencies:
+      sharp:
+        specifier: 0.35.5
+        version: 0.35.5(@types/node@24.19.2)
 
   packages/types: {}
 
@@ -1742,6 +1757,9 @@ packages:
     resolution: {integrity: sha512-o+NO+8WrRiQEE4/7nwRJhN1HWpVmJm511pBHUxPLtp0BUISzlBplORYSmTclCnJvQq2tKu/sgl3xVpkc7ZWuQQ==}
     engines: {node: '>=6'}
 
+  libphonenumber-js@1.13.15:
+    resolution: {integrity: sha512-AHdhEQeDFEJ4GKDAQ9AwxChy+v2kUILUB3TGQRpkXMkWePjXTU/WQEzWVQoIx/Gz8fE73Wr5SEuZCy2vk8jrMQ==}
+
   lightningcss-android-arm64@1.33.0:
     resolution: {integrity: sha512-gEpRTalKdosp4Bb8qWtc2iOgE5SeIHlpS1up9bFq2wAyYhl1UdTObYiHe98zEM9SQvSoqQZ1IQD0JNpg3Ml5pg==}
     engines: {node: '>= 12.0.0'}
@@ -3022,8 +3040,7 @@ snapshots:
 
   '@fontsource/ibm-plex-sans@5.3.0': {}
 
-  '@img/colour@1.1.0':
-    optional: true
+  '@img/colour@1.1.0': {}
 
   '@img/sharp-darwin-arm64@0.35.5':
     optionalDependencies:
@@ -4194,6 +4211,8 @@ snapshots:
 
   kleur@4.1.5: {}
 
+  libphonenumber-js@1.13.15: {}
+
   lightningcss-android-arm64@1.33.0:
     optional: true
 
@@ -4625,7 +4644,6 @@ snapshots:
       '@img/sharp-win32-ia32': 0.35.5
       '@img/sharp-win32-x64': 0.35.5
       '@types/node': 24.19.2
-    optional: true
 
   shiki@4.6.0:
     dependencies:

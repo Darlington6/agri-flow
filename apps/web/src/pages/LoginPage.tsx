@@ -6,6 +6,7 @@ import { brand } from '@/config/brand'
 import { CardButton, DemoTag } from '@/components/ui'
 import type { DemoRole } from '@/types'
 import { visibleDemoRoles } from '@/lib/demoRoles'
+import { AuthLayout } from '@/components/layout/AuthLayout'
 
 const ROLES: { role: DemoRole; description: string; icon: typeof ShieldCheck }[] = [
   {
@@ -52,7 +53,7 @@ export function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center bg-canvas px-4 py-12">
+    <AuthLayout photo="demo">
       <div className="mb-8 flex flex-col items-center gap-3 text-center">
         <LogoMark className="h-14" />
         <h1 className="font-display text-2xl font-semibold text-ink-900">{brand.name}</h1>
@@ -62,7 +63,7 @@ export function LoginPage() {
         </p>
       </div>
 
-      <div className="grid w-full max-w-3xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid w-full max-w-2xl gap-4 sm:grid-cols-2">
         {visibleDemoRoles(ROLES).map(({ role, description, icon: Icon }) => {
           const id = `role-${role.toLowerCase().replace(/\s+/g, '-')}`
           return (
@@ -97,6 +98,6 @@ export function LoginPage() {
         </a>
         .
       </p>
-    </div>
+    </AuthLayout>
   )
 }

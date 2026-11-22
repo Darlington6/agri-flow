@@ -26,6 +26,7 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
   sits directly on cream is darker (ink-600), and contrast tests cover the new pairings.
 - Easier to read: small text is a pixel larger (13 and 15px), and grey text across the app is one step darker
   (no grey text below 4.5:1 any more).
+- The demo-role cards keep their icon and title at the top when a neighbour's description is longer.
 - The pilot badge is forest green with a green dot, and only the sidebar shows it inside the platform.
 - Sign-in opens on email (phone codes need an SMS provider that staging and production don't have yet), and
   switching between email and phone is a clear button instead of small grey text.
@@ -72,6 +73,17 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
   handling.
 
 ### Added
+
+- Photos on the sign-in and demo-role pages: on laptops and desktops the photo fills the left half and stays put;
+  on phones and tablets it's a short band across the top, so the form is still on the first screen. They come
+  from the site's photo library, now a shared package (`packages/media`) with one licence register for the site
+  and the app. The app's copies are sized ahead of time as WebP (about 30 to 50 KB on a phone).
+- A country picker on phone numbers (sign-in and "Add phone number"): the flag and dialling code, then the
+  local number, so `0788 123 456` with Rwanda picked is sent as `+250788123456`. It starts on a country guessed
+  from the device (time zone first, then a region in the language setting, then Rwanda) and is one tap to
+  change; typing a number with `+` moves it along. The placeholder is a local example for that country, and the
+  code screen shows the number written out (`+250 788 123 456`). Accounts don't record a country yet; when they
+  do, adding a number will start on it.
 
 - Light and dark themes for the app: **System** (follows the device), **Light** or **Dark**, chosen in Settings or
   on the account page and remembered in the browser. Colours are named roles (`surface`, `canvas`, `action`,
