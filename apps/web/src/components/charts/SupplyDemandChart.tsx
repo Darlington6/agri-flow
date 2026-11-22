@@ -30,7 +30,7 @@ export function SupplyDemandChart() {
               key={c.id}
               onClick={() => setCropId(c.id)}
               className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-                cropId === c.id ? 'bg-white text-primary-800 shadow-sm' : 'text-ink-600 hover:text-ink-800'
+                cropId === c.id ? 'bg-surface text-primary-800 shadow-sm' : 'text-ink-600 hover:text-ink-800'
               }`}
             >
               {c.name}

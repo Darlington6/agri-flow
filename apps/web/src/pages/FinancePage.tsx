@@ -183,7 +183,7 @@ export function FinancePage() {
           {!isBuyer && (
             <Card className="border-dashed">
               <div className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-brand-700" />
+                <Sparkles className="h-4 w-4 text-accent" />
                 <h2 className="font-display text-sm font-semibold text-ink-800">Finance Intelligence</h2>
                 <ComingSoonBadge />
               </div>
@@ -197,7 +197,7 @@ export function FinancePage() {
           {!isBuyer && (
             <Card className="border-dashed">
               <div className="flex items-center gap-2">
-                <ShieldCheck className="h-4 w-4 text-brand-700" />
+                <ShieldCheck className="h-4 w-4 text-accent" />
                 <h2 className="font-display text-sm font-semibold text-ink-800">Climate-Smart Insurance</h2>
                 <ComingSoonBadge />
               </div>

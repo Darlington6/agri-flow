@@ -19,7 +19,7 @@ export function StatCard({ label, value, hint, icon: Icon, tone = 'default' }: S
           <span
             className={clsx(
               'flex h-9 w-9 items-center justify-center rounded-xl',
-              tone === 'risk' ? 'bg-status-risk-bg text-status-risk' : 'bg-brand-50 text-brand-700',
+              tone === 'risk' ? 'bg-status-risk-bg text-status-risk' : 'bg-brand-50 text-accent',
             )}
           >
             <Icon className="h-5 w-5" />

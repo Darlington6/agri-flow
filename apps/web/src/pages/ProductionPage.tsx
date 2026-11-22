@@ -174,7 +174,7 @@ export function ProductionPage() {
                       <span
                         className={clsx('inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium', {
                           'bg-ink-100 text-ink-600': c.stage === 'Planned' || c.stage === 'Planted',
-                          'bg-brand-50 text-brand-700': c.stage === 'Growing' || c.stage === 'Flowering',
+                          'bg-brand-50 text-accent': c.stage === 'Growing' || c.stage === 'Flowering',
                           'bg-status-good-bg text-status-good': c.stage === 'Maturing' || c.stage === 'Harvest Ready',
                         })}
                       >

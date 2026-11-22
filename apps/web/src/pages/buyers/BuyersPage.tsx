@@ -51,7 +51,7 @@ export function BuyersPage() {
               <Link key={b.id} to={`/buyers/${b.id}`}>
                 <Card hoverable className="h-full">
                   <div className="flex items-start justify-between">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-700">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-accent">
                       <Building2 className="h-5 w-5" />
                     </span>
                     <div className="flex flex-col items-end gap-1">

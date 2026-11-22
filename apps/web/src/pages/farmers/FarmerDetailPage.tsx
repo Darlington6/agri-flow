@@ -119,7 +119,7 @@ export function FarmerDetailPage() {
           <Card>
             <h2 className="font-display text-sm font-semibold text-ink-700">Climate-Smart Practices</h2>
             <div className="mt-4 flex items-center gap-4">
-              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-4 border-brand-100 font-display text-lg font-semibold text-brand-800">
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-4 border-brand-100 font-display text-lg font-semibold text-accent">
                 {farmer.climateSmartScore}%
               </div>
               <div>
@@ -224,7 +224,7 @@ export function FarmerDetailPage() {
               <h2 className="font-display text-sm font-semibold text-ink-700">Financing &amp; Insurance</h2>
             </div>
             <div className="mt-3 flex items-center gap-3">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-4 border-brand-100 font-display text-sm font-semibold text-brand-800">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-4 border-brand-100 font-display text-sm font-semibold text-accent">
                 {readinessScore}
               </div>
               <div>

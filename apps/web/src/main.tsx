@@ -8,6 +8,10 @@ import '@fontsource/ibm-plex-sans/600.css'
 import './index.css'
 import App from './App.tsx'
 import { initMonitoring } from './lib/monitoring'
+import { applyTheme, followSystemTheme } from './lib/theme'
+
+applyTheme()
+followSystemTheme()
 
 const reporting = initMonitoring()
 

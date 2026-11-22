@@ -3,6 +3,7 @@ import { Link, Navigate } from 'react-router-dom'
 import { useAuth } from '@/context/AuthContext'
 import { LogoMark } from '@/components/brand/LogoMark'
 import { Button, buttonClasses, Card, DemoTag, Field, inputClass } from '@/components/ui'
+import { ThemeSwitcher } from '@/components/theme/ThemeSwitcher'
 import { AddEmail, AddPhone } from './AddContact'
 
 export function AccountPage() {
@@ -35,7 +36,7 @@ export function AccountPage() {
   }
 
   return (
-    <div className="flex min-h-svh flex-col items-center bg-cream px-4 py-12">
+    <div className="flex min-h-svh flex-col items-center bg-canvas px-4 py-12">
       <div className="mb-8 flex flex-col items-center gap-2 text-center">
         <Link
           to="/"
@@ -104,12 +105,17 @@ export function AccountPage() {
           ) : (
             <ul className="mt-2 flex flex-wrap gap-2">
               {user.roles.map((role) => (
-                <li key={role.slug} className="rounded-full bg-brand-50 px-3 py-1 text-xs text-brand-800">
+                <li key={role.slug} className="rounded-full bg-brand-50 px-3 py-1 text-xs text-accent">
                   {role.name}
                 </li>
               ))}
             </ul>
           )}
+        </div>
+
+        <div className="mt-6 border-t border-ink-100 pt-6">
+          <p className="text-xs font-medium tracking-wide text-ink-500 uppercase">Appearance</p>
+          <ThemeSwitcher className="mt-3" />
         </div>
 
         <Button variant="outline" size="sm" className="mt-6" onClick={() => void logout()}>
