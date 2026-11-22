@@ -36,13 +36,13 @@ uses.
 
 English is at the root (`/about/`); every other language is under its code (`/fr/about/`, `/sw/about/`, ...).
 
-| Language | Translation | Live |
-|---|---|---|
-| English | source | yes |
-| French | `dictionaries/fr.ts` | yes (a fluent speaker's skim still welcome) |
-| Swahili | `dictionaries/sw.ts` | yes (a fluent speaker's skim still welcome) |
-| Kinyarwanda | needs a native-speaker translator | no |
-| Twi | needs a native-speaker translator | no |
+| Language    | Translation                       | Live                                        |
+| ----------- | --------------------------------- | ------------------------------------------- |
+| English     | source                            | yes                                         |
+| French      | `dictionaries/fr.ts`              | yes (a fluent speaker's skim still welcome) |
+| Swahili     | `dictionaries/sw.ts`              | yes (a fluent speaker's skim still welcome) |
+| Kinyarwanda | needs a native-speaker translator | no                                          |
+| Twi         | needs a native-speaker translator | no                                          |
 
 Machine translation is good for French and Swahili, so those only need a skim. It's weak for Kinyarwanda
 and Twi, so those need a native speaker to translate, not just review.
@@ -61,12 +61,12 @@ A language only appears (pages, sitemap, hreflang, language switcher) once it's 
 
 ## Search engines
 
-| Setting | Purpose |
-|---|---|
-| `SITE_URL` | The public origin, e.g. `https://agriflow.com`. Used for canonical URLs, hreflang and the sitemap. Defaults to Vercel's production URL, then `http://localhost:4321`. |
-| `PUBLIC_ALLOW_INDEXING` | Set to `true` to let search engines index the site. **Leave unset until the real domain is live**, so the temporary `*.vercel.app` address doesn't get indexed and later compete with the real one. |
-| `PUBLIC_API_URL` | Base URL of the AgriFlow API, for the demo request form. Until it's set (and the API endpoint exists), the form shows a clear "couldn't send" message. |
-| `PUBLIC_APP_URL` | Address of the AgriFlow app (the web app today, the PWA later). Powers "Log in" and "Create account". Unset in a production build, those links are left out; in development they point at the web app on `localhost:5173`. Signing in with a new phone number or email creates the account, so both go to the sign-in page for now. |
+| Setting                 | Purpose                                                                                                                                                                                                                                                                                                                             |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SITE_URL`              | The public origin, e.g. `https://agriflow.com`. Used for canonical URLs, hreflang and the sitemap. Defaults to Vercel's production URL, then `http://localhost:4321`.                                                                                                                                                               |
+| `PUBLIC_ALLOW_INDEXING` | Set to `true` to let search engines index the site. **Leave unset until the real domain is live**, so the temporary `*.vercel.app` address doesn't get indexed and later compete with the real one.                                                                                                                                 |
+| `PUBLIC_API_URL`        | Base URL of the AgriFlow API, for the demo request form. Until it's set (and the API endpoint exists), the form shows a clear "couldn't send" message.                                                                                                                                                                              |
+| `PUBLIC_APP_URL`        | Address of the AgriFlow app (the web app today, the PWA later). Powers "Log in" and "Create account". Unset in a production build, those links are left out; in development they point at the web app on `localhost:5173`. Signing in with a new phone number or email creates the account, so both go to the sign-in page for now. |
 
 Both addresses end up in the public pages, so the build stops if either is set to anything but a plain
 `https://` address (no path, no trailing slash, no password). Pages carry a Content Security Policy from

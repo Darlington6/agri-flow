@@ -19,14 +19,12 @@ const accent = audience === 'buyers' ? 'bg-gold-100' : 'bg-sage-100'
   <PageHero title={content.title} lede={content.lede} photo={audience === 'buyers' ? 'pageBuyers' : 'pageFarmers'} />
   <section class="mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-24">
     <ul class="grid gap-5 sm:grid-cols-2">
-      {
-        content.points.map((point) => (
-          <li class={`rounded-3xl p-7 ${accent}`}>
-            <h2 class="text-2xl font-semibold">{point.title}</h2>
-            <p class="mt-2 text-lg text-ink-700">{point.body}</p>
-          </li>
-        ))
-      }
+      {content.points.map((point) => (
+        <li class={`rounded-3xl p-7 ${accent}`}>
+          <h2 class="text-2xl font-semibold">{point.title}</h2>
+          <p class="mt-2 text-lg text-ink-700">{point.body}</p>
+        </li>
+      ))}
     </ul>
   </section>
   <CtaBand locale={locale} title={t.home.finalCta.title} body={t.home.finalCta.body} />

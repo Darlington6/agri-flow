@@ -24,7 +24,17 @@ export function isAdminRole(role?: DemoRole | null): boolean {
 }
 
 const PLATFORM_ADMIN_KEYS: NavKey[] = [
-  'dashboard', 'demand', 'farmers', 'contracts', 'production', 'harvest', 'climate', 'finance', 'marketplace', 'copilot', 'settings',
+  'dashboard',
+  'demand',
+  'farmers',
+  'contracts',
+  'production',
+  'harvest',
+  'climate',
+  'finance',
+  'marketplace',
+  'copilot',
+  'settings',
 ]
 
 // What each demo role is allowed to reach. This gates both the sidebar (see

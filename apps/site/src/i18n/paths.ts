@@ -36,7 +36,11 @@ export interface Alternate {
  * hreflang alternates for a page: one per *published* language, plus
  * x-default pointing at English. Unpublished languages are never advertised.
  */
-export function alternates(site: URL | string, page: PageKey, published: readonly Locale[] = PUBLISHED_LOCALES): Alternate[] {
+export function alternates(
+  site: URL | string,
+  page: PageKey,
+  published: readonly Locale[] = PUBLISHED_LOCALES,
+): Alternate[] {
   const list: Alternate[] = published.map((l) => ({ hreflang: LOCALES[l].code, href: absoluteUrl(site, l, page) }))
   list.push({ hreflang: 'x-default', href: absoluteUrl(site, DEFAULT_LOCALE, page) })
   return list
@@ -47,6 +51,7 @@ export function pageForPath(pathname: string): PageKey | undefined {
   const withSlash = pathname.endsWith('/') ? pathname : `${pathname}/`
   const segments = withSlash.split('/').filter(Boolean)
   const first = segments[0]
-  const unprefixed = first && first in LOCALES ? `/${segments.slice(1).join('/')}${segments.length > 1 ? '/' : ''}` : withSlash
+  const unprefixed =
+    first && first in LOCALES ? `/${segments.slice(1).join('/')}${segments.length > 1 ? '/' : ''}` : withSlash
   return (Object.keys(PAGES) as PageKey[]).find((k) => PAGES[k] === unprefixed)
 }

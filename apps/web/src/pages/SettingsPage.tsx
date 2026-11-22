@@ -95,24 +95,25 @@ export function SettingsPage() {
             <h2 className="font-display text-sm font-semibold text-ink-700">Verification Queue</h2>
           </div>
           <div className="mt-4 flex flex-col divide-y divide-ink-50">
-            {[...pendingFarmers.map((f) => ({ id: f.id, name: f.name, kind: 'Farmer' })), ...pendingBuyers.map((b) => ({ id: b.id, name: b.name, kind: 'Buyer' }))].map(
-              (entity) => (
-                <div key={entity.id} className="flex items-center justify-between py-2.5 first:pt-0 last:pb-0">
-                  <div>
-                    <p className="text-sm font-medium text-ink-800">{entity.name}</p>
-                    <Badge tone="neutral">{entity.kind}</Badge>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button size="sm" onClick={() => setKycStatus(entity.id, 'Verified')}>
-                      Approve
-                    </Button>
-                    <Button size="sm" variant="outline" onClick={() => setKycStatus(entity.id, 'Unverified')}>
-                      Reject
-                    </Button>
-                  </div>
+            {[
+              ...pendingFarmers.map((f) => ({ id: f.id, name: f.name, kind: 'Farmer' })),
+              ...pendingBuyers.map((b) => ({ id: b.id, name: b.name, kind: 'Buyer' })),
+            ].map((entity) => (
+              <div key={entity.id} className="flex items-center justify-between py-2.5 first:pt-0 last:pb-0">
+                <div>
+                  <p className="text-sm font-medium text-ink-800">{entity.name}</p>
+                  <Badge tone="neutral">{entity.kind}</Badge>
                 </div>
-              ),
-            )}
+                <div className="flex gap-2">
+                  <Button size="sm" onClick={() => setKycStatus(entity.id, 'Verified')}>
+                    Approve
+                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => setKycStatus(entity.id, 'Unverified')}>
+                    Reject
+                  </Button>
+                </div>
+              </div>
+            ))}
           </div>
         </Card>
       )}
@@ -130,7 +131,9 @@ export function SettingsPage() {
                 key={pref}
                 onClick={() => setContactPref(pref)}
                 className={`rounded-xl border px-3.5 py-2 text-sm font-medium transition-colors ${
-                  contactPref === pref ? 'border-primary-300 bg-primary-50 text-primary-800' : 'border-ink-200 text-ink-600 hover:bg-ink-50'
+                  contactPref === pref
+                    ? 'border-primary-300 bg-primary-50 text-primary-800'
+                    : 'border-ink-200 text-ink-600 hover:bg-ink-50'
                 }`}
               >
                 {pref}
@@ -175,9 +178,9 @@ export function SettingsPage() {
           <h2 className="font-display text-sm font-semibold text-ink-700">About this environment</h2>
         </div>
         <p className="mt-2 text-xs leading-relaxed text-ink-500">
-          {brand.name} is running in {brand.environmentLabel} mode. All farmers, buyers, contracts and financial
-          figures shown are simulated demonstration data for prototype review — no production data or live
-          integrations are connected.
+          {brand.name} is running in {brand.environmentLabel} mode. All farmers, buyers, contracts and financial figures
+          shown are simulated demonstration data for prototype review — no production data or live integrations are
+          connected.
         </p>
       </Card>
 

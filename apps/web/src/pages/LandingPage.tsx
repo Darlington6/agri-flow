@@ -27,15 +27,43 @@ const FLOW_STEPS = [
 ]
 
 const LOOP_STEPS = [
-  { label: 'Demand', icon: ClipboardList, desc: 'Institutional buyers submit verified demand: crop, quantity, grade, delivery date.' },
-  { label: 'Contracts', icon: FileSignature, desc: 'Demand becomes production contracts matched to farmers with capacity to deliver.' },
-  { label: 'Production', icon: Sprout, desc: 'Farmers grow against a confirmed contract, with guidance for the target quality grade.' },
-  { label: 'Climate Intelligence', icon: CloudSun, desc: 'Rainfall, heat and drought risk are tracked against each production cycle.' },
-  { label: 'Harvest Forecast', icon: LineChart, desc: 'Expected yield is projected ahead of harvest, adjusted for climate risk.' },
-  { label: 'Post-Harvest Coordination', icon: Warehouse, desc: 'Storage, aggregation and buyer pickup are coordinated to limit losses.' },
+  {
+    label: 'Demand',
+    icon: ClipboardList,
+    desc: 'Institutional buyers submit verified demand: crop, quantity, grade, delivery date.',
+  },
+  {
+    label: 'Contracts',
+    icon: FileSignature,
+    desc: 'Demand becomes production contracts matched to farmers with capacity to deliver.',
+  },
+  {
+    label: 'Production',
+    icon: Sprout,
+    desc: 'Farmers grow against a confirmed contract, with guidance for the target quality grade.',
+  },
+  {
+    label: 'Climate Intelligence',
+    icon: CloudSun,
+    desc: 'Rainfall, heat and drought risk are tracked against each production cycle.',
+  },
+  {
+    label: 'Harvest Forecast',
+    icon: LineChart,
+    desc: 'Expected yield is projected ahead of harvest, adjusted for climate risk.',
+  },
+  {
+    label: 'Post-Harvest Coordination',
+    icon: Warehouse,
+    desc: 'Storage, aggregation and buyer pickup are coordinated to limit losses.',
+  },
   { label: 'Delivery', icon: Truck, desc: 'Produce moves from farm to buyer against the original contract terms.' },
   { label: 'Payment', icon: Wallet, desc: 'Buyer and farmer payments are tracked through to settlement.' },
-  { label: 'Performance Data', icon: LineChart, desc: 'Delivery reliability and yield accuracy feed back into future contracts.' },
+  {
+    label: 'Performance Data',
+    icon: LineChart,
+    desc: 'Delivery reliability and yield accuracy feed back into future contracts.',
+  },
 ]
 
 const USERS = [
@@ -71,8 +99,12 @@ export function LandingPage() {
             <span className="font-display text-lg font-semibold text-ink-900">{brand.name}</span>
           </div>
           <nav className="hidden items-center gap-8 text-sm font-medium text-ink-600 md:flex">
-            <a href="#how-it-works" className="hover:text-ink-900">How it works</a>
-            <a href="#users" className="hover:text-ink-900">Who it's for</a>
+            <a href="#how-it-works" className="hover:text-ink-900">
+              How it works
+            </a>
+            <a href="#users" className="hover:text-ink-900">
+              Who it's for
+            </a>
           </nav>
           <div className="flex items-center gap-3">
             <Link to="/login" className="text-sm font-medium text-ink-600 hover:text-ink-900">
@@ -91,12 +123,12 @@ export function LandingPage() {
       <section className="relative overflow-hidden bg-gradient-to-b from-brand-50/60 to-white">
         <div className="mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 sm:py-28">
           <DemoTag className="mx-auto mb-6" />
-          <h1 className="font-display text-4xl font-semibold leading-[1.1] tracking-tight text-ink-900 sm:text-5xl">
+          <h1 className="font-display text-4xl leading-[1.1] font-semibold tracking-tight text-ink-900 sm:text-5xl">
             {brand.statement}
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-base text-ink-600 sm:text-lg">
-            {brand.name} connects institutional buyers with smallholder farmers through production contracts,
-            climate intelligence, harvest forecasting and coordinated post-harvest delivery.
+            {brand.name} connects institutional buyers with smallholder farmers through production contracts, climate
+            intelligence, harvest forecasting and coordinated post-harvest delivery.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
@@ -125,9 +157,7 @@ export function LandingPage() {
                   </span>
                   <span className="text-xs font-medium text-ink-700 sm:text-sm">{step.label}</span>
                 </div>
-                {i < FLOW_STEPS.length - 1 && (
-                  <ArrowRight className="hidden h-4 w-4 shrink-0 text-ink-300 sm:block" />
-                )}
+                {i < FLOW_STEPS.length - 1 && <ArrowRight className="hidden h-4 w-4 shrink-0 text-ink-300 sm:block" />}
               </div>
             ))}
           </div>
@@ -140,9 +170,9 @@ export function LandingPage() {
             Production and demand are poorly coordinated
           </h2>
           <p className="mt-4 text-base text-ink-600">
-            Smallholder farmers often produce without reliable knowledge of future demand, while institutional
-            buyers struggle to secure predictable volumes, quality and delivery. {brand.name} reverses the
-            traditional model: demand drives production, not the other way around.
+            Smallholder farmers often produce without reliable knowledge of future demand, while institutional buyers
+            struggle to secure predictable volumes, quality and delivery. {brand.name} reverses the traditional model:
+            demand drives production, not the other way around.
           </p>
           <p className="mt-6 font-display text-lg font-medium text-brand-800">{brand.substatement}</p>
         </div>
@@ -155,8 +185,8 @@ export function LandingPage() {
               One coordination layer, end to end
             </h2>
             <p className="mt-3 text-sm text-ink-600 sm:text-base">
-              Every module connects back to a single production contract — from the moment demand is verified to
-              the moment performance data informs the next one.
+              Every module connects back to a single production contract — from the moment demand is verified to the
+              moment performance data informs the next one.
             </p>
           </div>
 
@@ -169,7 +199,7 @@ export function LandingPage() {
                       <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-50 text-brand-700">
                         <step.icon className="h-[18px] w-[18px]" />
                       </span>
-                      <span className="text-xs font-semibold uppercase tracking-wide text-ink-400">
+                      <span className="text-xs font-semibold tracking-wide text-ink-400 uppercase">
                         {String(i + 1).padStart(2, '0')}
                       </span>
                     </div>
@@ -210,12 +240,10 @@ export function LandingPage() {
 
       <section className="py-16 sm:py-24">
         <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
-          <h2 className="font-display text-2xl font-semibold text-ink-900 sm:text-3xl">
-            Explore a working prototype
-          </h2>
+          <h2 className="font-display text-2xl font-semibold text-ink-900 sm:text-3xl">Explore a working prototype</h2>
           <p className="mt-3 text-sm text-ink-600 sm:text-base">
-            Walk through a live demand-to-farm scenario: a buyer's tomato order, matched farmers, climate risk,
-            harvest forecast, post-harvest coordination and payment — all connected.
+            Walk through a live demand-to-farm scenario: a buyer's tomato order, matched farmers, climate risk, harvest
+            forecast, post-harvest coordination and payment — all connected.
           </p>
           <Link
             to="/login"
@@ -230,8 +258,8 @@ export function LandingPage() {
       <footer className="border-t border-ink-100 py-8">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-4 text-center sm:px-6">
           <p className="text-xs text-ink-400">
-            {brand.name} is an early-stage prototype. All metrics, farmers, buyers and contracts shown are
-            simulated demonstration data.
+            {brand.name} is an early-stage prototype. All metrics, farmers, buyers and contracts shown are simulated
+            demonstration data.
           </p>
         </div>
       </footer>

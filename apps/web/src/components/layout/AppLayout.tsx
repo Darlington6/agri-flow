@@ -30,7 +30,7 @@ export function AppLayout() {
             <Sidebar onNavigate={() => setMobileNavOpen(false)} />
             <button
               onClick={() => setMobileNavOpen(false)}
-              className="absolute right-[-44px] top-4 flex h-9 w-9 items-center justify-center rounded-full bg-white text-ink-600 shadow"
+              className="absolute top-4 right-[-44px] flex h-9 w-9 items-center justify-center rounded-full bg-white text-ink-600 shadow"
               aria-label="Close navigation"
             >
               <X className="h-4 w-4" />
@@ -41,7 +41,7 @@ export function AppLayout() {
 
       <div className="flex min-w-0 flex-1 flex-col">
         <Topbar onMenuClick={() => setMobileNavOpen(true)} />
-        <main className="flex-1 overflow-y-auto scrollbar-thin">
+        <main className="flex-1 scrollbar-thin overflow-y-auto">
           <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:py-8">
             <Outlet />
           </div>

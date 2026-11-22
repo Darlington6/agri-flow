@@ -22,7 +22,12 @@ function form(overrides: Record<string, string> = {}) {
 
 describe('demo request payload', () => {
   it('trims text and turns the checkbox into a boolean', () => {
-    expect(demoRequestPayload(form(), 'en')).toMatchObject({ name: 'Aline Uwase', country: 'RW', consent: true, locale: 'en' })
+    expect(demoRequestPayload(form(), 'en')).toMatchObject({
+      name: 'Aline Uwase',
+      country: 'RW',
+      consent: true,
+      locale: 'en',
+    })
     expect(demoRequestPayload(form({ consent: '' }), 'en').consent).toBe(false)
   })
 
@@ -44,8 +49,12 @@ describe('submitDemoRequest', () => {
   })
 
   it('reports failure for an error response or a network error', async () => {
-    expect(await submitDemoRequest(endpoint, form(), 'en', vi.fn().mockResolvedValue(new Response('', { status: 400 })))).toBe('failed')
-    expect(await submitDemoRequest(endpoint, form(), 'en', vi.fn().mockRejectedValue(new TypeError('offline')))).toBe('failed')
+    expect(
+      await submitDemoRequest(endpoint, form(), 'en', vi.fn().mockResolvedValue(new Response('', { status: 400 }))),
+    ).toBe('failed')
+    expect(await submitDemoRequest(endpoint, form(), 'en', vi.fn().mockRejectedValue(new TypeError('offline')))).toBe(
+      'failed',
+    )
   })
 
   it('fails clearly when no API address is configured', async () => {

@@ -96,7 +96,11 @@ export function NewDemandRequestModal({
             </select>
           </Field>
           <Field label="Frequency">
-            <select className={inputClass} value={frequency} onChange={(e) => setFrequency(e.target.value as DemandFrequency)}>
+            <select
+              className={inputClass}
+              value={frequency}
+              onChange={(e) => setFrequency(e.target.value as DemandFrequency)}
+            >
               {FREQUENCIES.map((f) => (
                 <option key={f} value={f}>
                   {f}
@@ -108,15 +112,32 @@ export function NewDemandRequestModal({
 
         <div className="grid grid-cols-2 gap-4">
           <Field label="Required delivery date">
-            <input type="date" className={inputClass} value={deliveryDate} onChange={(e) => setDeliveryDate(e.target.value)} />
+            <input
+              type="date"
+              className={inputClass}
+              value={deliveryDate}
+              onChange={(e) => setDeliveryDate(e.target.value)}
+            />
           </Field>
           <Field label="Delivery location">
-            <input type="text" placeholder="Accra" className={inputClass} value={location} onChange={(e) => setLocation(e.target.value)} />
+            <input
+              type="text"
+              placeholder="Accra"
+              className={inputClass}
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+            />
           </Field>
         </div>
 
         <Field label="Target price (GHS / tonne)">
-          <input type="number" min="0" className={inputClass} value={price} onChange={(e) => setPrice(e.target.value)} />
+          <input
+            type="number"
+            min="0"
+            className={inputClass}
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+          />
         </Field>
 
         <Field label="Special requirements (optional)">

@@ -28,7 +28,8 @@ describe('translations', () => {
   // at build time; this catches anything that slips through, e.g. JSON).
   function shape(value: unknown): unknown {
     if (Array.isArray(value)) return value.map(shape)
-    if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, shape(v)]))
+    if (value && typeof value === 'object')
+      return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, shape(v)]))
     return typeof value
   }
   it.each(ALL_LOCALES.filter(hasDictionary))('%s has the same keys as English', (l) => {

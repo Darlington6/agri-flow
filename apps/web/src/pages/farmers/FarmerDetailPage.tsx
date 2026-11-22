@@ -38,7 +38,10 @@ export function FarmerDetailPage() {
     <div className="flex flex-col gap-6">
       <div>
         {session?.role !== 'Farmer' && (
-          <Link to="/farmers" className="mb-3 inline-flex items-center gap-1 text-xs font-medium text-ink-500 hover:text-ink-800">
+          <Link
+            to="/farmers"
+            className="mb-3 inline-flex items-center gap-1 text-xs font-medium text-ink-500 hover:text-ink-800"
+          >
             <ArrowLeft className="h-3.5 w-3.5" />
             Farmer Network
           </Link>
@@ -171,7 +174,10 @@ export function FarmerDetailPage() {
                       {content}
                     </Link>
                   ) : (
-                    <div key={c.id} className="flex flex-wrap items-center justify-between gap-2 py-3 first:pt-0 last:pb-0">
+                    <div
+                      key={c.id}
+                      className="flex flex-wrap items-center justify-between gap-2 py-3 first:pt-0 last:pb-0"
+                    >
                       {content}
                     </div>
                   )
@@ -187,19 +193,27 @@ export function FarmerDetailPage() {
             <dl className="mt-3 flex flex-col gap-2.5 text-sm">
               <div className="flex items-center justify-between">
                 <dt className="text-ink-500">Rainfall exposure</dt>
-                <dd><RiskBadge level={farmer.risk.rainfallExposure} /></dd>
+                <dd>
+                  <RiskBadge level={farmer.risk.rainfallExposure} />
+                </dd>
               </div>
               <div className="flex items-center justify-between">
                 <dt className="text-ink-500">Drought exposure</dt>
-                <dd><RiskBadge level={farmer.risk.droughtExposure} /></dd>
+                <dd>
+                  <RiskBadge level={farmer.risk.droughtExposure} />
+                </dd>
               </div>
               <div className="flex items-center justify-between">
                 <dt className="text-ink-500">Pest risk</dt>
-                <dd><RiskBadge level={farmer.risk.pestRisk} /></dd>
+                <dd>
+                  <RiskBadge level={farmer.risk.pestRisk} />
+                </dd>
               </div>
               <div className="flex items-center justify-between">
                 <dt className="text-ink-500">Expected yield risk</dt>
-                <dd><RiskBadge level={farmer.risk.yieldRisk} /></dd>
+                <dd>
+                  <RiskBadge level={farmer.risk.yieldRisk} />
+                </dd>
               </div>
             </dl>
           </Card>
@@ -220,7 +234,9 @@ export function FarmerDetailPage() {
             </div>
             <div className="mt-3 flex items-center justify-between rounded-lg bg-ink-50 px-3 py-2">
               <span className="text-xs text-ink-600">Climate-smart insurance pilot</span>
-              <Badge tone={insuranceEligible ? 'good' : 'neutral'}>{insuranceEligible ? 'Eligible' : 'Not yet eligible'}</Badge>
+              <Badge tone={insuranceEligible ? 'good' : 'neutral'}>
+                {insuranceEligible ? 'Eligible' : 'Not yet eligible'}
+              </Badge>
             </div>
             <div className="mt-2 flex items-center justify-between">
               <span className="text-xs text-ink-500">Input / working-capital financing</span>
@@ -242,7 +258,9 @@ export function FarmerDetailPage() {
                         {p.method} · {formatDate(p.date)}
                       </p>
                     </div>
-                    <Badge tone={p.status === 'Paid' ? 'good' : p.status === 'Processing' ? 'info' : 'warn'}>{p.status}</Badge>
+                    <Badge tone={p.status === 'Paid' ? 'good' : p.status === 'Processing' ? 'info' : 'warn'}>
+                      {p.status}
+                    </Badge>
                   </div>
                 ))}
               </div>

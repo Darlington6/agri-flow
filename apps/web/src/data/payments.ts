@@ -113,7 +113,6 @@ export const payments: Payment[] = [
   },
 ]
 
-export const paymentsByContract = (contractId: string) =>
-  payments.filter((p) => p.contractId === contractId)
+export const paymentsByContract = (contractId: string) => payments.filter((p) => p.contractId === contractId)
 export const paymentsByCounterparty = (counterpartyId: string) =>
   payments.filter((p) => p.counterpartyId === counterpartyId)

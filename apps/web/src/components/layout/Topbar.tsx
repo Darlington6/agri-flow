@@ -43,24 +43,22 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
           >
             <Bell className="h-5 w-5" />
             {unread.length > 0 && (
-              <span className="absolute right-1.5 top-1.5 flex h-2 w-2 rounded-full bg-status-risk" />
+              <span className="absolute top-1.5 right-1.5 flex h-2 w-2 rounded-full bg-status-risk" />
             )}
           </button>
           {notifOpen && (
             <div className="absolute right-0 z-20 mt-2 w-80 rounded-2xl border border-ink-100 bg-white p-2 shadow-[var(--shadow-card-hover)]">
-              <p className="px-2 py-1.5 text-xs font-semibold uppercase tracking-wide text-ink-400">
+              <p className="px-2 py-1.5 text-xs font-semibold tracking-wide text-ink-400 uppercase">
                 Risk alerts &amp; notifications
               </p>
-              <div className="max-h-80 overflow-y-auto scrollbar-thin">
+              <div className="max-h-80 scrollbar-thin overflow-y-auto">
                 {unread.map((n) => (
                   <div key={n.id} className="rounded-xl px-2 py-2 hover:bg-ink-50">
                     <p className="text-sm font-medium text-ink-800">{n.title}</p>
                     <p className="mt-0.5 text-xs text-ink-500">{n.message}</p>
                   </div>
                 ))}
-                {unread.length === 0 && (
-                  <p className="px-2 py-3 text-sm text-ink-400">No alerts for you right now.</p>
-                )}
+                {unread.length === 0 && <p className="px-2 py-3 text-sm text-ink-400">No alerts for you right now.</p>}
               </div>
             </div>
           )}
@@ -69,13 +67,13 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
         <div className="relative" ref={menuRef}>
           <button
             onClick={() => setMenuOpen((v) => !v)}
-            className="flex items-center gap-2 rounded-xl border border-ink-100 py-1.5 pl-1.5 pr-2.5 hover:bg-ink-50"
+            className="flex items-center gap-2 rounded-xl border border-ink-100 py-1.5 pr-2.5 pl-1.5 hover:bg-ink-50"
           >
             <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-700 text-xs font-semibold text-white">
               {session?.name?.[0] ?? 'A'}
             </span>
             <span className="hidden text-left sm:block">
-              <span className="block text-sm font-medium leading-tight text-ink-800">{session?.name}</span>
+              <span className="block text-sm leading-tight font-medium text-ink-800">{session?.name}</span>
               <span className="block text-[11px] leading-tight text-ink-400">{session?.role}</span>
             </span>
             <ChevronDown className="h-4 w-4 text-ink-400" />

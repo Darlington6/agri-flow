@@ -29,9 +29,12 @@ export function MatchRequestsPanel({ contractId }: { contractId: string }) {
                 <div>
                   <p className="text-sm font-medium text-ink-800">{farmer?.name ?? m.farmerId}</p>
                   <p className="text-xs text-ink-400">
-                    {farmer?.community}, {farmer?.region} · offering {formatTonnes(m.proposedQuantityTonnes)} · {formatDate(m.createdAt)}
+                    {farmer?.community}, {farmer?.region} · offering {formatTonnes(m.proposedQuantityTonnes)} ·{' '}
+                    {formatDate(m.createdAt)}
                   </p>
-                  {m.message && <p className="mt-1.5 rounded-lg bg-ink-50 px-2.5 py-1.5 text-xs text-ink-600">{m.message}</p>}
+                  {m.message && (
+                    <p className="mt-1.5 rounded-lg bg-ink-50 px-2.5 py-1.5 text-xs text-ink-600">{m.message}</p>
+                  )}
                 </div>
                 <Badge tone="warn">Pending</Badge>
               </div>
@@ -55,7 +58,9 @@ export function MatchRequestsPanel({ contractId }: { contractId: string }) {
             <div key={m.id} className="flex items-center justify-between py-2.5 first:pt-0 last:pb-0">
               <div>
                 <p className="text-sm text-ink-700">{farmer?.name ?? m.farmerId}</p>
-                <p className="text-xs text-ink-400">{formatTonnes(m.proposedQuantityTonnes)} · {m.decidedAt ? formatDate(m.decidedAt) : ''}</p>
+                <p className="text-xs text-ink-400">
+                  {formatTonnes(m.proposedQuantityTonnes)} · {m.decidedAt ? formatDate(m.decidedAt) : ''}
+                </p>
               </div>
               <Badge tone={m.status === 'Confirmed' ? 'good' : 'neutral'}>{m.status}</Badge>
             </div>

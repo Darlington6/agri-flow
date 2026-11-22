@@ -10,7 +10,13 @@ interface Props {
 const { label, class: className } = Astro.props
 ---
 
-<svg class:list={['hero-art block h-full w-full', className]} viewBox="0 0 800 560" preserveAspectRatio="xMidYMax slice" role="img" aria-label={label}>
+<svg
+  class:list={['hero-art block h-full w-full', className]}
+  viewBox="0 0 800 560"
+  preserveAspectRatio="xMidYMax slice"
+  role="img"
+  aria-label={label}
+>
   <defs>
     <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#151d17"></stop>
@@ -51,7 +57,9 @@ const { label, class: className } = Astro.props
 <style>
   .hero-art .sun {
     transform-origin: 560px 216px;
-    animation: rise 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) both, breathe 9s ease-in-out 1.6s infinite;
+    animation:
+      rise 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) both,
+      breathe 9s ease-in-out 1.6s infinite;
   }
   @keyframes rise {
     from {

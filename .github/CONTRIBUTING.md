@@ -9,11 +9,11 @@ feature/*  ──squash──▶  dev  ──merge──▶  staging  ──merg
 hotfix/*  ──merge──▶  main, then back-merge main → staging and main → dev
 ```
 
-| Target    | Accepts PRs from                    | Merge method      |
-|-----------|-------------------------------------|-------------------|
+| Target    | Accepts PRs from                              | Merge method               |
+| --------- | --------------------------------------------- | -------------------------- |
 | `dev`     | any branch (feature, Dependabot, back-merges) | **Squash only** (enforced) |
-| `staging` | `dev`, `main` (back-merge), `hotfix/*` | **Merge commit** |
-| `main`    | `staging`, `hotfix/*`               | **Merge commit**  |
+| `staging` | `dev`, `main` (back-merge), `hotfix/*`        | **Merge commit**           |
+| `main`    | `staging`, `hotfix/*`                         | **Merge commit**           |
 
 - Branch off `dev` for new work: `git switch -c feat/short-description dev`. Name the branch after the
   Conventional Commit type (`feat/`, `fix/`, `chore/`, `docs/`, ...).
@@ -21,12 +21,13 @@ hotfix/*  ──merge──▶  main, then back-merge main → staging and main 
   what's on the source branch is ready to move forward. Never skip `staging`.
 - **Opening a promotion:** use these links. They open the PR with the title and the promotion description
   already filled in:
-  - [Promote `dev` → `staging`](https://github.com/Darlington6/agri-flow/compare/staging...dev?quick_pull=1&template=promotion.md&title=chore(release):%20promote%20dev%20to%20staging)
-  - [Promote `staging` → `main`](https://github.com/Darlington6/agri-flow/compare/main...staging?quick_pull=1&template=promotion.md&title=chore(release):%20promote%20staging%20to%20main)
+  - [Promote `dev` → `staging`](<https://github.com/Darlington6/agri-flow/compare/staging...dev?quick_pull=1&template=promotion.md&title=chore(release):%20promote%20dev%20to%20staging>)
+  - [Promote `staging` → `main`](<https://github.com/Darlington6/agri-flow/compare/main...staging?quick_pull=1&template=promotion.md&title=chore(release):%20promote%20staging%20to%20main>)
 
   If you open one from the normal "New pull request" page instead, GitHub prefills the title with the
   branch name ("Dev"). That's fine: create it as is, and the `conventional PR title` check renames it
   within a few seconds (see [Commits](#commits)).
+
 - **Updating a PR branch:** on a PR into `dev`, "Update branch" merges `dev` into your branch (its dropdown
   also offers "Update with rebase"). Either is fine: the squash merge collapses everything into one commit.
   **Never click "Update branch" on a promotion PR** (`dev` → `staging`, `staging` → `main`). There it would
@@ -54,10 +55,10 @@ hotfix/*  ──merge──▶  main, then back-merge main → staging and main 
 
 Two rulesets (Settings → Rules → Rulesets), both active with no bypass, admins included:
 
-| Ruleset | Branches | Merge methods allowed | Branch must be up to date |
-|---|---|---|---|
-| `dev` | `dev` | squash only | yes |
-| `protected-branches (staging, main)` | `staging`, `main` | merge only | no |
+| Ruleset                              | Branches          | Merge methods allowed | Branch must be up to date |
+| ------------------------------------ | ----------------- | --------------------- | ------------------------- |
+| `dev`                                | `dev`             | squash only           | yes                       |
+| `protected-branches (staging, main)` | `staging`, `main` | merge only            | no                        |
 
 Both rulesets:
 
@@ -85,13 +86,13 @@ Rulesets can require a PR but can't restrict which branch it comes from. `pr-pol
 
 ## Deployments
 
-| What | Where | Deploys from |
-| --- | --- | --- |
-| Web app (`apps/web`) | Vercel project `agri-flow` | `main` → Production; every other branch → Preview |
-| Public site (`apps/site`) | Vercel project `agri-flow-site` | `main` → Production; every other branch → Preview |
-| API (`apps/api`), production | Render service `agriflow-api`, Frankfurt | `main` |
-| API (`apps/api`), staging | Render service `agriflow-api-staging`, Frankfurt | `staging` |
-| Database | Neon Postgres, Frankfurt: a `production` branch and a `staging` branch | — |
+| What                         | Where                                                                  | Deploys from                                      |
+| ---------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------- |
+| Web app (`apps/web`)         | Vercel project `agri-flow`                                             | `main` → Production; every other branch → Preview |
+| Public site (`apps/site`)    | Vercel project `agri-flow-site`                                        | `main` → Production; every other branch → Preview |
+| API (`apps/api`), production | Render service `agriflow-api`, Frankfurt                               | `main`                                            |
+| API (`apps/api`), staging    | Render service `agriflow-api-staging`, Frankfurt                       | `staging`                                         |
+| Database                     | Neon Postgres, Frankfurt: a `production` branch and a `staging` branch | —                                                 |
 
 There is no GitHub Actions deploy workflow. Vercel and Render deploy from Git, and `main` only accepts PRs
 that passed CI. Render also waits for a commit's checks to pass before deploying it.
@@ -141,24 +142,24 @@ production to Starter (always on) before the pilot depends on it.
 The settings (`config.settings.prod`, `config.settings.staging`; both build on
 [`deployed.py`](../apps/api/config/settings/deployed.py)) **refuse to start** if any of these is missing:
 
-| Variable | Production | Staging |
-| --- | --- | --- |
-| `DJANGO_SECRET_KEY` | generated by Render | generated by Render |
-| `DATABASE_URL` | Neon `production` branch, pooled | Neon `staging` branch, pooled |
-| `FRONTEND_URL` (where magic links land) | `https://agri-flow-eight.vercel.app` | the app's `staging` address on Vercel |
-| `CORS_ALLOWED_ORIGINS` | the app and the site | the site |
-| `CORS_ALLOWED_ORIGIN_REGEXES` (optional) | — | the app's preview addresses |
-| `BREVO_API_KEY` | Brevo → SMTP & API → API keys | same key |
-| `DEFAULT_FROM_EMAIL` | the sender verified in Brevo, e.g. `AgriFlow <you@gmail.com>` | same |
+| Variable                                 | Production                                                    | Staging                               |
+| ---------------------------------------- | ------------------------------------------------------------- | ------------------------------------- |
+| `DJANGO_SECRET_KEY`                      | generated by Render                                           | generated by Render                   |
+| `DATABASE_URL`                           | Neon `production` branch, pooled                              | Neon `staging` branch, pooled         |
+| `FRONTEND_URL` (where magic links land)  | `https://agri-flow-eight.vercel.app`                          | the app's `staging` address on Vercel |
+| `CORS_ALLOWED_ORIGINS`                   | the app and the site                                          | the site                              |
+| `CORS_ALLOWED_ORIGIN_REGEXES` (optional) | —                                                             | the app's preview addresses           |
+| `BREVO_API_KEY`                          | Brevo → SMTP & API → API keys                                 | same key                              |
+| `DEFAULT_FROM_EMAIL`                     | the sender verified in Brevo, e.g. `AgriFlow <you@gmail.com>` | same                                  |
 
 Render's own address is always allowed as a host. Add any other domain to `DJANGO_ALLOWED_HOSTS`.
 
 **Error reports (Sentry, EU region).** Optional: without a DSN nothing is sent.
 
-| Where | Variable | Value |
-| --- | --- | --- |
-| Render, both services | `SENTRY_DSN` | the `agriflow-api` project's DSN (Sentry → Settings → Projects → Client Keys) |
-| Vercel `agri-flow`, Production and Preview | `VITE_SENTRY_DSN` | the `agriflow-web` project's DSN; redeploy after setting it |
+| Where                                      | Variable          | Value                                                                         |
+| ------------------------------------------ | ----------------- | ----------------------------------------------------------------------------- |
+| Render, both services                      | `SENTRY_DSN`      | the `agriflow-api` project's DSN (Sentry → Settings → Projects → Client Keys) |
+| Vercel `agri-flow`, Production and Preview | `VITE_SENTRY_DSN` | the `agriflow-web` project's DSN; redeploy after setting it                   |
 
 Reports are tagged `production`, `staging` (API) or `preview` (app) and with the commit. They carry the
 user's **id** (and roles, from the app) and nothing that identifies them directly: no names, emails, phone
@@ -210,15 +211,16 @@ Configured in [`dependabot.yml`](dependabot.yml), all targeting `dev`, weekly:
 - **Held for deliberate upgrades** (ignored by Dependabot, each done as its own `chore/` branch when
   it's time):
 
-  | What | Held at | Why |
-  |---|---|---|
-  | Django major | 5.x | `pyproject.toml` caps `django<6.0`; DRF, simplejwt, drf-spectacular and django-cors-headers must support 6 first |
-  | Python (API Docker image) | 3.12 | Pinned in `.python-version`, CI and Vercel; moves everywhere at once |
-  | Node major (web Docker image) | 24 | Moves `.nvmrc` (CI), the web Dockerfile, `engines` (Vercel) and `@types/node` together |
-  | TypeScript major | 6.x | TypeScript 7 is the new native compiler |
-  | `@types/node` major | follows Node | Must match the Node version that actually runs |
+  | What                          | Held at      | Why                                                                                                              |
+  | ----------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------- |
+  | Django major                  | 5.x          | `pyproject.toml` caps `django<6.0`; DRF, simplejwt, drf-spectacular and django-cors-headers must support 6 first |
+  | Python (API Docker image)     | 3.12         | Pinned in `.python-version`, CI and Vercel; moves everywhere at once                                             |
+  | Node major (web Docker image) | 24           | Moves `.nvmrc` (CI), the web Dockerfile, `engines` (Vercel) and `@types/node` together                           |
+  | TypeScript major              | 6.x          | TypeScript 7 is the new native compiler                                                                          |
+  | `@types/node` major           | follows Node | Must match the Node version that actually runs                                                                   |
 
   For a Django upgrade: raise the cap in `pyproject.toml`, `uv lock`, run the tests.
+
 - API updates come from Dependabot's `uv` ecosystem, which updates `pyproject.toml` and `uv.lock`
   together. There's only one lock file, so nothing needs regenerating by hand.
 - A Dependabot PR that fails CI because of a version cap is closed, not merged around. Comment
@@ -254,6 +256,10 @@ Every change, before its PR is opened:
   is a folder of small, focused files, never one large `views.py`/`models.py` carrying everything for
   that context.
 - Frontend: `oxlint` (`pnpm lint`), TypeScript strict mode (`pnpm typecheck`), Vitest (`pnpm test`).
+- Formatting: **Prettier** for TypeScript, Astro, CSS, JSON, YAML and Markdown (`.prettierrc.json`: no
+  semicolons, single quotes, 120 columns; Tailwind classes sorted by `prettier-plugin-tailwindcss`). Run
+  `pnpm format` before pushing; CI runs `pnpm format:check`. In VS Code, install the recommended extensions
+  and files format on save (`.vscode/settings.json`). The API (Python) is formatted by ruff instead.
 - Node version: **24**, pinned in `.nvmrc` (CI reads it) and `engines` (Vercel reads it). Use it locally
   too (`nvm use`, `fnm use` or similar). Vitest doesn't start on Node 26 yet.
 - Backend: `ruff check` and `ruff format` (both enforced), Django's own `manage.py check`.
@@ -280,12 +286,12 @@ title into the commit.
 Promotion and back-merge PRs are titled for you: open them with whatever title GitHub prefills (the
 branch name, e.g. "Staging") and the `conventional PR title` check renames them:
 
-| PR | Title set automatically |
-|---|---|
-| `dev` → `staging` | `chore(release): promote dev to staging` |
+| PR                 | Title set automatically                   |
+| ------------------ | ----------------------------------------- |
+| `dev` → `staging`  | `chore(release): promote dev to staging`  |
 | `staging` → `main` | `chore(release): promote staging to main` |
-| `main` → `dev` | `chore: back-merge main into dev` |
-| `main` → `staging` | `chore: back-merge main into staging` |
+| `main` → `dev`     | `chore: back-merge main into dev`         |
+| `main` → `staging` | `chore: back-merge main into staging`     |
 
 A promotion PR that already has a Conventional Commit title (say, `chore(release): v0.2.0`) keeps it.
 

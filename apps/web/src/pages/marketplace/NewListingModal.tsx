@@ -52,7 +52,11 @@ export function NewListingModal({
     <Modal title="New Marketplace Listing" onClose={onClose}>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <Field label="Category">
-          <select className={inputClass} value={category} onChange={(e) => setCategory(e.target.value as ListingCategory)}>
+          <select
+            className={inputClass}
+            value={category}
+            onChange={(e) => setCategory(e.target.value as ListingCategory)}
+          >
             {CATEGORIES.map((c) => (
               <option key={c} value={c}>
                 {c}
@@ -82,13 +86,25 @@ export function NewListingModal({
             </select>
           </Field>
           <Field label="Location">
-            <input className={inputClass} value={location} onChange={(e) => setLocation(e.target.value)} placeholder="e.g. Techiman, Bono" />
+            <input
+              className={inputClass}
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              placeholder="e.g. Techiman, Bono"
+            />
           </Field>
         </div>
 
         <div className="grid grid-cols-3 gap-4">
           <Field label="Quantity">
-            <input type="number" min="0" step="0.1" className={inputClass} value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+            <input
+              type="number"
+              min="0"
+              step="0.1"
+              className={inputClass}
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
+            />
           </Field>
           <Field label="Unit">
             <select className={inputClass} value={unit} onChange={(e) => setUnit(e.target.value as ListingUnit)}>
@@ -100,7 +116,14 @@ export function NewListingModal({
             </select>
           </Field>
           <Field label="Price / unit (GHS)">
-            <input type="number" min="0" step="0.1" className={inputClass} value={price} onChange={(e) => setPrice(e.target.value)} />
+            <input
+              type="number"
+              min="0"
+              step="0.1"
+              className={inputClass}
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+            />
           </Field>
         </div>
 
