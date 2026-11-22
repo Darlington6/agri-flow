@@ -2,7 +2,14 @@
   "name": "@agriflow/config",
   "private": true,
   "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./public-url": "./src/publicUrl.ts",
+    "./tsconfig.base.json": "./tsconfig.base.json",
+    "./oxlintrc.base.json": "./oxlintrc.base.json"
+  },
   "files": [
+    "src",
     "tsconfig.base.json",
     "oxlintrc.base.json"
   ]
