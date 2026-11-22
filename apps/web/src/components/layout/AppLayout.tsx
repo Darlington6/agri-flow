@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { X } from 'lucide-react'
 import { useSession } from '@/context/SessionContext'
 import { canAccess } from '@/lib/permissions'
 import { Sidebar } from './Sidebar'
 import { Topbar } from './Topbar'
+import { PageLoading } from './PageLoading'
 
 export function AppLayout() {
   const { session } = useSession()
@@ -43,7 +44,10 @@ export function AppLayout() {
         <Topbar onMenuClick={() => setMobileNavOpen(true)} />
         <main className="flex-1 scrollbar-thin overflow-y-auto">
           <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:py-8">
-            <Outlet />
+            {/* The sidebar and top bar stay while the next page downloads. */}
+            <Suspense fallback={<PageLoading />}>
+              <Outlet />
+            </Suspense>
           </div>
         </main>
       </div>
