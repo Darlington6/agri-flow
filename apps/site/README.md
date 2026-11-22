@@ -92,7 +92,8 @@ centre of the gold sun on laptops and desktops.
 
 ## Photos
 
-Every photo slot is listed in `src/media/manifest.ts`. Files live in `src/assets/media/`, and Astro turns
+Every photo slot is listed in `src/media/manifest.ts`. Files, with their source and licence, live in the shared
+`packages/media` (`photos/` and `src/index.ts`), which the app uses too, and Astro turns
 them into AVIF/WebP at several widths at build time (never wider than the original). A slot whose file is
 missing shows drawn artwork instead, so the site always builds.
 
@@ -102,15 +103,15 @@ missing shows drawn artwork instead, so the site always builds.
   a photo header (`PageHero` with `photo`); the form sits below it. Privacy and terms stay plain.
 - Background photos are decorative (empty alt text); section photos are described, in every language
   (`media` in the dictionaries).
-- **Only licensed photos go in `src/assets/media/`.** This repository is public, so committing a photo
-  republishes it. `tests/app.test.ts` fails if a photo there has no `source` and `licence` in the manifest,
-  or isn't used. Raw downloads and photos we can't use yet go in `apps/site/assets/`, which is git-ignored.
+- **Only licensed photos go in `packages/media/photos/`.** This repository is public, so committing a photo
+  republishes it. `tests/app.test.ts` fails if a photo there has no `source` and `licence` in the register,
+  or neither the site nor the app uses it. Raw downloads and photos we can't use yet go in `apps/site/assets/`, which is git-ignored.
 - AI-generated images (the partners photos, for now) record the tool as their source. They're placeholders
   until we have our own photos from the pilot.
 - Full-width backgrounds want images at least 1920px wide; smaller ones are softened by the dark wash.
   Background photos (`<Photo background>`: the hero, page headers, climate) are served at quality 50 and at
   most 1600px wide, since the dark wash hides fine detail: about a third of the download of a section photo.
-- Every photo records its `source` (the photo's page) and `licence` in the manifest: our proof that we may
+- Every photo records its `source` (the photo's page) and `licence` in the register: our proof that we may
   use it, and how to find the original again. It isn't shown on the site; Unsplash and Pexels need no credit.
 - `public/og-<language>.jpg` (`og-en.jpg`, `og-fr.jpg`, `og-sw.jpg`) is the preview shown when a page is shared
   (WhatsApp, LinkedIn, X...), in that page's language: 1200×630, under 300 KB so WhatsApp shows it. It's
