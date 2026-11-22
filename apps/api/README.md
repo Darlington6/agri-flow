@@ -88,7 +88,9 @@ the admin's static files at build time and serves them with WhiteNoise; `scripts
 and then gunicorn on `$PORT`.
 
 Emails are rendered from `apps/identity/templates/identity/email/` (`link.html` and `link.txt`, one layout for
-all three kinds; the wording per kind is `EMAIL_WORDING` in `apps/identity/channels.py`).
+all three kinds; the wording per kind is `EMAIL_WORDING` in `apps/identity/channels.py`). The logo is loaded from
+the website (`apps/site/public/email/`, at `PUBLIC_SITE_URL`); many email apps block images until asked, so the
+wordmark beside it is text and the email reads fine without it. Set `PUBLIC_SITE_URL` once the real domain is live.
 
 With `SENTRY_DSN` set, errors go to Sentry with the user's id and no personal data (see
 `config/observability.py`; signed-in requests are tagged by `apps/identity/authentication.py`). Staff can check it works at

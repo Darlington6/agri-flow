@@ -33,6 +33,7 @@ class EmailDeliveryChannel(Protocol):
 @dataclass(frozen=True)
 class EmailWording:
     subject: str
+    label: str  # the small line above the heading
     heading: str
     intro: str
     button: str
@@ -43,19 +44,22 @@ class EmailWording:
 EMAIL_WORDING = {
     "sign_in": EmailWording(
         subject="Your AgriFlow sign-in link",
-        heading="Sign in to AgriFlow",
-        intro="Use the button below to sign in. There's no password to remember.",
+        label="Sign in",
+        heading="Welcome back",
+        intro="Use the button below to sign in to AgriFlow. There's no password to remember.",
         button="Sign in",
     ),
     "sign_up": EmailWording(
         subject="Finish creating your AgriFlow account",
+        label="New account",
         heading="Welcome to AgriFlow",
         intro="You're one step away. Use the button below to finish creating your account.",
         button="Create my account",
     ),
     "confirm_email": EmailWording(
         subject="Confirm your email for AgriFlow",
-        heading="Confirm your email",
+        label="Confirm email",
+        heading="Is this your email?",
         intro="Use the button below to add this email to your AgriFlow account.",
         button="Confirm email",
     ),
@@ -91,7 +95,15 @@ class DjangoEmailChannel:
     def send(self, email: str, link: str, kind: str) -> None:
         minutes = 15  # services.MAGIC_LINK_TTL_MINUTES; not imported, to avoid a cycle
         wording = EMAIL_WORDING[kind]
-        context = {**asdict(wording), "link": link, "minutes": minutes, "preview": wording.intro}
+        site = settings.PUBLIC_SITE_URL
+        context = {
+            **asdict(wording),
+            "link": link,
+            "minutes": minutes,
+            "preview": wording.intro,
+            "site_url": site,
+            "logo_url": f"{site}/email/agriflow-mark-reversed.png",
+        }
         if settings.DEBUG:
             # Local development only: the link in the terminal too, even if
             # sending fails. Never in staging or production (DEBUG is off).

@@ -73,6 +73,11 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Added
 
+- Emails redesigned to match the site: a forest-green header with the logo (a PNG hosted on the website at
+  `/email/`, since email apps don't show SVG), a gold label, a serif heading, a pill button, the "works once"
+  note in a panel, a sign-off ("Thanks for growing with us, The AgriFlow team"), and Website and Privacy links. The
+  website's address is `PUBLIC_SITE_URL` (defaults to the current Vercel address).
+
 - Sign-in, sign-up and confirmation emails have an HTML version: the AgriFlow wordmark, a heading, a
   button, and the plain link underneath in case the button doesn't work (the plain-text version stays).
 - The account page links home from the logo and, until an account has a role, offers a "What's next" card
