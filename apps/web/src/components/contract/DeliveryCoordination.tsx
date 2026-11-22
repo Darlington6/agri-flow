@@ -29,10 +29,10 @@ export function DeliveryCoordination() {
   return (
     <Card>
       <div className="flex items-center gap-2">
-        <Truck className="h-4 w-4 text-ink-500" />
+        <Truck className="h-4 w-4 text-ink-600" />
         <h2 className="font-display text-sm font-semibold text-ink-700">Delivery Coordination</h2>
       </div>
-      <p className="mt-1 text-xs text-ink-500">
+      <p className="mt-1 text-xs text-ink-600">
         Open jobs are on the delivery partners' job board to book directly. Commission earned to date:{' '}
         {formatGHSFull(totalCommission)}
       </p>
@@ -49,7 +49,7 @@ export function DeliveryCoordination() {
                   <p className="text-sm font-medium text-ink-800">
                     {cropById(job.cropId)?.name} · {formatTonnes(job.quantityTonnes)}
                   </p>
-                  <p className="text-xs text-ink-400">
+                  <p className="text-xs text-ink-500">
                     {formatPlace(job.from)} → {formatPlace(job.to)} · {formatDate(job.scheduledDate)}
                   </p>
                 </div>
@@ -62,7 +62,7 @@ export function DeliveryCoordination() {
                   </span>
                 ) : (
                   <div className="flex flex-wrap items-center gap-2">
-                    {bestMatch && <span className="text-xs text-ink-400">Best match: {bestMatch.partner.name}</span>}
+                    {bestMatch && <span className="text-xs text-ink-500">Best match: {bestMatch.partner.name}</span>}
                     <select
                       className={inputClass}
                       style={{ width: 220, height: 32 }}

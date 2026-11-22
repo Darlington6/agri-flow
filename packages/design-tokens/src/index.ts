@@ -99,10 +99,14 @@ export const chat = {
   own: '#28583e',
 } as const
 
+/** The site's warm page background, also used on the app's entry pages. */
+export const cream = '#f5f1e6'
+
+// The app and the site share one type pairing (since 2026-11-22).
 export const fonts = {
   app: {
-    display: '"Manrope", "Segoe UI", system-ui, sans-serif',
-    body: '"DM Sans", "Segoe UI", system-ui, sans-serif',
+    display: '"Fraunces Variable", Georgia, "Times New Roman", serif',
+    body: '"IBM Plex Sans", "Segoe UI", system-ui, sans-serif',
   },
   site: {
     display: 'Fraunces, Georgia, "Times New Roman", serif',

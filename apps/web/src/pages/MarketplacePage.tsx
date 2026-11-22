@@ -78,11 +78,11 @@ export function MarketplacePage() {
           >
             <c.icon className="h-4 w-4" />
             {c.label}
-            <span className="text-xs text-ink-400">({listings.filter((l) => l.category === c.key).length})</span>
+            <span className="text-xs text-ink-500">({listings.filter((l) => l.category === c.key).length})</span>
           </button>
         ))}
       </div>
-      <p className="-mt-3 text-xs text-ink-500">{activeCategory.blurb}</p>
+      <p className="-mt-3 text-xs text-ink-600">{activeCategory.blurb}</p>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {filtered.map((l) => (
@@ -92,22 +92,22 @@ export function MarketplacePage() {
               <Badge tone={STATUS_TONE[l.status]}>{l.status}</Badge>
             </div>
             <p className="mt-3 font-display text-sm font-semibold text-ink-900">{l.title}</p>
-            <p className="mt-1 text-xs text-ink-500">{l.description}</p>
+            <p className="mt-1 text-xs text-ink-600">{l.description}</p>
             <dl className="mt-4 grid grid-cols-2 gap-y-1.5 text-xs">
-              <dt className="text-ink-400">Quantity</dt>
+              <dt className="text-ink-500">Quantity</dt>
               <dd className="text-right text-ink-700">
                 {l.quantity} {l.unit}
               </dd>
-              <dt className="text-ink-400">Price</dt>
+              <dt className="text-ink-500">Price</dt>
               <dd className="text-right text-ink-700">
                 GHS {l.pricePerUnitGHS.toLocaleString()}/{l.unit}
               </dd>
-              <dt className="text-ink-400">Seller</dt>
+              <dt className="text-ink-500">Seller</dt>
               <dd className="text-right text-ink-700">{l.sellerName}</dd>
-              <dt className="text-ink-400">Posted</dt>
+              <dt className="text-ink-500">Posted</dt>
               <dd className="text-right text-ink-700">{formatDate(l.postedAt)}</dd>
             </dl>
-            <p className="mt-3 flex items-center gap-1 text-xs text-ink-400">
+            <p className="mt-3 flex items-center gap-1 text-xs text-ink-500">
               <MapPin className="h-3 w-3" />
               {l.location}
             </p>
@@ -131,7 +131,7 @@ export function MarketplacePage() {
             )}
           </Card>
         ))}
-        {filtered.length === 0 && <p className="text-sm text-ink-400">No listings in this category yet.</p>}
+        {filtered.length === 0 && <p className="text-sm text-ink-500">No listings in this category yet.</p>}
       </div>
 
       {modalOpen && (

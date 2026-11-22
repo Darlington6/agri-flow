@@ -5,6 +5,7 @@ import { useSession } from '@/context/SessionContext'
 import { brand } from '@/config/brand'
 import { CardButton, DemoTag } from '@/components/ui'
 import type { DemoRole } from '@/types'
+import { visibleDemoRoles } from '@/lib/demoRoles'
 
 const ROLES: { role: DemoRole; description: string; icon: typeof ShieldCheck }[] = [
   {
@@ -51,18 +52,18 @@ export function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center bg-ink-50 px-4 py-12">
+    <div className="flex min-h-svh flex-col items-center justify-center bg-cream px-4 py-12">
       <div className="mb-8 flex flex-col items-center gap-3 text-center">
         <LogoMark className="h-14" />
         <h1 className="font-display text-2xl font-semibold text-ink-900">{brand.name}</h1>
         <DemoTag />
-        <p className="max-w-sm text-sm text-ink-500">
+        <p className="max-w-sm text-sm text-ink-600">
           Choose a demo role to explore the platform. No account or password required.
         </p>
       </div>
 
       <div className="grid w-full max-w-3xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {ROLES.map(({ role, description, icon: Icon }) => {
+        {visibleDemoRoles(ROLES).map(({ role, description, icon: Icon }) => {
           const id = `role-${role.toLowerCase().replace(/\s+/g, '-')}`
           return (
             <CardButton
@@ -80,7 +81,7 @@ export function LoginPage() {
               <span id={`${id}-name`} className="mt-4 block font-display text-base font-semibold text-ink-900">
                 {role}
               </span>
-              <span id={`${id}-description`} className="mt-1 block text-sm text-ink-500">
+              <span id={`${id}-description`} className="mt-1 block text-sm text-ink-600">
                 {description}
               </span>
             </CardButton>
@@ -88,11 +89,11 @@ export function LoginPage() {
         })}
       </div>
 
-      <p className="mt-8 text-xs text-ink-400">This is a prototype environment. All data shown is simulated.</p>
-      <p className="mt-2 text-xs text-ink-400">
-        Have a real account?{' '}
+      <p className="mt-8 text-xs text-ink-600">This is a prototype environment. All data shown is simulated.</p>
+      <p className="mt-2 text-xs text-ink-600">
+        Want a real account?{' '}
         <a href="/signin" className="text-primary-700 hover:underline">
-          Sign in with your phone
+          Sign in or sign up with your phone or email
         </a>
         .
       </p>

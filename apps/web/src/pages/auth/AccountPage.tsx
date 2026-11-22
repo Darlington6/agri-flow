@@ -35,7 +35,7 @@ export function AccountPage() {
   }
 
   return (
-    <div className="flex min-h-svh flex-col items-center bg-ink-50 px-4 py-12">
+    <div className="flex min-h-svh flex-col items-center bg-cream px-4 py-12">
       <div className="mb-8 flex flex-col items-center gap-2 text-center">
         <Link
           to="/"
@@ -59,7 +59,7 @@ export function AccountPage() {
           ).map(([kind, label, value, addLabel]) => (
             <div key={kind} className="flex flex-col gap-2">
               <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
-                <dt className="text-ink-500">{label}</dt>
+                <dt className="text-ink-600">{label}</dt>
                 <dd className="min-w-0 break-all text-ink-900">
                   {value ??
                     (adding === kind ? null : (
@@ -98,9 +98,9 @@ export function AccountPage() {
         </form>
 
         <div className="mt-6 border-t border-ink-100 pt-6">
-          <p className="text-xs font-medium tracking-wide text-ink-400 uppercase">Roles</p>
+          <p className="text-xs font-medium tracking-wide text-ink-600 uppercase">Roles</p>
           {user.roles.length === 0 ? (
-            <p className="mt-2 text-sm text-ink-500">None yet.</p>
+            <p className="mt-2 text-sm text-ink-600">None yet.</p>
           ) : (
             <ul className="mt-2 flex flex-wrap gap-2">
               {user.roles.map((role) => (

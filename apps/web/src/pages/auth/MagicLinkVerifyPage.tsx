@@ -41,12 +41,12 @@ export function MagicLinkVerifyPage() {
   if (status === 'done') return <Navigate to="/account" replace />
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center bg-ink-50 px-4 py-12">
+    <div className="flex min-h-svh flex-col items-center justify-center bg-cream px-4 py-12">
       <div className="mb-8 flex flex-col items-center gap-2 text-center">
         <DemoTag />
       </div>
       <Card className="w-full max-w-sm text-center">
-        {status === 'verifying' && <p className="text-sm text-ink-500">Signing you in…</p>}
+        {status === 'verifying' && <p className="text-sm text-ink-600">Signing you in…</p>}
         {status === 'error' && (
           <>
             <p className="text-sm text-status-risk">{error}</p>

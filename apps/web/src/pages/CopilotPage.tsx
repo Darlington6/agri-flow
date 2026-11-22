@@ -89,7 +89,7 @@ export function CopilotPage() {
                   <p className="font-display text-base font-semibold text-ink-900">
                     Ask about supply risk, farms, harvest or priorities
                   </p>
-                  <p className="mt-1 text-sm text-ink-500">Try one of the prompts below to get started.</p>
+                  <p className="mt-1 text-sm text-ink-600">Try one of the prompts below to get started.</p>
                 </div>
                 <div className="flex max-w-xl flex-wrap justify-center gap-2">
                   {SUGGESTED_PROMPTS.map((p) => (
@@ -130,7 +130,7 @@ export function CopilotPage() {
                   <button
                     key={p}
                     onClick={() => ask(p)}
-                    className="rounded-full bg-ink-50 px-2.5 py-1 text-[11px] font-medium text-ink-500 hover:bg-ink-100"
+                    className="rounded-full bg-ink-50 px-2.5 py-1 text-[11px] font-medium text-ink-600 hover:bg-ink-100"
                   >
                     {p}
                   </button>
@@ -171,7 +171,7 @@ export function CopilotPage() {
       <div className="flex w-full flex-col gap-4 lg:w-72">
         <Card>
           <h2 className="font-display text-sm font-semibold text-ink-700">What the Copilot uses</h2>
-          <p className="mt-2 text-xs leading-relaxed text-ink-500">
+          <p className="mt-2 text-xs leading-relaxed text-ink-600">
             Responses are generated from structured platform data — contracts, farmers, production, harvest forecasts,
             climate risk and payments — not from open web search.
           </p>
@@ -180,13 +180,13 @@ export function CopilotPage() {
           {FUTURE_COPILOTS.map((c) => (
             <Card key={c.label} className="border-dashed">
               <div className="flex items-center gap-2">
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-ink-50 text-ink-500">
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-ink-50 text-ink-600">
                   <c.icon className="h-4 w-4" />
                 </span>
                 <p className="text-sm font-medium text-ink-800">{c.label}</p>
                 <ComingSoonBadge className="ml-auto" />
               </div>
-              <p className="mt-2 text-xs text-ink-500">{c.desc}</p>
+              <p className="mt-2 text-xs text-ink-600">{c.desc}</p>
             </Card>
           ))}
         </div>

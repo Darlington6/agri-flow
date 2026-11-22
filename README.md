@@ -248,6 +248,8 @@ To run the API outside Docker with uv, see [apps/api/README.md](apps/api/README.
 - Two ways in: `/signin` is **real** sign-up and sign-in (phone code or email link, JWT, against the API),
   while `/login` is still the demo role picker that sets a local session. The platform screens behind it
   use the demo session and mock data; they aren't connected to real accounts yet.
+  The Platform Admin and Super Admin demo roles only appear locally and on preview deployments, not in
+  production.
 - **No SMS provider yet.** Email links are sent through Brevo in staging and production, but phone codes
   can't be texted there: phone sign-up and adding a phone number answer "not available yet" until an SMS
   provider (e.g. Africa's Talking) is connected. Locally, codes and links are written to the API's log.

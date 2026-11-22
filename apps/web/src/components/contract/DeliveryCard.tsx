@@ -36,7 +36,7 @@ export function DeliveryCard({ contractId }: { contractId: string }) {
   return (
     <Card>
       <div className="flex items-center gap-2">
-        <Truck className="h-4 w-4 text-ink-500" />
+        <Truck className="h-4 w-4 text-ink-600" />
         <h2 className="font-display text-sm font-semibold text-ink-700">Delivery</h2>
       </div>
       <div className="mt-3 flex items-center justify-between">
@@ -45,7 +45,7 @@ export function DeliveryCard({ contractId }: { contractId: string }) {
         </p>
         <Badge tone={STATUS_TONE[job.status]}>{job.status}</Badge>
       </div>
-      <p className="mt-1 text-xs text-ink-400">
+      <p className="mt-1 text-xs text-ink-500">
         Scheduled {formatDate(job.scheduledDate)} · Fee {formatGHSFull(job.feeGHS)}
       </p>
 
@@ -55,7 +55,7 @@ export function DeliveryCard({ contractId }: { contractId: string }) {
         </p>
       ) : (
         <>
-          <p className="mt-3 text-xs text-ink-400">
+          <p className="mt-3 text-xs text-ink-500">
             Not yet booked — posted to the delivery job board for partners to claim.
           </p>
           {recommended.length > 0 && (
@@ -66,7 +66,7 @@ export function DeliveryCard({ contractId }: { contractId: string }) {
                   className="flex items-center justify-between rounded-lg bg-ink-50 px-2.5 py-1.5 text-xs"
                 >
                   <span className="text-ink-700">{p.name}</span>
-                  <span className="flex items-center gap-2 text-ink-400">
+                  <span className="flex items-center gap-2 text-ink-500">
                     <span className="flex items-center gap-0.5">
                       <Star className="h-3 w-3 fill-current text-status-warn" />
                       {p.rating.toFixed(1)}

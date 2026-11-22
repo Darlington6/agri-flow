@@ -24,7 +24,7 @@ export function BuyerDetailPage() {
       <div>
         <Link
           to="/buyers"
-          className="mb-3 inline-flex items-center gap-1 text-xs font-medium text-ink-500 hover:text-ink-800"
+          className="mb-3 inline-flex items-center gap-1 text-xs font-medium text-ink-600 hover:text-ink-800"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           Buyer Demand
@@ -62,7 +62,7 @@ export function BuyerDetailPage() {
                           <p className="text-sm font-semibold text-ink-900">
                             {crop?.name} · {formatTonnes(d.quantityTonnes)}
                           </p>
-                          <p className="text-xs text-ink-500">
+                          <p className="text-xs text-ink-600">
                             {d.qualityGrade} · Delivery {formatDate(d.requiredDeliveryDate)} · {d.deliveryLocation}
                           </p>
                         </div>
@@ -70,7 +70,7 @@ export function BuyerDetailPage() {
                           {d.status}
                         </Badge>
                       </div>
-                      <div className="mt-3 flex items-baseline justify-between text-xs text-ink-500">
+                      <div className="mt-3 flex items-baseline justify-between text-xs text-ink-600">
                         <span>
                           <span className="font-semibold text-ink-800">{formatTonnes(d.contractedTonnes)}</span>{' '}
                           contracted
@@ -91,7 +91,7 @@ export function BuyerDetailPage() {
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[560px] text-left text-sm">
                   <thead>
-                    <tr className="border-b border-ink-100 text-xs font-medium tracking-wide text-ink-400 uppercase">
+                    <tr className="border-b border-ink-100 text-xs font-medium tracking-wide text-ink-500 uppercase">
                       <th className="px-5 py-3 font-medium">Contract</th>
                       <th className="px-3 py-3 font-medium">Crop</th>
                       <th className="px-3 py-3 font-medium">Value</th>
@@ -130,28 +130,28 @@ export function BuyerDetailPage() {
           <h2 className="font-display text-sm font-semibold text-ink-700">Contact</h2>
           <dl className="mt-4 flex flex-col gap-3 text-sm">
             <div className="flex items-center gap-2 text-ink-700">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-ink-50 text-ink-500">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-ink-50 text-ink-600">
                 <Mail className="h-4 w-4" />
               </span>
               <div>
-                <dt className="text-xs text-ink-400">{buyer.contactPerson}</dt>
+                <dt className="text-xs text-ink-500">{buyer.contactPerson}</dt>
                 <dd>{buyer.contactEmail}</dd>
               </div>
             </div>
             <div className="flex items-center gap-2 text-ink-700">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-ink-50 text-ink-500">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-ink-50 text-ink-600">
                 <Phone className="h-4 w-4" />
               </span>
               <dd>{buyer.contactPhone}</dd>
             </div>
             <div className="flex items-center gap-2 text-ink-700">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-ink-50 text-ink-500">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-ink-50 text-ink-600">
                 <Calendar className="h-4 w-4" />
               </span>
               <dd>Buyer since {formatDate(buyer.since)}</dd>
             </div>
           </dl>
-          {buyer.notes && <p className="mt-4 rounded-xl bg-ink-50 px-3 py-2.5 text-xs text-ink-500">{buyer.notes}</p>}
+          {buyer.notes && <p className="mt-4 rounded-xl bg-ink-50 px-3 py-2.5 text-xs text-ink-600">{buyer.notes}</p>}
         </Card>
       </div>
     </div>

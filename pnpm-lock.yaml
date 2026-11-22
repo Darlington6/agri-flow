@@ -78,6 +78,12 @@ importers:
       '@agriflow/design-tokens':
         specifier: workspace:*
         version: link:../../packages/design-tokens
+      '@fontsource-variable/fraunces':
+        specifier: 5.3.0
+        version: 5.3.0
+      '@fontsource/ibm-plex-sans':
+        specifier: 5.3.0
+        version: 5.3.0
       '@sentry/react':
         specifier: ^11.16.0
         version: 11.16.0(react-router@7.18.5(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)

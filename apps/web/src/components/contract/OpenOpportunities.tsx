@@ -28,10 +28,10 @@ export function OpenOpportunities({ farmerId }: { farmerId: string }) {
   return (
     <Card>
       <div className="flex items-center gap-2">
-        <Sprout className="h-4 w-4 text-ink-500" />
+        <Sprout className="h-4 w-4 text-ink-600" />
         <h2 className="font-display text-sm font-semibold text-ink-700">Open Opportunities</h2>
       </div>
-      <p className="mt-1 text-xs text-ink-500">Buyer demand still looking for farmers to fulfill it.</p>
+      <p className="mt-1 text-xs text-ink-600">Buyer demand still looking for farmers to fulfill it.</p>
 
       <div className="mt-4 flex flex-col divide-y divide-ink-50">
         {opportunities.map((c) => {
@@ -43,7 +43,7 @@ export function OpenOpportunities({ farmerId }: { farmerId: string }) {
                 <p className="text-sm font-medium text-ink-800">
                   {cropById(c.cropId)?.name} · {buyerById(c.buyerId)?.name}
                 </p>
-                <p className="text-xs text-ink-400">
+                <p className="text-xs text-ink-500">
                   {formatTonnes(remaining)} still needed · delivery {formatDate(c.expectedDeliveryDate)}
                 </p>
               </div>

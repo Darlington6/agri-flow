@@ -36,25 +36,25 @@ export function HarvestPage() {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
-          <p className="text-xs text-ink-500">Upcoming harvest ({snapshot.weekLabel.toLowerCase()})</p>
+          <p className="text-xs text-ink-600">Upcoming harvest ({snapshot.weekLabel.toLowerCase()})</p>
           <p className="mt-1 font-display text-2xl font-semibold text-ink-900">
             {formatTonnes(snapshot.upcomingHarvestTonnes)}
           </p>
         </Card>
         <Card>
-          <p className="text-xs text-ink-500">Storage required</p>
+          <p className="text-xs text-ink-600">Storage required</p>
           <p className="mt-1 font-display text-2xl font-semibold text-ink-900">
             {formatTonnes(snapshot.storageRequiredTonnes)}
           </p>
         </Card>
         <Card>
-          <p className="text-xs text-ink-500">Storage available</p>
+          <p className="text-xs text-ink-600">Storage available</p>
           <p className="mt-1 font-display text-2xl font-semibold text-ink-900">
             {formatTonnes(snapshot.storageAvailableTonnes)}
           </p>
         </Card>
         <Card>
-          <p className="text-xs text-ink-500">Shortfall</p>
+          <p className="text-xs text-ink-600">Shortfall</p>
           <p className="mt-1 font-display text-2xl font-semibold text-status-risk">{formatTonnes(shortfall)}</p>
         </Card>
       </div>
@@ -63,7 +63,7 @@ export function HarvestPage() {
         <div className="flex flex-col gap-6 lg:col-span-2">
           <Card>
             <h2 className="font-display text-sm font-semibold text-ink-700">Harvest vs. Storage Outlook</h2>
-            <p className="text-xs text-ink-500">Next 4 weeks</p>
+            <p className="text-xs text-ink-600">Next 4 weeks</p>
             <div className="mt-2">
               <PostHarvestOutlookChart />
             </div>
@@ -73,13 +73,13 @@ export function HarvestPage() {
             <div className="flex items-center justify-between px-6 pt-6">
               <div>
                 <h2 className="font-display text-sm font-semibold text-ink-900">Upcoming Harvests</h2>
-                <p className="text-xs text-ink-500">Next 90 days{isScoped ? '' : ', all contracts'}</p>
+                <p className="text-xs text-ink-600">Next 90 days{isScoped ? '' : ', all contracts'}</p>
               </div>
             </div>
             <div className="mt-4 overflow-x-auto">
               <table className="w-full min-w-[720px] text-left text-sm">
                 <thead>
-                  <tr className="border-y border-ink-100 text-xs font-medium tracking-wide text-ink-400 uppercase">
+                  <tr className="border-y border-ink-100 text-xs font-medium tracking-wide text-ink-500 uppercase">
                     <th className="px-6 py-2.5 font-medium">Farmer</th>
                     <th className="px-3 py-2.5 font-medium">Crop</th>
                     <th className="px-3 py-2.5 font-medium">Region</th>
@@ -116,7 +116,7 @@ export function HarvestPage() {
                   })}
                   {harvests.length === 0 && (
                     <tr>
-                      <td colSpan={7} className="px-6 py-6 text-center text-sm text-ink-400">
+                      <td colSpan={7} className="px-6 py-6 text-center text-sm text-ink-500">
                         No upcoming harvests in this window.
                       </td>
                     </tr>
@@ -131,7 +131,7 @@ export function HarvestPage() {
         <div className="flex flex-col gap-6">
           <Card>
             <div className="flex items-center gap-2">
-              <Warehouse className="h-4 w-4 text-ink-500" />
+              <Warehouse className="h-4 w-4 text-ink-600" />
               <h2 className="font-display text-sm font-semibold text-ink-700">Post-Harvest Risk</h2>
             </div>
             <div className="mt-4 flex h-3 overflow-hidden rounded-full bg-ink-100">
