@@ -153,6 +153,20 @@ The settings (`config.settings.prod`, `config.settings.staging`; both build on
 
 Render's own address is always allowed as a host. Add any other domain to `DJANGO_ALLOWED_HOSTS`.
 
+**Error reports (Sentry, EU region).** Optional: without a DSN nothing is sent.
+
+| Where | Variable | Value |
+| --- | --- | --- |
+| Render, both services | `SENTRY_DSN` | the `agriflow-api` project's DSN (Sentry → Settings → Projects → Client Keys) |
+| Vercel `agri-flow`, Production and Preview | `VITE_SENTRY_DSN` | the `agriflow-web` project's DSN; redeploy after setting it |
+
+Reports are tagged `production`, `staging` (API) or `preview` (app) and with the commit. They carry the
+user's **id** (and roles, from the app) and nothing that identifies them directly: no names, emails, phone
+numbers, IP addresses, cookies, request bodies, or the tokens in sign-in links. Look the user up in the admin
+by id. What's collected and scrubbed is in `apps/api/config/observability.py` and `apps/web/src/lib/monitoring.ts`,
+each with tests; keep the two in step. Only errors are reported from the app for now: no performance tracing,
+and no session replay (it would record what people type).
+
 Magic links are emailed through Brevo (via django-anymail, so another provider is a settings change).
 Brevo sends from one verified address without a domain of our own, but mail from a Gmail address sent
 through Brevo can land in spam. Verify a domain in Brevo once we have one. There's no SMS provider yet, so

@@ -16,6 +16,7 @@ import {
   verifyOtp,
   type AuthUser,
 } from '@/lib/apiClient'
+import { identify } from '@/lib/monitoring'
 
 // Real backend auth — deliberately separate from SessionContext (the
 // six-role demo picker driving the rest of the app today). A real login
@@ -54,6 +55,9 @@ function logForDev(what: string, value: string | undefined) {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null)
   const [loading, setLoading] = useState(true)
+
+  // Error reports say who was signed in (id and roles only).
+  useEffect(() => identify(user), [user])
 
   useEffect(() => {
     if (!getStoredTokens()) {

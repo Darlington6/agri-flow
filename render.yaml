@@ -43,6 +43,8 @@ services:
         sync: false
       - key: DEFAULT_FROM_EMAIL # the sender address verified in Brevo, e.g. AgriFlow <you@gmail.com>
         sync: false
+      - key: SENTRY_DSN # the agriflow-api project's DSN; optional (unset = no error reports)
+        sync: false
       - key: WEB_CONCURRENCY # gunicorn workers; two fit in the free plan's 512 MB
         value: "2"
 
@@ -78,6 +80,8 @@ services:
       - key: BREVO_API_KEY
         sync: false
       - key: DEFAULT_FROM_EMAIL
+        sync: false
+      - key: SENTRY_DSN
         sync: false
       - key: WEB_CONCURRENCY
         value: "2"
