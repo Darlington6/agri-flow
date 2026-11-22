@@ -31,6 +31,46 @@ def test_magic_link_is_emailed(settings):
     assert "https://app.example.com/magic-link?token=" in sent.body
 
 
+def test_the_email_has_a_button_and_a_plain_text_version(settings):
+    settings.EMAIL_DELIVERY_CHANNEL = EMAIL_CHANNEL
+    settings.FRONTEND_URL = "https://app.example.com"
+
+    APIClient().post("/api/v1/auth/magic-link/request/", {"email": "new@example.com"})
+
+    sent = mail.outbox[0]
+    link = next(
+        w for w in sent.body.split() if w.startswith("https://app.example.com/magic-link?token=")
+    )
+    html, content_type = sent.alternatives[0]
+    assert content_type == "text/html"
+    assert f'href="{link}"' in html
+    assert ">Create my account</a" in html
+    assert "Welcome to AgriFlow" in sent.body
+    assert "works once, for the next 15 minutes" in sent.body
+
+
+@pytest.mark.parametrize("kind", sorted(channels.EMAIL_WORDING))
+def test_every_kind_of_email_renders(kind):
+    link = "https://app.example.com/x?token=t"
+    channels.DjangoEmailChannel().send("someone@example.com", link, kind)
+
+    sent = mail.outbox[0]
+    wording = channels.EMAIL_WORDING[kind]
+    assert sent.subject == wording.subject
+    assert wording.button in sent.alternatives[0][0]
+    assert "{{" not in sent.body and "{{" not in sent.alternatives[0][0]
+
+
+@pytest.mark.parametrize("debug", [True, False])
+def test_the_link_is_logged_only_in_local_development(settings, caplog, debug):
+    settings.DEBUG = debug
+    with caplog.at_level("INFO", logger="agriflow.identity.delivery"):
+        channels.DjangoEmailChannel().send(
+            "someone@example.com", "https://app.example.com/x?token=t", "sign_in"
+        )
+    assert ("token=t" in caplog.text) is debug
+
+
 def test_unknown_email_gets_a_sign_up_email(settings):
     settings.EMAIL_DELIVERY_CHANNEL = EMAIL_CHANNEL
 

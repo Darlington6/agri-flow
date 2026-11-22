@@ -9,10 +9,12 @@ sites in services.py never change.
 """
 
 import logging
+from dataclasses import asdict, dataclass
 from typing import Protocol
 
 from django.conf import settings
 from django.core.mail import send_mail
+from django.template.loader import render_to_string
 from django.utils.module_loading import import_string
 
 logger = logging.getLogger("agriflow.identity.delivery")
@@ -28,16 +30,34 @@ class EmailDeliveryChannel(Protocol):
     def send(self, email: str, link: str, kind: str) -> None: ...
 
 
-# Subject, then what the link does; each email ends the same way.
+@dataclass(frozen=True)
+class EmailWording:
+    subject: str
+    heading: str
+    intro: str
+    button: str
+
+
+# What each email says; the layout is the same for all three
+# (templates/identity/email/link.html and link.txt).
 EMAIL_WORDING = {
-    "sign_in": ("Your AgriFlow sign-in link", "Use this link to sign in to AgriFlow:"),
-    "sign_up": (
-        "Finish creating your AgriFlow account",
-        "Use this link to finish creating your AgriFlow account:",
+    "sign_in": EmailWording(
+        subject="Your AgriFlow sign-in link",
+        heading="Sign in to AgriFlow",
+        intro="Use the button below to sign in. There's no password to remember.",
+        button="Sign in",
     ),
-    "confirm_email": (
-        "Confirm your email for AgriFlow",
-        "Use this link to add this email to your AgriFlow account:",
+    "sign_up": EmailWording(
+        subject="Finish creating your AgriFlow account",
+        heading="Welcome to AgriFlow",
+        intro="You're one step away. Use the button below to finish creating your account.",
+        button="Create my account",
+    ),
+    "confirm_email": EmailWording(
+        subject="Confirm your email for AgriFlow",
+        heading="Confirm your email",
+        intro="Use the button below to add this email to your AgriFlow account.",
+        button="Confirm email",
     ),
 }
 
@@ -70,16 +90,17 @@ class DjangoEmailChannel:
 
     def send(self, email: str, link: str, kind: str) -> None:
         minutes = 15  # services.MAGIC_LINK_TTL_MINUTES; not imported, to avoid a cycle
-        subject, intro = EMAIL_WORDING[kind]
+        wording = EMAIL_WORDING[kind]
+        context = {**asdict(wording), "link": link, "minutes": minutes, "preview": wording.intro}
+        if settings.DEBUG:
+            # Local development only: the link in the terminal too, even if
+            # sending fails. Never in staging or production (DEBUG is off).
+            logger.info("Email link (%s) for %s: %s", kind, email, link)
         try:
             send_mail(
-                subject=subject,
-                message=(
-                    f"Hello,\n\n{intro}\n\n{link}\n\n"
-                    f"It works once, for the next {minutes} minutes. If this wasn't you, "
-                    "you can ignore this email.\n\n"
-                    "AgriFlow"
-                ),
+                subject=wording.subject,
+                message=render_to_string("identity/email/link.txt", context),
+                html_message=render_to_string("identity/email/link.html", context),
                 from_email=None,  # DEFAULT_FROM_EMAIL
                 recipient_list=[email],
             )
