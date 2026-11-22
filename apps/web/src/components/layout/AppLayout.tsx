@@ -25,12 +25,12 @@ export function AppLayout() {
 
       {mobileNavOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
-          <div className="absolute inset-0 bg-ink-900/40" onClick={() => setMobileNavOpen(false)} />
+          <div className="absolute inset-0 bg-black/50" onClick={() => setMobileNavOpen(false)} />
           <div className="absolute inset-y-0 left-0">
             <Sidebar onNavigate={() => setMobileNavOpen(false)} />
             <button
               onClick={() => setMobileNavOpen(false)}
-              className="absolute top-4 right-[-44px] flex h-9 w-9 items-center justify-center rounded-full bg-white text-ink-600 shadow"
+              className="absolute top-4 right-[-44px] flex h-9 w-9 items-center justify-center rounded-full bg-surface text-ink-600 shadow"
               aria-label="Close navigation"
             >
               <X className="h-4 w-4" />

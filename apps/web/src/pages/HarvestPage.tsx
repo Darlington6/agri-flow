@@ -171,7 +171,7 @@ export function HarvestPage() {
                 const Icon = ACTION_ICONS[i % ACTION_ICONS.length]
                 return (
                   <li key={action} className="flex items-start gap-3">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-700">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-accent">
                       <Icon className="h-4 w-4" />
                     </span>
                     <p className="mt-1 text-sm text-ink-700">{action}</p>

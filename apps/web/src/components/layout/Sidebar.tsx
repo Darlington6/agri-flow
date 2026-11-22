@@ -12,7 +12,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const primaryNav = navForRole(session?.role ?? 'Platform Admin')
 
   return (
-    <div className="flex h-full w-64 shrink-0 flex-col border-r border-ink-100 bg-white">
+    <div className="flex h-full w-64 shrink-0 flex-col border-r border-ink-100 bg-surface">
       <div className="flex items-center gap-2 px-5 py-5">
         <LogoMark className="h-10" />
         <div>

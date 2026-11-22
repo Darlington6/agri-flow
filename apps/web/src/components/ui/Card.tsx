@@ -9,8 +9,8 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const TONE_CLASSES: Record<NonNullable<CardProps['tone']>, string> = {
-  default: 'bg-white border-ink-100',
-  dark: 'bg-brand-950 border-brand-900 text-white',
+  default: 'bg-surface border-ink-100',
+  dark: 'bg-brand-950 border-brand-900 text-white dark:bg-brand-900 dark:border-brand-800',
 }
 
 export function Card({ children, className, padded = true, hoverable = false, tone = 'default', ...rest }: CardProps) {
