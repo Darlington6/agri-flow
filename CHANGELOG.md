@@ -74,6 +74,14 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Added
 
+- The sign-in and demo-role pages crossfade through three photos each, with the same slow pan and zoom as the
+  site's home page: Gisenyi on Lake Kivu and the Kigali wetlands join the field agents on sign-in; hillside
+  rows and Makete (Tanzania) on the demo page. The first photo loads straight away and the rest only after it;
+  the crossfade starts once they're all in. People who ask for less motion, or save data, see the first photo,
+  still.
+- On sign-in, a seedling grows out of the soil when the email link or the text code is on its way (a short
+  line drawing, played once; shown already grown for people who ask their device for less motion).
+
 - Photos on the sign-in and demo-role pages: on laptops and desktops the photo fills the left half and stays put;
   on phones and tablets it's a short band across the top, so the form is still on the first screen. They come
   from the site's photo library, now a shared package (`packages/media`) with one licence register for the site
