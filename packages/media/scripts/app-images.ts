@@ -5,7 +5,7 @@ import { mkdirSync, readdirSync, rmSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import sharp from 'sharp'
-import { APP_PHOTOS, APP_WIDTHS, appImageName } from '../src/index.ts'
+import { APP_FILES, APP_WIDTHS, appImageName } from '../src/index.ts'
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
 const OUT = join(ROOT, 'app')
@@ -13,7 +13,7 @@ const OUT = join(ROOT, 'app')
 mkdirSync(OUT, { recursive: true })
 for (const old of readdirSync(OUT)) rmSync(join(OUT, old))
 
-for (const { file } of Object.values(APP_PHOTOS)) {
+for (const file of APP_FILES) {
   for (const width of APP_WIDTHS) {
     const name = appImageName(file, width)
     const info = await sharp(join(ROOT, 'photos', file))

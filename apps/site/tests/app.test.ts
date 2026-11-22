@@ -3,7 +3,7 @@ import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 import { appUrl } from '../src/lib/app'
-import { APP_PHOTOS, PHOTOS as REGISTER, type PhotoRecord } from '@agriflow/media'
+import { APP_FILES, PHOTOS as REGISTER, type PhotoRecord } from '@agriflow/media'
 import { HERO_SLIDES, PHOTOS } from '../src/media/manifest'
 
 const MEDIA = resolve(dirname(fileURLToPath(import.meta.url)), '../../../packages/media/photos')
@@ -42,7 +42,7 @@ describe('photo manifest', () => {
   })
 
   it('commits only registered photos that the site or the app uses (others belong in the ignored apps/site/assets/)', () => {
-    const used = new Set([...Object.values(PHOTOS), ...Object.values(APP_PHOTOS)].map((p) => p.file))
+    const used = new Set([...Object.values(PHOTOS).map((p) => p.file), ...APP_FILES])
     const files = readdirSync(MEDIA).filter((f) => !f.startsWith('.'))
     for (const file of files) {
       expect(file in REGISTER, `${file}: in the register`).toBe(true)
