@@ -2,9 +2,14 @@
 
 {{ intro }}
 
-{{ link }}
+{{ button }}: {{ link }}
 
-The link works once, for the next {{ minutes }} minutes. If this wasn't you, you can ignore this email.
+The link works once, within {{ minutes }} minutes. If you didn't ask for it, you can ignore this email. Nobody can use your account without the link.
 
-AgriFlow
+Thanks for growing with us,
+The AgriFlow team
+
+--
+AgriFlow connects buyers with farmers through fair production contracts.
+{{ site_url }}
 {% endautoescape %}
