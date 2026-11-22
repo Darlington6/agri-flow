@@ -217,18 +217,23 @@ pnpm install
 pnpm --filter @agriflow/web dev     # http://localhost:5173 — pick a demo role at /login
 ```
 
-**Web app + API** (adds real sign-in at `/signin`):
+**Web app + API** (adds real sign-in at `/signin`). `npm run dev` starts the site and the app only, so
+start the API first:
 
 ```bash
-docker compose up -d postgres redis api   # API on http://localhost:8000 (docs at /api/v1/docs/)
+docker compose up -d --build postgres redis mailpit api   # API on http://localhost:8000 (docs at /api/v1/docs/)
 docker compose exec api python manage.py migrate   # first run, and after pulling new migrations
-pnpm --filter @agriflow/web dev           # VITE_API_URL defaults to http://localhost:8000 in dev
+npm run dev                               # site on :4321, app on :5173 (VITE_API_URL defaults to :8000)
 docker compose down                       # when you're done
 ```
 
-Locally, phone codes and email links aren't sent anywhere. The API prints them in its terminal
-(`docker compose logs -f api`), the sign-in screen shows them in a "Dev mode" box, and the browser's
-developer console logs them too. None of that happens in staging or production.
+`--build` picks up new API dependencies after a pull; without it, an old image can fail to start with "No
+module named …".
+
+Locally, nothing is really sent. **Emails** (with their design) land in Mailpit, a local inbox at
+**http://localhost:8025**. **Phone codes** and email links are also printed in the API's terminal
+(`docker compose logs -f api`), shown in a "Dev mode" box on the sign-in screen, and logged in the browser's
+developer console. None of that happens in staging or production.
 
 **Everything in containers** (Postgres, Redis, API, Celery worker, production build of the web app):
 

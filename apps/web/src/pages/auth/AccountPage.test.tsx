@@ -47,6 +47,19 @@ describe('AccountPage contacts', () => {
     expect(screen.queryByRole('button', { name: 'Add phone number' })).not.toBeInTheDocument()
   })
 
+  it('points an account without a role to the demo, and the logo home', async () => {
+    renderAccount(phoneOnly)
+    expect(await screen.findByRole('heading', { name: "What's next" })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Explore the platform' })).toHaveAttribute('href', '/login')
+    expect(screen.getByRole('link', { name: 'AgriFlow home' })).toHaveAttribute('href', '/')
+  })
+
+  it("doesn't show the demo prompt once the account has a role", async () => {
+    renderAccount({ ...phoneOnly, roles: [{ slug: 'buyer', name: 'Buyer' }] })
+    expect(await screen.findByText('Buyer')).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: "What's next" })).not.toBeInTheDocument()
+  })
+
   it('emails a confirmation link to the address being added', async () => {
     const calls = renderAccount(phoneOnly, { '/api/v1/auth/me/email/': { status: 202, body: {} } })
     await userEvent.click(await screen.findByRole('button', { name: 'Add email' }))
