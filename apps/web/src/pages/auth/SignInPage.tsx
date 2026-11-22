@@ -5,7 +5,10 @@ import { LogoMark } from '@/components/brand/LogoMark'
 import { useAuth } from '@/context/AuthContext'
 import { ApiError } from '@/lib/apiClient'
 import { brand } from '@/config/brand'
-import { Button, Card, DemoTag, Field, inputClass, OrDivider, PhoneInput, usePhoneField } from '@/components/ui'
+import { Button, Card, DemoTag, Field, inputClass, OrDivider } from '@/components/ui'
+// Imported directly, not from the ui index, so the phone library only downloads with the pages that use it.
+import { PhoneInput } from '@/components/ui/PhoneInput'
+import { usePhoneField } from '@/components/ui/usePhoneField'
 import { AuthLayout } from '@/components/layout/AuthLayout'
 import { formatPhone } from '@/lib/phone'
 

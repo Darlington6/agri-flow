@@ -19,6 +19,12 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Changed
 
+- The app downloads each page the first time it's opened instead of everything up front: the first download
+  drops from about 313 KB to 126 KB (compressed). Charts (about 100 KB) arrive with the pages that draw them, and
+  the phone-number library only with sign-in and the account page. Inside the platform the sidebar stays while
+  the next page loads; a spinner appears only if that takes more than half a second. A tab left open across a
+  release reloads once to pick up the new files instead of showing an error.
+
 - The app takes on the public site's look: Fraunces headings and IBM Plex Sans text (self-hosted, so the app
   no longer loads Google Fonts and its security policy drops them), pill buttons in the logo's forest green
   with cream text (gold on dark surfaces), and the site's cream background on the entry pages (sign-in, email

@@ -9,9 +9,11 @@ import './index.css'
 import App from './App.tsx'
 import { initMonitoring } from './lib/monitoring'
 import { applyTheme, followSystemTheme } from './lib/theme'
+import { reloadOnStaleRelease } from './lib/lazyPage'
 
 applyTheme()
 followSystemTheme()
+reloadOnStaleRelease()
 
 const reporting = initMonitoring()
 
