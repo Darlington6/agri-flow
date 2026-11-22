@@ -74,6 +74,10 @@ The platform screens run from `src/data/` mock fixtures and need no backend. Rea
 `/magic-link`, `/confirm-email`) calls the API at `VITE_API_URL` (see `.env.example`; defaults to `http://localhost:8000` in
 dev). Start it with `docker compose up -d postgres redis api` from the repo root.
 
+`VITE_API_URL` is built into the public JavaScript, so a build stops if it's anything but a plain `https://`
+address (and a Vercel build stops without it). The Content Security Policy in `vercel.json` only allows the
+API on `*.onrender.com`: if the API moves to its own domain, add it to `connect-src` there.
+
 ## Building for every device
 
 Every screen has to work on phones, tablets and desktops. Build mobile-first (base styles for small

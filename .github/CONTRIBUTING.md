@@ -110,6 +110,17 @@ The app finds the API through `VITE_API_URL`, set in the project's Environment V
 Use the addresses Render shows, without a trailing slash. Render adds a suffix if a name is taken. Vite
 builds the value into the app, so redeploy after changing it.
 
+Anything in a `VITE_*` or `PUBLIC_*` variable is copied into the JavaScript every visitor downloads, so it must
+never hold a secret. The builds check this: an address that isn't a plain `https://` address (a pasted
+database connection string, a path, a password in it) stops the build, and a Vercel build of the app without
+`VITE_API_URL` stops too. The check lives in `packages/config/src/publicUrl.ts`.
+
+Both projects send security headers from their `vercel.json`. The app's Content Security Policy only lets the
+page load its own files, Google Fonts, the API (`*.onrender.com`) and Vercel's preview toolbar; the site's
+policy is a `<meta>` tag Astro writes with hashes of its own inline scripts (`security.csp` in
+`apps/site/astro.config.ts`). A new outside service (a font, analytics, a new API domain) has to be added there
+first, or the browser blocks it.
+
 **The public site (`apps/site`) is a separate Vercel project** (Root Directory `apps/site`), so it can take
 the main domain while the app moves to `app.<domain>`. Setup steps and its environment variables (`SITE_URL`,
 `PUBLIC_APP_URL`, `PUBLIC_API_URL`, `PUBLIC_ALLOW_INDEXING`) are in `apps/site/README.md`. Search indexing
@@ -172,6 +183,11 @@ account page. Admin accounts sign in to `/admin/` with a phone number and passwo
 number.
 
 ## Dependencies (Dependabot)
+
+The **Audit** workflow ([`audit.yml`](workflows/audit.yml)) checks every shipped dependency against published
+advisories on each PR, each push and every Monday: `pnpm audit` (moderate and above) for the app and site,
+`pip-audit` on `uv.lock` for the API. A failure means a known vulnerability: upgrade the package (usually a
+patch, e.g. `uv lock --upgrade-package pyjwt`) in its own `fix(deps)` PR rather than waiting for Dependabot.
 
 Configured in [`dependabot.yml`](dependabot.yml), all targeting `dev`, weekly:
 

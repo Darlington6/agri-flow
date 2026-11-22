@@ -5,6 +5,18 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ## [Unreleased]
 
+### Security
+
+- Builds stop when `VITE_API_URL`, `PUBLIC_API_URL` or `PUBLIC_APP_URL` isn't a plain `https://` address,
+  without printing the value; Vercel builds of the app also need `VITE_API_URL`. These values are public, and
+  a database connection string had been pasted into one.
+- Security headers on the app and the site: a Content Security Policy (only the apps' own files, Google
+  Fonts, the API and Vercel's preview toolbar), no framing, `nosniff`, a strict referrer policy, and no
+  camera, microphone or location access.
+- A dependency audit in CI (`pnpm audit`, `pip-audit`) on every PR and weekly.
+- PyJWT 2.13.0 → 2.15.1 (15 published advisories in the library that signs sign-in tokens) and Astro
+  7.4.4 → 7.4.7.
+
 ### Changed
 
 - API: phone numbers are optional (an account needs a phone number or an email); emails are stored in lower
