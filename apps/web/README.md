@@ -78,6 +78,10 @@ dev). Start it with `docker compose up -d postgres redis api` from the repo root
 address (and a Vercel build stops without it). The Content Security Policy in `vercel.json` only allows the
 API on `*.onrender.com`: if the API moves to its own domain, add it to `connect-src` there.
 
+With `VITE_SENTRY_DSN` set (Vercel only; leave it unset locally), errors go to Sentry tagged with the
+deployment (`production` or `preview`), the commit, and the user's id and roles. Emails, phone numbers and
+the tokens in sign-in links are scrubbed first (`src/lib/monitoring.ts`).
+
 ## Building for every device
 
 Every screen has to work on phones, tablets and desktops. Build mobile-first (base styles for small

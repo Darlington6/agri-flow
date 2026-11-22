@@ -14,6 +14,12 @@ export default defineConfig({
     // the API at all).
     checkPublicUrls(['VITE_API_URL'], { required: process.env.VERCEL ? ['VITE_API_URL'] : [] }),
   ],
+  // Which deployment this is, for error reports. Vercel sets these at build
+  // time; they aren't secrets.
+  define: {
+    'import.meta.env.VITE_DEPLOY_ENV': JSON.stringify(process.env.VERCEL_ENV ?? 'development'),
+    'import.meta.env.VITE_RELEASE': JSON.stringify(process.env.VERCEL_GIT_COMMIT_SHA ?? ''),
+  },
   resolve: {
     alias: {
       '@': path.resolve(import.meta.dirname, './src'),
