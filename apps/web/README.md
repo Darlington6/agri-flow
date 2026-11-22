@@ -62,9 +62,16 @@ The logo's gold and sage are too light for text on white; use them as fills and 
 text. Pick-one-of-these choices (like the demo roles) use `CardButton`, a real button, never a clickable `<div>`.
 `src/test/tokens.test.ts` fails if a palette change drops a key pairing below WCAG AA contrast.
 
+## Pages load on demand
+
+Every page in `src/App.tsx` is loaded with `page()` (`src/lib/lazyPage.ts`), so it's its own download, fetched
+the first time it's opened. Add new pages the same way. Import heavy, single-purpose components straight from
+their file rather than the `@/components/ui` index (as the sign-in pages do with `PhoneInput`), so their
+libraries don't ride along with every page.
+
 ## Phone numbers
 
-Type phone numbers with `PhoneInput` and `usePhoneField` (`src/components/ui/`), never a bare `<input type="tel">`.
+Type phone numbers with `PhoneInput` and `usePhoneField` (`src/components/ui/`, imported from their own files), never a bare `<input type="tel">`.
 It pairs a country picker (flag and dialling code, a native `<select>`, so phones show their own list) with the
 local number, and gives the page the number in international form (E.164) to send. `src/lib/phone.ts` does the
 work with `libphonenumber-js`: it guesses the starting country (the account's, then the device's time zone, then

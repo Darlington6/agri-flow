@@ -19,6 +19,12 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Changed
 
+- The app downloads each page the first time it's opened instead of everything up front: the first download
+  drops from about 313 KB to 126 KB (compressed). Charts (about 100 KB) arrive with the pages that draw them, and
+  the phone-number library only with sign-in and the account page. Inside the platform the sidebar stays while
+  the next page loads; a spinner appears only if that takes more than half a second. A tab left open across a
+  release reloads once to pick up the new files instead of showing an error.
+
 - The app takes on the public site's look: Fraunces headings and IBM Plex Sans text (self-hosted, so the app
   no longer loads Google Fonts and its security policy drops them), pill buttons in the logo's forest green
   with cream text (gold on dark surfaces), and the site's cream background on the entry pages (sign-in, email
@@ -96,7 +102,7 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 - Light and dark themes for the app: **System** (follows the device), **Light** or **Dark**, chosen in Settings or
   on the account page and remembered in the browser. Colours are named roles (`surface`, `canvas`, `action`,
   `accent`, chart colours) plus the ink scale, which flips in dark mode; dark values live in
-  `apps/web/src/index.css`. Dark mode is a neutral near-black (page `#0b0e11`, cards `#181a20`). Buttons turn gold in dark mode (like the site's dark sections), the logo switches to
+  `apps/web/src/index.css`. Dark mode is a neutral charcoal (page `#181a20`, cards and menus a step lighter at `#1e2329`, so they read as raised; grey text at 6.8:1 on cards). Buttons turn gold in dark mode (like the site's dark sections), the logo switches to
   its cream-ringed version, and charts follow the theme. A small script (`public/theme-init.js`) applies the
   saved theme before the page draws, so dark mode never flashes white. Contrast tests check the dark palette.
 

@@ -68,16 +68,16 @@
   :root[data-theme='dark'] {
     color-scheme: dark;
 
-    --color-ink-50: #0b0e11;
-    --color-ink-100: #1e2329;
-    --color-ink-200: #2b3139;
-    --color-ink-300: #3a414b;
+    --color-ink-50: #181a20;
+    --color-ink-100: #2b3139;
+    --color-ink-200: #363c45;
+    --color-ink-300: #474d57;
     --color-ink-400: #5e6673;
-    --color-ink-500: #929aa5;
-    --color-ink-600: #b0b7c1;
-    --color-ink-700: #c9ced6;
-    --color-ink-800: #dfe2e7;
-    --color-ink-900: #eaecef;
+    --color-ink-500: #a0a8b3;
+    --color-ink-600: #bec4cd;
+    --color-ink-700: #d5d9df;
+    --color-ink-800: #e8eaed;
+    --color-ink-900: #f1f2f4;
     --color-ink-950: #f5f6f7;
 
     --color-brand-50: #142019;
@@ -105,17 +105,17 @@
     --color-status-info-bg: #0f2133;
     --color-status-info-text: #8cc2f0;
 
-    --color-surface: #181a20;
-    --color-canvas: #0b0e11;
+    --color-surface: #1e2329;
+    --color-canvas: #181a20;
     --color-action: #b2934d; /* gold, as the site's buttons on dark sections */
     --color-action-hover: #d1bf98;
     --color-on-action: #151d17;
     --color-accent: #9cc4a6;
     --color-chart-actual: #8fbf9c;
     --color-chart-target: #6b7380;
-    --color-chart-grid: #262b32;
-    --color-chart-axis: #929aa5;
-    --color-chart-text: #b0b7c1;
+    --color-chart-grid: #2b3139;
+    --color-chart-axis: #a0a8b3;
+    --color-chart-text: #bec4cd;
 
     --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.6);
     --shadow-card-hover: 0 2px 4px rgba(0, 0, 0, 0.35), 0 16px 32px -12px rgba(0, 0, 0, 0.7);
