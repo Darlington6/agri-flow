@@ -82,7 +82,7 @@ export function CopilotPage() {
           <div ref={listRef} className="flex-1 scrollbar-thin space-y-4 overflow-y-auto p-6">
             {messages.length === 0 && (
               <div className="flex h-full flex-col items-center justify-center gap-4 py-10 text-center">
-                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-700">
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-accent">
                   <Bot className="h-6 w-6" />
                 </span>
                 <div>

@@ -21,7 +21,7 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
   }, [])
 
   return (
-    <header className="flex h-16 shrink-0 items-center justify-between border-b border-ink-100 bg-white px-4 sm:px-6">
+    <header className="flex h-16 shrink-0 items-center justify-between border-b border-ink-100 bg-surface px-4 sm:px-6">
       <div className="flex items-center gap-3">
         <button
           onClick={onMenuClick}
@@ -45,7 +45,7 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
             )}
           </button>
           {notifOpen && (
-            <div className="absolute right-0 z-20 mt-2 w-80 rounded-2xl border border-ink-100 bg-white p-2 shadow-[var(--shadow-card-hover)]">
+            <div className="absolute right-0 z-20 mt-2 w-80 rounded-2xl border border-ink-100 bg-surface p-2 shadow-[var(--shadow-card-hover)]">
               <p className="px-2 py-1.5 text-xs font-semibold tracking-wide text-ink-500 uppercase">
                 Risk alerts &amp; notifications
               </p>
@@ -77,7 +77,7 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
             <ChevronDown className="h-4 w-4 text-ink-500" />
           </button>
           {menuOpen && (
-            <div className="absolute right-0 z-20 mt-2 w-48 rounded-2xl border border-ink-100 bg-white p-1.5 shadow-[var(--shadow-card-hover)]">
+            <div className="absolute right-0 z-20 mt-2 w-48 rounded-2xl border border-ink-100 bg-surface p-1.5 shadow-[var(--shadow-card-hover)]">
               <button
                 onClick={logout}
                 className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm text-ink-600 hover:bg-ink-50"

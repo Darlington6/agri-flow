@@ -71,7 +71,7 @@ export function SignInPage() {
   }
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center bg-cream px-4 py-12">
+    <div className="flex min-h-svh flex-col items-center justify-center bg-canvas px-4 py-12">
       <div className="mb-8 flex flex-col items-center gap-3 text-center">
         <LogoMark className="h-14" />
         <h1 className="font-display text-2xl font-semibold text-ink-900">{brand.name}</h1>

@@ -493,7 +493,7 @@ export function DashboardPage() {
               </span>
               <h3 className="font-display text-base font-semibold text-white">AI Supply Intelligence</h3>
             </div>
-            <p className="mt-3 text-sm leading-relaxed text-brand-100">
+            <p className="mt-3 text-sm leading-relaxed text-white/80">
               {summary?.headline ?? 'Analyzing current supply chain signals…'}
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
@@ -514,7 +514,7 @@ export function DashboardPage() {
           {role === 'Farmer' && me && (
             <Card>
               <div className="flex items-center gap-4">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-4 border-brand-100 font-display text-base font-semibold text-brand-800">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-4 border-brand-100 font-display text-base font-semibold text-accent">
                   {me.climateSmartScore}%
                 </div>
                 <div>
@@ -559,12 +559,12 @@ export function DashboardPage() {
                 </span>
                 <h3 className="font-display text-base font-semibold text-white">Platform Revenue</h3>
               </div>
-              <p className="mt-3 text-sm leading-relaxed text-brand-100">
+              <p className="mt-3 text-sm leading-relaxed text-white/80">
                 Take rate, revenue by source and network growth — the numbers Platform Admin doesn't need day to day.
               </p>
               <Link
                 to="/executive"
-                className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-white hover:text-brand-100"
+                className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-white hover:text-white/80"
               >
                 Open Executive view
                 <ArrowRight className="h-3.5 w-3.5" />
