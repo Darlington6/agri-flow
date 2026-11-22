@@ -183,10 +183,17 @@ EMAIL_DELIVERY_CHANNEL = env(
     default="apps.identity.channels.ConsoleEmailChannel",
 )
 
-# Outgoing email. Locally it's printed to the console; staging and prod
-# send through Brevo via django-anymail (see deployed.py), so switching
+# Outgoing email. With docker compose it goes to Mailpit (EMAIL_HOST, see
+# docker-compose.yml); otherwise it's printed to the console. Staging and
+# prod send through Brevo via django-anymail (see deployed.py), so switching
 # provider later is a settings change, not a code change.
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_HOST = env("EMAIL_HOST", default="")
+EMAIL_PORT = env.int("EMAIL_PORT", default=25)
+EMAIL_BACKEND = (
+    "django.core.mail.backends.smtp.EmailBackend"
+    if EMAIL_HOST
+    else "django.core.mail.backends.console.EmailBackend"
+)
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="AgriFlow <no-reply@localhost>")
 
 SPECTACULAR_SETTINGS = {

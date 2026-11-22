@@ -60,6 +60,16 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Added
 
+- Sign-in, sign-up and confirmation emails have an HTML version: the AgriFlow wordmark, a heading, a
+  button, and the plain link underneath in case the button doesn't work (the plain-text version stays).
+- The account page links home from the logo and, until an account has a role, offers a "What's next" card
+  pointing to the demo, so a new account no longer ends at a dead end.
+- `/api/v1/debug/sentry-error/` fails on purpose for staff (signed in at `/admin/`) to check that API errors
+  reach Sentry; everyone else gets a 404.
+- `.git-blame-ignore-revs` lists the Prettier reformat, so blame skips it.
+- Mailpit in docker compose: emails the local API sends appear, designed, at http://localhost:8025 (the
+  link is still printed in the API's log).
+
 - Error reporting with Sentry (EU region) for the app and the API, switched on by `VITE_SENTRY_DSN` /
   `SENTRY_DSN`. Reports carry the user's id (and roles) only: no names, emails, phone numbers, IP addresses,
   cookies, request bodies or sign-in tokens, with tests that send a real error through the SDK and check what
@@ -105,6 +115,10 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 - `ruff format --check` in CI.
 
 ### Fixed
+
+- Local API: it no longer fails to start with "No module named …" after a dependency is added. Its packages
+  live in the image (`/opt/venv`) instead of a saved Docker volume that kept old ones; `docker compose up
+--build` picks up changes.
 
 - API: no more "Control server error: Permission denied" on every start on Render (gunicorn's optional
   control socket is turned off; nothing used it).

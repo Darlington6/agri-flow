@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { useAuth } from '@/context/AuthContext'
-import { Button, Card, DemoTag, Field, inputClass } from '@/components/ui'
+import { LogoMark } from '@/components/brand/LogoMark'
+import { Button, buttonClasses, Card, DemoTag, Field, inputClass } from '@/components/ui'
 import { AddEmail, AddPhone } from './AddContact'
 
 export function AccountPage() {
@@ -36,6 +37,13 @@ export function AccountPage() {
   return (
     <div className="flex min-h-svh flex-col items-center bg-ink-50 px-4 py-12">
       <div className="mb-8 flex flex-col items-center gap-2 text-center">
+        <Link
+          to="/"
+          aria-label="AgriFlow home"
+          className="mb-1 rounded-lg focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:outline-none"
+        >
+          <LogoMark className="h-12" />
+        </Link>
         <h1 className="font-display text-2xl font-semibold text-ink-900">Your account</h1>
         <DemoTag />
       </div>
@@ -92,9 +100,7 @@ export function AccountPage() {
         <div className="mt-6 border-t border-ink-100 pt-6">
           <p className="text-xs font-medium tracking-wide text-ink-400 uppercase">Roles</p>
           {user.roles.length === 0 ? (
-            <p className="mt-2 text-sm text-ink-500">
-              No role assigned yet — this becomes available once farmer/buyer/etc. profiles exist on the platform.
-            </p>
+            <p className="mt-2 text-sm text-ink-500">None yet.</p>
           ) : (
             <ul className="mt-2 flex flex-wrap gap-2">
               {user.roles.map((role) => (
@@ -110,6 +116,21 @@ export function AccountPage() {
           Sign out
         </Button>
       </Card>
+
+      {user.roles.length === 0 && (
+        // Real accounts have no role until farmer and buyer profiles exist,
+        // so point people at the demo instead of leaving them here.
+        <Card className="mt-4 w-full max-w-md">
+          <h2 className="font-display text-lg font-semibold text-ink-900">What's next</h2>
+          <p className="mt-2 text-sm text-ink-600">
+            Farmer and buyer tools open up in your account as profiles arrive during the pilot. Until then, explore the
+            platform with a demo role. It uses sample data, and your changes there are cleared when you reload.
+          </p>
+          <Link to="/login" className={buttonClasses('primary', 'md', 'mt-4 w-full sm:w-auto')}>
+            Explore the platform
+          </Link>
+        </Card>
+      )}
     </div>
   )
 }

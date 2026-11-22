@@ -7,9 +7,12 @@ architecture this grows into.
 ## Run it (via Docker — recommended, no local Python needed)
 
 ```bash
-docker compose up api        # from the repo root; also brings up postgres + redis
+docker compose up -d --build api   # from the repo root; also brings up postgres, redis and mailpit
 curl http://localhost:8000/api/v1/health/
 ```
+
+Emails the local API sends land in Mailpit at http://localhost:8025 (the link is printed in the API's log
+too). Packages live in the image (`/opt/venv`), so after a dependency change, `--build` is all it takes.
 
 ## Run it locally (needs [uv](https://docs.astral.sh/uv/))
 
@@ -84,8 +87,12 @@ SMS provider. The image collects
 the admin's static files at build time and serves them with WhiteNoise; `scripts/serve.sh` runs `migrate`
 and then gunicorn on `$PORT`.
 
+Emails are rendered from `apps/identity/templates/identity/email/` (`link.html` and `link.txt`, one layout for
+all three kinds; the wording per kind is `EMAIL_WORDING` in `apps/identity/channels.py`).
+
 With `SENTRY_DSN` set, errors go to Sentry with the user's id and no personal data (see
-`config/observability.py`; signed-in requests are tagged by `apps/identity/authentication.py`).
+`config/observability.py`; signed-in requests are tagged by `apps/identity/authentication.py`). Staff can check it works at
+`/api/v1/debug/sentry-error/` after signing in at `/admin/`.
 
 Hosting (Render, `render.yaml` in the repo root), the variables to set, and first-time setup are in the
 Deployments section of [CONTRIBUTING](../../.github/CONTRIBUTING.md#deployments).

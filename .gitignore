@@ -43,7 +43,8 @@ db.sqlite3
 !.env.example
 !*/.env.example
 
-# Editor directories and files
+# Editor directories and files. Two shared VS Code files are committed on
+# purpose (recommended extensions; format on save); personal settings stay out.
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
