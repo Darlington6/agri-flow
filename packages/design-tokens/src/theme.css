@@ -7,10 +7,14 @@
  * needs raw colours (charts, canvas); a test in apps/web keeps them in sync
  * and checks contrast.
  *
- * Roles (option A, approved 2026-11-13):
- *   primary  teal    anything you can tap: buttons, links, focus, selected state
- *   brand    forest  identity: icon chips, headings, dark surfaces, charts (logo ring = 800)
- *   gold             warm highlight: the pilot tag, accents (logo centre = 400)
+ * Roles (option A, 2026-11-13; buttons moved to the logo's forest 2026-11-22,
+ * so the app matches the public site):
+ *   brand    forest  filled buttons and switches (800, cream text), identity:
+ *                    icon chips, headings, dark surfaces, charts (logo ring = 800)
+ *   primary  teal    links, focus rings, selected nav state
+ *   gold             warm highlight: buttons on dark surfaces, the pilot tag,
+ *                    accents (logo centre = 400)
+ *   cream            warm page background for entry pages (sign-in, account)
  *   sage             soft panels, tags, progress tracks (logo lower circle = 400)
  *   ink              text, borders, backgrounds
  *   status           good / warn / risk / info. Conventional meanings people
@@ -102,6 +106,9 @@
   --color-status-warn-text: #9d6000;
   --color-status-risk-text: #ba4033;
   --color-status-info-text: #2b6ea8;
+
+  /* Cream: the site's warm page background */
+  --color-cream: #f5f1e6;
 
   /* Chat: your own message bubbles keep the original AgriFlow green (2026-11-13 decision) */
   --color-chat-own: #28583e;
