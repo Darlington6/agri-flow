@@ -1,0 +1,61 @@
+name: Audit
+
+# Checks every dependency the apps ship against published security
+# advisories. Runs on each PR and push, and weekly, so an advisory
+# published after a merge still shows up (as a failed run) even when no
+# code changes. Dependabot opens the upgrade PRs; this makes sure a known
+# vulnerability can't be merged in the meantime.
+
+on:
+  pull_request:
+    branches: [dev, staging, main]
+  push:
+    branches: [dev, staging, main]
+  schedule:
+    - cron: "0 6 * * 1" # Mondays 06:00 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: audit-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  web:
+    name: audit (web, site)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 9.15.9
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+
+      # Reads pnpm-lock.yaml; no install needed. Low-severity advisories are
+      # left to Dependabot rather than blocking merges.
+      - run: pnpm audit --audit-level moderate
+
+  api:
+    name: audit (api)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/api
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v10.3.3
+        with:
+          version: "0.13.7"
+
+      # The exact versions the Docker image installs (uv.lock, without dev
+      # tools), with hashes, so pip-audit checks them as pinned.
+      - run: uv export --frozen --no-dev --format requirements-txt -o "$RUNNER_TEMP/requirements.txt"
+
+      - run: uvx pip-audit==2.10.1 --disable-pip -r "$RUNNER_TEMP/requirements.txt"

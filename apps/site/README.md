@@ -68,6 +68,10 @@ A language only appears (pages, sitemap, hreflang, language switcher) once it's 
 | `PUBLIC_API_URL` | Base URL of the AgriFlow API, for the demo request form. Until it's set (and the API endpoint exists), the form shows a clear "couldn't send" message. |
 | `PUBLIC_APP_URL` | Address of the AgriFlow app (the web app today, the PWA later). Powers "Log in" and "Create account". Unset in a production build, those links are left out; in development they point at the web app on `localhost:5173`. Signing in with a new phone number or email creates the account, so both go to the sign-in page for now. |
 
+Both addresses end up in the public pages, so the build stops if either is set to anything but a plain
+`https://` address (no path, no trailing slash, no password). Pages carry a Content Security Policy from
+`security.csp` in `astro.config.ts`; add any new outside service there.
+
 Every page has its own title, description, canonical URL, hreflang links, social preview tags and JSON-LD.
 `tests/build.test.ts` checks all of that on the built HTML, along with broken links, alt text, one `<h1>`
 per page, an axe accessibility scan, and a JavaScript budget of 20 KB per page.
