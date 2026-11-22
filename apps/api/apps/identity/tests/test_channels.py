@@ -3,6 +3,8 @@ email system (Brevo there; the in-memory outbox in tests), and phone sign-in
 answers "not available yet" while there's no SMS provider.
 """
 
+from pathlib import Path
+
 import pytest
 from django.core import mail
 from rest_framework.test import APIClient
@@ -44,9 +46,28 @@ def test_the_email_has_a_button_and_a_plain_text_version(settings):
     html, content_type = sent.alternatives[0]
     assert content_type == "text/html"
     assert f'href="{link}"' in html
-    assert ">Create my account</a" in html
+    assert "Create my account" in html
     assert "Welcome to AgriFlow" in sent.body
-    assert "works once, for the next 15 minutes" in sent.body
+    assert "works once, within 15 minutes" in sent.body
+    for version in (sent.body, html):
+        assert "The AgriFlow team" in version
+
+
+def test_the_logo_and_links_point_at_the_website(settings):
+    settings.PUBLIC_SITE_URL = "https://site.example"
+    channels.DjangoEmailChannel().send(
+        "someone@example.com", "https://app.example.com/x?token=t", "sign_in"
+    )
+
+    html = mail.outbox[0].alternatives[0][0]
+    assert 'src="https://site.example/email/agriflow-mark-reversed.png"' in html
+    assert 'href="https://site.example/privacy/"' in html
+
+
+def test_the_logo_the_emails_load_is_on_the_website():
+    # Emails load it from the site's public folder (apps/site/public/email/).
+    repo = Path(__file__).resolve().parents[5]
+    assert (repo / "apps/site/public/email/agriflow-mark-reversed.png").is_file()
 
 
 @pytest.mark.parametrize("kind", sorted(channels.EMAIL_WORDING))
