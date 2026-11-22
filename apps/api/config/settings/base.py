@@ -183,6 +183,10 @@ EMAIL_DELIVERY_CHANNEL = env(
     default="apps.identity.channels.ConsoleEmailChannel",
 )
 
+# The public website. Emails link to it and load the logo from it
+# (apps/site/public/email/). Change it when the real domain is live.
+PUBLIC_SITE_URL = env("PUBLIC_SITE_URL", default="https://agri-flow-site.vercel.app")
+
 # Outgoing email. With docker compose it goes to Mailpit (EMAIL_HOST, see
 # docker-compose.yml); otherwise it's printed to the console. Staging and
 # prod send through Brevo via django-anymail (see deployed.py), so switching
