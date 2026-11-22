@@ -3,6 +3,7 @@ from django.db import models
 from django.utils import timezone
 
 from .managers import UserManager
+from .phone import tidy
 
 
 class Permission(models.Model):
@@ -84,7 +85,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         ]
 
     def save(self, *args, **kwargs):
-        self.phone_number = self.phone_number or None
+        # Always stored as E.164, however it was typed (see phone.py).
+        self.phone_number = tidy(self.phone_number) if self.phone_number else None
         self.email = self.email.strip().lower() if self.email else None
         super().save(*args, **kwargs)
 
