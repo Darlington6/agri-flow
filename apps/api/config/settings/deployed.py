@@ -9,6 +9,10 @@ The values are set on the host (Render; see render.yaml in the repo root
 and the Deployments section of .github/CONTRIBUTING.md).
 """
 
+import os
+
+from config.observability import init_sentry
+
 from .base import *  # noqa: F401,F403
 from .base import MIDDLEWARE, env
 
@@ -70,3 +74,11 @@ EMAIL_DELIVERY_CHANNEL = "apps.identity.channels.DjangoEmailChannel"
 # No SMS provider yet: phone sign-in answers "not available yet" (503)
 # instead of pretending to send a code, or logging real users' codes.
 OTP_DELIVERY_CHANNEL = "apps.identity.channels.UnconfiguredOtpChannel"
+
+# Errors go to Sentry when SENTRY_DSN is set (see config/observability.py for
+# what is and isn't sent). Render provides the commit as RENDER_GIT_COMMIT.
+init_sentry(
+    dsn=env("SENTRY_DSN", default=""),
+    settings_module=os.environ.get("DJANGO_SETTINGS_MODULE", ""),
+    release=os.environ.get("RENDER_GIT_COMMIT"),
+)
