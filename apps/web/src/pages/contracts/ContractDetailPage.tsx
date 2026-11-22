@@ -189,13 +189,11 @@ export function ContractDetailPage() {
               </span>
               <h2 className="font-display text-sm font-semibold text-white">AI Assessment</h2>
             </div>
-            <p className="mt-3 text-sm leading-relaxed text-brand-100">
+            <p className="mt-3 text-sm leading-relaxed text-white/80">
               {contract.aiAssessment ?? 'No elevated risk factors detected for this contract.'}
             </p>
             {assessment && (
-              <p className="mt-3 text-xs text-brand-200">
-                Projected fulfillment: {assessment.projectedFulfillmentPct}%
-              </p>
+              <p className="mt-3 text-xs text-white/70">Projected fulfillment: {assessment.projectedFulfillmentPct}%</p>
             )}
           </Card>
 

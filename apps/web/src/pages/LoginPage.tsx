@@ -52,7 +52,7 @@ export function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center bg-cream px-4 py-12">
+    <div className="flex min-h-svh flex-col items-center justify-center bg-canvas px-4 py-12">
       <div className="mb-8 flex flex-col items-center gap-3 text-center">
         <LogoMark className="h-14" />
         <h1 className="font-display text-2xl font-semibold text-ink-900">{brand.name}</h1>
@@ -73,7 +73,7 @@ export function LoginPage() {
               aria-describedby={`${id}-description`}
             >
               <span
-                className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-700"
+                className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-accent"
                 aria-hidden="true"
               >
                 <Icon className="h-5 w-5" />

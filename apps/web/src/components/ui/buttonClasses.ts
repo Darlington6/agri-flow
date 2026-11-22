@@ -9,12 +9,14 @@ export type ButtonSize = 'sm' | 'md'
 // placed on a dark card needs `inverse`/`ghost-inverse`, not `primary` plus
 // a className color override.
 // The public site's buttons: pills in the logo's forest green with cream
-// text, gold on dark surfaces. Teal stays for links and focus rings.
+// text, gold on dark surfaces. Teal stays for links and focus rings. Colours
+// come from the named roles in index.css (action, surface...), so they
+// follow the light/dark theme.
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
-  primary: 'bg-brand-800 text-cream hover:bg-brand-700 focus-visible:ring-primary-500',
-  secondary: 'bg-brand-100 text-brand-800 hover:bg-brand-50 focus-visible:ring-primary-500',
+  primary: 'bg-action text-on-action hover:bg-action-hover focus-visible:ring-primary-500',
+  secondary: 'bg-brand-100 text-accent hover:bg-brand-50 focus-visible:ring-primary-500',
   outline:
-    'border border-ink-200 bg-white text-ink-700 hover:border-ink-300 hover:bg-ink-50 focus-visible:ring-primary-500',
+    'border border-ink-200 bg-surface text-ink-700 hover:border-ink-300 hover:bg-ink-50 focus-visible:ring-primary-500',
   ghost: 'text-ink-600 hover:bg-ink-100 focus-visible:ring-primary-500',
   inverse: 'bg-gold-400 text-brand-950 hover:bg-gold-300 focus-visible:ring-white/60',
   'ghost-inverse': 'border border-cream/40 text-cream hover:bg-white/10 focus-visible:ring-white/60',

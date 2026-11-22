@@ -2,6 +2,11 @@
 /* Colours (primary, brand, gold, sage, ink, status) come from the shared palette. */
 @import '@agriflow/design-tokens/theme.css';
 
+/* dark: utilities apply when <html data-theme="dark"> (set by
+   public/theme-init.js and lib/theme.ts), not only by the system setting,
+   so people can pick a theme. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
 @theme {
   /* The site's typefaces, self-hosted (imported in main.tsx): Fraunces for
      headings, IBM Plex Sans for everything else. */
@@ -14,6 +19,22 @@
   --text-xs--line-height: 1.25rem;
   --text-sm: 0.9375rem;
   --text-sm--line-height: 1.375rem;
+
+  /* Named colour roles. Light values here; dark values in the
+     [data-theme='dark'] block below. Prefer these (and the ink scale, which
+     flips in dark mode) over raw white or fixed shades. */
+  --color-surface: #ffffff; /* cards, panels, menus, inputs */
+  --color-canvas: #f5f1e6; /* entry pages (sign-in, account): the site's cream */
+  --color-action: #283f2f; /* filled buttons and switches: forest (brand-800) */
+  --color-action-hover: #435949; /* brand-700 */
+  --color-on-action: #f5f1e6; /* text on buttons: cream */
+  --color-accent: #435949; /* green text (brand-700) */
+  --color-forest: #283f2f; /* forest fills that stay forest in both themes */
+  --color-chart-actual: #435949;
+  --color-chart-target: #9aa59b;
+  --color-chart-grid: #e1e0d9;
+  --color-chart-axis: #898781;
+  --color-chart-text: #52514e;
 
   --shadow-card: 0 1px 2px rgba(16, 21, 16, 0.04), 0 8px 24px -12px rgba(16, 21, 16, 0.12);
   --shadow-card-hover: 0 2px 4px rgba(16, 21, 16, 0.06), 0 16px 32px -12px rgba(16, 21, 16, 0.16);
@@ -36,6 +57,68 @@
   html {
     font-family: var(--font-sans);
     color-scheme: light;
+  }
+
+  /* Dark theme (option B, chosen 2026-11-22): neutral near-black, close to
+     Binance's dark theme, so brand colour comes from buttons and accents
+     only. The ink scale flips (50 is the darkest background, 900 the
+     lightest text), so ink-based classes adapt on their own. Pale tints
+     (50-200) and the shades used as text get dark-mode versions; mid and
+     dark fills (gold-400, brand-600/700, chat bubbles) stay as they are. */
+  :root[data-theme='dark'] {
+    color-scheme: dark;
+
+    --color-ink-50: #0b0e11;
+    --color-ink-100: #1e2329;
+    --color-ink-200: #2b3139;
+    --color-ink-300: #3a414b;
+    --color-ink-400: #5e6673;
+    --color-ink-500: #929aa5;
+    --color-ink-600: #b0b7c1;
+    --color-ink-700: #c9ced6;
+    --color-ink-800: #dfe2e7;
+    --color-ink-900: #eaecef;
+    --color-ink-950: #f5f6f7;
+
+    --color-brand-50: #142019;
+    --color-brand-100: #1a2a20;
+    --color-brand-200: #24392c;
+    --color-primary-50: #0f2327;
+    --color-primary-100: #143037;
+    --color-primary-700: #7cc6d2;
+    --color-primary-800: #9cd6df;
+    --color-gold-50: #221c10;
+    --color-gold-100: #2c2414;
+    --color-gold-700: #dcc38c;
+    --color-sage-100: #1d251e;
+
+    --color-status-good: #4cbf86;
+    --color-status-good-bg: #10261b;
+    --color-status-good-text: #6fd4a2;
+    --color-status-warn: #e0a43a;
+    --color-status-warn-bg: #2a1f0b;
+    --color-status-warn-text: #f0bd62;
+    --color-status-risk: #f07a6c;
+    --color-status-risk-bg: #2d1411;
+    --color-status-risk-text: #f59a8f;
+    --color-status-info: #6aaee8;
+    --color-status-info-bg: #0f2133;
+    --color-status-info-text: #8cc2f0;
+
+    --color-surface: #181a20;
+    --color-canvas: #0b0e11;
+    --color-action: #b2934d; /* gold, as the site's buttons on dark sections */
+    --color-action-hover: #d1bf98;
+    --color-on-action: #151d17;
+    --color-accent: #9cc4a6;
+    --color-chart-actual: #8fbf9c;
+    --color-chart-target: #6b7380;
+    --color-chart-grid: #262b32;
+    --color-chart-axis: #929aa5;
+    --color-chart-text: #b0b7c1;
+
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.6);
+    --shadow-card-hover: 0 2px 4px rgba(0, 0, 0, 0.35), 0 16px 32px -12px rgba(0, 0, 0, 0.7);
   }
 
   body {

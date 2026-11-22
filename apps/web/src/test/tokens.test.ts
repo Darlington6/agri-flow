@@ -118,3 +118,60 @@ describe('contrast (WCAG AA)', () => {
     expect(contrast(color('sage-400'), WHITE)).toBeLessThan(4.5)
   })
 })
+
+// The app's named roles and dark theme live in index.css: light values in
+// @theme, dark values in the [data-theme='dark'] block. Dark mode uses the
+// light palette with those overrides on top.
+const appCss = readFileSync(resolve(here, '../index.css'), 'utf8')
+const darkBlock = appCss.slice(appCss.indexOf(":root[data-theme='dark']"))
+const vars = (source: string) =>
+  Object.fromEntries([...source.matchAll(/--color-([a-z0-9-]+):\s*(#[0-9a-f]{6})/g)].map((m) => [m[1], m[2]]))
+const lightRoles = vars(appCss.slice(0, appCss.indexOf(":root[data-theme='dark']")))
+const dark: Record<string, string> = { ...css, ...lightRoles, ...vars(darkBlock.slice(0, darkBlock.indexOf('}'))) }
+const darkColor = (token: string) => {
+  const value = dark[token]
+  if (!value) throw new Error(`no dark value for --color-${token}`)
+  return value
+}
+
+describe('contrast in the dark theme (WCAG AA)', () => {
+  it('overrides every colour it means to', () => {
+    // A typo in the dark block would silently fall back to the light value.
+    for (const token of ['ink-50', 'ink-900', 'surface', 'canvas', 'action', 'on-action', 'accent', 'status-risk-bg'])
+      expect(darkColor(token)).not.toBe({ ...css, ...lightRoles }[token])
+  })
+
+  it.each([
+    ['headings: ink-900 on the page', 'ink-900', 'ink-50'],
+    ['headings: ink-900 on cards', 'ink-900', 'surface'],
+    ['body text: ink-800 on cards', 'ink-800', 'surface'],
+    ['secondary text: ink-600 on cards', 'ink-600', 'surface'],
+    ['secondary text: ink-600 on the page', 'ink-600', 'ink-50'],
+    ['small grey text: ink-500 on cards', 'ink-500', 'surface'],
+    ['small grey text: ink-500 on the page', 'ink-500', 'ink-50'],
+    ['buttons: on-action on action', 'on-action', 'action'],
+    ['buttons on hover: on-action on action-hover', 'on-action', 'action-hover'],
+    ['links: primary-700 on cards', 'primary-700', 'surface'],
+    ['selected nav: primary-800 on primary-50', 'primary-800', 'primary-50'],
+    ['green text: accent on cards', 'accent', 'surface'],
+    ['icon chips and pilot badge: accent on brand-100', 'accent', 'brand-100'],
+    ['entry pages: ink-600 on canvas', 'ink-600', 'canvas'],
+    ['KYC Verified / Low risk badge', 'status-good-text', 'status-good-bg'],
+    ['KYC Pending / Medium risk badge', 'status-warn-text', 'status-warn-bg'],
+    ['High risk badge', 'status-risk-text', 'status-risk-bg'],
+    ['info badge', 'status-info-text', 'status-info-bg'],
+    ['risk figures: status-risk on cards', 'status-risk', 'surface'],
+    ['warnings: status-warn on cards', 'status-warn', 'surface'],
+    ['good figures: status-good on cards', 'status-good', 'surface'],
+  ])('%s', (_label, fg, bg) => {
+    expect(contrast(darkColor(fg), darkColor(bg))).toBeGreaterThanOrEqual(4.5)
+  })
+
+  it.each([
+    ['card edges: ink-100 border against the page', 'ink-100', 'ink-50'],
+    ['focus ring: primary-500 on cards', 'primary-500', 'surface'],
+    ['chart line: chart-actual on cards', 'chart-actual', 'surface'],
+  ])('%s', (_label, fg, bg) => {
+    expect(contrast(darkColor(fg), darkColor(bg))).toBeGreaterThanOrEqual(fg === 'ink-100' ? 1.2 : 3)
+  })
+})

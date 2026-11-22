@@ -91,8 +91,8 @@ const USERS = [
 
 export function LandingPage() {
   return (
-    <div className="min-h-svh bg-white">
-      <header className="sticky top-0 z-30 border-b border-ink-100 bg-white/90 backdrop-blur">
+    <div className="min-h-svh bg-surface">
+      <header className="sticky top-0 z-30 border-b border-ink-100 bg-surface/90 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6">
           <div className="flex items-center gap-2">
             <LogoMark className="h-9" />
@@ -117,7 +117,7 @@ export function LandingPage() {
         </div>
       </header>
 
-      <section className="relative overflow-hidden bg-gradient-to-b from-brand-50/60 to-white">
+      <section className="relative overflow-hidden bg-gradient-to-b from-brand-50/60 to-surface">
         <div className="mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 sm:py-28">
           <DemoTag className="mx-auto mb-6" />
           <h1 className="font-display text-4xl leading-[1.1] font-semibold tracking-tight text-ink-900 sm:text-5xl">
@@ -142,11 +142,11 @@ export function LandingPage() {
         </div>
 
         <div className="mx-auto max-w-5xl px-4 pb-16 sm:px-6">
-          <div className="flex flex-col items-stretch gap-3 rounded-2xl border border-ink-100 bg-white p-4 shadow-[var(--shadow-card)] sm:flex-row sm:items-center sm:gap-2 sm:p-6">
+          <div className="flex flex-col items-stretch gap-3 rounded-2xl border border-ink-100 bg-surface p-4 shadow-[var(--shadow-card)] sm:flex-row sm:items-center sm:gap-2 sm:p-6">
             {FLOW_STEPS.map((step, i) => (
               <div key={step.label} className="flex flex-1 items-center gap-2">
                 <div className="flex flex-1 flex-col items-center gap-2 rounded-xl px-3 py-3 text-center sm:py-2">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-700">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-accent">
                     <step.icon className="h-5 w-5" />
                   </span>
                   <span className="text-xs font-medium text-ink-700 sm:text-sm">{step.label}</span>
@@ -168,7 +168,7 @@ export function LandingPage() {
             struggle to secure predictable volumes, quality and delivery. {brand.name} reverses the traditional model:
             demand drives production, not the other way around.
           </p>
-          <p className="mt-6 font-display text-lg font-medium text-brand-800">{brand.substatement}</p>
+          <p className="mt-6 font-display text-lg font-medium text-accent">{brand.substatement}</p>
         </div>
       </section>
 
@@ -188,9 +188,9 @@ export function LandingPage() {
             <div className="grid gap-3 sm:grid-cols-3">
               {LOOP_STEPS.map((step, i) => (
                 <div key={step.label} className="flex items-start gap-3 sm:flex-col sm:items-start">
-                  <div className="flex w-full flex-col gap-2 rounded-2xl border border-ink-100 bg-white p-4 shadow-[var(--shadow-card)]">
+                  <div className="flex w-full flex-col gap-2 rounded-2xl border border-ink-100 bg-surface p-4 shadow-[var(--shadow-card)]">
                     <div className="flex items-center gap-2">
-                      <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-50 text-brand-700">
+                      <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-50 text-accent">
                         <step.icon className="h-[18px] w-[18px]" />
                       </span>
                       <span className="text-xs font-semibold tracking-wide text-ink-500 uppercase">
@@ -220,8 +220,11 @@ export function LandingPage() {
           </div>
           <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {USERS.map((u) => (
-              <div key={u.label} className="rounded-2xl border border-ink-100 bg-white p-5 shadow-[var(--shadow-card)]">
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-700">
+              <div
+                key={u.label}
+                className="rounded-2xl border border-ink-100 bg-surface p-5 shadow-[var(--shadow-card)]"
+              >
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-accent">
                   <u.icon className="h-5 w-5" />
                 </span>
                 <p className="mt-4 font-display text-sm font-semibold text-ink-900">{u.label}</p>

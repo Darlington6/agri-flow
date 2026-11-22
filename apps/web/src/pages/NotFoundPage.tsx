@@ -4,8 +4,8 @@ import { Button } from '@/components/ui'
 
 export function NotFoundPage() {
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center gap-4 bg-cream px-6 text-center">
-      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-50 text-brand-700">
+    <div className="flex min-h-svh flex-col items-center justify-center gap-4 bg-canvas px-6 text-center">
+      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-50 text-accent">
         <Compass className="h-6 w-6" />
       </span>
       <div>
