@@ -1,4 +1,4 @@
-import { APP_PHOTOS, APP_WIDTHS, appImageName, type AppPhoto } from '@agriflow/media'
+import { APP_PHOTOS, APP_WIDTHS, appImageName, type AppPhoto, type PhotoFile } from '@agriflow/media'
 
 // The app's photos, sized ahead of time in packages/media/app/ (see that
 // package for the files, their licences and how to regenerate them).
@@ -14,8 +14,12 @@ export interface SizedPhoto {
   focus?: string
 }
 
-export function appPhoto(name: AppPhoto): SizedPhoto {
-  const { file, focus } = APP_PHOTOS[name]
+/** The slides for an entry page, each ready for an <img srcSet>. */
+export function appSlides(name: AppPhoto): SizedPhoto[] {
+  return APP_PHOTOS[name].map(({ file, focus }) => sized(file, focus))
+}
+
+function sized(file: PhotoFile, focus?: string): SizedPhoto {
   const sized = APP_WIDTHS.map((width) => ({
     width,
     url: urls[`../../../../packages/media/app/${appImageName(file, width)}`],

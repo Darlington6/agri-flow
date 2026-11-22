@@ -80,8 +80,9 @@ for people (`formatPhone`). The API checks every number again.
 
 ## Photos
 
-The entry pages (sign-in, demo roles) use `AuthLayout`, a photo beside the content (a band on top on phones and
-tablets). Photos come from `packages/media`, shared with the site and its licence register. The app has no image
+The entry pages (sign-in, demo roles) use `AuthLayout`: photos beside the content (a band on top on phones and
+tablets) that crossfade with a slow zoom, as on the site's home page; a still first photo for less motion or
+data saving. Photos come from `packages/media`, shared with the site and its licence register. The app has no image
 pipeline, so the photos it uses (`APP_PHOTOS` there) are sized ahead of time into `packages/media/app/`; after
 changing them, run `pnpm --filter @agriflow/media app-images`. `src/lib/appPhotos.test.ts` fails if a copy is
 missing or left over.
