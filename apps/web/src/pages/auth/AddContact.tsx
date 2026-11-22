@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
 import { ApiError } from '@/lib/apiClient'
-import { Button, Field, inputClass, PhoneInput, usePhoneField } from '@/components/ui'
+import { Button, Field, inputClass } from '@/components/ui'
+import { PhoneInput } from '@/components/ui/PhoneInput'
+import { usePhoneField } from '@/components/ui/usePhoneField'
 import { formatPhone } from '@/lib/phone'
 
 // Adding the second way to sign in from the account page. Nothing is saved
