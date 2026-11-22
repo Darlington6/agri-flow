@@ -53,3 +53,43 @@ def test_me_patch_cannot_change_phone_number():
 
     user.refresh_from_db()
     assert user.phone_number == "+233241234569"
+
+
+def _client_for(user):
+    client = APIClient()
+    client.credentials(HTTP_AUTHORIZATION=f"Bearer {RefreshToken.for_user(user).access_token}")
+    return client
+
+
+def test_me_says_a_new_account_needs_onboarding():
+    user = User.objects.create_user(email="new@example.com")
+    body = _client_for(user).get("/api/v1/auth/me/").json()
+    assert body["needs_onboarding"] is True
+    assert body["onboarded_at"] is None
+    assert body["country"] == "" and body["language"] == ""
+
+
+def test_me_patch_sets_country_and_language():
+    user = User.objects.create_user(email="place@example.com")
+    response = _client_for(user).patch(
+        "/api/v1/auth/me/", {"country": "rw", "language": "rw"}, format="json"
+    )
+    assert response.status_code == 200
+    assert response.json()["country"] == "RW"
+    assert response.json()["language"] == "rw"
+
+
+@pytest.mark.parametrize("field,value", [("country", "XX"), ("language", "de")])
+def test_me_patch_rejects_unknown_country_or_language(field, value):
+    user = User.objects.create_user(email="bad@example.com")
+    response = _client_for(user).patch("/api/v1/auth/me/", {field: value}, format="json")
+    assert response.status_code == 400
+    assert field in response.json()
+
+
+def test_me_patch_tidies_spaces_in_the_name():
+    user = User.objects.create_user(email="spaces@example.com")
+    response = _client_for(user).patch(
+        "/api/v1/auth/me/", {"display_name": "  Aline   Uwase "}, format="json"
+    )
+    assert response.json()["display_name"] == "Aline Uwase"
