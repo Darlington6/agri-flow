@@ -5,4 +5,4 @@
 // deliberately, one at a time, once this package is ready to be a real
 // dependency rather than a workspace placeholder.
 
-export {};
+export {}

@@ -13,7 +13,9 @@ export function ClimatePage() {
   const { session } = useSession()
   const regions = scopedRegions(session)
   const isScoped = regions.length > 0
-  const visibleRegionRisks = isScoped ? regionClimateRisks.filter((r) => regions.includes(r.region)) : regionClimateRisks
+  const visibleRegionRisks = isScoped
+    ? regionClimateRisks.filter((r) => regions.includes(r.region))
+    : regionClimateRisks
 
   return (
     <div className="flex flex-col gap-6">
@@ -32,28 +34,36 @@ export function ClimatePage() {
             <span className="text-xs text-ink-500">Rainfall Risk</span>
             <CloudRain className="h-4 w-4 text-ink-400" />
           </div>
-          <p className="mt-2 font-display text-xl font-semibold text-ink-900">{RISK_LABEL[overallClimateSnapshot.rainfallRisk]}</p>
+          <p className="mt-2 font-display text-xl font-semibold text-ink-900">
+            {RISK_LABEL[overallClimateSnapshot.rainfallRisk]}
+          </p>
         </Card>
         <Card>
           <div className="flex items-center justify-between">
             <span className="text-xs text-ink-500">Heat Stress</span>
             <Thermometer className="h-4 w-4 text-ink-400" />
           </div>
-          <p className="mt-2 font-display text-xl font-semibold text-ink-900">{RISK_LABEL[overallClimateSnapshot.heatStress]}</p>
+          <p className="mt-2 font-display text-xl font-semibold text-ink-900">
+            {RISK_LABEL[overallClimateSnapshot.heatStress]}
+          </p>
         </Card>
         <Card>
           <div className="flex items-center justify-between">
             <span className="text-xs text-ink-500">Water Stress</span>
             <Droplets className="h-4 w-4 text-ink-400" />
           </div>
-          <p className="mt-2 font-display text-xl font-semibold text-ink-900">{RISK_LABEL[overallClimateSnapshot.waterStress]}</p>
+          <p className="mt-2 font-display text-xl font-semibold text-ink-900">
+            {RISK_LABEL[overallClimateSnapshot.waterStress]}
+          </p>
         </Card>
         <Card className="border-status-warn-bg bg-status-warn-bg/40">
           <div className="flex items-center justify-between">
             <span className="text-xs text-ink-500">Overall Climate Risk</span>
             <Gauge className="h-4 w-4 text-status-warn" />
           </div>
-          <p className="mt-2 font-display text-xl font-semibold text-status-warn">{overallClimateSnapshot.overallRisk}</p>
+          <p className="mt-2 font-display text-xl font-semibold text-status-warn">
+            {overallClimateSnapshot.overallRisk}
+          </p>
         </Card>
       </div>
 
@@ -90,15 +100,15 @@ export function ClimatePage() {
               <div className="mt-3 grid grid-cols-3 gap-2 text-center text-[11px]">
                 <div className="rounded-lg bg-ink-50 py-1.5">
                   <p className="text-ink-400">Rain</p>
-                  <p className="font-medium capitalize text-ink-700">{r.rainfallRisk}</p>
+                  <p className="font-medium text-ink-700 capitalize">{r.rainfallRisk}</p>
                 </div>
                 <div className="rounded-lg bg-ink-50 py-1.5">
                   <p className="text-ink-400">Heat</p>
-                  <p className="font-medium capitalize text-ink-700">{r.heatStress}</p>
+                  <p className="font-medium text-ink-700 capitalize">{r.heatStress}</p>
                 </div>
                 <div className="rounded-lg bg-ink-50 py-1.5">
                   <p className="text-ink-400">Water</p>
-                  <p className="font-medium capitalize text-ink-700">{r.waterStress}</p>
+                  <p className="font-medium text-ink-700 capitalize">{r.waterStress}</p>
                 </div>
               </div>
               <p className="mt-3 text-xs text-ink-500">{r.notes}</p>

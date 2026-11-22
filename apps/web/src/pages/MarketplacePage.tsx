@@ -10,9 +10,24 @@ import type { ListingCategory, ListingStatus } from '@/types'
 import { NewListingModal } from './marketplace/NewListingModal'
 
 const CATEGORIES: { key: ListingCategory; label: string; icon: typeof Sprout; blurb: string }[] = [
-  { key: 'Produce Surplus', label: 'Produce Surplus', icon: Sprout, blurb: 'Above-contract harvest, sold in small batches instead of going to waste.' },
-  { key: 'Farm Inputs', label: 'Farm Inputs', icon: Wrench, blurb: 'Seeds, seedlings, fertilizer and equipment available to network farmers.' },
-  { key: 'Farm Residue', label: 'Farm Residue', icon: Recycle, blurb: 'Crop residue available to composters and feed processors.' },
+  {
+    key: 'Produce Surplus',
+    label: 'Produce Surplus',
+    icon: Sprout,
+    blurb: 'Above-contract harvest, sold in small batches instead of going to waste.',
+  },
+  {
+    key: 'Farm Inputs',
+    label: 'Farm Inputs',
+    icon: Wrench,
+    blurb: 'Seeds, seedlings, fertilizer and equipment available to network farmers.',
+  },
+  {
+    key: 'Farm Residue',
+    label: 'Farm Residue',
+    icon: Recycle,
+    blurb: 'Crop residue available to composters and feed processors.',
+  },
 ]
 
 const STATUS_TONE: Record<ListingStatus, 'good' | 'warn' | 'neutral'> = {
@@ -56,7 +71,9 @@ export function MarketplacePage() {
             key={c.key}
             onClick={() => setCategory(c.key)}
             className={`flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition-colors ${
-              category === c.key ? 'border-primary-300 bg-primary-50 text-primary-800' : 'border-ink-200 text-ink-600 hover:bg-ink-50'
+              category === c.key
+                ? 'border-primary-300 bg-primary-50 text-primary-800'
+                : 'border-ink-200 text-ink-600 hover:bg-ink-50'
             }`}
           >
             <c.icon className="h-4 w-4" />
@@ -78,9 +95,13 @@ export function MarketplacePage() {
             <p className="mt-1 text-xs text-ink-500">{l.description}</p>
             <dl className="mt-4 grid grid-cols-2 gap-y-1.5 text-xs">
               <dt className="text-ink-400">Quantity</dt>
-              <dd className="text-right text-ink-700">{l.quantity} {l.unit}</dd>
+              <dd className="text-right text-ink-700">
+                {l.quantity} {l.unit}
+              </dd>
               <dt className="text-ink-400">Price</dt>
-              <dd className="text-right text-ink-700">GHS {l.pricePerUnitGHS.toLocaleString()}/{l.unit}</dd>
+              <dd className="text-right text-ink-700">
+                GHS {l.pricePerUnitGHS.toLocaleString()}/{l.unit}
+              </dd>
               <dt className="text-ink-400">Seller</dt>
               <dd className="text-right text-ink-700">{l.sellerName}</dd>
               <dt className="text-ink-400">Posted</dt>

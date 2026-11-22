@@ -1,12 +1,12 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 /* The shared AgriFlow palette: primary (teal) for actions, brand (forest),
    gold, sage, ink and status. Same file the web app uses. */
-@import "@agriflow/design-tokens/theme.css";
+@import '@agriflow/design-tokens/theme.css';
 
 @theme {
   /* Public site typefaces (design-tokens: Fraunces display, IBM Plex Sans body). */
-  --font-display: "Fraunces Variable", Georgia, "Times New Roman", serif;
-  --font-sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+  --font-sans: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif;
   --color-cream: #f5f1e6;
 }
 

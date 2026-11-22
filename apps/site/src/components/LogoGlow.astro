@@ -8,7 +8,9 @@ interface Props {
   /** Position and size; default: partly off the right edge. */
   class?: string
 }
-const { class: className = '-right-24 top-1/2 h-[26rem] w-[26rem] -translate-y-1/2 sm:-right-10 sm:h-[32rem] sm:w-[32rem]' } = Astro.props
+const {
+  class: className = '-right-24 top-1/2 h-[26rem] w-[26rem] -translate-y-1/2 sm:-right-10 sm:h-[32rem] sm:w-[32rem]',
+} = Astro.props
 ---
 
 <div aria-hidden="true" class:list={['logo-glow pointer-events-none absolute', className]}>

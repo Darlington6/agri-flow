@@ -15,7 +15,9 @@ describe('scrubbing', () => {
   })
 
   it('hides the one-time token in sign-in and confirmation links', () => {
-    expect(scrubUrl('https://app.example/magic-link?token=secret')).toBe('https://app.example/magic-link?token=[Filtered]')
+    expect(scrubUrl('https://app.example/magic-link?token=secret')).toBe(
+      'https://app.example/magic-link?token=[Filtered]',
+    )
     expect(scrubUrl('/confirm-email?token=secret&from=mail#top')).toBe('/confirm-email?token=[Filtered]&from=mail#top')
     expect(scrubUrl('https://app.example/account')).toBe('https://app.example/account')
   })
@@ -25,7 +27,9 @@ describe('scrubbing', () => {
       type: undefined,
       request: { url: 'https://app.example/magic-link?token=secret', cookies: { a: 'b' }, data: { email: 'x@y.z' } },
       exception: { values: [{ type: 'Error', value: 'Code 123456 for +250788123456 failed' }] },
-      breadcrumbs: [{ category: 'fetch', data: { url: 'https://api.example/api/v1/auth/magic-link/verify/?token=secret' } }],
+      breadcrumbs: [
+        { category: 'fetch', data: { url: 'https://api.example/api/v1/auth/magic-link/verify/?token=secret' } },
+      ],
     })
     const sent = JSON.stringify(event)
     for (const secret of ['secret', '+250788123456', 'x@y.z', 'cookies']) expect(sent).not.toContain(secret)

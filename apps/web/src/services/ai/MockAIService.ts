@@ -10,11 +10,13 @@ import { buyerById, contractById, cropById, farmers } from '@/data'
 const AT_RISK_NARRATIVES: Record<string, { projectedFulfillmentPct: number; recommendation: string }> = {
   'AG-204': {
     projectedFulfillmentPct: 92,
-    recommendation: 'Reallocate 2.5 tonnes of expected harvest from lower-risk farms, or confirm 2 additional growers within 2 weeks.',
+    recommendation:
+      'Reallocate 2.5 tonnes of expected harvest from lower-risk farms, or confirm 2 additional growers within 2 weeks.',
   },
   'AG-188': {
     projectedFulfillmentPct: 87,
-    recommendation: 'Monitor the delayed-planting farm closely and confirm buyer flexibility on delivery date if maturity slips further.',
+    recommendation:
+      'Monitor the delayed-planting farm closely and confirm buyer flexibility on delivery date if maturity slips further.',
   },
   'AG-217': {
     projectedFulfillmentPct: 76,
@@ -22,11 +24,12 @@ const AT_RISK_NARRATIVES: Record<string, { projectedFulfillmentPct: number; reco
   },
   'AG-202': {
     projectedFulfillmentPct: 65,
-    recommendation: 'Expand farmer recruitment beyond Northern Region to close the matching gap before the planting window closes.',
+    recommendation:
+      'Expand farmer recruitment beyond Northern Region to close the matching gap before the planting window closes.',
   },
   'AG-203': {
     projectedFulfillmentPct: 82,
-    recommendation: 'Match 2-3 additional Volta-region growers to reach the export order\'s full contracted volume.',
+    recommendation: "Match 2-3 additional Volta-region growers to reach the export order's full contracted volume.",
   },
 }
 
@@ -100,7 +103,8 @@ export class MockAIService implements AIService {
         id: 'RA-001',
         kind: 'recommendation',
         title: 'Source 1.6 tonnes of additional tomato supply',
-        description: 'Contract AG-204 is projected at 92% fulfillment. Identify 1-2 nearby farms to close the gap before the Oct 18 delivery date.',
+        description:
+          'Contract AG-204 is projected at 92% fulfillment. Identify 1-2 nearby farms to close the gap before the Oct 18 delivery date.',
         contractId: 'AG-204',
       },
       {
@@ -114,13 +118,15 @@ export class MockAIService implements AIService {
         id: 'RA-003',
         kind: 'detection',
         title: 'Follow up with 3 farmers on missing crop updates',
-        description: 'Kojo Mensah, Rahinatu Yakubu and Ibrahim Mohammed have not submitted a crop update in over 2 weeks.',
+        description:
+          'Kojo Mensah, Rahinatu Yakubu and Ibrahim Mohammed have not submitted a crop update in over 2 weeks.',
       },
       {
         id: 'RA-004',
         kind: 'recommendation',
-        title: 'Allocate cold storage for next week\'s harvest',
-        description: 'Upcoming harvest volume (46.8t) exceeds available storage (31t) by 7 tonnes. Prioritize high-risk perishable lots.',
+        title: "Allocate cold storage for next week's harvest",
+        description:
+          'Upcoming harvest volume (46.8t) exceeds available storage (31t) by 7 tonnes. Prioritize high-risk perishable lots.',
       },
     ]
   }
@@ -146,7 +152,10 @@ export class MockAIService implements AIService {
 
     if (q.includes('farms') && q.includes('attention')) {
       const list = farmersNeedingAttention()
-        .map((f) => `- ${f.name} (${f.community}, ${f.region}) — ${f.primaryCropId}, ${f.riskStatus} risk${!f.hasSubmittedLatestUpdate ? ', no update in 2+ weeks' : ''}`)
+        .map(
+          (f) =>
+            `- ${f.name} (${f.community}, ${f.region}) — ${f.primaryCropId}, ${f.riskStatus} risk${!f.hasSubmittedLatestUpdate ? ', no update in 2+ weeks' : ''}`,
+        )
         .join('\n')
       return assistantMessage(`${farmersNeedingAttention().length} farms need attention this week:\n\n${list}`)
     }
@@ -160,7 +169,10 @@ export class MockAIService implements AIService {
     if (q.includes('support')) {
       const list = farmers
         .filter((f) => f.reliabilityScore < 75 || f.climateSmartScore < 60)
-        .map((f) => `- ${f.name} (${f.community}, ${f.region}) — reliability ${f.reliabilityScore}%, climate-smart score ${f.climateSmartScore}%`)
+        .map(
+          (f) =>
+            `- ${f.name} (${f.community}, ${f.region}) — reliability ${f.reliabilityScore}%, climate-smart score ${f.climateSmartScore}%`,
+        )
         .join('\n')
       return assistantMessage(
         `A small group of farmers show lower reliability and climate-smart practice adoption, and may benefit from field agent visits or input support:\n\n${list}`,

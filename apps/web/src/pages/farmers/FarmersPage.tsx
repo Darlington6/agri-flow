@@ -10,7 +10,15 @@ import type { GhanaRegion, CropId } from '@/types'
 import { formatTonnes } from '@/lib/format'
 
 const ALL_REGIONS: GhanaRegion[] = [
-  'Ashanti', 'Bono', 'Bono East', 'Northern', 'Upper West', 'Upper East', 'Greater Accra', 'Eastern', 'Volta',
+  'Ashanti',
+  'Bono',
+  'Bono East',
+  'Northern',
+  'Upper West',
+  'Upper East',
+  'Greater Accra',
+  'Eastern',
+  'Volta',
 ]
 const CROP_IDS: CropId[] = ['tomatoes', 'onions', 'peppers', 'cassava']
 
@@ -29,7 +37,12 @@ export function FarmersPage() {
     return baseFarmers.filter((f) => {
       if (region !== 'all' && f.region !== region) return false
       if (crop !== 'all' && f.primaryCropId !== crop) return false
-      if (query && !f.name.toLowerCase().includes(query.toLowerCase()) && !f.community.toLowerCase().includes(query.toLowerCase())) return false
+      if (
+        query &&
+        !f.name.toLowerCase().includes(query.toLowerCase()) &&
+        !f.community.toLowerCase().includes(query.toLowerCase())
+      )
+        return false
       return true
     })
   }, [baseFarmers, region, crop, query])
@@ -52,8 +65,8 @@ export function FarmersPage() {
       />
 
       <div className="flex flex-wrap items-center gap-3">
-        <div className="relative flex-1 min-w-[220px] max-w-sm">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400" />
+        <div className="relative max-w-sm min-w-[220px] flex-1">
+          <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-ink-400" />
           <input
             className={`${inputClass} pl-9`}
             placeholder="Search name or community…"
@@ -61,7 +74,12 @@ export function FarmersPage() {
             onChange={(e) => setQuery(e.target.value)}
           />
         </div>
-        <select className={inputClass} style={{ width: 180 }} value={region} onChange={(e) => setRegion(e.target.value as typeof region)}>
+        <select
+          className={inputClass}
+          style={{ width: 180 }}
+          value={region}
+          onChange={(e) => setRegion(e.target.value as typeof region)}
+        >
           <option value="all">All regions</option>
           {availableRegions.map((r) => (
             <option key={r} value={r}>
@@ -69,7 +87,12 @@ export function FarmersPage() {
             </option>
           ))}
         </select>
-        <select className={inputClass} style={{ width: 160 }} value={crop} onChange={(e) => setCrop(e.target.value as typeof crop)}>
+        <select
+          className={inputClass}
+          style={{ width: 160 }}
+          value={crop}
+          onChange={(e) => setCrop(e.target.value as typeof crop)}
+        >
           <option value="all">All crops</option>
           {CROP_IDS.map((c) => (
             <option key={c} value={c}>
@@ -83,7 +106,7 @@ export function FarmersPage() {
         <div className="overflow-x-auto">
           <table className="w-full min-w-[920px] text-left text-sm">
             <thead>
-              <tr className="border-b border-ink-100 text-xs font-medium uppercase tracking-wide text-ink-400">
+              <tr className="border-b border-ink-100 text-xs font-medium tracking-wide text-ink-400 uppercase">
                 <th className="px-5 py-3 font-medium">Farmer</th>
                 <th className="px-3 py-3 font-medium">Region / Community</th>
                 <th className="px-3 py-3 font-medium">Crop</th>
@@ -111,10 +134,12 @@ export function FarmersPage() {
                   <td className="px-3 py-3">
                     <Badge tone="neutral">{cropById(f.primaryCropId)?.name}</Badge>
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3 text-ink-600">{f.farmSizeHectares} ha</td>
-                  <td className="whitespace-nowrap px-3 py-3 text-ink-600">{formatTonnes(f.contractedQuantityTonnes)}</td>
+                  <td className="px-3 py-3 whitespace-nowrap text-ink-600">{f.farmSizeHectares} ha</td>
+                  <td className="px-3 py-3 whitespace-nowrap text-ink-600">
+                    {formatTonnes(f.contractedQuantityTonnes)}
+                  </td>
                   <td className="px-3 py-3 text-ink-600">{f.currentCropStage}</td>
-                  <td className="whitespace-nowrap px-3 py-3 text-ink-600">{f.reliabilityScore}%</td>
+                  <td className="px-3 py-3 whitespace-nowrap text-ink-600">{f.reliabilityScore}%</td>
                   <td className="px-3 py-3">
                     <KycBadge status={resolveKycStatus(f.kycStatus, f.id, kycOverrides)} />
                   </td>

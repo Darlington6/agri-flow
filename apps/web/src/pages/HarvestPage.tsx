@@ -37,15 +37,21 @@ export function HarvestPage() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <p className="text-xs text-ink-500">Upcoming harvest ({snapshot.weekLabel.toLowerCase()})</p>
-          <p className="mt-1 font-display text-2xl font-semibold text-ink-900">{formatTonnes(snapshot.upcomingHarvestTonnes)}</p>
+          <p className="mt-1 font-display text-2xl font-semibold text-ink-900">
+            {formatTonnes(snapshot.upcomingHarvestTonnes)}
+          </p>
         </Card>
         <Card>
           <p className="text-xs text-ink-500">Storage required</p>
-          <p className="mt-1 font-display text-2xl font-semibold text-ink-900">{formatTonnes(snapshot.storageRequiredTonnes)}</p>
+          <p className="mt-1 font-display text-2xl font-semibold text-ink-900">
+            {formatTonnes(snapshot.storageRequiredTonnes)}
+          </p>
         </Card>
         <Card>
           <p className="text-xs text-ink-500">Storage available</p>
-          <p className="mt-1 font-display text-2xl font-semibold text-ink-900">{formatTonnes(snapshot.storageAvailableTonnes)}</p>
+          <p className="mt-1 font-display text-2xl font-semibold text-ink-900">
+            {formatTonnes(snapshot.storageAvailableTonnes)}
+          </p>
         </Card>
         <Card>
           <p className="text-xs text-ink-500">Shortfall</p>
@@ -73,7 +79,7 @@ export function HarvestPage() {
             <div className="mt-4 overflow-x-auto">
               <table className="w-full min-w-[720px] text-left text-sm">
                 <thead>
-                  <tr className="border-y border-ink-100 text-xs font-medium uppercase tracking-wide text-ink-400">
+                  <tr className="border-y border-ink-100 text-xs font-medium tracking-wide text-ink-400 uppercase">
                     <th className="px-6 py-2.5 font-medium">Farmer</th>
                     <th className="px-3 py-2.5 font-medium">Crop</th>
                     <th className="px-3 py-2.5 font-medium">Region</th>
@@ -90,7 +96,10 @@ export function HarvestPage() {
                     return (
                       <tr key={h.id} className="border-b border-ink-50 last:border-0 hover:bg-ink-50/60">
                         <td className="px-6 py-3">
-                          <Link to={`/farmers/${h.farmerId}`} className="font-medium text-ink-800 hover:text-primary-700">
+                          <Link
+                            to={`/farmers/${h.farmerId}`}
+                            className="font-medium text-ink-800 hover:text-primary-700"
+                          >
                             {farmer?.name}
                           </Link>
                         </td>
@@ -99,7 +108,9 @@ export function HarvestPage() {
                         <td className="px-3 py-3 text-ink-600">{formatTonnes(h.expectedQuantityTonnes)}</td>
                         <td className="px-3 py-3 text-ink-600">{formatShortDate(h.expectedHarvestDate)}</td>
                         <td className="px-3 py-3 text-ink-600">{buyer?.name ?? '—'}</td>
-                        <td className="px-6 py-3"><RiskBadge level={h.riskLevel} /></td>
+                        <td className="px-6 py-3">
+                          <RiskBadge level={h.riskLevel} />
+                        </td>
                       </tr>
                     )
                   })}
@@ -130,15 +141,24 @@ export function HarvestPage() {
             </div>
             <ul className="mt-4 flex flex-col gap-2 text-sm">
               <li className="flex items-center justify-between">
-                <span className="flex items-center gap-2 text-ink-600"><span className="h-2 w-2 rounded-full bg-status-risk" />High risk</span>
+                <span className="flex items-center gap-2 text-ink-600">
+                  <span className="h-2 w-2 rounded-full bg-status-risk" />
+                  High risk
+                </span>
                 <span className="font-medium text-ink-800">{formatTonnes(highRiskTonnes)}</span>
               </li>
               <li className="flex items-center justify-between">
-                <span className="flex items-center gap-2 text-ink-600"><span className="h-2 w-2 rounded-full bg-status-warn" />Medium risk</span>
+                <span className="flex items-center gap-2 text-ink-600">
+                  <span className="h-2 w-2 rounded-full bg-status-warn" />
+                  Medium risk
+                </span>
                 <span className="font-medium text-ink-800">{formatTonnes(mediumRiskTonnes)}</span>
               </li>
               <li className="flex items-center justify-between">
-                <span className="flex items-center gap-2 text-ink-600"><span className="h-2 w-2 rounded-full bg-status-good" />Low risk</span>
+                <span className="flex items-center gap-2 text-ink-600">
+                  <span className="h-2 w-2 rounded-full bg-status-good" />
+                  Low risk
+                </span>
                 <span className="font-medium text-ink-800">{formatTonnes(lowRiskTonnes)}</span>
               </li>
             </ul>

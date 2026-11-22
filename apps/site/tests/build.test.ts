@@ -14,7 +14,17 @@ const DIST = resolve(here, '../dist')
 const SITE = (process.env.SITE_URL ?? 'http://localhost:4321').replace(/\/$/, '')
 const INDEXING = process.env.PUBLIC_ALLOW_INDEXING === 'true'
 const JS_BUDGET_BYTES = 20 * 1024
-const PAGE_PATHS = ['/', '/about/', '/buyers/', '/farmers/', '/how-it-works/', '/partners/', '/privacy/', '/request-a-demo/', '/terms/']
+const PAGE_PATHS = [
+  '/',
+  '/about/',
+  '/buyers/',
+  '/farmers/',
+  '/how-it-works/',
+  '/partners/',
+  '/privacy/',
+  '/request-a-demo/',
+  '/terms/',
+]
 /** "/fr/about/" -> "fr"; "/about/" -> the default language. */
 function langOf(path: string): string {
   const first = path.split('/').filter(Boolean)[0]
@@ -57,7 +67,8 @@ beforeAll(() => {
   contentPages = pages.filter((p) => p.path !== '/404.html')
 })
 
-const meta = (doc: Document, selector: string) => doc.querySelector(selector)?.getAttribute('content') ?? doc.querySelector(selector)?.getAttribute('href')
+const meta = (doc: Document, selector: string) =>
+  doc.querySelector(selector)?.getAttribute('content') ?? doc.querySelector(selector)?.getAttribute('href')
 
 describe('every page', () => {
   it('builds all nine content pages in every published language, and the 404 page', () => {
@@ -92,7 +103,9 @@ describe('every page', () => {
 
   it('advertises exactly the published languages in hreflang, plus x-default', () => {
     for (const p of contentPages) {
-      const langs = [...p.doc.querySelectorAll('link[rel="alternate"][hreflang]')].map((l) => l.getAttribute('hreflang'))
+      const langs = [...p.doc.querySelectorAll('link[rel="alternate"][hreflang]')].map((l) =>
+        l.getAttribute('hreflang'),
+      )
       expect(langs, p.path).toEqual(EXPECTED_HREFLANGS)
     }
   })
@@ -105,7 +118,10 @@ describe('every page', () => {
         continue
       }
       const links = [...picker!.querySelectorAll('a[hreflang]')]
-      expect(links.map((a) => a.getAttribute('hreflang')), p.path).toEqual(PUBLISHED_LOCALES.map((l) => LOCALES[l].code))
+      expect(
+        links.map((a) => a.getAttribute('hreflang')),
+        p.path,
+      ).toEqual(PUBLISHED_LOCALES.map((l) => LOCALES[l].code))
       // The current language is marked, and each link keeps you on the same page.
       expect(picker!.querySelector('a[aria-current="true"]')?.getAttribute('hreflang'), p.path).toBe(langOf(p.path))
       for (const a of links) {
@@ -126,7 +142,8 @@ describe('every page', () => {
   })
 
   it(`is ${INDEXING ? 'indexable' : 'kept out of search engines'} (PUBLIC_ALLOW_INDEXING)`, () => {
-    for (const p of contentPages) expect(meta(p.doc, 'meta[name="robots"]'), p.path).toBe(INDEXING ? 'index, follow' : 'noindex, nofollow')
+    for (const p of contentPages)
+      expect(meta(p.doc, 'meta[name="robots"]'), p.path).toBe(INDEXING ? 'index, follow' : 'noindex, nofollow')
     expect(meta(pages.find((p) => p.path === '/404.html')!.doc, 'meta[name="robots"]')).toBe('noindex, nofollow')
   })
 
@@ -135,7 +152,9 @@ describe('every page', () => {
   })
 
   it('gives every image alt text (empty only for decoration)', () => {
-    for (const p of pages) for (const img of p.doc.querySelectorAll('img')) expect(img.hasAttribute('alt'), `${p.path}: ${img.outerHTML}`).toBe(true)
+    for (const p of pages)
+      for (const img of p.doc.querySelectorAll('img'))
+        expect(img.hasAttribute('alt'), `${p.path}: ${img.outerHTML}`).toBe(true)
   })
 
   it('has valid structured data', () => {
@@ -194,7 +213,8 @@ describe('every page', () => {
       }
       for (const img of p.doc.querySelectorAll('.hero-slides img')) expect(img.getAttribute('alt'), p.path).toBe('')
       // The page's opening band (home slideshow, page header photo) is background only.
-      for (const img of p.doc.querySelectorAll('main > section:first-of-type img')) expect(img.getAttribute('alt'), p.path).toBe('')
+      for (const img of p.doc.querySelectorAll('main > section:first-of-type img'))
+        expect(img.getAttribute('alt'), p.path).toBe('')
     }
   })
 
@@ -202,7 +222,8 @@ describe('every page', () => {
     for (const p of contentPages) {
       const slug = p.path.split('/').filter(Boolean).at(-1) ?? ''
       const hasPhoto = p.doc.querySelector('main > section:first-of-type[data-photo-header]') !== null
-      if (['how-it-works', 'buyers', 'farmers', 'partners', 'about', 'request-a-demo'].includes(slug)) expect(hasPhoto, p.path).toBe(true)
+      if (['how-it-works', 'buyers', 'farmers', 'partners', 'about', 'request-a-demo'].includes(slug))
+        expect(hasPhoto, p.path).toBe(true)
       if (['privacy', 'terms'].includes(slug)) expect(hasPhoto, p.path).toBe(false)
     }
   })
@@ -210,13 +231,17 @@ describe('every page', () => {
   it('has no duplicate ids (e.g. two decorative SVGs on one page)', () => {
     for (const p of pages) {
       const ids = [...p.doc.querySelectorAll('[id]')].map((el) => el.id)
-      expect(ids.filter((id, i) => ids.indexOf(id) !== i), p.path).toEqual([])
+      expect(
+        ids.filter((id, i) => ids.indexOf(id) !== i),
+        p.path,
+      ).toEqual([])
     }
   })
 
   it('makes the menu and language picker closable by clicking away', () => {
     for (const p of pages) {
-      for (const d of p.doc.querySelectorAll('header details')) expect(d.hasAttribute('data-dismissable'), p.path).toBe(true)
+      for (const d of p.doc.querySelectorAll('header details'))
+        expect(d.hasAttribute('data-dismissable'), p.path).toBe(true)
     }
   })
 
@@ -281,7 +306,10 @@ describe('site files', () => {
       // Walk the JPEG segments to the frame header (SOF0/SOF2), which holds the size.
       let i = 2
       while (i < jpg.length && ![0xc0, 0xc2].includes(jpg[i + 1])) i += 2 + jpg.readUInt16BE(i + 2)
-      expect({ width: jpg.readUInt16BE(i + 7), height: jpg.readUInt16BE(i + 5) }, name).toEqual({ width: 1200, height: 630 })
+      expect({ width: jpg.readUInt16BE(i + 7), height: jpg.readUInt16BE(i + 5) }, name).toEqual({
+        width: 1200,
+        height: 630,
+      })
     }
   })
 })

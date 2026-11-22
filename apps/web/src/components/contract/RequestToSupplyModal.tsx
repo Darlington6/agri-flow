@@ -28,7 +28,9 @@ export function RequestToSupplyModal({
     <Modal title="Request to Supply" onClose={onClose}>
       <div className="mb-4 rounded-xl bg-ink-50 px-3 py-2.5 text-sm text-ink-700">
         {contract.id} · {cropById(contract.cropId)?.name} for {buyerById(contract.buyerId)?.name}
-        <p className="mt-1 text-xs text-ink-500">{formatTonnes(remaining)} of {formatTonnes(contract.contractedQuantityTonnes)} still needed</p>
+        <p className="mt-1 text-xs text-ink-500">
+          {formatTonnes(remaining)} of {formatTonnes(contract.contractedQuantityTonnes)} still needed
+        </p>
       </div>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <Field label="Quantity you can supply (tonnes)">

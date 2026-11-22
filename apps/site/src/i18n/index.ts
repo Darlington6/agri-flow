@@ -18,7 +18,8 @@ const DICTIONARIES: Partial<Record<Locale, Dictionary>> = {
 
 export function dictionaryFor(locale: Locale): Dictionary {
   const dict = DICTIONARIES[locale]
-  if (!dict) throw new Error(`No translation for "${locale}". Add src/i18n/dictionaries/${locale}.ts before publishing it.`)
+  if (!dict)
+    throw new Error(`No translation for "${locale}". Add src/i18n/dictionaries/${locale}.ts before publishing it.`)
   return dict
 }
 

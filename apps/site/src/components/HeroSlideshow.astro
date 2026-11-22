@@ -16,19 +16,20 @@ const slides = HERO_SLIDES.filter((s) => photoImage(s) !== undefined)
 const cycle = slides.length * 7
 ---
 
-{
-  slides.length === 0 ? (
-    <HeroArt label={artLabel} />
-  ) : (
-    <div class="hero-slides absolute inset-0" style={`--cycle: ${cycle}s`} aria-hidden="true">
-      {slides.map((slot, i) => (
-        <div class="hero-slide absolute inset-0" style={`z-index: ${slides.length - i}; animation-delay: ${i === 0 ? 0 : -(cycle - i * 7)}s`}>
-          <Photo slot={slot} alt="" sizes="100vw" priority={i === 0} background />
-        </div>
-      ))}
-    </div>
-  )
-}
+{slides.length === 0 ? (
+  <HeroArt label={artLabel} />
+) : (
+  <div class="hero-slides absolute inset-0" style={`--cycle: ${cycle}s`} aria-hidden="true">
+    {slides.map((slot, i) => (
+      <div
+        class="hero-slide absolute inset-0"
+        style={`z-index: ${slides.length - i}; animation-delay: ${i === 0 ? 0 : -(cycle - i * 7)}s`}
+      >
+        <Photo slot={slot} alt="" sizes="100vw" priority={i === 0} background />
+      </div>
+    ))}
+  </div>
+)}
 
 <style>
   .hero-slide {

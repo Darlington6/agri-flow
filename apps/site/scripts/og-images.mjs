@@ -40,14 +40,22 @@ const rows = `<svg viewBox="0 0 1600 320" preserveAspectRatio="xMidYMin slice" s
 <path d="M0 90 C280 50 520 60 800 82 C1080 104 1320 60 1600 46 V320 H0 Z" fill="#38412c"/><path d="M0 90 C280 50 520 60 800 82 C1080 104 1320 60 1600 46 V320 H0 Z" fill="url(#r)"/>
 <path d="M0 152 C340 112 660 132 940 158 C1180 180 1400 152 1600 132 V320 H0 Z" fill="#4c573d"/><path d="M0 152 C340 112 660 132 940 158 C1180 180 1400 152 1600 132 V320 H0 Z" fill="url(#r)"/>
 <path d="M0 222 C300 190 600 200 900 230 C1180 258 1400 230 1600 212 V320 H0 Z" fill="#283f2f"/><path d="M0 222 C300 190 600 200 900 230 C1180 258 1400 230 1600 212 V320 H0 Z" fill="url(#n)"/></svg>`
-const glow = (cx, cy, size) => `<div style="position:absolute;left:${cx - size / 2}px;top:${cy - size / 2}px;width:${size}px;height:${size}px">
+const glow = (
+  cx,
+  cy,
+  size,
+) => `<div style="position:absolute;left:${cx - size / 2}px;top:${cy - size / 2}px;width:${size}px;height:${size}px">
 <div style="position:absolute;left:2.78%;top:1.11%;width:94.44%;height:94.44%;border-radius:50%;background:radial-gradient(circle closest-side,rgba(209,191,152,.55),rgba(209,191,152,0))"></div>
 <div style="position:absolute;left:26.11%;top:24.44%;width:47.78%;height:47.78%;border-radius:50%;background:rgba(245,241,230,.12)"></div>
 <div style="position:absolute;left:33.89%;top:33.89%;width:32.22%;height:32.22%;border-radius:50%;background:#b2934d"></div>
 <div style="position:absolute;left:32.22%;top:60%;width:16.67%;height:16.67%;border-radius:50%;background:#93a281"></div></div>`
 
 const escape = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;')
-const card = (lang, eyebrow, title) => `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><link rel="stylesheet" href="${css}"><style>
+const card = (
+  lang,
+  eyebrow,
+  title,
+) => `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><link rel="stylesheet" href="${css}"><style>
 html,body{margin:0}#card{position:relative;width:1200px;height:630px;overflow:hidden;background:#151d17;font-family:var(--font-sans)}
 </style></head><body><div id="card">
 <img src="${photo}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 60%">
@@ -87,12 +95,14 @@ try {
     // Longer headlines (French, Swahili) shrink until they fit in three lines.
     await page.evaluate(() => {
       const h = document.getElementById('title')
-      for (let size = 66; size > 40 && h.offsetHeight > 3 * size * 1.04 + 2; size -= 2) h.style.fontSize = `${size - 2}px`
+      for (let size = 66; size > 40 && h.offsetHeight > 3 * size * 1.04 + 2; size -= 2)
+        h.style.fontSize = `${size - 2}px`
     })
     const out = join(ROOT, 'public', `og-${code}.jpg`)
     await (await page.$('#card')).screenshot({ path: out, type: 'jpeg', quality: 84 })
     const bytes = statSync(out).size
-    if (bytes > MAX_BYTES) throw new Error(`${out} is ${Math.round(bytes / 1024)} KB, over the ${MAX_BYTES / 1024} KB limit`)
+    if (bytes > MAX_BYTES)
+      throw new Error(`${out} is ${Math.round(bytes / 1024)} KB, over the ${MAX_BYTES / 1024} KB limit`)
     console.log(`public/og-${code}.jpg  ${Math.round(bytes / 1024)} KB`)
   }
 } finally {

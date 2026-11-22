@@ -1,10 +1,10 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 /* Colours (primary, brand, gold, sage, ink, status) come from the shared palette. */
-@import "@agriflow/design-tokens/theme.css";
+@import '@agriflow/design-tokens/theme.css';
 
 @theme {
-  --font-display: "Manrope", "Segoe UI", system-ui, sans-serif;
-  --font-sans: "DM Sans", "Segoe UI", system-ui, sans-serif;
+  --font-display: 'Manrope', 'Segoe UI', system-ui, sans-serif;
+  --font-sans: 'DM Sans', 'Segoe UI', system-ui, sans-serif;
 
   --shadow-card: 0 1px 2px rgba(16, 21, 16, 0.04), 0 8px 24px -12px rgba(16, 21, 16, 0.12);
   --shadow-card-hover: 0 2px 4px rgba(16, 21, 16, 0.06), 0 16px 32px -12px rgba(16, 21, 16, 0.16);
@@ -33,7 +33,12 @@
     @apply bg-ink-50 text-ink-800 antialiased;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-display);
     @apply tracking-tight;
   }
@@ -53,7 +58,7 @@
     height: 6px;
   }
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    @apply bg-ink-200 rounded-full;
+    @apply rounded-full bg-ink-200;
   }
   .scrollbar-thin::-webkit-scrollbar-track {
     background: transparent;

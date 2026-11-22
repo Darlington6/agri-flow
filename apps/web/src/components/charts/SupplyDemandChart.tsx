@@ -1,15 +1,5 @@
 import { useMemo, useState } from 'react'
-import {
-  AreaChart,
-  Area,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-} from 'recharts'
+import { AreaChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import { crops, supplyDemandSeries } from '@/data'
 import type { CropId } from '@/types'
 import { chartColors, tooltipStyle } from './chartTheme'
@@ -58,24 +48,10 @@ export function SupplyDemandChart() {
             </linearGradient>
           </defs>
           <CartesianGrid vertical={false} stroke={chartColors.grid} />
-          <XAxis
-            dataKey="week"
-            tickLine={false}
-            axisLine={false}
-            tick={{ fill: chartColors.axis, fontSize: 11 }}
-          />
-          <YAxis
-            tickLine={false}
-            axisLine={false}
-            tick={{ fill: chartColors.axis, fontSize: 11 }}
-            width={36}
-          />
+          <XAxis dataKey="week" tickLine={false} axisLine={false} tick={{ fill: chartColors.axis, fontSize: 11 }} />
+          <YAxis tickLine={false} axisLine={false} tick={{ fill: chartColors.axis, fontSize: 11 }} width={36} />
           <Tooltip contentStyle={tooltipStyle} formatter={(v, name) => [`${v} t`, name]} />
-          <Legend
-            iconType="circle"
-            iconSize={8}
-            wrapperStyle={{ fontSize: 12, color: chartColors.textSecondary }}
-          />
+          <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 12, color: chartColors.textSecondary }} />
           <Area
             type="monotone"
             dataKey="Supply"

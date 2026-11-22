@@ -21,7 +21,7 @@ export function CardButton({
       className={clsx(
         'w-full rounded-2xl border border-ink-100 bg-white p-5 text-left shadow-[var(--shadow-card)] sm:p-6',
         'transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-card-hover)] motion-reduce:transition-none motion-reduce:hover:translate-y-0',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2',
+        'focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:outline-none',
         className,
       )}
       {...rest}
