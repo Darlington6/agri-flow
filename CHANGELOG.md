@@ -56,6 +56,11 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Added
 
+- Error reporting with Sentry (EU region) for the app and the API, switched on by `VITE_SENTRY_DSN` /
+  `SENTRY_DSN`. Reports carry the user's id (and roles) only: no names, emails, phone numbers, IP addresses,
+  cookies, request bodies or sign-in tokens, with tests that send a real error through the SDK and check what
+  would leave. The app's Content Security Policy allows Sentry's EU ingest.
+
 - Sign up with a phone number or an email. Signing in by email no longer needs an existing account: an
   unknown email gets a "finish creating your account" link, and the account is created when it's used (so
   a mistyped address never creates one). The answer is the same either way.
