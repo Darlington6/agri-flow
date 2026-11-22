@@ -84,5 +84,8 @@ SMS provider. The image collects
 the admin's static files at build time and serves them with WhiteNoise; `scripts/serve.sh` runs `migrate`
 and then gunicorn on `$PORT`.
 
+With `SENTRY_DSN` set, errors go to Sentry with the user's id and no personal data (see
+`config/observability.py`; signed-in requests are tagged by `apps/identity/authentication.py`).
+
 Hosting (Render, `render.yaml` in the repo root), the variables to set, and first-time setup are in the
 Deployments section of [CONTRIBUTING](../../.github/CONTRIBUTING.md#deployments).
