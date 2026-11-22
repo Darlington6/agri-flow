@@ -17,7 +17,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
         <LogoMark className="h-10" />
         <div>
           <p className="font-display text-lg leading-tight font-semibold text-ink-900">{brand.name}</p>
-          <p className="text-[11px] leading-tight text-ink-400">{brand.country} pilot</p>
+          <p className="text-[11px] leading-tight text-ink-500">{brand.country} pilot</p>
         </div>
       </div>
 
@@ -63,7 +63,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
             </li>
           ))}
           <li>
-            <div className="flex cursor-default items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-ink-400">
+            <div className="flex cursor-default items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-ink-500">
               <HelpCircle className="h-[18px] w-[18px]" />
               Help
               <ComingSoonBadge className="ml-auto" />
@@ -73,7 +73,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
       </nav>
 
       <div className="border-t border-ink-100 px-5 py-4">
-        <div className="flex items-center gap-2 text-xs font-medium text-ink-500">
+        <div className="flex items-center gap-2 text-xs font-medium text-ink-600">
           <span className="h-1.5 w-1.5 rounded-full bg-status-good" />
           Pilot Simulation
         </div>

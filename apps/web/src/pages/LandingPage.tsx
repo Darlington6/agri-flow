@@ -16,7 +16,7 @@ import {
 } from 'lucide-react'
 import { LogoMark } from '@/components/brand/LogoMark'
 import { brand } from '@/config/brand'
-import { DemoTag } from '@/components/ui'
+import { buttonClasses, DemoTag } from '@/components/ui'
 
 const FLOW_STEPS = [
   { label: 'Buyer Demand', icon: ClipboardList },
@@ -110,10 +110,7 @@ export function LandingPage() {
             <Link to="/login" className="text-sm font-medium text-ink-600 hover:text-ink-900">
               Log in
             </Link>
-            <Link
-              to="/login"
-              className="inline-flex h-10 items-center rounded-xl bg-primary-600 px-4 text-sm font-medium text-white hover:bg-primary-700"
-            >
+            <Link to="/login" className={buttonClasses('primary', 'md')}>
               Explore the Platform
             </Link>
           </div>
@@ -131,10 +128,7 @@ export function LandingPage() {
             intelligence, harvest forecasting and coordinated post-harvest delivery.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link
-              to="/login"
-              className="inline-flex h-11 items-center gap-2 rounded-xl bg-primary-600 px-5 text-sm font-medium text-white hover:bg-primary-700"
-            >
+            <Link to="/login" className={buttonClasses('primary', 'md')}>
               Explore the Platform
               <ArrowRight className="h-4 w-4" />
             </Link>
@@ -199,12 +193,12 @@ export function LandingPage() {
                       <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-50 text-brand-700">
                         <step.icon className="h-[18px] w-[18px]" />
                       </span>
-                      <span className="text-xs font-semibold tracking-wide text-ink-400 uppercase">
+                      <span className="text-xs font-semibold tracking-wide text-ink-500 uppercase">
                         {String(i + 1).padStart(2, '0')}
                       </span>
                     </div>
                     <p className="font-display text-sm font-semibold text-ink-900">{step.label}</p>
-                    <p className="text-xs leading-relaxed text-ink-500">{step.desc}</p>
+                    <p className="text-xs leading-relaxed text-ink-600">{step.desc}</p>
                   </div>
                 </div>
               ))}
@@ -231,7 +225,7 @@ export function LandingPage() {
                   <u.icon className="h-5 w-5" />
                 </span>
                 <p className="mt-4 font-display text-sm font-semibold text-ink-900">{u.label}</p>
-                <p className="mt-1.5 text-xs leading-relaxed text-ink-500">{u.desc}</p>
+                <p className="mt-1.5 text-xs leading-relaxed text-ink-600">{u.desc}</p>
               </div>
             ))}
           </div>
@@ -245,10 +239,7 @@ export function LandingPage() {
             Walk through a live demand-to-farm scenario: a buyer's tomato order, matched farmers, climate risk, harvest
             forecast, post-harvest coordination and payment — all connected.
           </p>
-          <Link
-            to="/login"
-            className="mt-7 inline-flex h-11 items-center gap-2 rounded-xl bg-primary-600 px-5 text-sm font-medium text-white hover:bg-primary-700"
-          >
+          <Link to="/login" className={buttonClasses('primary', 'md', 'mt-7')}>
             Explore the Platform
             <ArrowRight className="h-4 w-4" />
           </Link>
@@ -257,7 +248,7 @@ export function LandingPage() {
 
       <footer className="border-t border-ink-100 py-8">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-4 text-center sm:px-6">
-          <p className="text-xs text-ink-400">
+          <p className="text-xs text-ink-500">
             {brand.name} is an early-stage prototype. All metrics, farmers, buyers and contracts shown are simulated
             demonstration data.
           </p>

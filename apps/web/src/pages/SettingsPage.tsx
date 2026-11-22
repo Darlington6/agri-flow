@@ -43,7 +43,7 @@ export function SettingsPage() {
 
       <Card>
         <div className="flex items-center gap-2">
-          <Building2 className="h-4 w-4 text-ink-500" />
+          <Building2 className="h-4 w-4 text-ink-600" />
           <h2 className="font-display text-sm font-semibold text-ink-700">Organization</h2>
         </div>
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -65,13 +65,13 @@ export function SettingsPage() {
       {myEntity?.base && myKycStatus && (
         <Card>
           <div className="flex items-center gap-2">
-            <ShieldCheck className="h-4 w-4 text-ink-500" />
+            <ShieldCheck className="h-4 w-4 text-ink-600" />
             <h2 className="font-display text-sm font-semibold text-ink-700">Verification (KYC)</h2>
           </div>
           <div className="mt-4 flex items-center justify-between">
             <div>
               <p className="text-sm text-ink-700">Your account verification status</p>
-              <p className="text-xs text-ink-400">Verified accounts unlock contract matching and financing features.</p>
+              <p className="text-xs text-ink-500">Verified accounts unlock contract matching and financing features.</p>
             </div>
             <KycBadge status={myKycStatus} />
           </div>
@@ -91,7 +91,7 @@ export function SettingsPage() {
       {isAdminRole(session?.role) && (pendingFarmers.length > 0 || pendingBuyers.length > 0) && (
         <Card>
           <div className="flex items-center gap-2">
-            <ShieldCheck className="h-4 w-4 text-ink-500" />
+            <ShieldCheck className="h-4 w-4 text-ink-600" />
             <h2 className="font-display text-sm font-semibold text-ink-700">Verification Queue</h2>
           </div>
           <div className="mt-4 flex flex-col divide-y divide-ink-50">
@@ -121,10 +121,10 @@ export function SettingsPage() {
       {(session?.role === 'Buyer' || session?.role === 'Farmer') && (
         <Card>
           <div className="flex items-center gap-2">
-            <MessageCircle className="h-4 w-4 text-ink-500" />
+            <MessageCircle className="h-4 w-4 text-ink-600" />
             <h2 className="font-display text-sm font-semibold text-ink-700">Contact preference</h2>
           </div>
-          <p className="mt-1 text-xs text-ink-500">How contracted counterparties should reach you.</p>
+          <p className="mt-1 text-xs text-ink-600">How contracted counterparties should reach you.</p>
           <div className="mt-3 flex gap-2">
             {CONTACT_PREFS.map((pref) => (
               <button
@@ -145,7 +145,7 @@ export function SettingsPage() {
 
       <Card>
         <div className="flex items-center gap-2">
-          <Bell className="h-4 w-4 text-ink-500" />
+          <Bell className="h-4 w-4 text-ink-600" />
           <h2 className="font-display text-sm font-semibold text-ink-700">Notification preferences</h2>
         </div>
         <div className="mt-4 flex flex-col divide-y divide-ink-50">
@@ -153,11 +153,11 @@ export function SettingsPage() {
             <div key={t.key} className="flex items-center justify-between py-3 first:pt-0 last:pb-0">
               <div>
                 <p className="text-sm font-medium text-ink-800">{t.label}</p>
-                <p className="text-xs text-ink-500">{t.desc}</p>
+                <p className="text-xs text-ink-600">{t.desc}</p>
               </div>
               <button
                 onClick={() => setToggles((prev) => ({ ...prev, [t.key]: !prev[t.key] }))}
-                className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${toggles[t.key] ? 'bg-primary-600' : 'bg-ink-200'}`}
+                className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${toggles[t.key] ? 'bg-brand-800' : 'bg-ink-200'}`}
                 aria-pressed={toggles[t.key]}
                 aria-label={t.label}
               >
@@ -174,10 +174,10 @@ export function SettingsPage() {
 
       <Card>
         <div className="flex items-center gap-2">
-          <Info className="h-4 w-4 text-ink-500" />
+          <Info className="h-4 w-4 text-ink-600" />
           <h2 className="font-display text-sm font-semibold text-ink-700">About this environment</h2>
         </div>
-        <p className="mt-2 text-xs leading-relaxed text-ink-500">
+        <p className="mt-2 text-xs leading-relaxed text-ink-600">
           {brand.name} is running in {brand.environmentLabel} mode. All farmers, buyers, contracts and financial figures
           shown are simulated demonstration data for prototype review — no production data or live integrations are
           connected.

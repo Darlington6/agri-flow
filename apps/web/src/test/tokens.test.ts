@@ -75,7 +75,12 @@ const WHITE = '#ffffff'
 describe('contrast (WCAG AA)', () => {
   // Text needs 4.5:1. These are the pairings the app actually renders.
   it.each([
-    ['button text: white on primary-600', WHITE, 'primary-600'],
+    ['buttons: cream on brand-800', 'cream', 'brand-800'],
+    ['buttons on hover: cream on brand-700', 'cream', 'brand-700'],
+    ['secondary buttons: brand-800 on brand-100', 'brand-800', 'brand-100'],
+    ['buttons on dark surfaces: brand-950 on gold-400', 'brand-950', 'gold-400'],
+    ['links: primary-700 on the cream entry pages', 'primary-700', 'cream'],
+    ['grey text on the cream entry pages: ink-600 on cream', 'ink-600', 'cream'],
     ['links: primary-700 on white', 'primary-700', WHITE],
     ['links: primary-700 on the ink-50 page', 'primary-700', 'ink-50'],
     ['selected nav: primary-800 on primary-50', 'primary-800', 'primary-50'],

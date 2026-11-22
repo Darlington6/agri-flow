@@ -1,10 +1,11 @@
 import { useState } from 'react'
+import { ArrowLeft, Mail, Smartphone } from 'lucide-react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { LogoMark } from '@/components/brand/LogoMark'
 import { useAuth } from '@/context/AuthContext'
 import { ApiError } from '@/lib/apiClient'
 import { brand } from '@/config/brand'
-import { Button, Card, DemoTag, Field, inputClass } from '@/components/ui'
+import { Button, Card, DemoTag, Field, inputClass, OrDivider } from '@/components/ui'
 
 type Step = 'phone' | 'code' | 'email' | 'email-sent'
 
@@ -12,7 +13,9 @@ export function SignInPage() {
   const { user, requestOtp, verifyOtp, requestMagicLink } = useAuth()
   const navigate = useNavigate()
 
-  const [step, setStep] = useState<Step>('phone')
+  // Email first: phone codes need an SMS provider, which staging and
+  // production don't have yet. Phone stays one tap away.
+  const [step, setStep] = useState<Step>('email')
   const [phoneNumber, setPhoneNumber] = useState('')
   const [code, setCode] = useState('')
   const [email, setEmail] = useState('')
@@ -68,7 +71,7 @@ export function SignInPage() {
   }
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center bg-ink-50 px-4 py-12">
+    <div className="flex min-h-svh flex-col items-center justify-center bg-cream px-4 py-12">
       <div className="mb-8 flex flex-col items-center gap-3 text-center">
         <LogoMark className="h-14" />
         <h1 className="font-display text-2xl font-semibold text-ink-900">{brand.name}</h1>
@@ -80,7 +83,7 @@ export function SignInPage() {
           <form className="flex flex-col gap-4" onSubmit={handleRequestCode}>
             <div>
               <h2 className="font-display text-base font-semibold text-ink-900">Sign in with your phone</h2>
-              <p className="mt-1 text-sm text-ink-500">
+              <p className="mt-1 text-sm text-ink-600">
                 We'll text you a 6-digit code. New here? The code creates your account.
               </p>
             </div>
@@ -98,9 +101,11 @@ export function SignInPage() {
             <Button type="submit" disabled={busy}>
               {busy ? 'Sending…' : 'Send code'}
             </Button>
-            <button type="button" className="text-xs text-ink-500 hover:text-ink-700" onClick={() => setStep('email')}>
-              Sign in with email instead
-            </button>
+            <OrDivider />
+            <Button type="button" variant="outline" className="w-full" onClick={() => setStep('email')}>
+              <Mail className="h-4 w-4" aria-hidden />
+              Use email instead
+            </Button>
           </form>
         )}
 
@@ -108,7 +113,7 @@ export function SignInPage() {
           <form className="flex flex-col gap-4" onSubmit={handleRequestMagicLink}>
             <div>
               <h2 className="font-display text-base font-semibold text-ink-900">Sign in with email</h2>
-              <p className="mt-1 text-sm text-ink-500">
+              <p className="mt-1 text-sm text-ink-600">
                 We'll email you a link. New here? The link creates your account.
               </p>
             </div>
@@ -126,16 +131,18 @@ export function SignInPage() {
             <Button type="submit" disabled={busy}>
               {busy ? 'Sending…' : 'Send link'}
             </Button>
-            <button type="button" className="text-xs text-ink-500 hover:text-ink-700" onClick={() => setStep('phone')}>
+            <OrDivider />
+            <Button type="button" variant="outline" className="w-full" onClick={() => setStep('phone')}>
+              <Smartphone className="h-4 w-4" aria-hidden />
               Use my phone instead
-            </button>
+            </Button>
           </form>
         )}
 
         {step === 'email-sent' && (
           <div className="flex flex-col gap-3 text-center">
             <h2 className="font-display text-base font-semibold text-ink-900">Check your email</h2>
-            <p className="text-sm text-ink-500">
+            <p className="text-sm text-ink-600">
               We've sent a link to {email}. It works once, for 15 minutes. Can't find it? Check your spam folder.
             </p>
             {debugLink && (
@@ -153,7 +160,7 @@ export function SignInPage() {
           <form className="flex flex-col gap-4" onSubmit={handleVerifyCode}>
             <div>
               <h2 className="font-display text-base font-semibold text-ink-900">Enter the code</h2>
-              <p className="mt-1 text-sm text-ink-500">Sent to {phoneNumber}.</p>
+              <p className="mt-1 text-sm text-ink-600">Sent to {phoneNumber}.</p>
               {debugCode && (
                 <p className="mt-2 rounded-lg bg-status-info-bg px-3 py-2 text-xs text-status-info">
                   Dev mode — code is {debugCode} (never shown outside DEBUG).
@@ -174,14 +181,19 @@ export function SignInPage() {
             <Button type="submit" disabled={busy}>
               {busy ? 'Verifying…' : 'Verify'}
             </Button>
-            <button type="button" className="text-xs text-ink-500 hover:text-ink-700" onClick={() => setStep('phone')}>
+            <button
+              type="button"
+              className="inline-flex items-center justify-center gap-1 text-sm font-medium text-primary-700 underline-offset-4 hover:underline"
+              onClick={() => setStep('phone')}
+            >
+              <ArrowLeft className="h-4 w-4" aria-hidden />
               Use a different number
             </button>
           </form>
         )}
       </Card>
 
-      <p className="mt-8 text-xs text-ink-400">
+      <p className="mt-8 text-xs text-ink-600">
         Exploring the platform instead?{' '}
         <a href="/login" className="text-primary-700 hover:underline">
           Use a demo role

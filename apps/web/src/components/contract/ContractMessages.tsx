@@ -35,13 +35,13 @@ export function ContractMessages({
       <div className="flex items-center justify-between px-5 pt-5">
         <div>
           <h2 className="font-display text-sm font-semibold text-ink-900">Messages</h2>
-          <p className="text-xs text-ink-500">With {counterpartyName}</p>
+          <p className="text-xs text-ink-600">With {counterpartyName}</p>
         </div>
         <CallButton counterpartyName={counterpartyName} counterpartyPhone={counterpartyPhone} />
       </div>
 
       <div className="mt-4 flex max-h-80 scrollbar-thin flex-col gap-3 overflow-y-auto px-5">
-        {thread.length === 0 && <p className="pb-2 text-sm text-ink-400">No messages yet — say hello.</p>}
+        {thread.length === 0 && <p className="pb-2 text-sm text-ink-500">No messages yet — say hello.</p>}
         {thread.map((m) => {
           const mine = m.senderRole === myRole
           return (
@@ -50,7 +50,7 @@ export function ContractMessages({
                 className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm ${mine ? 'rounded-tr-sm bg-chat-own text-white' : 'rounded-tl-sm bg-ink-50 text-ink-800'}`}
               >
                 {!mine && (
-                  <p className="mb-0.5 text-[11px] font-semibold tracking-wide text-ink-400 uppercase">
+                  <p className="mb-0.5 text-[11px] font-semibold tracking-wide text-ink-500 uppercase">
                     {m.senderName}
                   </p>
                 )}
