@@ -104,7 +104,7 @@ works). Previews are behind Vercel Authentication.
 
 The app finds the API through `VITE_API_URL`, set in the project's Environment Variables:
 
-- **Production:** `https://agriflow-api.onrender.com` (the production service's address on Render).
+- **Production:** `https://agriflow-api-rp79.onrender.com` (Render added the `-rp79` suffix because the name was taken).
 - **Preview:** `https://agriflow-api-staging.onrender.com`.
 
 Use the addresses Render shows, without a trailing slash. Render adds a suffix if a name is taken. Vite

@@ -97,6 +97,9 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Fixed
 
+- API: no more "Control server error: Permission denied" on every start on Render (gunicorn's optional
+  control socket is turned off; nothing used it).
+
 - App: people were signed out about an hour after signing in. Each refresh hands out a new refresh token and
   retires the old one, but the app kept the old one, so the second refresh failed. It now keeps the new one,
   and requests that expire together share one refresh instead of spending the same token twice.
