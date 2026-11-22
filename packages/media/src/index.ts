@@ -41,6 +41,32 @@ export const PHOTOS = {
   'farmer-potato-rows.jpg': { source: 'https://www.pexels.com/photo/11588032/', licence: PEXELS },
   'field-lone-tree.jpg': { source: 'https://unsplash.com/photos/5gzZo_nQBIM', licence: UNSPLASH },
   'sunflower-field.jpg': { source: 'https://unsplash.com/photos/DljZW8nrgv8', licence: UNSPLASH },
+  // Landscapes for the app's entry pages, until we have our own from the pilot.
+  'hill-lake-kivu-gisenyi.jpg': {
+    source: 'https://unsplash.com/photos/OQrOSZovusw',
+    credit: 'Ifeoluwa B. (Gisenyi, Rwanda)',
+    licence: UNSPLASH,
+  },
+  'kigali-wetland.jpg': {
+    source: 'https://unsplash.com/photos/TbLHLm-NHKc',
+    credit: 'Protais Benjamin Mugenzi (Kigali, Rwanda)',
+    licence: UNSPLASH,
+  },
+  'makete-hills-town.jpg': {
+    source: 'https://www.pexels.com/photo/15883613/',
+    credit: 'Alex Levis (Makete, Tanzania)',
+    licence: PEXELS,
+  },
+  'vineyard-rows-low-sun.jpg': {
+    source: 'https://unsplash.com/photos/0AgtPoAARtE',
+    credit: 'Dan Meyers (Oregon, USA)',
+    licence: UNSPLASH,
+  },
+  'vineyard-rows-blue-sky.jpg': {
+    source: 'https://unsplash.com/photos/R4ns94kbpAg',
+    credit: 'Dan Meyers (Oregon, USA)',
+    licence: UNSPLASH,
+  },
 } satisfies Record<string, PhotoRecord>
 
 export type PhotoFile = keyof typeof PHOTOS
@@ -52,13 +78,30 @@ export interface PhotoPlacement {
   focus?: string
 }
 
-/** Photos the app uses. app-images sizes exactly these, at APP_WIDTHS. */
+/**
+ * Photos the app uses: each entry page crossfades through its slides, first
+ * one first (it's the one that loads straight away). app-images sizes exactly
+ * these files, at APP_WIDTHS.
+ */
 export const APP_PHOTOS = {
-  // Sign-in: field agents on the terraces, the people the platform serves.
-  signIn: { file: 'field-agents-terraces.jpg', focus: '82% 45%' },
-  // Demo roles: rows over the hills, a calm look at the whole operation.
-  demo: { file: 'hero-rows-hills-sunset.jpg', focus: '50% 40%' },
-} satisfies Record<string, PhotoPlacement>
+  // Sign-in: the people the platform serves, then Rwanda's hills and water.
+  signIn: [
+    { file: 'field-agents-terraces.jpg', focus: '82% 45%' },
+    { file: 'hill-lake-kivu-gisenyi.jpg', focus: '55% 70%' },
+    { file: 'kigali-wetland.jpg', focus: '45% 75%' },
+  ],
+  // Demo roles: rows and hillsides, a calm look at the whole operation.
+  demo: [
+    { file: 'vineyard-rows-low-sun.jpg', focus: '50% 55%' },
+    { file: 'makete-hills-town.jpg', focus: '60% 50%' },
+    { file: 'vineyard-rows-blue-sky.jpg', focus: '50% 60%' },
+  ],
+} satisfies Record<string, PhotoPlacement[]>
+
+/** Every file the app uses, once each. */
+export const APP_FILES: PhotoFile[] = [
+  ...new Set(Object.values(APP_PHOTOS).flatMap((slides) => slides.map((s) => s.file))),
+]
 
 export type AppPhoto = keyof typeof APP_PHOTOS
 
