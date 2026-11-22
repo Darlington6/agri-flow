@@ -7,7 +7,10 @@
  * Signing in with a new phone number or email creates the account, so both
  * links go to the sign-in page for now.
  */
-export function appUrl(path: string, env: { PUBLIC_APP_URL?: string; DEV?: boolean } = import.meta.env): string | undefined {
+export function appUrl(
+  path: string,
+  env: { PUBLIC_APP_URL?: string; DEV?: boolean } = import.meta.env,
+): string | undefined {
   const base = env.PUBLIC_APP_URL || (env.DEV ? 'http://localhost:5173' : undefined)
   return base ? new URL(path, base).href : undefined
 }

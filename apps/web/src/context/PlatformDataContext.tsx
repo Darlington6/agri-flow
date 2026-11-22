@@ -303,6 +303,10 @@ export function usePlatformData() {
   return ctx
 }
 
-export function resolveKycStatus(baseStatus: KycStatus, entityId: string, overrides: Record<string, KycStatus>): KycStatus {
+export function resolveKycStatus(
+  baseStatus: KycStatus,
+  entityId: string,
+  overrides: Record<string, KycStatus>,
+): KycStatus {
   return overrides[entityId] ?? baseStatus
 }

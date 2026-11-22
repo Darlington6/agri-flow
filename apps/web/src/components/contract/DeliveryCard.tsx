@@ -45,7 +45,9 @@ export function DeliveryCard({ contractId }: { contractId: string }) {
         </p>
         <Badge tone={STATUS_TONE[job.status]}>{job.status}</Badge>
       </div>
-      <p className="mt-1 text-xs text-ink-400">Scheduled {formatDate(job.scheduledDate)} · Fee {formatGHSFull(job.feeGHS)}</p>
+      <p className="mt-1 text-xs text-ink-400">
+        Scheduled {formatDate(job.scheduledDate)} · Fee {formatGHSFull(job.feeGHS)}
+      </p>
 
       {partner ? (
         <p className="mt-3 text-sm text-ink-700">
@@ -59,7 +61,10 @@ export function DeliveryCard({ contractId }: { contractId: string }) {
           {recommended.length > 0 && (
             <div className="mt-2 flex flex-col gap-1.5">
               {recommended.map(({ partner: p, score }) => (
-                <div key={p.id} className="flex items-center justify-between rounded-lg bg-ink-50 px-2.5 py-1.5 text-xs">
+                <div
+                  key={p.id}
+                  className="flex items-center justify-between rounded-lg bg-ink-50 px-2.5 py-1.5 text-xs"
+                >
                   <span className="text-ink-700">{p.name}</span>
                   <span className="flex items-center gap-2 text-ink-400">
                     <span className="flex items-center gap-0.5">

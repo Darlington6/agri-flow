@@ -9,7 +9,9 @@ const MEDIA = resolve(dirname(fileURLToPath(import.meta.url)), '../src/assets/me
 
 describe('appUrl', () => {
   it('builds links on the configured app address', () => {
-    expect(appUrl('/signin', { PUBLIC_APP_URL: 'https://app.agriflow.example' })).toBe('https://app.agriflow.example/signin')
+    expect(appUrl('/signin', { PUBLIC_APP_URL: 'https://app.agriflow.example' })).toBe(
+      'https://app.agriflow.example/signin',
+    )
   })
 
   it('falls back to the local web app in development', () => {

@@ -41,14 +41,16 @@ export const fr: Dictionary = {
     googlePlay: 'Google Play',
     notYetAvailable: 'Pas encore disponible',
     webTitle: 'Ou commencez dès aujourd’hui sur le web',
-    webBody: 'Connectez-vous avec votre numéro de téléphone ou votre e-mail. Nouveau sur AgriFlow ? La connexion crée votre compte.',
+    webBody:
+      'Connectez-vous avec votre numéro de téléphone ou votre e-mail. Nouveau sur AgriFlow ? La connexion crée votre compte.',
   },
   media: {
     buyers: 'Des fruits et légumes frais empilés sur un marché animé',
     buyersDetail: 'Poivrons, tomates, concombres et légumes verts empilés sur un étal de marché',
     farmers: 'Une productrice souriante, panier au bras, récolte des feuilles dans son champ',
     farmersDetail: 'Un producteur souriant tient des tomates fraîchement cueillies',
-    partners: 'Un agent de terrain montre des informations sur son téléphone à une productrice souriante, dans un champ de maïs',
+    partners:
+      'Un agent de terrain montre des informations sur son téléphone à une productrice souriante, dans un champ de maïs',
     partnersDetail: 'Des ouvriers chargent des caisses de tomates et de choux dans une camionnette',
   },
   home: {
@@ -70,9 +72,18 @@ export const fr: Dictionary = {
       lede: 'Chaque étape s’appuie sur la précédente, pour que tous voient la même chose.',
       steps: [
         { title: 'Demande', body: 'Un acheteur indique ce qu’il lui faut, en quelle quantité et pour quand.' },
-        { title: 'Contrats', body: 'Les producteurs s’engagent à le cultiver, avec des conditions convenues d’avance.' },
-        { title: 'Production', body: 'Les agents de terrain suivent l’avancement et les pratiques climato-intelligentes.' },
-        { title: 'Prévision', body: 'Les signaux climatiques et les relevés de terrain affinent la prévision de récolte.' },
+        {
+          title: 'Contrats',
+          body: 'Les producteurs s’engagent à le cultiver, avec des conditions convenues d’avance.',
+        },
+        {
+          title: 'Production',
+          body: 'Les agents de terrain suivent l’avancement et les pratiques climato-intelligentes.',
+        },
+        {
+          title: 'Prévision',
+          body: 'Les signaux climatiques et les relevés de terrain affinent la prévision de récolte.',
+        },
         { title: 'Livraison', body: 'Chaque chargement reçoit un transport adapté, chaîne du froid comprise.' },
         { title: 'Paiement', body: 'Livraison confirmée, paiement versé, historique enregistré.' },
       ],
@@ -91,42 +102,85 @@ export const fr: Dictionary = {
   },
   howItWorks: {
     title: 'Le fonctionnement d’AgriFlow',
-    description: 'De la demande confirmée d’un acheteur au paiement d’un producteur : les six étapes d’une saison AgriFlow.',
+    description:
+      'De la demande confirmée d’un acheteur au paiement d’un producteur : les six étapes d’une saison AgriFlow.',
     lede: 'Sur AgriFlow, une saison commence par la demande, pas par les semis. Voici ce qui se passe à chaque étape, et qui fait quoi.',
     steps: [
-      { title: 'Un acheteur confirme sa demande', body: 'L’acheteur fixe la culture, la quantité, la qualité et la période de livraison. Rien n’est cultivé au hasard.' },
-      { title: 'Des producteurs s’engagent à la fournir', body: 'Les producteurs demandent une part de la commande. Une fois les deux parties d’accord, le contrat est établi, ainsi que le plan de production de chacun.' },
-      { title: 'La production est suivie sur le terrain', body: 'Les agents de terrain visitent les exploitations, vérifient les pratiques climato-intelligentes et notent l’avancement, pour repérer les problèmes tôt.' },
-      { title: 'Le climat affine la prévision', body: 'Les signaux météo et climatiques, avec les relevés de terrain, gardent la prévision de récolte fiable pour tous.' },
-      { title: 'La livraison est coordonnée', body: 'Chaque chargement est attribué à un transporteur selon la zone, la capacité et, pour les produits périssables, la chaîne du froid.' },
-      { title: 'Le paiement, puis la réputation', body: 'La livraison confirmée déclenche le paiement. Chaque contrat honoré constitue un historique qui inspire confiance pour le suivant.' },
+      {
+        title: 'Un acheteur confirme sa demande',
+        body: 'L’acheteur fixe la culture, la quantité, la qualité et la période de livraison. Rien n’est cultivé au hasard.',
+      },
+      {
+        title: 'Des producteurs s’engagent à la fournir',
+        body: 'Les producteurs demandent une part de la commande. Une fois les deux parties d’accord, le contrat est établi, ainsi que le plan de production de chacun.',
+      },
+      {
+        title: 'La production est suivie sur le terrain',
+        body: 'Les agents de terrain visitent les exploitations, vérifient les pratiques climato-intelligentes et notent l’avancement, pour repérer les problèmes tôt.',
+      },
+      {
+        title: 'Le climat affine la prévision',
+        body: 'Les signaux météo et climatiques, avec les relevés de terrain, gardent la prévision de récolte fiable pour tous.',
+      },
+      {
+        title: 'La livraison est coordonnée',
+        body: 'Chaque chargement est attribué à un transporteur selon la zone, la capacité et, pour les produits périssables, la chaîne du froid.',
+      },
+      {
+        title: 'Le paiement, puis la réputation',
+        body: 'La livraison confirmée déclenche le paiement. Chaque contrat honoré constitue un historique qui inspire confiance pour le suivant.',
+      },
     ],
   },
   buyers: {
     title: 'AgriFlow pour les acheteurs',
-    description: 'Sécurisez un approvisionnement prévisible et traçable auprès de petits producteurs, avec une visibilité du contrat à la livraison.',
+    description:
+      'Sécurisez un approvisionnement prévisible et traçable auprès de petits producteurs, avec une visibilité du contrat à la livraison.',
     lede: 'Transformateurs, hôtels, restaurants, supermarchés, agrégateurs et exportateurs : obtenez les volumes nécessaires, au bon moment, d’exploitations que vous voyez.',
     points: [
-      { title: 'Un approvisionnement planifiable', body: 'Contractualisez les volumes avant les semis et suivez l’exécution semaine après semaine.' },
-      { title: 'Alerte précoce sur les risques', body: 'Les signaux climatiques et de terrain signalent les déficits tant qu’il est encore temps d’agir.' },
-      { title: 'Traçable depuis l’exploitation', body: 'Sachez quelles exploitations ont produit votre commande, et comment.' },
+      {
+        title: 'Un approvisionnement planifiable',
+        body: 'Contractualisez les volumes avant les semis et suivez l’exécution semaine après semaine.',
+      },
+      {
+        title: 'Alerte précoce sur les risques',
+        body: 'Les signaux climatiques et de terrain signalent les déficits tant qu’il est encore temps d’agir.',
+      },
+      {
+        title: 'Traçable depuis l’exploitation',
+        body: 'Sachez quelles exploitations ont produit votre commande, et comment.',
+      },
       { title: 'Une livraison fiable', body: 'Un transport adapté à chaque chargement, chaîne du froid comprise.' },
     ],
   },
   farmers: {
     title: 'AgriFlow pour les producteurs',
-    description: 'Cultivez pour un acheteur confirmé, avec des conseils climato-intelligents toute la saison et un paiement fiable à la fin.',
+    description:
+      'Cultivez pour un acheteur confirmé, avec des conseils climato-intelligents toute la saison et un paiement fiable à la fin.',
     lede: 'Sachez qui achètera votre récolte avant de semer, et soyez accompagné du champ jusqu’au paiement.',
     points: [
-      { title: 'Un acheteur avant de semer', body: 'Choisissez parmi les commandes ouvertes et convenez des conditions d’avance.' },
-      { title: 'Un accompagnement toute la saison', body: 'Agents de terrain et alertes climatiques vous aident à protéger votre culture.' },
-      { title: 'De l’aide à la récolte', body: 'Un transport organisé pour vos produits, avec chaîne du froid quand c’est nécessaire.' },
-      { title: 'Un paiement fiable', body: 'Payé à la livraison confirmée, avec un historique qui construit votre réputation.' },
+      {
+        title: 'Un acheteur avant de semer',
+        body: 'Choisissez parmi les commandes ouvertes et convenez des conditions d’avance.',
+      },
+      {
+        title: 'Un accompagnement toute la saison',
+        body: 'Agents de terrain et alertes climatiques vous aident à protéger votre culture.',
+      },
+      {
+        title: 'De l’aide à la récolte',
+        body: 'Un transport organisé pour vos produits, avec chaîne du froid quand c’est nécessaire.',
+      },
+      {
+        title: 'Un paiement fiable',
+        body: 'Payé à la livraison confirmée, avec un historique qui construit votre réputation.',
+      },
     ],
   },
   partners: {
     title: 'AgriFlow pour les agents de terrain et transporteurs',
-    description: 'Les agents de terrain suivent la production de leur zone ; les transporteurs réservent des livraisons adaptées à leurs trajets et véhicules.',
+    description:
+      'Les agents de terrain suivent la production de leur zone ; les transporteurs réservent des livraisons adaptées à leurs trajets et véhicules.',
     lede: 'Ceux qui font avancer la saison : un travail clair, adapté à votre zone et à votre véhicule.',
     agents: {
       title: 'Agents de terrain',
@@ -139,7 +193,8 @@ export const fr: Dictionary = {
   },
   about: {
     title: 'À propos d’AgriFlow',
-    description: 'AgriFlow construit la couche de coordination entre les acheteurs alimentaires et les petits producteurs africains, à partir d’une demande vérifiée.',
+    description:
+      'AgriFlow construit la couche de coordination entre les acheteurs alimentaires et les petits producteurs africains, à partir d’une demande vérifiée.',
     lede: 'Nous construisons la couche de coordination entre les acheteurs alimentaires et les petits producteurs, partout en Afrique.',
     sections: [
       {
@@ -187,20 +242,36 @@ export const fr: Dictionary = {
   },
   privacy: {
     title: 'Avis de confidentialité',
-    description: 'Comment AgriFlow collecte, utilise et protège les informations personnelles que vous nous confiez, y compris les demandes de démo.',
-    draftNotice: 'Brouillon : cet avis est en cours de préparation avec un conseil juridique et sera finalisé avant le lancement.',
+    description:
+      'Comment AgriFlow collecte, utilise et protège les informations personnelles que vous nous confiez, y compris les demandes de démo.',
+    draftNotice:
+      'Brouillon : cet avis est en cours de préparation avec un conseil juridique et sera finalisé avant le lancement.',
     sections: [
-      { title: 'Ce que nous collectons', body: 'Lorsque vous demandez une démo, nous collectons les informations saisies : nom, organisation, rôle, pays, e-mail et, si vous le souhaitez, numéro de téléphone et message.' },
-      { title: 'Pourquoi', body: 'Uniquement pour répondre à votre demande et organiser une démo. Nous ne vendons pas vos informations et ne les utilisons pas pour d’autres actions marketing.' },
-      { title: 'Contact', body: 'Pour toute question sur vos informations, utilisez le formulaire de demande et nous vous répondrons.' },
+      {
+        title: 'Ce que nous collectons',
+        body: 'Lorsque vous demandez une démo, nous collectons les informations saisies : nom, organisation, rôle, pays, e-mail et, si vous le souhaitez, numéro de téléphone et message.',
+      },
+      {
+        title: 'Pourquoi',
+        body: 'Uniquement pour répondre à votre demande et organiser une démo. Nous ne vendons pas vos informations et ne les utilisons pas pour d’autres actions marketing.',
+      },
+      {
+        title: 'Contact',
+        body: 'Pour toute question sur vos informations, utilisez le formulaire de demande et nous vous répondrons.',
+      },
     ],
   },
   terms: {
     title: 'Conditions d’utilisation',
-    description: 'Les conditions qui s’appliquent lorsque vous utilisez le site d’AgriFlow, notamment pour les fonctionnalités en cours de développement.',
-    draftNotice: 'Brouillon : ces conditions sont en cours de préparation avec un conseil juridique et seront finalisées avant le lancement.',
+    description:
+      'Les conditions qui s’appliquent lorsque vous utilisez le site d’AgriFlow, notamment pour les fonctionnalités en cours de développement.',
+    draftNotice:
+      'Brouillon : ces conditions sont en cours de préparation avec un conseil juridique et seront finalisées avant le lancement.',
     sections: [
-      { title: 'Ce site', body: 'Ce site présente AgriFlow, en cours de développement. Les fonctionnalités décrites peuvent évoluer avant le lancement.' },
+      {
+        title: 'Ce site',
+        body: 'Ce site présente AgriFlow, en cours de développement. Les fonctionnalités décrites peuvent évoluer avant le lancement.',
+      },
     ],
   },
   notFound: {

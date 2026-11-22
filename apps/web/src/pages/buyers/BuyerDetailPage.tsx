@@ -22,7 +22,10 @@ export function BuyerDetailPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <Link to="/buyers" className="mb-3 inline-flex items-center gap-1 text-xs font-medium text-ink-500 hover:text-ink-800">
+        <Link
+          to="/buyers"
+          className="mb-3 inline-flex items-center gap-1 text-xs font-medium text-ink-500 hover:text-ink-800"
+        >
           <ArrowLeft className="h-3.5 w-3.5" />
           Buyer Demand
         </Link>
@@ -63,11 +66,14 @@ export function BuyerDetailPage() {
                             {d.qualityGrade} · Delivery {formatDate(d.requiredDeliveryDate)} · {d.deliveryLocation}
                           </p>
                         </div>
-                        <Badge tone={d.status === 'Fully Contracted' || d.status === 'Closed' ? 'good' : 'warn'}>{d.status}</Badge>
+                        <Badge tone={d.status === 'Fully Contracted' || d.status === 'Closed' ? 'good' : 'warn'}>
+                          {d.status}
+                        </Badge>
                       </div>
                       <div className="mt-3 flex items-baseline justify-between text-xs text-ink-500">
                         <span>
-                          <span className="font-semibold text-ink-800">{formatTonnes(d.contractedTonnes)}</span> contracted
+                          <span className="font-semibold text-ink-800">{formatTonnes(d.contractedTonnes)}</span>{' '}
+                          contracted
                         </span>
                         <span>{formatTonnes(Math.max(0, d.quantityTonnes - d.contractedTonnes))} remaining</span>
                       </div>
@@ -85,7 +91,7 @@ export function BuyerDetailPage() {
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[560px] text-left text-sm">
                   <thead>
-                    <tr className="border-b border-ink-100 text-xs font-medium uppercase tracking-wide text-ink-400">
+                    <tr className="border-b border-ink-100 text-xs font-medium tracking-wide text-ink-400 uppercase">
                       <th className="px-5 py-3 font-medium">Contract</th>
                       <th className="px-3 py-3 font-medium">Crop</th>
                       <th className="px-3 py-3 font-medium">Value</th>
@@ -97,7 +103,10 @@ export function BuyerDetailPage() {
                     {contracts.map((c) => (
                       <tr key={c.id} className="border-b border-ink-50 last:border-0 hover:bg-ink-50/60">
                         <td className="px-5 py-3">
-                          <Link to={`/contracts/${c.id}`} className="font-medium text-primary-700 hover:text-primary-800">
+                          <Link
+                            to={`/contracts/${c.id}`}
+                            className="font-medium text-primary-700 hover:text-primary-800"
+                          >
                             {c.id}
                           </Link>
                         </td>

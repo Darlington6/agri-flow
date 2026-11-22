@@ -54,7 +54,10 @@ export function ContractDetailPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <Link to="/contracts" className="mb-3 inline-flex items-center gap-1 text-xs font-medium text-ink-500 hover:text-ink-800">
+        <Link
+          to="/contracts"
+          className="mb-3 inline-flex items-center gap-1 text-xs font-medium text-ink-500 hover:text-ink-800"
+        >
           <ArrowLeft className="h-3.5 w-3.5" />
           Contracts
         </Link>
@@ -73,10 +76,26 @@ export function ContractDetailPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
-        <Card><p className="text-xs text-ink-500">Contracted</p><p className="mt-1 font-display text-xl font-semibold text-ink-900">{formatTonnes(contract.contractedQuantityTonnes)}</p></Card>
-        <Card><p className="text-xs text-ink-500">Expected delivery</p><p className="mt-1 font-display text-xl font-semibold text-ink-900">{formatDate(contract.expectedDeliveryDate)}</p></Card>
-        <Card><p className="text-xs text-ink-500">Contract value</p><p className="mt-1 font-display text-xl font-semibold text-ink-900">{formatGHSFull(contract.valueGHS)}</p></Card>
-        <Card><p className="text-xs text-ink-500">Stage</p><p className="mt-1 font-display text-xl font-semibold text-ink-900">{contract.stage}</p></Card>
+        <Card>
+          <p className="text-xs text-ink-500">Contracted</p>
+          <p className="mt-1 font-display text-xl font-semibold text-ink-900">
+            {formatTonnes(contract.contractedQuantityTonnes)}
+          </p>
+        </Card>
+        <Card>
+          <p className="text-xs text-ink-500">Expected delivery</p>
+          <p className="mt-1 font-display text-xl font-semibold text-ink-900">
+            {formatDate(contract.expectedDeliveryDate)}
+          </p>
+        </Card>
+        <Card>
+          <p className="text-xs text-ink-500">Contract value</p>
+          <p className="mt-1 font-display text-xl font-semibold text-ink-900">{formatGHSFull(contract.valueGHS)}</p>
+        </Card>
+        <Card>
+          <p className="text-xs text-ink-500">Stage</p>
+          <p className="mt-1 font-display text-xl font-semibold text-ink-900">{contract.stage}</p>
+        </Card>
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -89,7 +108,11 @@ export function ContractDetailPage() {
               </span>
               <span className="font-medium text-ink-500">{pct.toFixed(0)}%</span>
             </div>
-            <ProgressBar value={pct} tone={contract.riskLevel === 'high' ? 'risk' : contract.riskLevel === 'medium' ? 'warn' : 'brand'} className="mt-2" />
+            <ProgressBar
+              value={pct}
+              tone={contract.riskLevel === 'high' ? 'risk' : contract.riskLevel === 'medium' ? 'warn' : 'brand'}
+              className="mt-2"
+            />
           </Card>
 
           {canManageMatches && <MatchRequestsPanel contractId={contract.id} />}
@@ -150,7 +173,11 @@ export function ContractDetailPage() {
           </Card>
 
           {canMessage && (
-            <ContractMessages contractId={contract.id} counterpartyName={counterparty.name} counterpartyPhone={counterparty.phone} />
+            <ContractMessages
+              contractId={contract.id}
+              counterpartyName={counterparty.name}
+              counterpartyPhone={counterparty.phone}
+            />
           )}
         </div>
 
@@ -184,11 +211,15 @@ export function ContractDetailPage() {
                   <div key={p.id} className="flex items-center justify-between py-2.5 first:pt-0 last:pb-0">
                     <div>
                       <p className="text-sm font-medium text-ink-800">{p.counterpartyName}</p>
-                      <p className="text-xs text-ink-400">{p.direction} · {p.method}</p>
+                      <p className="text-xs text-ink-400">
+                        {p.direction} · {p.method}
+                      </p>
                     </div>
                     <div className="text-right">
                       <p className="text-sm font-medium text-ink-800">{formatGHSFull(p.amountGHS)}</p>
-                      <Badge tone={p.status === 'Paid' ? 'good' : p.status === 'Processing' ? 'info' : 'warn'}>{p.status}</Badge>
+                      <Badge tone={p.status === 'Paid' ? 'good' : p.status === 'Processing' ? 'info' : 'warn'}>
+                        {p.status}
+                      </Badge>
                     </div>
                   </div>
                 ))}

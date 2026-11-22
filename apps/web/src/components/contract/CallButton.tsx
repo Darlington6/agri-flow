@@ -2,7 +2,13 @@ import { useState } from 'react'
 import { Phone, PhoneOff } from 'lucide-react'
 import { Button, Modal } from '@/components/ui'
 
-export function CallButton({ counterpartyName, counterpartyPhone }: { counterpartyName: string; counterpartyPhone: string }) {
+export function CallButton({
+  counterpartyName,
+  counterpartyPhone,
+}: {
+  counterpartyName: string
+  counterpartyPhone: string
+}) {
   const [open, setOpen] = useState(false)
   const [calling, setCalling] = useState(false)
 

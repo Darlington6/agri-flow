@@ -51,7 +51,8 @@ function round1(n: number): number {
 export function scorePartnerForJob(partner: DeliveryPartner, job: DeliveryJob): ScoredPartner {
   const coversPickup = isInServiceAreas(job.from, partner.serviceAreas)
   const coversDropoff = isInServiceAreas(job.to, partner.serviceAreas)
-  const coverage: Coverage = coversPickup && coversDropoff ? 'both' : coversPickup ? 'pickup' : coversDropoff ? 'dropoff' : 'none'
+  const coverage: Coverage =
+    coversPickup && coversDropoff ? 'both' : coversPickup ? 'pickup' : coversDropoff ? 'dropoff' : 'none'
 
   const capacity = partner.vehicle.capacityTonnes
   const trips = capacity > 0 ? Math.max(1, Math.ceil(job.quantityTonnes / capacity)) : Number.POSITIVE_INFINITY
@@ -94,7 +95,10 @@ export function recommendPartnersForJob(job: DeliveryJob, partners: DeliveryPart
 }
 
 /** Every job for a partner's job board, best first. Out-of-area jobs stay visible but rank last. */
-export function rankJobsForPartner(partner: DeliveryPartner, jobs: DeliveryJob[]): { job: DeliveryJob; score: number; regionMatch: boolean }[] {
+export function rankJobsForPartner(
+  partner: DeliveryPartner,
+  jobs: DeliveryJob[],
+): { job: DeliveryJob; score: number; regionMatch: boolean }[] {
   return jobs
     .map((job) => {
       const s = scorePartnerForJob(partner, job)

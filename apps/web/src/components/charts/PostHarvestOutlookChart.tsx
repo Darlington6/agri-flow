@@ -23,8 +23,23 @@ export function PostHarvestOutlookChart() {
         <YAxis tickLine={false} axisLine={false} tick={{ fill: chartColors.axis, fontSize: 11 }} width={36} />
         <Tooltip contentStyle={tooltipStyle} formatter={(v, name) => [`${v} t`, name]} />
         <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 12, color: chartColors.textSecondary }} />
-        <Area type="monotone" dataKey="Expected harvest" stroke={chartColors.actual} strokeWidth={2} fill="url(#harvestFill)" activeDot={{ r: 4 }} />
-        <Line type="monotone" dataKey="Storage available" stroke={chartColors.target} strokeWidth={2} strokeDasharray="4 4" dot={false} activeDot={{ r: 4 }} />
+        <Area
+          type="monotone"
+          dataKey="Expected harvest"
+          stroke={chartColors.actual}
+          strokeWidth={2}
+          fill="url(#harvestFill)"
+          activeDot={{ r: 4 }}
+        />
+        <Line
+          type="monotone"
+          dataKey="Storage available"
+          stroke={chartColors.target}
+          strokeWidth={2}
+          strokeDasharray="4 4"
+          dot={false}
+          activeDot={{ r: 4 }}
+        />
       </AreaChart>
     </ResponsiveContainer>
   )

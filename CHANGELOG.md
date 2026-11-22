@@ -19,6 +19,10 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Changed
 
+- Prettier formats the web app, the site and the shared packages (no semicolons, single quotes, 120
+  columns, sorted Tailwind classes), checked in CI. The one-time reformat is its own commit, with no other
+  changes.
+
 - API: phone numbers are optional (an account needs a phone number or an email); emails are stored in lower
   case. Email links are limited to 5 an hour per caller, and one address gets at most 5 emails an hour.
   Sign-in responses say whether the account was just created (`created`).

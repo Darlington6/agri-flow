@@ -1,4 +1,15 @@
-import { Wallet, TrendingUp, Clock, PiggyBank, Smartphone, Landmark, Sparkles, Users, Truck, ShieldCheck } from 'lucide-react'
+import {
+  Wallet,
+  TrendingUp,
+  Clock,
+  PiggyBank,
+  Smartphone,
+  Landmark,
+  Sparkles,
+  Users,
+  Truck,
+  ShieldCheck,
+} from 'lucide-react'
 import { PageHeader, Card, StatCard, Badge, ComingSoonBadge } from '@/components/ui'
 import { financeMetrics, payments as allPayments } from '@/data'
 import { useSession } from '@/context/SessionContext'
@@ -37,26 +48,55 @@ export function FinancePage() {
 
       {isBuyer ? (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard label="Your Contracted Value" value={formatGHS(contracts.reduce((s, c) => s + c.valueGHS, 0))} icon={Wallet} />
+          <StatCard
+            label="Your Contracted Value"
+            value={formatGHS(contracts.reduce((s, c) => s + c.valueGHS, 0))}
+            icon={Wallet}
+          />
           <StatCard
             label="Your Delivered Value"
-            value={formatGHS(contracts.filter((c) => c.stage === 'Delivered' || c.stage === 'Paid').reduce((s, c) => s + c.valueGHS, 0))}
+            value={formatGHS(
+              contracts
+                .filter((c) => c.stage === 'Delivered' || c.stage === 'Paid')
+                .reduce((s, c) => s + c.valueGHS, 0),
+            )}
             icon={TrendingUp}
           />
           <StatCard
             label="Your Pending Payments"
-            value={formatGHS(payments.filter((p) => p.direction === 'Buyer Payment' && p.status !== 'Paid').reduce((s, p) => s + p.amountGHS, 0))}
+            value={formatGHS(
+              payments
+                .filter((p) => p.direction === 'Buyer Payment' && p.status !== 'Paid')
+                .reduce((s, p) => s + p.amountGHS, 0),
+            )}
             icon={Clock}
           />
-          <StatCard label="Suppliers on Your Orders" value={String(scopedFarmers(session, liveContracts).length)} icon={Users} />
+          <StatCard
+            label="Suppliers on Your Orders"
+            value={String(scopedFarmers(session, liveContracts).length)}
+            icon={Users}
+          />
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard label="Contracted Value" value={formatGHS(financeMetrics.contractedValueGHS)} icon={Wallet} />
           <StatCard label="Delivered Value" value={formatGHS(financeMetrics.deliveredValueGHS)} icon={TrendingUp} />
-          <StatCard label="Pending Farmer Payments" value={formatGHS(financeMetrics.pendingFarmerPaymentsGHS)} icon={Clock} />
-          <StatCard label="Financing Requested" value={formatGHS(financeMetrics.financingRequestedGHS)} icon={PiggyBank} />
-          <StatCard label="Delivery Commission" value={formatGHS(deliveryCommission)} icon={Truck} hint="Earned on coordinated logistics" />
+          <StatCard
+            label="Pending Farmer Payments"
+            value={formatGHS(financeMetrics.pendingFarmerPaymentsGHS)}
+            icon={Clock}
+          />
+          <StatCard
+            label="Financing Requested"
+            value={formatGHS(financeMetrics.financingRequestedGHS)}
+            icon={PiggyBank}
+          />
+          <StatCard
+            label="Delivery Commission"
+            value={formatGHS(deliveryCommission)}
+            icon={Truck}
+            hint="Earned on coordinated logistics"
+          />
         </div>
       )}
 
@@ -65,13 +105,15 @@ export function FinancePage() {
           <div className="px-6 pt-6">
             <h2 className="font-display text-sm font-semibold text-ink-900">Payments</h2>
             <p className="text-xs text-ink-500">
-              {isBuyer ? 'Payments tied to your contracts' : 'Farmer payouts and buyer settlements across active contracts'}
+              {isBuyer
+                ? 'Payments tied to your contracts'
+                : 'Farmer payouts and buyer settlements across active contracts'}
             </p>
           </div>
           <div className="mt-4 overflow-x-auto">
             <table className="w-full min-w-[640px] text-left text-sm">
               <thead>
-                <tr className="border-y border-ink-100 text-xs font-medium uppercase tracking-wide text-ink-400">
+                <tr className="border-y border-ink-100 text-xs font-medium tracking-wide text-ink-400 uppercase">
                   <th className="px-6 py-2.5 font-medium">Counterparty</th>
                   <th className="px-3 py-2.5 font-medium">Contract</th>
                   <th className="px-3 py-2.5 font-medium">Method</th>
@@ -99,7 +141,9 @@ export function FinancePage() {
                       <td className="px-3 py-3 text-ink-600">{formatGHSFull(p.amountGHS)}</td>
                       <td className="px-3 py-3 text-ink-600">{formatDate(p.date)}</td>
                       <td className="px-6 py-3">
-                        <Badge tone={p.status === 'Paid' ? 'good' : p.status === 'Processing' ? 'info' : 'warn'}>{p.status}</Badge>
+                        <Badge tone={p.status === 'Paid' ? 'good' : p.status === 'Processing' ? 'info' : 'warn'}>
+                          {p.status}
+                        </Badge>
                       </td>
                     </tr>
                   )
@@ -120,10 +164,15 @@ export function FinancePage() {
         <div className="flex flex-col gap-6">
           <Card>
             <h2 className="font-display text-sm font-semibold text-ink-700">Payment Channels</h2>
-            <p className="mt-1 text-xs text-ink-500">Planned integrations — not yet processing live payments in this prototype.</p>
+            <p className="mt-1 text-xs text-ink-500">
+              Planned integrations — not yet processing live payments in this prototype.
+            </p>
             <div className="mt-4 grid grid-cols-2 gap-3">
               {['MTN Mobile Money', 'Telecel Cash', 'AirtelTigo Money', 'Bank Transfer'].map((m) => (
-                <div key={m} className="flex items-center gap-2 rounded-xl border border-dashed border-ink-200 px-3 py-2.5 text-xs font-medium text-ink-500">
+                <div
+                  key={m}
+                  className="flex items-center gap-2 rounded-xl border border-dashed border-ink-200 px-3 py-2.5 text-xs font-medium text-ink-500"
+                >
                   {m === 'Bank Transfer' ? <Landmark className="h-4 w-4" /> : <Smartphone className="h-4 w-4" />}
                   {m}
                 </div>

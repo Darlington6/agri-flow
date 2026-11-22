@@ -14,12 +14,12 @@
   --color-surface-sunken: #f5f7f7;
 
   /* Type: platform app (Manrope / DM Sans — unchanged from the prototype) */
-  --font-app-display: "Manrope", "Segoe UI", system-ui, sans-serif;
-  --font-app-body: "DM Sans", "Segoe UI", system-ui, sans-serif;
+  --font-app-display: 'Manrope', 'Segoe UI', system-ui, sans-serif;
+  --font-app-body: 'DM Sans', 'Segoe UI', system-ui, sans-serif;
 
   /* Type: public marketing site (Fraunces / IBM Plex Sans) */
-  --font-site-display: "Fraunces", Georgia, "Times New Roman", serif;
-  --font-site-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-site-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-site-body: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif;
 
   --shadow-card: 0 1px 2px rgba(16, 21, 16, 0.04), 0 8px 24px -12px rgba(16, 21, 16, 0.12);
   --shadow-card-hover: 0 2px 4px rgba(16, 21, 16, 0.06), 0 16px 32px -12px rgba(16, 21, 16, 0.16);
@@ -28,7 +28,7 @@
 /* Dark theme — applies automatically when the OS prefers dark, unless the
    user has explicitly chosen Light (data-theme="light" wins over system). */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
+  :root:not([data-theme='light']) {
     --color-surface: #10181a;
     --color-surface-sunken: #16201f;
     --color-ink-50: #101510;
@@ -39,7 +39,7 @@
 }
 
 /* Explicit user override to Dark, regardless of OS preference. */
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   --color-surface: #10181a;
   --color-surface-sunken: #16201f;
   --color-ink-50: #101510;

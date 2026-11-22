@@ -47,16 +47,16 @@ Two different things, handled differently:
 The palette lives in `packages/design-tokens/src/theme.css` (imported by `src/index.css`); never define
 colours in this app. Pick colours by role, not by look:
 
-| Role | Use | Examples |
-|---|---|---|
-| `primary` (teal) | Anything you can tap | Buttons, links, selected nav/filters, focus rings |
-| `brand` (forest) | Identity | Icon chips, avatars, headings, dark cards, chart series |
-| `gold` | Warm highlight, sparingly | The pilot tag |
-| `sage` | Soft surfaces | Progress tracks, soft panels |
-| `ink` | Text, borders, backgrounds | Body text, dividers |
-| `chat-own` | Your own chat bubbles | Contract chat, AI Copilot (the original AgriFlow green, kept on purpose) |
-| `status-*` | Meaning: good, warning, risk, info | Dots, icons, timeline ticks: keep these conventional |
-| `status-*-text` | Text on a `status-*-bg` badge | Same hues, darkened to 4.5:1 for small text (`Badge` uses these) |
+| Role             | Use                                | Examples                                                                 |
+| ---------------- | ---------------------------------- | ------------------------------------------------------------------------ |
+| `primary` (teal) | Anything you can tap               | Buttons, links, selected nav/filters, focus rings                        |
+| `brand` (forest) | Identity                           | Icon chips, avatars, headings, dark cards, chart series                  |
+| `gold`           | Warm highlight, sparingly          | The pilot tag                                                            |
+| `sage`           | Soft surfaces                      | Progress tracks, soft panels                                             |
+| `ink`            | Text, borders, backgrounds         | Body text, dividers                                                      |
+| `chat-own`       | Your own chat bubbles              | Contract chat, AI Copilot (the original AgriFlow green, kept on purpose) |
+| `status-*`       | Meaning: good, warning, risk, info | Dots, icons, timeline ticks: keep these conventional                     |
+| `status-*-text`  | Text on a `status-*-bg` badge      | Same hues, darkened to 4.5:1 for small text (`Badge` uses these)         |
 
 The logo's gold and sage are too light for text on white; use them as fills and their `700`+ shades for
 text. Pick-one-of-these choices (like the demo roles) use `CardButton`, a real button, never a clickable `<div>`.
@@ -67,6 +67,7 @@ text. Pick-one-of-these choices (like the demo roles) use `CardButton`, a real b
 Locations are structured (`Place`: name, administrative area, ISO country code), never free text, so
 matching works across countries: regions in Ghana, provinces in Rwanda, counties in Kenya. Compare and
 format them with `src/lib/places.ts`; never match place names by substring.
+
 - Test files are type-checked by `tsconfig.test.json` (Node types available); app code by
   `tsconfig.app.json` (no Node types, so app code can't depend on Node by accident).
 

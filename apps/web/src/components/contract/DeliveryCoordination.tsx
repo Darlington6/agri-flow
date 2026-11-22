@@ -33,7 +33,8 @@ export function DeliveryCoordination() {
         <h2 className="font-display text-sm font-semibold text-ink-700">Delivery Coordination</h2>
       </div>
       <p className="mt-1 text-xs text-ink-500">
-        Open jobs are on the delivery partners' job board to book directly. Commission earned to date: {formatGHSFull(totalCommission)}
+        Open jobs are on the delivery partners' job board to book directly. Commission earned to date:{' '}
+        {formatGHSFull(totalCommission)}
       </p>
 
       <div className="mt-4 flex flex-col divide-y divide-ink-50">
@@ -61,9 +62,7 @@ export function DeliveryCoordination() {
                   </span>
                 ) : (
                   <div className="flex flex-wrap items-center gap-2">
-                    {bestMatch && (
-                      <span className="text-xs text-ink-400">Best match: {bestMatch.partner.name}</span>
-                    )}
+                    {bestMatch && <span className="text-xs text-ink-400">Best match: {bestMatch.partner.name}</span>}
                     <select
                       className={inputClass}
                       style={{ width: 220, height: 32 }}

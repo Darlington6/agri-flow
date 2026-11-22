@@ -41,7 +41,8 @@ export function countryName(code: CountryCode, locale = 'en'): string {
 
 /** "Bono, Bono East, Ashanti" for one country; "Ghana: Volta · Rwanda (all areas)" across several. */
 export function formatServiceAreas(serviceAreas: ServiceArea[], locale = 'en'): string {
-  const describe = (sa: ServiceArea) => (sa.areas ? sa.areas.join(', ') : `${countryName(sa.countryCode, locale)} (all areas)`)
+  const describe = (sa: ServiceArea) =>
+    sa.areas ? sa.areas.join(', ') : `${countryName(sa.countryCode, locale)} (all areas)`
   if (serviceAreas.length === 1) return describe(serviceAreas[0])
   return serviceAreas
     .map((sa) => (sa.areas ? `${countryName(sa.countryCode, locale)}: ${sa.areas.join(', ')}` : describe(sa)))

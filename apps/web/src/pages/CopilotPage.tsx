@@ -6,7 +6,11 @@ import { aiService, SUGGESTED_PROMPTS, type AIChatMessage } from '@/services/ai'
 const FUTURE_COPILOTS = [
   { label: 'Farmer Copilot', desc: 'Crop and production guidance in-app for smallholder farmers.', icon: Sprout },
   { label: 'Buyer Copilot', desc: 'Supply forecasting and sourcing recommendations for buyers.', icon: ShoppingCart },
-  { label: 'Operations Copilot', desc: 'Contract and logistics optimization for platform operations.', icon: Settings2 },
+  {
+    label: 'Operations Copilot',
+    desc: 'Contract and logistics optimization for platform operations.',
+    icon: Settings2,
+  },
   { label: 'Climate Copilot', desc: 'Climate-risk recommendations tailored to each farm.', icon: CloudSun },
 ]
 
@@ -18,12 +22,12 @@ function AssistantBubble({ message }: { message: AIChatMessage }) {
       </span>
       <div className="max-w-[80%] rounded-2xl rounded-tl-sm bg-ink-50 px-4 py-3">
         {message.isAIGenerated && (
-          <span className="mb-1.5 inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide text-brand-600">
+          <span className="mb-1.5 inline-flex items-center gap-1 text-[10px] font-semibold tracking-wide text-brand-600 uppercase">
             <Sparkles className="h-2.5 w-2.5" />
             AI-generated insight
           </span>
         )}
-        <p className="whitespace-pre-line text-sm leading-relaxed text-ink-800">{message.content}</p>
+        <p className="text-sm leading-relaxed whitespace-pre-line text-ink-800">{message.content}</p>
       </div>
     </div>
   )
@@ -75,7 +79,7 @@ export function CopilotPage() {
         <PageHeader title="AgriFlow Intelligence" subtitle="Ask questions about your agricultural supply chain." />
 
         <Card padded={false} className="mt-4 flex flex-1 flex-col overflow-hidden">
-          <div ref={listRef} className="flex-1 space-y-4 overflow-y-auto p-6 scrollbar-thin">
+          <div ref={listRef} className="flex-1 scrollbar-thin space-y-4 overflow-y-auto p-6">
             {messages.length === 0 && (
               <div className="flex h-full flex-col items-center justify-center gap-4 py-10 text-center">
                 <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-700">
@@ -168,8 +172,8 @@ export function CopilotPage() {
         <Card>
           <h2 className="font-display text-sm font-semibold text-ink-700">What the Copilot uses</h2>
           <p className="mt-2 text-xs leading-relaxed text-ink-500">
-            Responses are generated from structured platform data — contracts, farmers, production, harvest
-            forecasts, climate risk and payments — not from open web search.
+            Responses are generated from structured platform data — contracts, farmers, production, harvest forecasts,
+            climate risk and payments — not from open web search.
           </p>
         </Card>
         <div className="flex flex-col gap-3">

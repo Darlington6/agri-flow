@@ -31,8 +31,10 @@ describe('publicUrlProblem', () => {
 })
 
 describe('checkPublicUrls', () => {
-  const run = (env: Record<string, unknown>, required: string[] = []) => () =>
-    checkPublicUrls(['VITE_API_URL'], { required }).configResolved({ env })
+  const run =
+    (env: Record<string, unknown>, required: string[] = []) =>
+    () =>
+      checkPublicUrls(['VITE_API_URL'], { required }).configResolved({ env })
 
   it('lets a good address through', () => {
     expect(run({ VITE_API_URL: 'https://agriflow-api.onrender.com' })).not.toThrow()

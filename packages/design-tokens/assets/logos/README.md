@@ -7,25 +7,25 @@ here, never from a copy.
 
 Three circles: a forest ring, a gold sun or seed inside it, and a sage circle overlapping at the lower left.
 
-| Colour | Hex | Role |
-|---|---|---|
-| Forest | `#283F2F` | outer ring |
-| Gold | `#B2934D` | inner disc |
-| Sage | `#93A281` | overlapping disc |
-| Cream | `#F5F1E6` | ring on dark backgrounds; app-icon background |
+| Colour | Hex       | Role                                          |
+| ------ | --------- | --------------------------------------------- |
+| Forest | `#283F2F` | outer ring                                    |
+| Gold   | `#B2934D` | inner disc                                    |
+| Sage   | `#93A281` | overlapping disc                              |
+| Cream  | `#F5F1E6` | ring on dark backgrounds; app-icon background |
 
 The SVGs are exact geometric rebuilds of the original artwork in `source/`. The difference from
 `source/agriflow-mark-original.png` is under 0.5% of pixels, all of it edge anti-aliasing.
 
 ## Files
 
-| File | Use |
-|---|---|
-| `agriflow-mark.svg` | **Master.** Default mark on light backgrounds. |
-| `agriflow-mark-reversed.svg` | On dark backgrounds (the forest ring becomes cream). |
-| `agriflow-mark-1024.png` | Raster mark, transparent, 1024 px wide, for places that can't take SVG. |
+| File                                                   | Use                                                                     |
+| ------------------------------------------------------ | ----------------------------------------------------------------------- |
+| `agriflow-mark.svg`                                    | **Master.** Default mark on light backgrounds.                          |
+| `agriflow-mark-reversed.svg`                           | On dark backgrounds (the forest ring becomes cream).                    |
+| `agriflow-mark-1024.png`                               | Raster mark, transparent, 1024 px wide, for places that can't take SVG. |
 | `agriflow-app-icon.svg` / `agriflow-app-icon-1024.png` | Square app icon (mark on cream). Source for PWA, iOS and Android icons. |
-| `source/` | Original artwork as supplied. Reference only; don't use these in apps. |
+| `source/`                                              | Original artwork as supplied. Reference only; don't use these in apps.  |
 
 Web favicons generated from these live in `apps/web/public/`. `favicon.svg` switches to the cream ring
 when the browser is in dark mode.

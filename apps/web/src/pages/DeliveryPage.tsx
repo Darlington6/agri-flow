@@ -50,8 +50,18 @@ export function DeliveryPage() {
       />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Available Jobs" value={String(available.length)} icon={Truck} hint="Open to book, network-wide" />
-        <StatCard label="My Active Jobs" value={String(activeCount)} icon={CheckCircle2} hint="Assigned or in transit" />
+        <StatCard
+          label="Available Jobs"
+          value={String(available.length)}
+          icon={Truck}
+          hint="Open to book, network-wide"
+        />
+        <StatCard
+          label="My Active Jobs"
+          value={String(activeCount)}
+          icon={CheckCircle2}
+          hint="Assigned or in transit"
+        />
         <StatCard label="Completed Deliveries" value={String(deliveredCount)} icon={CheckCircle2} />
         <StatCard label="Fees Earned" value={formatGHSFull(earnedGHS)} icon={Star} hint="From completed deliveries" />
       </div>
@@ -65,13 +75,17 @@ export function DeliveryPage() {
             </div>
             <div className="mt-4 flex flex-col divide-y divide-ink-50 px-6 pb-6">
               {rankedAvailable.map(({ job, regionMatch }) => (
-                <div key={job.id} className="flex flex-wrap items-center justify-between gap-3 py-3 first:pt-0 last:pb-0">
+                <div
+                  key={job.id}
+                  className="flex flex-wrap items-center justify-between gap-3 py-3 first:pt-0 last:pb-0"
+                >
                   <div>
                     <p className="text-sm font-medium text-ink-800">
                       {cropById(job.cropId)?.name} · {formatTonnes(job.quantityTonnes)}
                     </p>
                     <p className="text-xs text-ink-400">
-                      {formatPlace(job.from)} → {formatPlace(job.to)} · {formatDate(job.scheduledDate)} · fee {formatGHSFull(job.feeGHS)}
+                      {formatPlace(job.from)} → {formatPlace(job.to)} · {formatDate(job.scheduledDate)} · fee{' '}
+                      {formatGHSFull(job.feeGHS)}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
@@ -82,7 +96,9 @@ export function DeliveryPage() {
                   </div>
                 </div>
               ))}
-              {rankedAvailable.length === 0 && <p className="py-3 text-sm text-ink-400">No open jobs right now — check back soon.</p>}
+              {rankedAvailable.length === 0 && (
+                <p className="py-3 text-sm text-ink-400">No open jobs right now — check back soon.</p>
+              )}
             </div>
           </Card>
 
@@ -95,7 +111,10 @@ export function DeliveryPage() {
               {myJobs.map((job) => {
                 const nextStatus = NEXT_STATUS[job.status]
                 return (
-                  <div key={job.id} className="flex flex-wrap items-center justify-between gap-3 py-3 first:pt-0 last:pb-0">
+                  <div
+                    key={job.id}
+                    className="flex flex-wrap items-center justify-between gap-3 py-3 first:pt-0 last:pb-0"
+                  >
                     <div>
                       <p className="text-sm font-medium text-ink-800">
                         {cropById(job.cropId)?.name} · {formatTonnes(job.quantityTonnes)}
@@ -123,7 +142,9 @@ export function DeliveryPage() {
         <Card className="h-fit">
           <h2 className="font-display text-sm font-semibold text-ink-700">Your Profile</h2>
           <p className="mt-3 font-display text-base font-semibold text-ink-900">{partner.name}</p>
-          <p className="text-xs text-ink-500">{partner.type} · {partner.vehicle.label}</p>
+          <p className="text-xs text-ink-500">
+            {partner.type} · {partner.vehicle.label}
+          </p>
           <div className="mt-3 flex items-center gap-1.5 text-sm text-ink-700">
             <Star className="h-4 w-4 fill-current text-status-warn" />
             {partner.rating.toFixed(1)} rating

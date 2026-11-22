@@ -19,7 +19,11 @@ export const currentPostHarvestSnapshot: PostHarvestCapacity = {
   ],
 }
 
-export const postHarvestWeeklyOutlook: { weekLabel: string; upcomingHarvestTonnes: number; storageAvailableTonnes: number }[] = [
+export const postHarvestWeeklyOutlook: {
+  weekLabel: string
+  upcomingHarvestTonnes: number
+  storageAvailableTonnes: number
+}[] = [
   { weekLabel: 'This week', upcomingHarvestTonnes: 46.8, storageAvailableTonnes: 31 },
   { weekLabel: 'Next week', upcomingHarvestTonnes: 38.2, storageAvailableTonnes: 34 },
   { weekLabel: 'Week 3', upcomingHarvestTonnes: 29.5, storageAvailableTonnes: 36 },

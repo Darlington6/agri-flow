@@ -38,8 +38,8 @@ export function AddEmail({ onDone }: { onDone: () => void }) {
     return (
       <div className="flex flex-col gap-2 rounded-xl bg-ink-50 p-3 text-sm text-ink-700">
         <p>
-          We've sent a link to <strong className="break-all">{email}</strong>. Open it to add this email. It works
-          once, for 15 minutes.
+          We've sent a link to <strong className="break-all">{email}</strong>. Open it to add this email. It works once,
+          for 15 minutes.
         </p>
         {debugLink && (
           <a href={debugLink} className="text-xs text-status-info hover:underline">

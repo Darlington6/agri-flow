@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import type { DeliveryJob, DeliveryPartner } from '@/types'
-import { rankJobsForPartner, rankPartnersForJob, recommendPartnersForJob, SCORE_WEIGHTS, scorePartnerForJob } from './deliveryScore'
+import {
+  rankJobsForPartner,
+  rankPartnersForJob,
+  recommendPartnersForJob,
+  SCORE_WEIGHTS,
+  scorePartnerForJob,
+} from './deliveryScore'
 
 function partner(overrides: Partial<DeliveryPartner> = {}): DeliveryPartner {
   return {
@@ -41,7 +47,10 @@ describe('scorePartnerForJob', () => {
   })
 
   it('weights the pickup more than the drop-off', () => {
-    const pickupOnly = scorePartnerForJob(partner({ serviceAreas: [{ countryCode: 'RW', areas: ['Northern Province'] }] }), job())
+    const pickupOnly = scorePartnerForJob(
+      partner({ serviceAreas: [{ countryCode: 'RW', areas: ['Northern Province'] }] }),
+      job(),
+    )
     const dropoffOnly = scorePartnerForJob(partner({ serviceAreas: [{ countryCode: 'RW', areas: ['Kigali'] }] }), job())
     expect(pickupOnly.coverage).toBe('pickup')
     expect(dropoffOnly.coverage).toBe('dropoff')
@@ -70,7 +79,10 @@ describe('scorePartnerForJob', () => {
   it('requires a refrigerated vehicle for perishable crops', () => {
     const tomatoes = job({ cropId: 'tomatoes' })
     const open = scorePartnerForJob(partner(), tomatoes)
-    const cold = scorePartnerForJob(partner({ vehicle: { label: 'Reefer (10t)', capacityTonnes: 10, refrigerated: true } }), tomatoes)
+    const cold = scorePartnerForJob(
+      partner({ vehicle: { label: 'Reefer (10t)', capacityTonnes: 10, refrigerated: true } }),
+      tomatoes,
+    )
     expect(open.coldChainOk).toBe(false)
     expect(open.vehicleFit).toBe(false)
     expect(cold.coldChainOk).toBe(true)
@@ -98,11 +110,18 @@ describe('rankPartnersForJob and recommendPartnersForJob', () => {
   const halfway = partner({ id: 'halfway', serviceAreas: [{ countryCode: 'RW', areas: ['Kigali'] }], rating: 5 })
 
   it('ranks every partner, best first', () => {
-    expect(rankPartnersForJob(job(), [crossBorder, halfway, local]).map((s) => s.partner.id)).toEqual(['local', 'halfway', 'cross-border'])
+    expect(rankPartnersForJob(job(), [crossBorder, halfway, local]).map((s) => s.partner.id)).toEqual([
+      'local',
+      'halfway',
+      'cross-border',
+    ])
   })
 
   it('only recommends partners that cover at least one end of the trip', () => {
-    expect(recommendPartnersForJob(job(), [crossBorder, halfway, local]).map((s) => s.partner.id)).toEqual(['local', 'halfway'])
+    expect(recommendPartnersForJob(job(), [crossBorder, halfway, local]).map((s) => s.partner.id)).toEqual([
+      'local',
+      'halfway',
+    ])
   })
 
   it('returns an empty list when there are no partners', () => {

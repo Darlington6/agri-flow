@@ -14,14 +14,12 @@ const t = dictionaryFor(locale)
 <BaseLayout locale={locale} page="about" title={t.about.title} description={t.about.description}>
   <PageHero title={t.about.title} lede={t.about.lede} photo="pageAbout" />
   <section class="mx-auto grid max-w-4xl gap-12 px-4 py-16 sm:px-6 md:py-24">
-    {
-      t.about.sections.map((s) => (
-        <div>
-          <h2 class="text-3xl font-semibold">{s.title}</h2>
-          <p class="mt-3 text-lg leading-relaxed text-ink-700">{s.body}</p>
-        </div>
-      ))
-    }
+    {t.about.sections.map((s) => (
+      <div>
+        <h2 class="text-3xl font-semibold">{s.title}</h2>
+        <p class="mt-3 text-lg leading-relaxed text-ink-700">{s.body}</p>
+      </div>
+    ))}
   </section>
   <CtaBand locale={locale} title={t.home.finalCta.title} body={t.home.finalCta.body} />
 </BaseLayout>
