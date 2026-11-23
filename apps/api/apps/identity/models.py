@@ -80,6 +80,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(max_length=20, unique=True, null=True, blank=True)
     email = models.EmailField(unique=True, null=True, blank=True)
     display_name = models.CharField(max_length=150, blank=True)
+    # Google's own, permanent ID for the person ("sub"), set the first time
+    # they continue with Google, so the link holds even if their Google
+    # email changes.
+    google_sub = models.CharField(max_length=255, unique=True, null=True, blank=True)
     roles = models.ManyToManyField(Role, blank=True, related_name="users")
 
     # Set while setting up the account (see apps/network/onboarding.py).

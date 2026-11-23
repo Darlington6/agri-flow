@@ -165,6 +165,8 @@ REST_FRAMEWORK = {
         # Email links: anyone can type any address, so the same strict cap
         # per caller (services.py also caps emails per address).
         "email_link": "5/hour",
+        # Google sign-in sends nothing, but each try checks a token.
+        "google": "30/hour",
     },
 }
 
@@ -184,6 +186,14 @@ OTP_DELIVERY_CHANNEL = env(
     "OTP_DELIVERY_CHANNEL",
     default="apps.identity.channels.ConsoleOtpChannel",
 )
+# "Continue with Google": the OAuth client IDs whose sign-in tokens this
+# API accepts (the web app's now; the mobile apps' later). Client IDs are
+# public, not secrets. Empty turns Google sign-in off.
+GOOGLE_CLIENT_IDS = env.list(
+    "GOOGLE_CLIENT_IDS",
+    default=["725235480256-at4gqeelol3iqgdat4ae1h3vvf3mhs5j.apps.googleusercontent.com"],
+)
+
 EMAIL_DELIVERY_CHANNEL = env(
     "EMAIL_DELIVERY_CHANNEL",
     default="apps.identity.channels.ConsoleEmailChannel",

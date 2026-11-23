@@ -6,18 +6,19 @@ import { GrowingSprout } from '@/components/brand/GrowingSprout'
 import { useAuth } from '@/context/AuthContext'
 import { ApiError } from '@/lib/apiClient'
 import { brand } from '@/config/brand'
-import { Button, Card, DemoTag, Field, inputClass, OrDivider } from '@/components/ui'
+import { Button, Card, Field, inputClass, OrDivider } from '@/components/ui'
 // Imported directly, not from the ui index, so the phone library only downloads with the pages that use it.
 import { PhoneInput } from '@/components/ui/PhoneInput'
 import { usePhoneField } from '@/components/ui/usePhoneField'
 import { AuthLayout } from '@/components/layout/AuthLayout'
+import { GoogleButton } from '@/components/auth/GoogleButton'
 import { formatPhone } from '@/lib/phone'
 import { landingFor } from '@/lib/onboarding'
 
 type Step = 'phone' | 'code' | 'email' | 'email-sent'
 
 export function SignInPage() {
-  const { user, requestOtp, verifyOtp, requestMagicLink } = useAuth()
+  const { user, requestOtp, verifyOtp, requestMagicLink, signInWithGoogle } = useAuth()
   const navigate = useNavigate()
 
   // Email first: phone codes need an SMS provider, which staging and
@@ -31,8 +32,22 @@ export function SignInPage() {
   const [debugLink, setDebugLink] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  const [googleError, setGoogleError] = useState<string | null>(null)
 
   if (user) return <Navigate to={landingFor(user)} replace />
+
+  async function handleGoogle(credential: string) {
+    setGoogleError(null)
+    setBusy(true)
+    try {
+      const signedIn = await signInWithGoogle(credential)
+      navigate(landingFor(signedIn), { replace: true })
+    } catch (err) {
+      setGoogleError(err instanceof ApiError ? err.message : 'Something went wrong. Try again.')
+    } finally {
+      setBusy(false)
+    }
+  }
 
   async function handleRequestMagicLink(event: React.FormEvent) {
     event.preventDefault()
@@ -80,11 +95,12 @@ export function SignInPage() {
 
   return (
     <AuthLayout photo="signIn">
-      <div className="mb-8 flex flex-col items-center gap-3 text-center">
+      {/* Just the logo: the demo link sits below the card, and the demo shows its own pilot badge. */}
+      <div className="mb-8 flex justify-center">
         <LogoMark className="h-14" />
-        <h1 className="font-display text-2xl font-semibold text-ink-900">{brand.name}</h1>
-        <DemoTag />
       </div>
+      {/* Screen readers still get a page heading. */}
+      <h1 className="sr-only">Sign in to {brand.name}</h1>
 
       <Card className="w-full max-w-sm">
         {step === 'phone' && (
@@ -191,6 +207,17 @@ export function SignInPage() {
               Use a different number
             </button>
           </form>
+        )}
+        {(step === 'email' || step === 'phone') && (
+          // Last, after the switch between email and phone. New accounts are made this way too.
+          <div className="mt-4 flex flex-col gap-4">
+            <GoogleButton onCredential={(credential) => void handleGoogle(credential)} before={<OrDivider />} />
+            {googleError && (
+              <p role="alert" className="text-sm text-status-risk">
+                {googleError}
+              </p>
+            )}
+          </div>
         )}
       </Card>
 
