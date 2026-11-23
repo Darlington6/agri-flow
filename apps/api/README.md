@@ -72,11 +72,32 @@ An account has a phone number, an email, or both, never neither. The first succe
 | `POST me/phone/`, `POST me/phone/confirm/` | Add a phone number: a code is texted to it and must be confirmed. |
 | `POST token/refresh/` | New access + refresh tokens; each refresh token works once. |
 | `POST token/logout/` | Retires the refresh token. |
-| `GET`/`PATCH me/` | The signed-in user. |
+| `GET`/`PATCH me/` | The signed-in user. `PATCH` takes `display_name`, `country` (ISO code, e.g. `RW`) and `language` (`en`, `fr`, `rw`, `sw`, `tw`). `needs_onboarding` is true until they've set up their account, and again when the terms change. |
 
 Sign-in responses carry `access`, `refresh`, `user` and `created` (true when this sign-in created the
 account). Adding a phone number or email that another account uses answers 409. Anything that sends a
 text or an email is limited to 5 an hour per caller, and one address gets at most 5 emails an hour.
+
+## Setting up an account (`/api/v1/onboarding/`, `/api/v1/network/`)
+
+After signing up, people set up their account in a few steps, each saved as soon as it's done, so they can
+stop and carry on later on any device: their name, country and language, what they do on AgriFlow, a phone
+number (optional), and agreeing to the terms and privacy notice.
+
+| Endpoint | What it does |
+| --- | --- |
+| `GET onboarding/` | Which steps are done, the `next_step`, whether it's `complete`, and the `terms_version` to show. |
+| `POST onboarding/skip-phone/` | They'd rather not add a phone number now; it isn't asked again. |
+| `POST onboarding/complete/` | `{terms_version, accept_terms: true}`: records which terms they agreed to and when, and finishes. 409 if a step is missing or the terms changed meanwhile. Also how someone agrees to new terms. |
+| `GET network/options/?country=RW` | The pick lists: Rwanda's provinces and districts (`regions` is null for countries without a list, where people type theirs), crops, buyer types and vehicle types. |
+| `GET`/`POST network/profiles/` | The account's roles and their details. `POST {role, ...}` chooses a role (`farmer`, `buyer`, `delivery_partner` or `cooperative`) and grants it together with its profile. 409 if they already have it. |
+| `PATCH network/profiles/<role>/` | Edit a profile. |
+
+- **Nobody can give themselves a staff role.** Field agents and admins aren't offered; staff get their roles
+  in `/admin` (Users → roles) and skip the role step.
+- **A role isn't verification.** Every profile starts `unverified`; staff change `verification` in `/admin`.
+- **The terms version** is `TERMS_VERSION` (an environment variable, default `2026-11-draft`). Change it
+  when the terms or privacy notice change materially, and everyone is asked to agree again.
 
 ## Deployed (staging and prod)
 
