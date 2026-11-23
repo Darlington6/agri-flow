@@ -70,9 +70,14 @@ An account has a phone number, an email, or both, never neither. The first succe
 | `POST magic-link/request/`, `GET magic-link/verify/?token=` | Email a link; the link signs in (or signs up). The answer is the same whether or not the email has an account. |
 | `POST me/email/`, `POST email/confirm/` | Add an email: a link is sent to it, and the email is saved once the link is used (signed in or not). |
 | `POST me/phone/`, `POST me/phone/confirm/` | Add a phone number: a code is texted to it and must be confirmed. |
+| `POST google/` | Continue with Google: `{credential}` is the ID token from Google's button. Signs in, links an existing account with the same Google-confirmed email, or creates one (named from Google). 400 for a token that isn't genuine or an unconfirmed email; 409 if that email's account is linked to a different Google account. |
 | `POST token/refresh/` | New access + refresh tokens; each refresh token works once. |
 | `POST token/logout/` | Retires the refresh token. |
 | `GET`/`PATCH me/` | The signed-in user. `PATCH` takes `display_name`, `country` (ISO code, e.g. `RW`) and `language` (`en`, `fr`, `rw`, `sw`, `tw`). `needs_onboarding` is true until they've set up their account, and again when the terms change. |
+
+Google sign-in tokens are checked here against Google's published keys (signature, issuer, expiry, and that
+they're meant for one of `GOOGLE_CLIENT_IDS`, the web app's client by default; add the mobile apps' later).
+The account keeps Google's own ID for the person, so it's found again even if their Google email changes.
 
 Sign-in responses carry `access`, `refresh`, `user` and `created` (true when this sign-in created the
 account). Adding a phone number or email that another account uses answers 409. Anything that sends a

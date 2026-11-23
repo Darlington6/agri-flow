@@ -21,3 +21,7 @@ class EmailLinkThrottle(AnonRateThrottle):
 
 class EmailAddThrottle(UserRateThrottle):
     scope = "email_link"
+
+
+class GoogleSignInThrottle(AnonRateThrottle):
+    scope = "google"

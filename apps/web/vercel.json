@@ -7,13 +7,13 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' https://vercel.live; style-src 'self' https://vercel.live; font-src 'self' https://vercel.live https://assets.vercel.com; img-src 'self' data: blob: https://vercel.live https://vercel.com; connect-src 'self' https://*.onrender.com https://*.ingest.de.sentry.io https://vercel.live wss://ws-us3.pusher.com; frame-src https://vercel.live; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+          "value": "default-src 'self'; script-src 'self' https://vercel.live https://accounts.google.com/gsi/client; style-src 'self' https://vercel.live https://accounts.google.com/gsi/style; font-src 'self' https://vercel.live https://assets.vercel.com; img-src 'self' data: blob: https://vercel.live https://vercel.com; connect-src 'self' https://accounts.google.com/gsi/ https://*.onrender.com https://*.ingest.de.sentry.io https://vercel.live wss://ws-us3.pusher.com; frame-src https://vercel.live https://accounts.google.com/gsi/; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
         },
         { "key": "X-Content-Type-Options", "value": "nosniff" },
         { "key": "X-Frame-Options", "value": "DENY" },
         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
         { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=()" },
-        { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" }
+        { "key": "Cross-Origin-Opener-Policy", "value": "same-origin-allow-popups" }
       ]
     }
   ]

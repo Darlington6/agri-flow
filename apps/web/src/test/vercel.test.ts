@@ -17,3 +17,24 @@ describe('apps/web/vercel.json', () => {
     expect(config.rewrites).toContainEqual({ source: '/(.*)', destination: '/index.html' })
   })
 })
+
+describe('apps/web/vercel.json headers', () => {
+  const headers = Object.fromEntries(
+    config.headers.flatMap((block: { headers: { key: string; value: string }[] }) =>
+      block.headers.map((h) => [h.key, h.value]),
+    ),
+  )
+
+  it("lets Google's sign-in button load, draw and talk to Google, and nothing else of Google's", () => {
+    const csp: string = headers['Content-Security-Policy']
+    expect(csp).toContain("script-src 'self' https://vercel.live https://accounts.google.com/gsi/client;")
+    expect(csp).toMatch(/frame-src [^;]*https:\/\/accounts\.google\.com\/gsi\//)
+    expect(csp).toMatch(/connect-src [^;]*https:\/\/accounts\.google\.com\/gsi\//)
+    expect(csp).not.toMatch(/https:\/\/accounts\.google\.com[ ;]/)
+  })
+
+  it("lets Google's sign-in popup report back (and nothing may frame the app)", () => {
+    expect(headers['Cross-Origin-Opener-Policy']).toBe('same-origin-allow-popups')
+    expect(headers['X-Frame-Options']).toBe('DENY')
+  })
+})

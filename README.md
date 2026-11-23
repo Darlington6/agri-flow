@@ -248,7 +248,7 @@ To run the API outside Docker with uv, see [apps/api/README.md](apps/api/README.
 
 ## Current prototype limitations
 
-- Two ways in: `/signin` is **real** sign-up and sign-in (phone code or email link, JWT, against the API),
+- Two ways in: `/signin` is **real** sign-up and sign-in (Google, phone code or email link, JWT, against the API),
   followed by account setup at `/welcome` and a home page at `/home`, while `/login` is still the demo role
   picker that sets a local session. The platform screens behind it use the demo session and mock data; they
   aren't connected to real accounts yet.
@@ -281,8 +281,8 @@ Decided and underway; see `apps/api` above and the Platform Blueprint for the fu
   `apps/web/src/types/` (and mirrored in `packages/types/`). Those become generated from the API's OpenAPI
   schema as domain endpoints land.
 - **Authentication** (done: sign-up and sign-in by phone code or email link, adding the other later, JWT
-  with server-side logout, roles; email through Brevo; account setup with self-chosen roles). Next: an SMS
-  provider, Google sign-in,
+  with server-side logout, roles; email through Brevo; account setup with self-chosen roles; continue with
+  Google). Next: an SMS provider,
   and server-side role-based access control replacing the demo session behind the platform screens.
 - **Clients:** this web app becomes the public marketing site; the platform itself moves to a PWA and
   mobile apps, all on the same API and the same accounts.
