@@ -12,10 +12,16 @@ class UserAdmin(DjangoUserAdmin):
     search_fields = ["phone_number", "email", "display_name"]
     ordering = ["phone_number"]
     filter_horizontal = ["roles"]
-    readonly_fields = ["onboarded_at", "terms_version", "terms_accepted_at", "phone_prompted_at"]
+    readonly_fields = [
+        "google_sub",
+        "onboarded_at",
+        "terms_version",
+        "terms_accepted_at",
+        "phone_prompted_at",
+    ]
     fieldsets = (
         (None, {"fields": ("phone_number", "password")}),
-        ("Profile", {"fields": ("email", "display_name", "country", "language")}),
+        ("Profile", {"fields": ("email", "display_name", "country", "language", "google_sub")}),
         (
             "Account setup",
             {"fields": ("onboarded_at", "terms_version", "terms_accepted_at", "phone_prompted_at")},

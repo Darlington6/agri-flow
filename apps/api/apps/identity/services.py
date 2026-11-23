@@ -212,3 +212,56 @@ def _attach(user, **field):
         # Someone else confirmed it first.
         raise AlreadyInUse(f"This {name.replace('_', ' ')} belongs to another account.") from exc
     return user
+
+
+# ── Google ───────────────────────────────────────────────────────────────
+
+
+class GoogleEmailNotVerified(Exception):
+    """Google hasn't confirmed the email, so it can't identify an account."""
+
+
+def sign_in_with_google(identity):
+    """Returns (user, created) for a checked Google identity (google.py).
+
+    1. Someone who has continued with Google before is found by Google's
+       own ID for them, whatever their email is now.
+    2. Otherwise, an account with the same email is theirs: Google has
+       confirmed they own that address, just as our email link would. The
+       Google ID is saved on it, so step 1 finds it from now on.
+    3. Otherwise, a new account, named from Google.
+
+    Raises GoogleEmailNotVerified, or AlreadyInUse when the email's account
+    is already linked to a different Google account.
+    """
+    user = _users().filter(google_sub=identity.sub).first()
+    if user is not None:
+        return user, False
+    if not identity.email or not identity.email_verified:
+        raise GoogleEmailNotVerified("Your Google account's email isn't verified.")
+
+    user = _users().filter(email=identity.email).first()
+    if user is not None:
+        if user.google_sub:
+            raise AlreadyInUse("This email is linked to a different Google account.")
+        user.google_sub = identity.sub
+        fields = ["google_sub"]
+        if not user.display_name and identity.name:
+            user.display_name = identity.name
+            fields.append("display_name")
+        try:
+            with transaction.atomic():
+                user.save(update_fields=fields)
+        except IntegrityError:
+            # The same person, signing in twice at once: the other won.
+            return _users().get(google_sub=identity.sub), False
+        return user, False
+
+    try:
+        with transaction.atomic():
+            user = _users().create_user(
+                email=identity.email, google_sub=identity.sub, display_name=identity.name
+            )
+    except IntegrityError:
+        return _users().get(google_sub=identity.sub), False
+    return user, True
