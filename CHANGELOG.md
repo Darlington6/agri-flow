@@ -80,6 +80,14 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Added
 
+- Account setup in the app (`/welcome`): after signing up, people answer one question per screen (name,
+  country and language, what they do on AgriFlow and a few details, a phone number they can skip, and the
+  terms), and can stop and carry on later on any device. Rwanda's provinces and districts are lists to pick
+  from. Afterwards they land on a new home page (`/home`) showing each role's verification and what's coming
+  for it during the pilot, with the demo a click away. The account page now edits country, language and each
+  role's details, and another role can be added from `/add-role`. Anyone not yet set up, or with new terms to
+  agree to, is taken back to `/welcome`. Works on phones, tablets and desktops, light and dark.
+
 - Account setup in the API: people give their name, country and language, choose what they do on AgriFlow
   (farmer, buyer, delivery partner, or the new cooperative role) with a few details about their farm or
   business, optionally add a phone number, and agree to the terms. Each step is saved as they go, so they can

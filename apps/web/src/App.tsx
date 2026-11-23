@@ -13,6 +13,9 @@ const LandingPage = page(() => import('@/pages/LandingPage'), 'LandingPage')
 const LoginPage = page(() => import('@/pages/LoginPage'), 'LoginPage')
 const SignInPage = page(() => import('@/pages/auth/SignInPage'), 'SignInPage')
 const AccountPage = page(() => import('@/pages/auth/AccountPage'), 'AccountPage')
+const WelcomePage = page(() => import('@/pages/onboarding/WelcomePage'), 'WelcomePage')
+const HomePage = page(() => import('@/pages/onboarding/HomePage'), 'HomePage')
+const AddRolePage = page(() => import('@/pages/onboarding/AddRolePage'), 'AddRolePage')
 const MagicLinkVerifyPage = page(() => import('@/pages/auth/MagicLinkVerifyPage'), 'MagicLinkVerifyPage')
 const ConfirmEmailPage = page(() => import('@/pages/auth/ConfirmEmailPage'), 'ConfirmEmailPage')
 const DashboardPage = page(() => import('@/pages/DashboardPage'), 'DashboardPage')
@@ -44,6 +47,9 @@ function App() {
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signin" element={<SignInPage />} />
+                <Route path="/welcome" element={<WelcomePage />} />
+                <Route path="/home" element={<HomePage />} />
+                <Route path="/add-role" element={<AddRolePage />} />
                 <Route path="/account" element={<AccountPage />} />
                 <Route path="/magic-link" element={<MagicLinkVerifyPage />} />
                 <Route path="/confirm-email" element={<ConfirmEmailPage />} />

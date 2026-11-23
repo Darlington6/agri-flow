@@ -14,6 +14,7 @@ import {
   updateMe,
   verifyMagicLink,
   verifyOtp,
+  type AccountChanges,
   type AuthUser,
 } from '@/lib/apiClient'
 import { identify } from '@/lib/monitoring'
@@ -29,10 +30,16 @@ interface AuthContextValue {
   user: AuthUser | null
   loading: boolean
   requestOtp: (phoneNumber: string) => Promise<{ debugCode?: string }>
-  verifyOtp: (phoneNumber: string, code: string) => Promise<void>
+  /** Signs in; answers with the user, to decide where they go next. */
+  verifyOtp: (phoneNumber: string, code: string) => Promise<AuthUser>
   requestMagicLink: (email: string) => Promise<{ debugLink?: string }>
-  verifyMagicLink: (token: string) => Promise<void>
-  updateDisplayName: (displayName: string) => Promise<void>
+  verifyMagicLink: (token: string) => Promise<AuthUser>
+  /** Name, country or language. */
+  updateAccount: (changes: AccountChanges) => Promise<void>
+  /** Shows a user the API just answered with (e.g. after finishing setup). */
+  replaceUser: (user: AuthUser) => void
+  /** Fetches the user again, e.g. after choosing a role. */
+  refreshUser: () => Promise<void>
   /** Sends a confirmation link; the email is only added once it's used. */
   requestEmailAdd: (email: string) => Promise<{ debugLink?: string }>
   /** Uses that link (works signed in or not, on any device). */
@@ -82,6 +89,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const tokens = await verifyOtp(phoneNumber, code)
       storeTokens(tokens.access, tokens.refresh)
       setUser(tokens.user)
+      return tokens.user
     },
     async requestMagicLink(email) {
       const { debug_link } = await requestMagicLink(email)
@@ -92,10 +100,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const tokens = await verifyMagicLink(token)
       storeTokens(tokens.access, tokens.refresh)
       setUser(tokens.user)
+      return tokens.user
     },
-    async updateDisplayName(displayName) {
-      const updated = await updateMe(displayName)
-      setUser(updated)
+    async updateAccount(changes) {
+      setUser(await updateMe(changes))
+    },
+    replaceUser: setUser,
+    async refreshUser() {
+      setUser(await getMe())
     },
     async requestEmailAdd(email) {
       const { debug_link } = await requestEmailAdd(email)

@@ -1,16 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
 import { Navigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '@/context/AuthContext'
-import { ApiError } from '@/lib/apiClient'
+import { ApiError, type AuthUser } from '@/lib/apiClient'
+import { landingFor } from '@/lib/onboarding'
 import { Card, DemoTag } from '@/components/ui'
 
 // The redirect target the magic-link email points at (see
 // apps/api's FRONTEND_URL setting) — reads the token from the URL,
-// calls the API to verify it, then hands off to /account.
+// calls the API to verify it, then hands off to account setup (new
+// accounts) or the account's home.
 export function MagicLinkVerifyPage() {
   const [params] = useSearchParams()
   const { verifyMagicLink } = useAuth()
   const [status, setStatus] = useState<'verifying' | 'done' | 'error'>('verifying')
+  const [signedIn, setSignedIn] = useState<AuthUser | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   const token = params.get('token')
@@ -29,7 +32,10 @@ export function MagicLinkVerifyPage() {
     attempted.current = true
 
     verifyMagicLink(token)
-      .then(() => setStatus('done'))
+      .then((user) => {
+        setSignedIn(user)
+        setStatus('done')
+      })
       .catch((err) => {
         setStatus('error')
         setError(err instanceof ApiError ? err.message : 'Something went wrong.')
@@ -38,7 +44,7 @@ export function MagicLinkVerifyPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token])
 
-  if (status === 'done') return <Navigate to="/account" replace />
+  if (status === 'done' && signedIn) return <Navigate to={landingFor(signedIn)} replace />
 
   return (
     <div className="flex min-h-svh flex-col items-center justify-center bg-canvas px-4 py-12">
