@@ -7,6 +7,9 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Security
 
+- The app's security policy allows only Google's sign-in addresses (`accounts.google.com/gsi/…`), and its
+  opener policy is `same-origin-allow-popups` so Google's sign-in popup can report back.
+
 - Builds stop when `VITE_API_URL`, `PUBLIC_API_URL` or `PUBLIC_APP_URL` isn't a plain `https://` address,
   without printing the value; Vercel builds of the app also need `VITE_API_URL`. These values are public, and
   a database connection string had been pasted into one.
@@ -79,6 +82,12 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
   handling.
 
 ### Added
+
+- Continue with Google on the sign-in page. New Google users get an account (named from Google) and go
+  straight to account setup; someone who already signed up with the same email is signed in to that account,
+  which remembers their Google ID from then on. The API checks every Google token itself. In WhatsApp's,
+  Facebook's and Instagram's built-in browsers, where Google blocks sign-in, the page explains how to open it in
+  a real browser.
 
 - Account setup in the app (`/welcome`): after signing up, people answer one question per screen (name,
   country and language, what they do on AgriFlow and a few details, a phone number they can skip, and the
