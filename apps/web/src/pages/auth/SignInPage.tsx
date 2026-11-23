@@ -6,7 +6,7 @@ import { GrowingSprout } from '@/components/brand/GrowingSprout'
 import { useAuth } from '@/context/AuthContext'
 import { ApiError } from '@/lib/apiClient'
 import { brand } from '@/config/brand'
-import { Button, Card, DemoTag, Field, inputClass, OrDivider } from '@/components/ui'
+import { Button, Card, Field, inputClass, OrDivider } from '@/components/ui'
 // Imported directly, not from the ui index, so the phone library only downloads with the pages that use it.
 import { PhoneInput } from '@/components/ui/PhoneInput'
 import { usePhoneField } from '@/components/ui/usePhoneField'
@@ -95,11 +95,12 @@ export function SignInPage() {
 
   return (
     <AuthLayout photo="signIn">
-      <div className="mb-8 flex flex-col items-center gap-3 text-center">
+      {/* Just the logo: the demo link sits below the card, and the demo shows its own pilot badge. */}
+      <div className="mb-8 flex justify-center">
         <LogoMark className="h-14" />
-        <h1 className="font-display text-2xl font-semibold text-ink-900">{brand.name}</h1>
-        <DemoTag />
       </div>
+      {/* Screen readers still get a page heading. */}
+      <h1 className="sr-only">Sign in to {brand.name}</h1>
 
       <Card className="w-full max-w-sm">
         {step === 'phone' && (

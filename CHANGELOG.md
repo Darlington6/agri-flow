@@ -88,6 +88,8 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
   which remembers their Google ID from then on. The API checks every Google token itself. In WhatsApp's,
   Facebook's and Instagram's built-in browsers, where Google blocks sign-in, the page explains how to open it in
   a real browser.
+- The sign-in page shows just the logo above the card: no product name or pilot badge (the demo link sits below
+  the card, and the demo shows its own badge). Screen readers still hear "Sign in to AgriFlow".
 
 - Account setup in the app (`/welcome`): after signing up, people answer one question per screen (name,
   country and language, what they do on AgriFlow and a few details, a phone number they can skip, and the
