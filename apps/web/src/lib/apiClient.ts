@@ -260,6 +260,14 @@ export function verifyMagicLink(token: string) {
   return request<AuthTokens>(`/api/v1/auth/magic-link/verify/?token=${encodeURIComponent(token)}`)
 }
 
+/** Continue with Google: the ID token Google's button handed us. */
+export function signInWithGoogle(credential: string) {
+  return request<AuthTokens>('/api/v1/auth/google/', {
+    method: 'POST',
+    body: JSON.stringify({ credential }),
+  })
+}
+
 export function getMe() {
   return request<AuthUser>('/api/v1/auth/me/')
 }

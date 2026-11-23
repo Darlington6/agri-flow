@@ -10,6 +10,7 @@ import {
   requestEmailAdd,
   requestOtp,
   requestPhoneAdd,
+  signInWithGoogle,
   storeTokens,
   updateMe,
   verifyMagicLink,
@@ -34,6 +35,8 @@ interface AuthContextValue {
   verifyOtp: (phoneNumber: string, code: string) => Promise<AuthUser>
   requestMagicLink: (email: string) => Promise<{ debugLink?: string }>
   verifyMagicLink: (token: string) => Promise<AuthUser>
+  /** Continue with Google, with the credential from Google's button. */
+  signInWithGoogle: (credential: string) => Promise<AuthUser>
   /** Name, country or language. */
   updateAccount: (changes: AccountChanges) => Promise<void>
   /** Shows a user the API just answered with (e.g. after finishing setup). */
@@ -98,6 +101,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     async verifyMagicLink(token) {
       const tokens = await verifyMagicLink(token)
+      storeTokens(tokens.access, tokens.refresh)
+      setUser(tokens.user)
+      return tokens.user
+    },
+    async signInWithGoogle(credential) {
+      const tokens = await signInWithGoogle(credential)
       storeTokens(tokens.access, tokens.refresh)
       setUser(tokens.user)
       return tokens.user
