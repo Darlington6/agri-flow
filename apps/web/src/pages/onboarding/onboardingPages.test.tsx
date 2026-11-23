@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { AuthProvider } from '@/context/AuthContext'
@@ -130,5 +130,66 @@ describe('account setup pages', () => {
     expect(screen.getByText('See what buyers need before you plant')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Explore the demo' })).toHaveAttribute('href', '/login')
     expect(screen.getByRole('link', { name: 'Add another role' })).toHaveAttribute('href', '/add-role')
+  })
+
+  describe('continue with Google', () => {
+    let callback: ((r: { credential: string }) => void) | undefined
+    beforeEach(() => {
+      window.google = {
+        accounts: {
+          id: {
+            initialize: vi.fn((config) => {
+              callback = config.callback
+            }),
+            renderButton: vi.fn(),
+            disableAutoSelect: vi.fn(),
+          },
+        },
+      }
+    })
+    afterEach(() => {
+      delete window.google
+    })
+
+    it('signs in a new Google account and takes them to set up', async () => {
+      const calls = renderAt(
+        '/signin',
+        {
+          'POST /api/v1/auth/google/': { body: { access: 'a', refresh: 'r', user: NEW_USER, created: true } },
+          '/api/v1/onboarding/': { body: { ...STATE, next_step: 'role' } },
+          '/api/v1/network/profiles/': { body: [] },
+          '/api/v1/network/options/': {
+            body: { country: 'RW', regions: [], crops: [], buyer_types: [], vehicle_types: [] },
+          },
+        },
+        false,
+      )
+      await waitFor(() => expect(callback).toBeDefined())
+      await act(async () => callback!({ credential: 'google-id-token' }))
+
+      expect(await screen.findByRole('heading', { name: 'Welcome to AgriFlow' })).toBeInTheDocument()
+      expect(calls).toContainEqual({
+        path: '/api/v1/auth/google/',
+        method: 'POST',
+        body: { credential: 'google-id-token' },
+      })
+      expect(localStorage.getItem('agriflow.auth.access')).toBe('a')
+    })
+
+    it("says why when Google sign-in can't be used", async () => {
+      renderAt(
+        '/signin',
+        {
+          'POST /api/v1/auth/google/': {
+            status: 409,
+            body: { detail: 'This email is linked to a different Google account.' },
+          },
+        },
+        false,
+      )
+      await waitFor(() => expect(callback).toBeDefined())
+      await act(async () => callback!({ credential: 'x' }))
+      expect(await screen.findByRole('alert')).toHaveTextContent('linked to a different Google account')
+    })
   })
 })

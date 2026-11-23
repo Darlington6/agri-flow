@@ -22,7 +22,11 @@ describe('SignInPage', () => {
   it('starts with email, since phone codes need an SMS provider', () => {
     renderSignIn()
     expect(screen.getByLabelText('Email')).toBeInTheDocument()
-    expect(screen.getByRole('separator', { name: 'Or' })).toBeInTheDocument()
+    // Email, then the phone link, then Google last.
+    expect(screen.getAllByRole('separator', { name: 'Or' })).toHaveLength(2)
+    const google = screen.getByTestId('google-button')
+    const phoneLink = screen.getByRole('button', { name: 'Use my phone instead' })
+    expect(phoneLink.compareDocumentPosition(google) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 
   it('switches between email and phone with clearly labelled buttons', async () => {

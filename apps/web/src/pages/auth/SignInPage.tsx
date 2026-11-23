@@ -11,13 +11,14 @@ import { Button, Card, DemoTag, Field, inputClass, OrDivider } from '@/component
 import { PhoneInput } from '@/components/ui/PhoneInput'
 import { usePhoneField } from '@/components/ui/usePhoneField'
 import { AuthLayout } from '@/components/layout/AuthLayout'
+import { GoogleButton } from '@/components/auth/GoogleButton'
 import { formatPhone } from '@/lib/phone'
 import { landingFor } from '@/lib/onboarding'
 
 type Step = 'phone' | 'code' | 'email' | 'email-sent'
 
 export function SignInPage() {
-  const { user, requestOtp, verifyOtp, requestMagicLink } = useAuth()
+  const { user, requestOtp, verifyOtp, requestMagicLink, signInWithGoogle } = useAuth()
   const navigate = useNavigate()
 
   // Email first: phone codes need an SMS provider, which staging and
@@ -31,8 +32,22 @@ export function SignInPage() {
   const [debugLink, setDebugLink] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  const [googleError, setGoogleError] = useState<string | null>(null)
 
   if (user) return <Navigate to={landingFor(user)} replace />
+
+  async function handleGoogle(credential: string) {
+    setGoogleError(null)
+    setBusy(true)
+    try {
+      const signedIn = await signInWithGoogle(credential)
+      navigate(landingFor(signedIn), { replace: true })
+    } catch (err) {
+      setGoogleError(err instanceof ApiError ? err.message : 'Something went wrong. Try again.')
+    } finally {
+      setBusy(false)
+    }
+  }
 
   async function handleRequestMagicLink(event: React.FormEvent) {
     event.preventDefault()
@@ -191,6 +206,17 @@ export function SignInPage() {
               Use a different number
             </button>
           </form>
+        )}
+        {(step === 'email' || step === 'phone') && (
+          // Last, after the switch between email and phone. New accounts are made this way too.
+          <div className="mt-4 flex flex-col gap-4">
+            <GoogleButton onCredential={(credential) => void handleGoogle(credential)} before={<OrDivider />} />
+            {googleError && (
+              <p role="alert" className="text-sm text-status-risk">
+                {googleError}
+              </p>
+            )}
+          </div>
         )}
       </Card>
 
