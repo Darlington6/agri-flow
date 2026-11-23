@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     # (Identity & Access, Network, Demand & Matching, Contracts, ...)
     # — Platform Blueprint, Section 1.
     "apps.identity",
+    "apps.network",
 ]
 
 AUTH_USER_MODEL = "identity.User"
@@ -130,6 +131,11 @@ LOGGING = {
 # Where apps/web lives — used to build links that need to land the user
 # back in the SPA (the magic-link email), not the API itself.
 FRONTEND_URL = env("FRONTEND_URL", default="http://localhost:5173")
+
+# The version of the terms of use and privacy notice people agree to when
+# they set up their account. Change it when either changes materially:
+# everyone is asked to agree again the next time they open the app.
+TERMS_VERSION = env("TERMS_VERSION", default="2026-11-draft")
 
 # CORS: explicit allow-list from the environment or allow all for prototype
 CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])

@@ -1,9 +1,19 @@
+from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils import timezone
 
 from .managers import UserManager
 from .phone import tidy
+
+# The launch languages (see the README's internationalisation notes).
+LANGUAGES = [
+    ("en", "English"),
+    ("fr", "Français"),
+    ("rw", "Ikinyarwanda"),
+    ("sw", "Kiswahili"),
+    ("tw", "Twi"),
+]
 
 
 class Permission(models.Model):
@@ -34,10 +44,16 @@ class Role(models.Model):
     BUYER = "buyer"
     FIELD_AGENT = "field_agent"
     DELIVERY_PARTNER = "delivery_partner"
+    COOPERATIVE = "cooperative"
     PLATFORM_ADMIN = "platform_admin"
     SUPER_ADMIN = "super_admin"
 
     ADMIN_SLUGS = (PLATFORM_ADMIN, SUPER_ADMIN)
+    # People choose one of these for themselves while setting up their
+    # account. Field agents are invited and admins are granted in /admin,
+    # so nobody can give themselves a staff role.
+    SELF_SERVE_SLUGS = (FARMER, BUYER, DELIVERY_PARTNER, COOPERATIVE)
+    STAFF_SLUGS = (FIELD_AGENT, PLATFORM_ADMIN, SUPER_ADMIN)
 
     slug = models.SlugField(max_length=50, unique=True)
     name = models.CharField(max_length=100)
@@ -66,6 +82,20 @@ class User(AbstractBaseUser, PermissionsMixin):
     display_name = models.CharField(max_length=150, blank=True)
     roles = models.ManyToManyField(Role, blank=True, related_name="users")
 
+    # Set while setting up the account (see apps/network/onboarding.py).
+    # Country decides currency, place lists and the phone default;
+    # language is kept for when the app is translated.
+    country = models.CharField(max_length=2, blank=True, help_text="ISO 3166-1 alpha-2, e.g. RW")
+    language = models.CharField(max_length=5, choices=LANGUAGES, blank=True)
+    # Which version of the terms and privacy notice they agreed to, and
+    # when. A new version (settings.TERMS_VERSION) asks them again.
+    terms_version = models.CharField(max_length=40, blank=True)
+    terms_accepted_at = models.DateTimeField(null=True, blank=True)
+    # When they saw (or skipped) the "add your phone number" step, so it
+    # isn't asked again on every visit.
+    phone_prompted_at = models.DateTimeField(null=True, blank=True)
+    onboarded_at = models.DateTimeField(null=True, blank=True)
+
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
@@ -92,6 +122,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self) -> str:
         return self.display_name or self.phone_number or self.email or f"User {self.pk}"
+
+    def needs_onboarding(self) -> bool:
+        """True until they've finished setting up their account, and again
+        whenever the terms change and they haven't agreed to the new ones."""
+        return self.onboarded_at is None or self.terms_version != settings.TERMS_VERSION
 
     def is_admin_role(self) -> bool:
         """Mirrors src/lib/permissions.ts's isAdminRole() — Platform Admin

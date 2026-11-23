@@ -5,12 +5,13 @@ from apps.identity.models import Role, User
 pytestmark = pytest.mark.django_db
 
 
-def test_seed_migration_created_all_six_roles():
+def test_seed_migrations_created_all_seven_roles():
     assert set(Role.objects.values_list("slug", flat=True)) == {
         "farmer",
         "buyer",
         "field_agent",
         "delivery_partner",
+        "cooperative",
         "platform_admin",
         "super_admin",
     }

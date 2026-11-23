@@ -189,6 +189,7 @@ apps/
          French, Kinyarwanda, Swahili and Twi ready to add. See apps/site/README.md
   web/   the frontend described in this README: platform screens on mock data, plus real sign-in
   api/   Django + DRF backend: identity (users, roles, sign-up/sign-in by phone code or email link, JWT, /me),
+         network (farmer, buyer, delivery partner and cooperative profiles) and account setup,
          health check, OpenAPI schema and docs at /api/v1/docs/
 packages/
   types/          shared domain types, hand-maintained today; generated from the API's OpenAPI
@@ -279,7 +280,8 @@ Decided and underway; see `apps/api` above and the Platform Blueprint for the fu
   `apps/web/src/types/` (and mirrored in `packages/types/`). Those become generated from the API's OpenAPI
   schema as domain endpoints land.
 - **Authentication** (done: sign-up and sign-in by phone code or email link, adding the other later, JWT
-  with server-side logout, roles; email through Brevo). Next: an SMS provider,
+  with server-side logout, roles; email through Brevo; account setup with self-chosen roles). Next: an SMS
+  provider, Google sign-in,
   and server-side role-based access control replacing the demo session behind the platform screens.
 - **Clients:** this web app becomes the public marketing site; the platform itself moves to a PWA and
   mobile apps, all on the same API and the same accounts.
