@@ -12,6 +12,7 @@ import { PhoneInput } from '@/components/ui/PhoneInput'
 import { usePhoneField } from '@/components/ui/usePhoneField'
 import { AuthLayout } from '@/components/layout/AuthLayout'
 import { formatPhone } from '@/lib/phone'
+import { landingFor } from '@/lib/onboarding'
 
 type Step = 'phone' | 'code' | 'email' | 'email-sent'
 
@@ -31,7 +32,7 @@ export function SignInPage() {
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
 
-  if (user) return <Navigate to="/account" replace />
+  if (user) return <Navigate to={landingFor(user)} replace />
 
   async function handleRequestMagicLink(event: React.FormEvent) {
     event.preventDefault()
@@ -68,8 +69,8 @@ export function SignInPage() {
     setError(null)
     setBusy(true)
     try {
-      await verifyOtp(phone.value, code)
-      navigate('/account')
+      const signedIn = await verifyOtp(phone.value, code)
+      navigate(landingFor(signedIn), { replace: true })
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Something went wrong. Try again.')
     } finally {
