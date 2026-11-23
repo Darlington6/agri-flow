@@ -8,13 +8,18 @@ from .models import MagicLinkToken, OtpCode, Permission, Role, User
 class UserAdmin(DjangoUserAdmin):
     model = User
     list_display = ["phone_number", "email", "display_name", "is_active", "is_staff"]
-    list_filter = ["is_active", "is_staff", "roles"]
+    list_filter = ["is_active", "is_staff", "roles", "country"]
     search_fields = ["phone_number", "email", "display_name"]
     ordering = ["phone_number"]
     filter_horizontal = ["roles"]
+    readonly_fields = ["onboarded_at", "terms_version", "terms_accepted_at", "phone_prompted_at"]
     fieldsets = (
         (None, {"fields": ("phone_number", "password")}),
-        ("Profile", {"fields": ("email", "display_name")}),
+        ("Profile", {"fields": ("email", "display_name", "country", "language")}),
+        (
+            "Account setup",
+            {"fields": ("onboarded_at", "terms_version", "terms_accepted_at", "phone_prompted_at")},
+        ),
         ("Roles & permissions", {"fields": ("roles", "is_active", "is_staff", "is_superuser")}),
         ("Important dates", {"fields": ("last_login", "date_joined")}),
     )

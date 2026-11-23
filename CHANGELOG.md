@@ -80,6 +80,13 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Added
 
+- Account setup in the API: people give their name, country and language, choose what they do on AgriFlow
+  (farmer, buyer, delivery partner, or the new cooperative role) with a few details about their farm or
+  business, optionally add a phone number, and agree to the terms. Each step is saved as they go, so they can
+  carry on later on any device. Which terms they agreed to, and when, is recorded, and changing the terms
+  version asks everyone again. Staff roles can't be chosen, and every profile starts unverified until staff
+  check it in `/admin`. Rwanda's provinces and districts are built in; elsewhere people type their region.
+
 - The sign-in and demo-role pages crossfade through three photos each, with the same slow pan and zoom as the
   site's home page: Gisenyi on Lake Kivu and the Kigali wetlands join the field agents on sign-in; hillside
   rows and Makete (Tanzania) on the demo page. The first photo loads straight away and the rest only after it;
