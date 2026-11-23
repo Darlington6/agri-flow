@@ -1,12 +1,49 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter } from 'react-router-dom'
+import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { AuthProvider } from '@/context/AuthContext'
 import { storeTokens } from '@/lib/apiClient'
 import { AccountPage } from './AccountPage'
 
-const phoneOnly = { id: 1, phone_number: '+250788123456', email: null, display_name: '', roles: [], date_joined: '' }
+const phoneOnly = {
+  id: 1,
+  phone_number: '+250788123456',
+  email: null,
+  display_name: 'Abena',
+  country: 'RW',
+  language: 'en',
+  roles: [],
+  needs_onboarding: false,
+  onboarded_at: '2026-11-23T10:00:00Z',
+  date_joined: '',
+}
+
+const OPTIONS = {
+  country: 'RW',
+  regions: [
+    { name: 'Northern Province', districts: ['Musanze', 'Burera'] },
+    { name: 'Southern Province', districts: ['Huye'] },
+  ],
+  crops: [
+    { value: 'maize', label: 'Maize' },
+    { value: 'beans', label: 'Beans' },
+  ],
+  buyer_types: [{ value: 'processor', label: 'Processor' }],
+  vehicle_types: [{ value: 'truck', label: 'Truck' }],
+}
+
+const FARMER = {
+  role: 'farmer',
+  verification: 'unverified',
+  created_at: '',
+  updated_at: '',
+  region: 'Northern Province',
+  district: 'Musanze',
+  crops: ['maize'],
+  farm_size_hectares: null,
+  cooperative_name: '',
+}
 
 function renderAccount(user: object, answers: Record<string, { status: number; body: unknown }> = {}) {
   const calls: { path: string; body: unknown }[] = []
@@ -15,15 +52,24 @@ function renderAccount(user: object, answers: Record<string, { status: number; b
     vi.fn(async (url: string, init: RequestInit = {}) => {
       const path = new URL(url).pathname
       calls.push({ path, body: init.body ? JSON.parse(String(init.body)) : undefined })
-      const answer = answers[path] ?? { status: 200, body: user }
+      const answer =
+        answers[path] ??
+        (path === '/api/v1/network/profiles/'
+          ? { status: 200, body: [] }
+          : path === '/api/v1/network/options/'
+            ? { status: 200, body: OPTIONS }
+            : { status: 200, body: user })
       return new Response(JSON.stringify(answer.body), { status: answer.status })
     }),
   )
   storeTokens('access', 'refresh')
   render(
     <AuthProvider>
-      <MemoryRouter>
-        <AccountPage />
+      <MemoryRouter initialEntries={['/account']}>
+        <Routes>
+          <Route path="/account" element={<AccountPage />} />
+          <Route path="/welcome" element={<p>At welcome</p>} />
+        </Routes>
       </MemoryRouter>
     </AuthProvider>,
   )
@@ -47,17 +93,83 @@ describe('AccountPage contacts', () => {
     expect(screen.queryByRole('button', { name: 'Add phone number' })).not.toBeInTheDocument()
   })
 
-  it('points an account without a role to the demo, and the logo home', async () => {
+  it('links the logo to the account home', async () => {
     renderAccount(phoneOnly)
-    expect(await screen.findByRole('heading', { name: "What's next" })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Explore the platform' })).toHaveAttribute('href', '/login')
-    expect(screen.getByRole('link', { name: 'AgriFlow home' })).toHaveAttribute('href', '/')
+    expect(await screen.findByRole('link', { name: 'AgriFlow home' })).toHaveAttribute('href', '/home')
   })
 
-  it("doesn't show the demo prompt once the account has a role", async () => {
-    renderAccount({ ...phoneOnly, roles: [{ slug: 'buyer', name: 'Buyer' }] })
-    expect(await screen.findByText('Buyer')).toBeInTheDocument()
-    expect(screen.queryByRole('heading', { name: "What's next" })).not.toBeInTheDocument()
+  it('lists the chosen roles with their verification, and roles given by AgriFlow', async () => {
+    renderAccount(
+      {
+        ...phoneOnly,
+        roles: [
+          { slug: 'farmer', name: 'Farmer' },
+          { slug: 'field_agent', name: 'Field Agent' },
+        ],
+      },
+      { '/api/v1/network/profiles/': { status: 200, body: [FARMER] } },
+    )
+    expect(await screen.findByText('Not verified yet')).toBeInTheDocument()
+    expect(screen.getByText('Field Agent')).toBeInTheDocument()
+    expect(screen.getByText('Given by AgriFlow')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Add another role' })).toHaveAttribute('href', '/add-role')
+  })
+
+  it("edits a role's details, sending only that role's fields", async () => {
+    const calls = renderAccount(phoneOnly, {
+      '/api/v1/network/profiles/': { status: 200, body: [FARMER] },
+      '/api/v1/network/profiles/farmer/': { status: 200, body: { ...FARMER, crops: ['maize', 'beans'] } },
+    })
+    await userEvent.click(await screen.findByRole('button', { name: 'Edit details for Farmer' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Beans' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Save details' }))
+
+    expect(await screen.findByRole('button', { name: 'Edit details for Farmer' })).toBeInTheDocument()
+    expect(calls).toContainEqual({
+      path: '/api/v1/network/profiles/farmer/',
+      body: {
+        region: 'Northern Province',
+        district: 'Musanze',
+        crops: ['maize', 'beans'],
+        farm_size_hectares: null,
+        cooperative_name: '',
+      },
+    })
+  })
+
+  it("shows the API's message next to the field it is about", async () => {
+    renderAccount(phoneOnly, {
+      '/api/v1/network/profiles/': { status: 200, body: [FARMER] },
+      '/api/v1/network/profiles/farmer/': {
+        status: 400,
+        body: { district: ['Choose a district in that region.'] },
+      },
+    })
+    await userEvent.click(await screen.findByRole('button', { name: 'Edit details for Farmer' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Save details' }))
+    expect(await screen.findByText('Choose a district in that region.')).toBeInTheDocument()
+    expect(screen.getByLabelText('District')).toHaveAttribute('aria-invalid', 'true')
+  })
+
+  it('saves name, country and language together', async () => {
+    const calls = renderAccount(phoneOnly)
+    await userEvent.selectOptions(await screen.findByLabelText('Language'), 'rw')
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }))
+    expect(await screen.findByText('Saved.')).toBeInTheDocument()
+    expect(calls).toContainEqual({
+      path: '/api/v1/auth/me/',
+      body: { display_name: 'Abena', country: 'RW', language: 'rw' },
+    })
+  })
+
+  it('sends an account that still needs setting up to /welcome', async () => {
+    renderAccount({ ...phoneOnly, needs_onboarding: true })
+    expect(await screen.findByText('At welcome')).toBeInTheDocument()
+  })
+
+  it('nudges an email-only account to add a phone number', async () => {
+    renderAccount({ ...phoneOnly, phone_number: null, email: 'abena@example.com' })
+    expect(await screen.findByText(/Add a phone number so buyers/)).toBeInTheDocument()
   })
 
   it('emails a confirmation link to the address being added', async () => {

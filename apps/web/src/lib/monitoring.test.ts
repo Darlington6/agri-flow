@@ -69,7 +69,11 @@ describe('identify', () => {
       phone_number: '+250788123456',
       email: 'abena@example.com',
       display_name: 'Abena',
+      country: 'RW',
+      language: 'en',
       roles: [{ slug: 'buyer', name: 'Buyer' }],
+      needs_onboarding: false,
+      onboarded_at: '2026-11-23T10:00:00Z',
       date_joined: '',
     })
     expect(Sentry.setUser).toHaveBeenLastCalledWith({ id: '42' })

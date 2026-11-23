@@ -83,10 +83,11 @@ export function AddEmail({ onDone }: { onDone: () => void }) {
 }
 
 export function AddPhone({ onDone }: { onDone: () => void }) {
-  const { requestPhoneAdd, confirmPhoneAdd } = useAuth()
+  const { user, requestPhoneAdd, confirmPhoneAdd } = useAuth()
   // Accounts don't record a country yet; when they do, pass it here so the
   // picker starts on it. Until then the device decides.
-  const phone = usePhoneField()
+  // The account's country first; the device only if it hasn't one.
+  const phone = usePhoneField(user?.country)
   const [code, setCode] = useState('')
   const [codeSent, setCodeSent] = useState(false)
   const [debugCode, setDebugCode] = useState<string | null>(null)
