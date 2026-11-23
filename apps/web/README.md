@@ -78,6 +78,26 @@ work with `libphonenumber-js`: it guesses the starting country (the account's, t
 a region in its language setting, then Rwanda), reads a local number with its leading 0, and writes numbers out
 for people (`formatPhone`). The API checks every number again.
 
+## Real accounts: setup, home and account
+
+After signing in, a real account goes to `/welcome` until it's set up, then to `/home` (`landingFor` in
+`src/lib/onboarding.ts`). `RequireAccount` guards `/home`, `/account` and `/add-role` the same way, so an
+account that isn't set up, or has new terms to agree to, always lands back on `/welcome`.
+
+- **`/welcome`** asks one question per screen: name, country and language, role and its details, a phone
+  number (skippable; not asked if they signed up with one) and the terms. Each step saves to the API as it
+  goes and the page starts at the API's `next_step`, so people can stop and carry on on any device. Staff skip
+  the role step; an account already set up sees only the new terms.
+- **The flow (`OnboardingFlow`) doesn't call the API itself**: it takes a driver with the starting point and
+  one function per save. `WelcomePage` passes the API driver; the demo's walkthrough can pass one that saves
+  nothing, so both show the same screens.
+- **`RoleDetailsForm`** is the per-role form, used in setup and to edit details on `/account`. Pick lists
+  (Rwanda's provinces and districts, crops, buyer types, vehicles) come from the API's `network/options/`;
+  countries without a place list get text fields. Field errors from the API show next to their field.
+- **`/home`** shows each role's verification and what's coming for it during the pilot, with the demo a click
+  away. Real accounts never show sample data.
+- The terms and privacy links point at the public site, `VITE_SITE_URL` (default: the production site).
+
 ## Photos
 
 The entry pages (sign-in, demo roles) use `AuthLayout`: photos beside the content (a band on top on phones and
