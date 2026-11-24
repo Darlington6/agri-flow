@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect, useMemo } from 'react'
-import { Menu, Bell, ChevronDown, LogOut } from 'lucide-react'
+import { Menu, Bell, ChevronDown, LogOut, Compass } from 'lucide-react'
 import { useSession } from '@/context/SessionContext'
 import { scopedNotifications } from '@/lib/scope'
 
-export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
+export function Topbar({ onMenuClick, onTourClick }: { onMenuClick: () => void; onTourClick?: () => void }) {
   const { session, logout } = useSession()
   const [notifOpen, setNotifOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -33,6 +33,16 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
       </div>
 
       <div className="flex items-center gap-2">
+        {onTourClick && (
+          <button
+            type="button"
+            onClick={onTourClick}
+            className="flex items-center gap-1.5 rounded-lg p-2 text-sm font-medium text-ink-600 hover:bg-ink-50"
+          >
+            <Compass className="h-5 w-5" aria-hidden />
+            <span className="sr-only sm:not-sr-only">Tour</span>
+          </button>
+        )}
         <div className="relative" ref={notifRef}>
           <button
             onClick={() => setNotifOpen((v) => !v)}
