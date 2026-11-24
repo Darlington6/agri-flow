@@ -261,10 +261,11 @@ export function verifyMagicLink(token: string) {
 }
 
 /** Continue with Google: the ID token Google's button handed us. */
-export function signInWithGoogle(credential: string) {
+/** `credential`: the ID token Google sent back; `nonce`: the one we put in the request (the API checks they match). */
+export function signInWithGoogle(credential: string, nonce: string) {
   return request<AuthTokens>('/api/v1/auth/google/', {
     method: 'POST',
-    body: JSON.stringify({ credential }),
+    body: JSON.stringify({ credential, nonce }),
   })
 }
 

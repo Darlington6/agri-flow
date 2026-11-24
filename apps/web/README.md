@@ -111,16 +111,23 @@ account that isn't set up, or has new terms to agree to, always lands back on `/
 
 ## Continue with Google
 
-`GoogleButton` (`src/components/auth/`) draws Google's own button (Google Identity Services), loading Google's
-script only on the sign-in page. Its ID token goes to the API's `auth/google/`, which checks it. The client ID is
-public and built in (`VITE_GOOGLE_CLIENT_ID` overrides it). Google only allows the addresses listed on that client
-(local, staging and production), so the button doesn't work on per-PR preview links. Inside apps' built-in
-browsers (WhatsApp, Facebook, Instagram), where Google refuses to sign in, it explains how to open the page in a
-real browser instead. `vercel.json` allows Google's sign-in addresses in the security policy, and the
-opener policy is `same-origin-allow-popups` so Google's popup can report back. Google first draws a stand-in
-of its button that stays unstyled until Google's styles arrive (some of which the policy blocks), so it would
-show a huge logo: `GoogleButton` hides it and shows a plain pill until Google's frame has loaded. Don't clip the
-button's area: Google's frame reaches 10px past each side for its focus ring.
+`GoogleButton` (`src/components/auth/`) is our own button (outline style, Google's "G" in its standard colours),
+so it's there at once and never shows the browser's Google account. Tapping it sends people to Google's account
+picker with Google's standard sign-in redirect (OpenID Connect, `response_type=id_token`, `src/lib/google.ts`);
+no Google script, frame or popup is loaded, so `vercel.json` allows nothing of Google's and keeps the opener
+policy at `same-origin`.
+
+Google sends people back to `/auth/google` (`GoogleReturnPage`) with an ID token in the address's `#fragment`.
+The page removes it from the address at once, checks the random `state` it saved in `sessionStorage` before
+leaving (so only this tab's own request is accepted, within 10 minutes, once), and sends the token with its
+`nonce` to the API's `auth/google/`, which checks both. Closing Google's picker goes quietly back to `/signin`;
+other failures go back there with the reason. Error reports scrub `id_token`, `state` and `nonce` from addresses.
+
+The client ID is public and built in (`VITE_GOOGLE_CLIENT_ID` overrides it). Google only sends people back to the
+addresses listed on that client in the Google Cloud console (**Authorized redirect URIs**:
+`<origin>/auth/google` for local, staging and production), so it doesn't work on per-PR preview links. Inside
+apps' built-in browsers (WhatsApp, Facebook, Instagram), where Google refuses to sign in, the button is replaced
+by how to open the page in a real browser.
 
 ## Photos
 
