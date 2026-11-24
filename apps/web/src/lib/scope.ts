@@ -22,6 +22,7 @@ import {
   buyers,
   buyerById,
   farmerById,
+  farmerGroupById,
   deliveryPartnerById,
 } from '@/data'
 import { isAdminRole } from './permissions'
@@ -29,7 +30,8 @@ import { isAdminRole } from './permissions'
 // Scopes the mock dataset down to what a given demo session "owns" or is
 // assigned to. Platform Admin is unscoped (sees the whole network). Buyer is
 // scoped to their own buyer record. Field Agent is scoped to the regions
-// they're assigned to. Farmer is scoped to their own single record. This is
+// they're assigned to. Farmer is scoped to their own single record.
+// Cooperative is scoped to its member farmers (and what they're on). This is
 // the single place that logic lives, so pages stay simple: call the scope
 // function instead of importing raw data.
 //
@@ -56,13 +58,16 @@ function scopedFarmerIds(session: Session | null, liveContracts: Contract[] = co
   if (session.role === 'Farmer' && session.farmerId) {
     return new Set([session.farmerId])
   }
+  if (session.role === 'Cooperative' && session.cooperativeId) {
+    return new Set(farmerGroupById(session.cooperativeId)?.farmerIds ?? [])
+  }
   return new Set()
 }
 
 export function scopedContracts(session: Session | null, liveContracts: Contract[] = contracts): Contract[] {
   if (!session || isAdminRole(session.role)) return liveContracts
   if (session.role === 'Buyer' && session.buyerId) return liveContracts.filter((c) => c.buyerId === session.buyerId)
-  if (session.role === 'Field Agent' || session.role === 'Farmer') {
+  if (session.role === 'Field Agent' || session.role === 'Farmer' || session.role === 'Cooperative') {
     const ids = scopedFarmerIds(session, liveContracts)!
     return liveContracts.filter((c) => c.farmerIds.some((fid) => ids.has(fid)))
   }
@@ -120,6 +125,10 @@ export function scopedPayments(session: Session | null, liveContracts: Contract[
   if (session.role === 'Farmer' && session.farmerId) {
     return payments.filter((p) => p.counterpartyId === session.farmerId)
   }
+  if (session.role === 'Cooperative') {
+    const members = scopedFarmerIds(session, liveContracts)!
+    return payments.filter((p) => members.has(p.counterpartyId))
+  }
   return []
 }
 
@@ -135,7 +144,7 @@ export function scopedBuyers(session: Session | null): Buyer[] {
 export function scopedRegions(session: Session | null, liveContracts: Contract[] = contracts): GhanaRegion[] {
   if (!session || isAdminRole(session.role)) return []
   if (session.role === 'Field Agent' && session.agentRegions) return session.agentRegions
-  if (session.role === 'Buyer' || session.role === 'Farmer') {
+  if (session.role === 'Buyer' || session.role === 'Farmer' || session.role === 'Cooperative') {
     return Array.from(new Set(scopedFarmers(session, liveContracts).map((f) => f.region)))
   }
   return []
@@ -143,7 +152,7 @@ export function scopedRegions(session: Session | null, liveContracts: Contract[]
 
 export function scopedNotifications(session: Session | null, liveContracts: Contract[] = contracts): Notification[] {
   if (!session || isAdminRole(session.role)) return notifications
-  if (session.role === 'Buyer' || session.role === 'Farmer') {
+  if (session.role === 'Buyer' || session.role === 'Farmer' || session.role === 'Cooperative') {
     const contractIds = new Set(scopedContracts(session, liveContracts).map((c) => c.id))
     const regions = new Set(scopedRegions(session, liveContracts))
     return notifications.filter(
@@ -161,7 +170,7 @@ export function scopedNotifications(session: Session | null, liveContracts: Cont
 export function canViewFarmer(session: Session | null, farmer: Farmer, liveContracts: Contract[] = contracts): boolean {
   if (!session || isAdminRole(session.role)) return true
   if (session.role === 'Field Agent' && session.agentRegions) return session.agentRegions.includes(farmer.region)
-  if (session.role === 'Buyer' || session.role === 'Farmer')
+  if (session.role === 'Buyer' || session.role === 'Farmer' || session.role === 'Cooperative')
     return scopedFarmerIds(session, liveContracts)!.has(farmer.id)
   return false
 }
@@ -173,7 +182,7 @@ export function canViewContract(
 ): boolean {
   if (!session || isAdminRole(session.role)) return true
   if (session.role === 'Buyer' && session.buyerId) return contract.buyerId === session.buyerId
-  if (session.role === 'Field Agent' || session.role === 'Farmer') {
+  if (session.role === 'Field Agent' || session.role === 'Farmer' || session.role === 'Cooperative') {
     const ids = scopedFarmerIds(session, liveContracts)!
     return contract.farmerIds.some((fid) => ids.has(fid))
   }
@@ -188,6 +197,11 @@ export function canViewBuyer(session: Session | null, buyerId: string): boolean 
 
 export function currentFarmer(session: Session | null): Farmer | undefined {
   if (session?.role === 'Farmer' && session.farmerId) return farmerById(session.farmerId)
+  return undefined
+}
+
+export function currentCooperative(session: Session | null) {
+  if (session?.role === 'Cooperative' && session.cooperativeId) return farmerGroupById(session.cooperativeId)
   return undefined
 }
 

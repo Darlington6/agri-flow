@@ -125,7 +125,7 @@ export function SettingsPage() {
         </Card>
       )}
 
-      {(session?.role === 'Buyer' || session?.role === 'Farmer') && (
+      {(session?.role === 'Buyer' || session?.role === 'Farmer' || session?.role === 'Cooperative') && (
         <Card>
           <div className="flex items-center gap-2">
             <MessageCircle className="h-4 w-4 text-ink-600" />

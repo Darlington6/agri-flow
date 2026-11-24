@@ -39,6 +39,7 @@ import {
   scopedProductionCycles,
   scopedRegions,
   currentFarmer,
+  currentCooperative,
   currentDeliveryPartner,
   myDeliveryJobs,
 } from '@/lib/scope'
@@ -59,6 +60,7 @@ const SUBTITLE = {
   Buyer: "Here's the status of your orders today.",
   'Field Agent': "Here's what your farms need today.",
   Farmer: "Here's how your farm is tracking today.",
+  Cooperative: "Here's how your members are tracking today.",
   'Delivery Partner': "Here's what's on your route today.",
 } as const
 
@@ -106,6 +108,7 @@ export function DashboardPage() {
   const me = useMemo(() => currentFarmer(session), [session])
   const myCycle = me ? productionByFarmer(me.id, liveProductionCycles)[0] : undefined
   const myPartner = useMemo(() => currentDeliveryPartner(session), [session])
+  const myCooperative = useMemo(() => currentCooperative(session), [session])
 
   const canManageMatches = isAdminRole(role) || role === 'Buyer'
   const pendingMatches = useMemo(() => {
@@ -273,6 +276,33 @@ export function DashboardPage() {
         </div>
       )}
 
+      {role === 'Cooperative' && myCooperative && (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <StatCard label="Members" value={String(scopedFarmerList.length)} icon={Users} hint={myCooperative.name} />
+          <StatCard
+            label="Contracted Volume"
+            value={formatTonnes(scopedFarmerList.reduce((sum, f) => sum + f.contractedQuantityTonnes, 0))}
+            icon={Sprout}
+            hint={`Across ${contracts.length} contract${contracts.length === 1 ? '' : 's'}`}
+          />
+          <StatCard
+            label="Expected Harvest"
+            value={formatTonnes(scopedFarmerList.reduce((sum, f) => sum + f.latestYieldEstimateTonnes, 0))}
+            icon={Warehouse}
+            hint="Latest estimates from members"
+          />
+          <StatCard
+            label="Needing Attention"
+            value={String(
+              scopedFarmerList.filter((f) => f.riskStatus === 'high' || !f.hasSubmittedLatestUpdate).length,
+            )}
+            icon={AlertTriangle}
+            tone="risk"
+            hint="High risk or missing crop update"
+          />
+        </div>
+      )}
+
       {role === 'Farmer' && me && (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard
@@ -306,11 +336,11 @@ export function DashboardPage() {
             </Card>
           )}
 
-          {(role === 'Buyer' || role === 'Farmer') && (
+          {(role === 'Buyer' || role === 'Farmer' || role === 'Cooperative') && (
             <Card padded={false}>
               <div className="px-6 pt-6">
                 <h3 className="font-display text-base font-semibold text-ink-900">
-                  {role === 'Buyer' ? 'Your Contracts' : 'My Contract'}
+                  {role === 'Buyer' ? 'Your Contracts' : role === 'Cooperative' ? "Members' Contracts" : 'My Contract'}
                 </h3>
                 <p className="text-xs text-ink-600">Progress against contracted volume</p>
               </div>
@@ -327,7 +357,7 @@ export function DashboardPage() {
                       <div>
                         <p className="text-sm font-medium text-ink-800">
                           {c.id} · {cropById(c.cropId)?.name}
-                          {role === 'Farmer' && buyer ? ` · ${buyer.name}` : ''}
+                          {(role === 'Farmer' || role === 'Cooperative') && buyer ? ` · ${buyer.name}` : ''}
                         </p>
                         <p className="text-xs text-ink-500">
                           {formatTonnes(c.suppliedQuantityTonnes)} / {formatTonnes(c.contractedQuantityTonnes)} ·{' '}
@@ -345,10 +375,12 @@ export function DashboardPage() {
 
           {role === 'Farmer' && me && <OpenOpportunities farmerId={me.id} />}
 
-          {role === 'Field Agent' && (
+          {(role === 'Field Agent' || role === 'Cooperative') && (
             <Card padded={false}>
               <div className="px-6 pt-6">
-                <h3 className="font-display text-base font-semibold text-ink-900">Farms Needing Attention</h3>
+                <h3 className="font-display text-base font-semibold text-ink-900">
+                  {role === 'Cooperative' ? 'Members Needing Attention' : 'Farms Needing Attention'}
+                </h3>
                 <p className="text-xs text-ink-600">High risk or missing a crop update</p>
               </div>
               <div className="mt-4 flex flex-col divide-y divide-ink-50 px-6 pb-6">
@@ -497,7 +529,7 @@ export function DashboardPage() {
               {summary?.headline ?? 'Analyzing current supply chain signals…'}
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
-              <Link to={role === 'Field Agent' ? '/farmers' : '/contracts/AG-204'}>
+              <Link to={role === 'Field Agent' || role === 'Cooperative' ? '/farmers' : '/contracts/AG-204'}>
                 <Button size="sm" variant="inverse">
                   Review Risk
                 </Button>

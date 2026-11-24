@@ -9,7 +9,6 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 - The app's security policy allows only Google's sign-in addresses (`accounts.google.com/gsi/…`), and its
   opener policy is `same-origin-allow-popups` so Google's sign-in popup can report back.
-
 - Builds stop when `VITE_API_URL`, `PUBLIC_API_URL` or `PUBLIC_APP_URL` isn't a plain `https://` address,
   without printing the value; Vercel builds of the app also need `VITE_API_URL`. These values are public, and
   a database connection string had been pasted into one.
@@ -83,6 +82,15 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Added
 
+- A Cooperative demo role: the manager of Techiman Growers' Cooperative, seven growers already on the demo's
+  contracts (Abena, the demo farmer, among them). Its dashboard shows members, contracted volume, expected
+  harvest and who needs attention; "Members" lists only its farmers, and contracts, harvests, payments and
+  alerts are scoped to them.
+- "See how signing up works" on the demo page: the real account setup screens, saving and sending nothing,
+  ending in the demo as the role chosen.
+- A first-visit tour of the demo for each role (who you are, where to start, how to switch role), remembered
+  per role on the device and replayable from the Tour button. It's a real dialog: focus stays inside and
+  Escape closes it.
 - Continue with Google on the sign-in page. New Google users get an account (named from Google) and go
   straight to account setup; someone who already signed up with the same email is signed in to that account,
   which remembers their Google ID from then on. The API checks every Google token itself. In WhatsApp's,
@@ -90,7 +98,6 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
   a real browser.
 - The sign-in page shows just the logo above the card: no product name or pilot badge (the demo link sits below
   the card, and the demo shows its own badge). Screen readers still hear "Sign in to AgriFlow".
-
 - Account setup in the app (`/welcome`): after signing up, people answer one question per screen (name,
   country and language, what they do on AgriFlow and a few details, a phone number they can skip, and the
   terms), and can stop and carry on later on any device. Rwanda's provinces and districts are lists to pick
@@ -192,6 +199,10 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 - `ruff format --check` in CI.
 
 ### Fixed
+
+- The Google button no longer flashes a huge Google logo while it loads. Google first draws an unstyled
+  stand-in copy of its button (its styles arrive later, and production's security policy blocks some of
+  them); the stand-in is now hidden and a plain pill holds the space until Google's real button has loaded.
 
 - Phone numbers are always stored one way (+250788123456), however they're typed. An admin made with
   `createsuperuser` as "+250 793 440 734" used to be a different account from "+250793440734", and could only log
