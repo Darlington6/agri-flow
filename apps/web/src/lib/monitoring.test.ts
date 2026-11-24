@@ -20,6 +20,10 @@ describe('scrubbing', () => {
     )
     expect(scrubUrl('/confirm-email?token=secret&from=mail#top')).toBe('/confirm-email?token=[Filtered]&from=mail#top')
     expect(scrubUrl('https://app.example/account')).toBe('https://app.example/account')
+    // What Google sends back after its sign-in, in the #fragment.
+    expect(scrubUrl('/auth/google#state=s1&id_token=eyJ.x.y&authuser=0')).toBe(
+      '/auth/google#state=[Filtered]&id_token=[Filtered]&authuser=0',
+    )
   })
 
   it('cleans a whole error report', () => {

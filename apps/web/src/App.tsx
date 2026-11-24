@@ -17,6 +17,7 @@ const AccountPage = page(() => import('@/pages/auth/AccountPage'), 'AccountPage'
 const WelcomePage = page(() => import('@/pages/onboarding/WelcomePage'), 'WelcomePage')
 const HomePage = page(() => import('@/pages/onboarding/HomePage'), 'HomePage')
 const AddRolePage = page(() => import('@/pages/onboarding/AddRolePage'), 'AddRolePage')
+const GoogleReturnPage = page(() => import('@/pages/auth/GoogleReturnPage'), 'GoogleReturnPage')
 const MagicLinkVerifyPage = page(() => import('@/pages/auth/MagicLinkVerifyPage'), 'MagicLinkVerifyPage')
 const ConfirmEmailPage = page(() => import('@/pages/auth/ConfirmEmailPage'), 'ConfirmEmailPage')
 const DashboardPage = page(() => import('@/pages/DashboardPage'), 'DashboardPage')
@@ -54,6 +55,7 @@ function App() {
                 <Route path="/add-role" element={<AddRolePage />} />
                 <Route path="/account" element={<AccountPage />} />
                 <Route path="/magic-link" element={<MagicLinkVerifyPage />} />
+                <Route path="/auth/google" element={<GoogleReturnPage />} />
                 <Route path="/confirm-email" element={<ConfirmEmailPage />} />
 
                 <Route element={<AppLayout />}>

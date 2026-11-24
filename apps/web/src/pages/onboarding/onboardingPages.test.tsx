@@ -1,9 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { act, render, screen, waitFor } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { AuthProvider } from '@/context/AuthContext'
 import { storeTokens } from '@/lib/apiClient'
+import { GoogleReturnPage } from '@/pages/auth/GoogleReturnPage'
 import { SignInPage } from '@/pages/auth/SignInPage'
 import { WelcomePage } from './WelcomePage'
 import { HomePage } from './HomePage'
@@ -59,6 +60,7 @@ function renderAt(path: string, answers: Answers, signedIn = true) {
       <MemoryRouter initialEntries={[path]}>
         <Routes>
           <Route path="/signin" element={<SignInPage />} />
+          <Route path="/auth/google" element={<GoogleReturnPage />} />
           <Route path="/welcome" element={<WelcomePage />} />
           <Route path="/home" element={<HomePage />} />
         </Routes>
@@ -133,27 +135,20 @@ describe('account setup pages', () => {
   })
 
   describe('continue with Google', () => {
-    let callback: ((r: { credential: string }) => void) | undefined
-    beforeEach(() => {
-      window.google = {
-        accounts: {
-          id: {
-            initialize: vi.fn((config) => {
-              callback = config.callback
-            }),
-            renderButton: vi.fn(),
-            disableAutoSelect: vi.fn(),
-          },
-        },
-      }
-    })
+    // What startGoogleSignIn leaves in this tab before going to Google.
+    function cameBackFromGoogle(fragment: string) {
+      sessionStorage.setItem('agriflow.google-sign-in', JSON.stringify({ state: 's1', nonce: 'n1', at: Date.now() }))
+      window.history.replaceState(null, '', `/auth/google#${fragment}`)
+    }
     afterEach(() => {
-      delete window.google
+      sessionStorage.clear()
+      window.history.replaceState(null, '', '/')
     })
 
     it('signs in a new Google account and takes them to set up', async () => {
+      cameBackFromGoogle('state=s1&id_token=google-id-token&authuser=0')
       const calls = renderAt(
-        '/signin',
+        '/auth/google',
         {
           'POST /api/v1/auth/google/': { body: { access: 'a', refresh: 'r', user: NEW_USER, created: true } },
           '/api/v1/onboarding/': { body: { ...STATE, next_step: 'role' } },
@@ -164,21 +159,23 @@ describe('account setup pages', () => {
         },
         false,
       )
-      await waitFor(() => expect(callback).toBeDefined())
-      await act(async () => callback!({ credential: 'google-id-token' }))
 
       expect(await screen.findByRole('heading', { name: 'Welcome to AgriFlow' })).toBeInTheDocument()
       expect(calls).toContainEqual({
         path: '/api/v1/auth/google/',
         method: 'POST',
-        body: { credential: 'google-id-token' },
+        body: { credential: 'google-id-token', nonce: 'n1' },
       })
       expect(localStorage.getItem('agriflow.auth.access')).toBe('a')
+      // The token is gone from the address, and the request can't be used again.
+      expect(window.location.hash).toBe('')
+      expect(sessionStorage.getItem('agriflow.google-sign-in')).toBeNull()
     })
 
-    it("says why when Google sign-in can't be used", async () => {
+    it("goes back to sign-in and says why when Google sign-in can't be used", async () => {
+      cameBackFromGoogle('state=s1&id_token=x')
       renderAt(
-        '/signin',
+        '/auth/google',
         {
           'POST /api/v1/auth/google/': {
             status: 409,
@@ -187,9 +184,22 @@ describe('account setup pages', () => {
         },
         false,
       )
-      await waitFor(() => expect(callback).toBeDefined())
-      await act(async () => callback!({ credential: 'x' }))
       expect(await screen.findByRole('alert')).toHaveTextContent('linked to a different Google account')
+      expect(screen.getByRole('button', { name: 'Continue with Google' })).toBeInTheDocument()
+    })
+
+    it('refuses an answer this tab never asked for, without calling the API', async () => {
+      cameBackFromGoogle('state=someone-elses&id_token=x')
+      const calls = renderAt('/auth/google', {}, false)
+      expect(await screen.findByRole('alert')).toHaveTextContent('expired')
+      expect(calls.filter((c) => c.path === '/api/v1/auth/google/')).toHaveLength(0)
+    })
+
+    it("goes quietly back to sign-in when they close Google's picker", async () => {
+      cameBackFromGoogle('error=access_denied&state=s1')
+      renderAt('/auth/google', {}, false)
+      expect(await screen.findByRole('button', { name: 'Continue with Google' })).toBeInTheDocument()
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument()
     })
   })
 })

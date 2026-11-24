@@ -1,70 +1,43 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { act, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { GoogleButton } from './GoogleButton'
-import type { GoogleIdentity } from '@/lib/google'
-
-function fakeGoogle() {
-  const id = {
-    initialize: vi.fn(),
-    renderButton: vi.fn((parent: HTMLElement, _options: Parameters<GoogleIdentity['renderButton']>[1]) => {
-      parent.innerHTML = '<button>Continue with Google</button>'
-    }),
-    disableAutoSelect: vi.fn(),
-  } satisfies GoogleIdentity
-  window.google = { accounts: { id } }
-  return id
-}
 
 describe('GoogleButton', () => {
   afterEach(() => {
-    delete window.google
     vi.restoreAllMocks()
+    vi.unstubAllGlobals()
+    sessionStorage.clear()
   })
 
-  it("draws Google's button and passes on the credential it hands back", async () => {
-    const google = fakeGoogle()
-    const onCredential = vi.fn()
-    render(<GoogleButton onCredential={onCredential} before={<p>Or</p>} />)
-
-    expect(await screen.findByRole('button', { name: 'Continue with Google' })).toBeInTheDocument()
+  it('is our own button, there at once, the same size as the other sign-in buttons', () => {
+    render(<GoogleButton before={<p>Or</p>} />)
+    const button = screen.getByRole('button', { name: 'Continue with Google' })
+    expect(button).toBeEnabled()
+    expect(button).toHaveClass('h-11', 'rounded-full')
+    expect(button.querySelector('svg')).toHaveAttribute('aria-hidden')
     expect(screen.getByText('Or')).toBeInTheDocument()
-    const config = google.initialize.mock.calls[0][0]
-    expect(config.client_id).toMatch(/\.apps\.googleusercontent\.com$/)
-    expect(google.renderButton.mock.calls[0][1]).toMatchObject({
-      text: 'continue_with',
-      theme: 'outline',
-      locale: 'en',
-    })
-
-    config.callback({ credential: 'id-token' })
-    expect(onCredential).toHaveBeenCalledWith('id-token')
+    // Nothing of Google's is loaded until someone taps it.
+    expect(document.querySelector('script[src*="accounts.google.com"]')).toBeNull()
   })
 
-  it("shows a plain pill until Google's button frame has loaded, never Google's unstyled stand-in", async () => {
-    const google = fakeGoogle()
-    google.renderButton.mockImplementation((parent: HTMLElement) => {
-      parent.innerHTML = '<div role="button">stand-in</div><iframe title="Sign in with Google"></iframe>'
-    })
-    render(<GoogleButton onCredential={() => {}} />)
+  it("goes to Google's account picker when tapped", async () => {
+    const assign = vi.fn()
+    vi.stubGlobal('location', { ...window.location, origin: 'https://app.example', assign })
+    render(<GoogleButton />)
+    await userEvent.click(screen.getByRole('button', { name: 'Continue with Google' }))
 
-    expect(screen.getByTestId('google-button-placeholder')).toBeInTheDocument()
-    const frame = await screen.findByTitle('Sign in with Google')
-    expect(frame.parentElement).toHaveClass('opacity-0')
-
-    // Never clipped: Google's frame reaches past the area for its focus ring.
-    expect(screen.getByTestId('google-button')).not.toHaveClass('overflow-hidden')
-
-    act(() => frame.dispatchEvent(new Event('load')))
-    expect(screen.queryByTestId('google-button-placeholder')).not.toBeInTheDocument()
-    expect(frame.parentElement).toHaveClass('opacity-100')
+    const url = new URL(assign.mock.calls[0][0])
+    expect(url.origin + url.pathname).toBe('https://accounts.google.com/o/oauth2/v2/auth')
+    expect(url.searchParams.get('redirect_uri')).toBe('https://app.example/auth/google')
+    expect(url.searchParams.get('prompt')).toBe('select_account')
+    expect(screen.getByRole('button', { name: 'Opening Google…' })).toBeDisabled()
   })
 
   it('explains how to open a real browser inside apps that block Google', () => {
     vi.spyOn(navigator, 'userAgent', 'get').mockReturnValue('Mozilla/5.0 (Linux; Android 14; wv) WhatsApp')
-    const google = fakeGoogle()
-    render(<GoogleButton onCredential={() => {}} before={<p>Or</p>} />)
+    render(<GoogleButton before={<p>Or</p>} />)
     expect(screen.getByText(/open this page in your browser/)).toBeInTheDocument()
-    expect(screen.getByText('Or')).toBeInTheDocument()
-    expect(google.initialize).not.toHaveBeenCalled()
+    expect(screen.queryByRole('button')).not.toBeInTheDocument()
   })
 })
