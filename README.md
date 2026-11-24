@@ -88,7 +88,7 @@ Intelligence are shown as "Coming soon" in the UI — they are not implemented.
 
 ## Role-based access
 
-The six demo roles are not just labels — each is scoped to a distinct nav and dataset, computed in
+The seven demo roles are not just labels — each is scoped to a distinct nav and dataset, computed in
 `src/lib/scope.ts` and `src/lib/permissions.ts`. A route or record outside a role's scope isn't just
 hidden from the sidebar — `AppLayout` guards every route against the current role's permissions, and
 detail pages additionally guard against out-of-scope individual records (e.g. a buyer trying another
@@ -110,13 +110,24 @@ than rendering.
   of their own contract, expected harvest, climate-smart practice score and payment history. "Farmers" in
   their nav goes straight to their own profile rather than a directory; Demand, Production and Finance
   aren't reachable at all.
+- **Cooperative** — logged in as the manager of a farmers' cooperative (Techiman Growers' Cooperative: seven
+  tomato and pepper growers in Bono and Bono East, Abena among them). Sees only its members ("Members" in the
+  nav), the contracts they supply, their harvests, payments and risk alerts. Demand, Production and Finance
+  aren't reachable.
 - **Field Agent** — assigned to a set of regions (Bono, Bono East, Ashanti in this demo). Sees only
   farmers, production cycles, harvests and climate risk within those regions. Demand, Contracts and
   Finance are not in their nav or reachable directly.
-- **Delivery Partner** — logged in as a specific delivery partner (Kwabena, an individual mover in this
-  demo, tied into the same AG-204 story as the other roles). Sees only their own Job Board: available
+- **Delivery Partner** — logged in as a specific delivery partner (Kwabena of Bono Freight Movers in this
+  demo, covering the same regions as the AG-204 story). Sees only their own Job Board: available
   jobs ranked for them, and the jobs they've booked. No access to farmers, contracts, or financial data
   beyond their own delivery fees.
+
+### Getting around the demo
+
+- **A first-visit tour** opens the first time each role is explored on a device: who you're playing, the pages
+  to start with, and how to switch role. The **Tour** button in the top bar replays it.
+- **See how signing up works** (on the demo page, `/try-sign-up`) runs the real account setup screens, saving
+  nothing (the phone step gives its code on screen), then opens the demo as the role chosen.
 
 ## Interactive features
 

@@ -11,7 +11,7 @@ describe('isAdminRole', () => {
   })
 
   it('treats every other role, and no role, as non-admin', () => {
-    for (const role of ['Buyer', 'Farmer', 'Field Agent', 'Delivery Partner'] as DemoRole[]) {
+    for (const role of ['Buyer', 'Farmer', 'Cooperative', 'Field Agent', 'Delivery Partner'] as DemoRole[]) {
       expect(isAdminRole(role)).toBe(false)
     }
     expect(isAdminRole(null)).toBe(false)
