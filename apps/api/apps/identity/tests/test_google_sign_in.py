@@ -136,3 +136,20 @@ def test_the_reason_a_token_was_refused_is_logged_without_the_token(caplog):
     post(token)
     assert "InvalidAudienceError" in caplog.text
     assert token not in caplog.text
+
+
+def test_a_matching_nonce_is_accepted():
+    response = APIClient().post(
+        URL, {"credential": credential(nonce="n-123"), "nonce": "n-123"}, format="json"
+    )
+    assert response.status_code == 200
+
+
+@pytest.mark.parametrize(
+    "token_nonce", [pytest.param("n-other", id="different"), pytest.param(None, id="missing")]
+)
+def test_a_token_without_the_nonce_we_asked_for_is_refused(token_nonce):
+    token = credential(nonce=token_nonce)
+    response = APIClient().post(URL, {"credential": token, "nonce": "n-123"}, format="json")
+    assert response.status_code == 400
+    assert not User.objects.exists()
