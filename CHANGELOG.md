@@ -7,6 +7,8 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Security
 
+- `glob` and `minimatch` are held at their fixed versions (14.0.2+ and 11.0.1+) across the repo. The Expo app's
+  build and test tools brought in older copies with moderate advisories, which the CI audit would have stopped.
 - The app's security policy allows only Google's sign-in addresses (`accounts.google.com/gsi/…`), and its
   opener policy is `same-origin-allow-popups` so Google's sign-in popup can report back.
 - Builds stop when `VITE_API_URL`, `PUBLIC_API_URL` or `PUBLIC_APP_URL` isn't a plain `https://` address,
@@ -81,6 +83,19 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
   handling.
 
 ### Added
+
+- **The Expo app** (`apps/app`, Expo SDK 58 with Expo Router): one codebase for iOS, Android and the web, where
+  real features are built from now on. This first step sets up the groundwork every screen will use:
+  - the site's look: the same light and dark colour roles as the web app (a test fails if they drift apart),
+    Fraunces and IBM Plex Sans shipped inside the app so they work offline, pill buttons in forest (gold in
+    dark mode), and screens that scroll on small phones and stay a readable width on tablets and desktops;
+  - translations from the start: every string goes through `t()`, keyed by the five launch languages the API
+    stores (English, French, Kinyarwanda, Swahili, Twi). A language is offered only once a native speaker has
+    reviewed it; until then people see English;
+  - a first screen with the logo and a note that signing in is coming next;
+  - lint, typecheck, tests (Jest) and a web build in the same root commands CI runs, and `npm run dev` starts it.
+
+  The web app (`apps/web`) stays as the demo until its screens move over.
 
 - A Cooperative demo role: the manager of Techiman Growers' Cooperative, seven growers already on the demo's
   contracts (Abena, the demo farmer, among them). Its dashboard shows members, contracted volume, expected
