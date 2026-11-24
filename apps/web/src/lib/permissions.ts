@@ -47,6 +47,8 @@ export const ROLE_PERMISSIONS: Record<DemoRole, NavKey[]> = {
   Buyer: ['dashboard', 'demand', 'contracts', 'harvest', 'climate', 'finance', 'marketplace', 'copilot', 'settings'],
   'Field Agent': ['dashboard', 'farmers', 'production', 'harvest', 'climate', 'copilot', 'settings'],
   Farmer: ['dashboard', 'farmers', 'contracts', 'harvest', 'climate', 'marketplace', 'copilot', 'settings'],
+  // A cooperative's manager: their members, the contracts they're on, and what's coming in.
+  Cooperative: ['dashboard', 'farmers', 'contracts', 'harvest', 'climate', 'marketplace', 'copilot', 'settings'],
   'Delivery Partner': ['dashboard', 'delivery', 'settings'],
 }
 

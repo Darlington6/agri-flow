@@ -18,7 +18,7 @@ function renderLogin() {
   )
 }
 
-const ROLES = ['Platform Admin', 'Super Admin', 'Buyer', 'Field Agent', 'Farmer', 'Delivery Partner']
+const ROLES = ['Platform Admin', 'Super Admin', 'Buyer', 'Field Agent', 'Farmer', 'Cooperative', 'Delivery Partner']
 
 describe('LoginPage', () => {
   beforeEach(() => {
@@ -42,6 +42,9 @@ describe('LoginPage', () => {
   it('signs in with the keyboard alone: Tab to a role, then Enter', async () => {
     const user = userEvent.setup()
     renderLogin()
+    await user.tab()
+    // First the sign-up walkthrough, then the roles in order.
+    expect(screen.getByRole('link', { name: 'See how signing up works' })).toHaveFocus()
     await user.tab()
     expect(screen.getByRole('button', { name: 'Platform Admin' })).toHaveFocus()
     await user.keyboard('{Enter}')
