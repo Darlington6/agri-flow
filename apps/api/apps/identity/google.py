@@ -1,12 +1,18 @@
 """Checking a "Continue with Google" sign-in.
 
 The app gets an ID token from Google (a JWT Google signs) and sends it
-here. We check it ourselves against Google's published keys (PyJWT,
-already used for our own tokens, so no Google library is needed): signed
-by Google, issued by Google, meant for one of our client IDs
-(settings.GOOGLE_CLIENT_IDS), and not expired.
+here: the web apps after Google sends people back from its account picker,
+with the `nonce` they put in that request (so a token can't be replayed),
+and the iOS and Android apps from Google's sign-in on the device.
+
+We check it ourselves against Google's published keys (PyJWT, already used
+for our own tokens, so no Google library is needed): signed by Google,
+issued by Google, meant for one of our client IDs
+(settings.GOOGLE_CLIENT_IDS), not expired, and carrying the nonce if one
+was sent.
 """
 
+import hmac
 import logging
 from dataclasses import dataclass
 
@@ -35,8 +41,9 @@ class GoogleIdentity:
     name: str
 
 
-def verify(token: str) -> GoogleIdentity:
-    """The person the token is about, or InvalidGoogleToken."""
+def verify(token: str, nonce: str | None = None) -> GoogleIdentity:
+    """The person the token is about, or InvalidGoogleToken. With a
+    `nonce`, the token must carry exactly that nonce."""
     if not settings.GOOGLE_CLIENT_IDS:
         raise InvalidGoogleToken("Google sign-in isn't available.")
     try:
@@ -57,6 +64,9 @@ def verify(token: str) -> GoogleIdentity:
         raise InvalidGoogleToken("Google sign-in didn't work. Try again.") from exc
     if claims["iss"] not in GOOGLE_ISSUERS:
         logger.warning("Google sign-in token refused: unexpected issuer %s", claims["iss"])
+        raise InvalidGoogleToken("Google sign-in didn't work. Try again.")
+    if nonce is not None and not hmac.compare_digest(str(claims.get("nonce", "")), nonce):
+        logger.warning("Google sign-in token refused: nonce doesn't match")
         raise InvalidGoogleToken("Google sign-in didn't work. Try again.")
     return GoogleIdentity(
         sub=str(claims["sub"]),

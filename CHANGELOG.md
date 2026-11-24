@@ -9,8 +9,11 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 - `glob` and `minimatch` are held at their fixed versions (14.0.2+ and 11.0.1+) across the repo. The Expo app's
   build and test tools brought in older copies with moderate advisories, which the CI audit would have stopped.
-- The app's security policy allows only Google's sign-in addresses (`accounts.google.com/gsi/…`), and its
-  opener policy is `same-origin-allow-popups` so Google's sign-in popup can report back.
+- Nothing of Google's loads into the app any more, so its security policy no longer allows any Google address
+  and its opener policy is back to `same-origin`. Google's ID token comes back in the address's `#fragment`
+  (never sent to a server), is removed from the address at once, and is scrubbed from error reports; a random
+  `state` ties it to this tab's request and a `nonce` inside the token (checked by the API) stops it being
+  replayed.
 - Builds stop when `VITE_API_URL`, `PUBLIC_API_URL` or `PUBLIC_APP_URL` isn't a plain `https://` address,
   without printing the value; Vercel builds of the app also need `VITE_API_URL`. These values are public, and
   a database connection string had been pasted into one.
@@ -22,6 +25,12 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
   7.4.4 → 7.4.7.
 
 ### Changed
+
+- "Continue with Google" is our own button: the same size and look as the other sign-in buttons, there at
+  once, and never filled in with the browser's Google account. Tapping it goes to Google's account picker
+  (every time, so people with several Google accounts choose one), and Google sends them back to
+  `/auth/google`, which signs them in. Closing the picker goes quietly back to sign-in; anything else says why
+  there. The API accepts a `nonce` with the token and checks the token carries it.
 
 - The app downloads each page the first time it's opened instead of everything up front: the first download
   drops from about 313 KB to 126 KB (compressed). Charts (about 100 KB) arrive with the pages that draw them, and
@@ -215,9 +224,8 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Fixed
 
-- The Google button no longer flashes a huge Google logo while it loads. Google first draws an unstyled
-  stand-in copy of its button (its styles arrive later, and production's security policy blocks some of
-  them); the stand-in is now hidden and a plain pill holds the space until Google's real button has loaded.
+- The Google button no longer flashes a huge Google logo or sits empty while it loads: it's now our own button
+  (see Changed), so there's nothing of Google's to wait for.
 
 - Phone numbers are always stored one way (+250788123456), however they're typed. An admin made with
   `createsuperuser` as "+250 793 440 734" used to be a different account from "+250793440734", and could only log

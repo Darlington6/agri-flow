@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { ArrowLeft, Mail, Smartphone } from 'lucide-react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { LogoMark } from '@/components/brand/LogoMark'
 import { GrowingSprout } from '@/components/brand/GrowingSprout'
 import { useAuth } from '@/context/AuthContext'
@@ -18,8 +18,10 @@ import { landingFor } from '@/lib/onboarding'
 type Step = 'phone' | 'code' | 'email' | 'email-sent'
 
 export function SignInPage() {
-  const { user, requestOtp, verifyOtp, requestMagicLink, signInWithGoogle } = useAuth()
+  const { user, requestOtp, verifyOtp, requestMagicLink } = useAuth()
   const navigate = useNavigate()
+  // Set by GoogleReturnPage when Google sign-in didn't work.
+  const googleError = (useLocation().state as { googleError?: string } | null)?.googleError ?? null
 
   // Email first: phone codes need an SMS provider, which staging and
   // production don't have yet. Phone stays one tap away.
@@ -32,22 +34,8 @@ export function SignInPage() {
   const [debugLink, setDebugLink] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
-  const [googleError, setGoogleError] = useState<string | null>(null)
 
   if (user) return <Navigate to={landingFor(user)} replace />
-
-  async function handleGoogle(credential: string) {
-    setGoogleError(null)
-    setBusy(true)
-    try {
-      const signedIn = await signInWithGoogle(credential)
-      navigate(landingFor(signedIn), { replace: true })
-    } catch (err) {
-      setGoogleError(err instanceof ApiError ? err.message : 'Something went wrong. Try again.')
-    } finally {
-      setBusy(false)
-    }
-  }
 
   async function handleRequestMagicLink(event: React.FormEvent) {
     event.preventDefault()
@@ -211,7 +199,7 @@ export function SignInPage() {
         {(step === 'email' || step === 'phone') && (
           // Last, after the switch between email and phone. New accounts are made this way too.
           <div className="mt-4 flex flex-col gap-4">
-            <GoogleButton onCredential={(credential) => void handleGoogle(credential)} before={<OrDivider />} />
+            <GoogleButton before={<OrDivider />} />
             {googleError && (
               <p role="alert" className="text-sm text-status-risk">
                 {googleError}
