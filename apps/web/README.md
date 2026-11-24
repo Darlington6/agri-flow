@@ -117,7 +117,10 @@ public and built in (`VITE_GOOGLE_CLIENT_ID` overrides it). Google only allows t
 (local, staging and production), so the button doesn't work on per-PR preview links. Inside apps' built-in
 browsers (WhatsApp, Facebook, Instagram), where Google refuses to sign in, it explains how to open the page in a
 real browser instead. `vercel.json` allows Google's sign-in addresses in the security policy, and the
-opener policy is `same-origin-allow-popups` so Google's popup can report back.
+opener policy is `same-origin-allow-popups` so Google's popup can report back. Google first draws a stand-in
+of its button that stays unstyled until Google's styles arrive (some of which the policy blocks), so it would
+show a huge logo: `GoogleButton` hides it and shows a plain pill until Google's frame has loaded. Don't clip the
+button's area: Google's frame reaches 10px past each side for its focus ring.
 
 ## Photos
 

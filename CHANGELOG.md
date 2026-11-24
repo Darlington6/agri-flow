@@ -200,6 +200,10 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Fixed
 
+- The Google button no longer flashes a huge Google logo while it loads. Google first draws an unstyled
+  stand-in copy of its button (its styles arrive later, and production's security policy blocks some of
+  them); the stand-in is now hidden and a plain pill holds the space until Google's real button has loaded.
+
 - Phone numbers are always stored one way (+250788123456), however they're typed. An admin made with
   `createsuperuser` as "+250 793 440 734" used to be a different account from "+250793440734", and could only log
   in with the spaces. The admin login now accepts either, and a migration tidies numbers already saved.
