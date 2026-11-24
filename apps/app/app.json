@@ -1,0 +1,47 @@
+{
+  "expo": {
+    "name": "AgriFlow",
+    "slug": "agriflow",
+    "version": "0.1.0",
+    "orientation": "default",
+    "icon": "../../packages/design-tokens/assets/logos/agriflow-app-icon-1024.png",
+    "scheme": "agriflow",
+    "userInterfaceStyle": "automatic",
+    "backgroundColor": "#f5f1e6",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#f5f1e6",
+        "foregroundImage": "../../packages/design-tokens/assets/logos/agriflow-app-icon-1024.png"
+      },
+      "predictiveBackGestureEnabled": true
+    },
+    "web": {
+      "output": "single",
+      "name": "AgriFlow",
+      "shortName": "AgriFlow",
+      "lang": "en",
+      "themeColor": "#283f2f",
+      "backgroundColor": "#f5f1e6",
+      "favicon": "../../packages/design-tokens/assets/logos/agriflow-app-icon-1024.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#f5f1e6",
+          "image": "../../packages/design-tokens/assets/logos/agriflow-mark-1024.png",
+          "imageWidth": 96
+        }
+      ],
+      "expo-localization"
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}
