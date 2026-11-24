@@ -98,6 +98,17 @@ account that isn't set up, or has new terms to agree to, always lands back on `/
   away. Real accounts never show sample data.
 - The terms and privacy links point at the public site, `VITE_SITE_URL` (default: the production site).
 
+## Demo extras
+
+- **Roles** live in `src/lib/permissions.ts` (what each can reach), `src/lib/scope.ts` (which records) and
+  `src/components/layout/navigation.ts` (labels). A new role touches all three, plus `SessionContext` and the
+  dashboard; TypeScript flags most places (`Record<DemoRole, …>`), but not `role === '…'` checks, so search for
+  those too.
+- **The tour** (`DemoTour`, text in `src/lib/demoTour.ts`) is a native `<dialog>`. Its "where to start" list
+  comes from the role's own navigation, so labels stay in step.
+- **The sign-up walkthrough** (`/try-sign-up`) is `OnboardingFlow` with a driver that saves nothing. Its pick
+  lists are a copy in `src/data/setupOptions.ts`; an API test fails if that copy and the API's lists differ.
+
 ## Continue with Google
 
 `GoogleButton` (`src/components/auth/`) draws Google's own button (Google Identity Services), loading Google's

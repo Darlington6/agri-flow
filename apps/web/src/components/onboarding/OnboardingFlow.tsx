@@ -43,7 +43,8 @@ export interface OnboardingDriver {
   saveName: (name: string) => Promise<void>
   savePlace: (country: string, language: Language) => Promise<void>
   chooseRole: <R extends SelfServeRole>(role: R, details: RoleDetails[R]) => Promise<void>
-  requestPhoneCode: (phone: string) => Promise<{ debugCode?: string }>
+  /** debugCode: the API's, in local development only. demoCode: the demo's (no text is sent). */
+  requestPhoneCode: (phone: string) => Promise<{ debugCode?: string; demoCode?: string }>
   confirmPhone: (phone: string, code: string) => Promise<void>
   skipPhone: () => Promise<void>
   finish: (termsVersion: string) => Promise<void>
@@ -471,6 +472,7 @@ function PhoneStep({
   const [sentTo, setSentTo] = useState<string | null>(null)
   const [code, setCode] = useState('')
   const [debugCode, setDebugCode] = useState<string | null>(null)
+  const [demoCode, setDemoCode] = useState<string | null>(null)
   const { busy, error, run } = useSave()
 
   if (sentTo) {
@@ -482,7 +484,14 @@ function PhoneStep({
           void run(() => driver.confirmPhone(sentTo, code), onDone)
         }}
       >
-        <p className="text-sm text-ink-600">We've texted a 6-digit code to {formatPhone(sentTo)}.</p>
+        <p className="text-sm text-ink-600">
+          {demoCode ? 'For real, we would text' : "We've texted"} a 6-digit code to {formatPhone(sentTo)}.
+        </p>
+        {demoCode && (
+          <p className="rounded-lg bg-status-info-bg px-3 py-2 text-xs text-status-info">
+            This is the demo, so no text was sent. Enter {demoCode}.
+          </p>
+        )}
         {debugCode && (
           <p className="rounded-lg bg-status-info-bg px-3 py-2 text-xs text-status-info">
             Dev mode — code is {debugCode} (never shown outside DEBUG).
@@ -525,8 +534,9 @@ function PhoneStep({
         const number = phone.value
         void run(
           async () => {
-            const { debugCode } = await driver.requestPhoneCode(number)
+            const { debugCode, demoCode } = await driver.requestPhoneCode(number)
             setDebugCode(debugCode ?? null)
+            setDemoCode(demoCode ?? null)
           },
           () => setSentTo(number),
         )

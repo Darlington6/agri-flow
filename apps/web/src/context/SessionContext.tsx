@@ -7,6 +7,7 @@ import type { DemoRole, GhanaRegion } from '@/types'
 export const BUYER_DEMO_ID = 'B001' // Ghana Fresh Foods Ltd.
 export const AGENT_DEMO_REGIONS: GhanaRegion[] = ['Bono', 'Bono East', 'Ashanti']
 export const FARMER_DEMO_ID = 'F001' // Abena Owusu — supplies contract AG-204, in the Field Agent's regions
+export const COOPERATIVE_DEMO_ID = 'G001' // Techiman Growers' Cooperative — Abena (F001) is a member
 export const DELIVERY_PARTNER_DEMO_ID = 'DP-002' // Bono Freight Movers — covers the Field Agent's regions too
 
 export interface Session {
@@ -15,6 +16,7 @@ export interface Session {
   buyerId?: string
   agentRegions?: GhanaRegion[]
   farmerId?: string
+  cooperativeId?: string
   deliveryPartnerId?: string
 }
 
@@ -36,6 +38,8 @@ function buildSession(role: DemoRole): Session {
       return { role, name: 'Akosua', agentRegions: AGENT_DEMO_REGIONS }
     case 'Farmer':
       return { role, name: 'Abena', farmerId: FARMER_DEMO_ID }
+    case 'Cooperative':
+      return { role, name: 'Akua', cooperativeId: COOPERATIVE_DEMO_ID }
     case 'Delivery Partner':
       return { role, name: 'Kwabena', deliveryPartnerId: DELIVERY_PARTNER_DEMO_ID }
     case 'Super Admin':
