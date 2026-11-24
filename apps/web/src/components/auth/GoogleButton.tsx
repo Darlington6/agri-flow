@@ -62,8 +62,9 @@ export function GoogleButton({
   }, [inApp])
 
   // While its frame loads, Google first draws a stand-in copy of the button in
-  // our page, styled with inline styles that our security policy (rightly)
-  // blocks, so its logo would show huge for a moment. We hide that stand-in
+  // our page. Until Google's stylesheet arrives (and, in production, because our
+  // security policy blocks the inline styles it also uses) that copy is
+  // unstyled, so its logo would show huge for a moment. We hide that stand-in
   // and show a plain pill until the real button's frame has loaded.
   useEffect(() => {
     const el = slot.current
@@ -102,11 +103,12 @@ export function GoogleButton({
     )
   }
 
-  // A fixed-size area, so nothing Google draws can spill out or move the form.
+  // A fixed height, so the form doesn't jump when Google's button arrives. Not clipped:
+  // Google's frame reaches 10px past each side (and 2px above) for its blue focus ring.
   return (
     <>
       {before}
-      <div className="relative h-11 w-full overflow-hidden" data-testid="google-button">
+      <div className="relative h-11 w-full" data-testid="google-button">
         {!ready && (
           <div
             aria-hidden

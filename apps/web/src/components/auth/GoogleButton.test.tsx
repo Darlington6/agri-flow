@@ -51,6 +51,9 @@ describe('GoogleButton', () => {
     const frame = await screen.findByTitle('Sign in with Google')
     expect(frame.parentElement).toHaveClass('opacity-0')
 
+    // Never clipped: Google's frame reaches past the area for its focus ring.
+    expect(screen.getByTestId('google-button')).not.toHaveClass('overflow-hidden')
+
     act(() => frame.dispatchEvent(new Event('load')))
     expect(screen.queryByTestId('google-button-placeholder')).not.toBeInTheDocument()
     expect(frame.parentElement).toHaveClass('opacity-100')
