@@ -108,6 +108,7 @@ account that isn't set up, or has new terms to agree to, always lands back on `/
   comes from the role's own navigation, so labels stay in step.
 - **The sign-up walkthrough** (`/try-sign-up`) is `OnboardingFlow` with a driver that saves nothing. Its pick
   lists are a copy in `src/data/setupOptions.ts`; an API test fails if that copy and the API's lists differ.
+
 ## Continue with Google
 
 `GoogleButton` (`src/components/auth/`) draws Google's own button (Google Identity Services), loading Google's
