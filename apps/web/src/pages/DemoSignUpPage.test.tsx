@@ -60,5 +60,7 @@ describe('the sign-up walkthrough', () => {
 
     expect(await screen.findByText('Dashboard as Cooperative')).toBeInTheDocument()
     expect(fetchSpy).not.toHaveBeenCalled()
-  })
+    // Clicks through every setup screen, so it needs more than the default 5 s
+    // when the whole repo's tests run side by side (as in CI).
+  }, 20_000)
 })
