@@ -45,6 +45,7 @@ export const secondaryNav: NavItem[] = [{ key: 'settings', label: 'Settings', to
 // every role — e.g. a Farmer's "Farmers" link really means "my own profile."
 const LABEL_OVERRIDES: Partial<Record<DemoRole, Partial<Record<NavKey, string>>>> = {
   Farmer: { farmers: 'My Farm' },
+  Cooperative: { farmers: 'Members' },
 }
 
 export function navForRole(role: DemoRole): NavItem[] {

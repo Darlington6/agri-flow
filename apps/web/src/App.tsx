@@ -11,6 +11,7 @@ import { page } from '@/lib/lazyPage'
 // signing in doesn't download the charts and every platform screen.
 const LandingPage = page(() => import('@/pages/LandingPage'), 'LandingPage')
 const LoginPage = page(() => import('@/pages/LoginPage'), 'LoginPage')
+const DemoSignUpPage = page(() => import('@/pages/DemoSignUpPage'), 'DemoSignUpPage')
 const SignInPage = page(() => import('@/pages/auth/SignInPage'), 'SignInPage')
 const AccountPage = page(() => import('@/pages/auth/AccountPage'), 'AccountPage')
 const WelcomePage = page(() => import('@/pages/onboarding/WelcomePage'), 'WelcomePage')
@@ -46,6 +47,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/login" element={<LoginPage />} />
+                <Route path="/try-sign-up" element={<DemoSignUpPage />} />
                 <Route path="/signin" element={<SignInPage />} />
                 <Route path="/welcome" element={<WelcomePage />} />
                 <Route path="/home" element={<HomePage />} />
