@@ -264,7 +264,8 @@ export interface Notification {
   relatedRegions?: GhanaRegion[]
 }
 
-export type DemoRole = 'Platform Admin' | 'Buyer' | 'Field Agent' | 'Farmer' | 'Delivery Partner' | 'Super Admin'
+export type DemoRole =
+  'Platform Admin' | 'Buyer' | 'Field Agent' | 'Farmer' | 'Cooperative' | 'Delivery Partner' | 'Super Admin'
 
 // --- Demand-to-contract matching ---
 // A farmer's request to supply (part of) an existing contract's remaining
