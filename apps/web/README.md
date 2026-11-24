@@ -98,6 +98,17 @@ account that isn't set up, or has new terms to agree to, always lands back on `/
   away. Real accounts never show sample data.
 - The terms and privacy links point at the public site, `VITE_SITE_URL` (default: the production site).
 
+## Demo extras
+
+- **Roles** live in `src/lib/permissions.ts` (what each can reach), `src/lib/scope.ts` (which records) and
+  `src/components/layout/navigation.ts` (labels). A new role touches all three, plus `SessionContext` and the
+  dashboard; TypeScript flags most places (`Record<DemoRole, …>`), but not `role === '…'` checks, so search for
+  those too.
+- **The tour** (`DemoTour`, text in `src/lib/demoTour.ts`) is a native `<dialog>`. Its "where to start" list
+  comes from the role's own navigation, so labels stay in step.
+- **The sign-up walkthrough** (`/try-sign-up`) is `OnboardingFlow` with a driver that saves nothing. Its pick
+  lists are a copy in `src/data/setupOptions.ts`; an API test fails if that copy and the API's lists differ.
+
 ## Continue with Google
 
 `GoogleButton` (`src/components/auth/`) draws Google's own button (Google Identity Services), loading Google's
@@ -106,7 +117,10 @@ public and built in (`VITE_GOOGLE_CLIENT_ID` overrides it). Google only allows t
 (local, staging and production), so the button doesn't work on per-PR preview links. Inside apps' built-in
 browsers (WhatsApp, Facebook, Instagram), where Google refuses to sign in, it explains how to open the page in a
 real browser instead. `vercel.json` allows Google's sign-in addresses in the security policy, and the
-opener policy is `same-origin-allow-popups` so Google's popup can report back.
+opener policy is `same-origin-allow-popups` so Google's popup can report back. Google first draws a stand-in
+of its button that stays unstyled until Google's styles arrive (some of which the policy blocks), so it would
+show a huge logo: `GoogleButton` hides it and shows a plain pill until Google's frame has loaded. Don't clip the
+button's area: Google's frame reaches 10px past each side for its focus ring.
 
 ## Photos
 
