@@ -44,10 +44,11 @@ export function ContractDetailPage() {
   const pct = (contract.suppliedQuantityTonnes / contract.contractedQuantityTonnes) * 100
   const role = session?.role ?? 'Platform Admin'
   const canManageMatches = isAdminRole(role) || role === 'Buyer'
-  const canMessage = isAdminRole(role) || role === 'Buyer' || role === 'Farmer'
+  const canMessage = isAdminRole(role) || role === 'Buyer' || role === 'Farmer' || role === 'Cooperative'
 
+  // Farmers and their cooperative talk to the buyer; everyone else to the farmers.
   const counterparty =
-    role === 'Farmer'
+    role === 'Farmer' || role === 'Cooperative'
       ? { name: buyer?.name ?? 'Buyer', phone: buyer?.contactPhone ?? '' }
       : { name: farmers[0]?.name ?? 'Farmers on this contract', phone: farmers[0]?.phone ?? '' }
 

@@ -5,7 +5,7 @@ import { PageHeader, Card, Badge, RiskBadge, KycBadge, inputClass } from '@/comp
 import { cropById, dashboardMetrics } from '@/data'
 import { useSession } from '@/context/SessionContext'
 import { usePlatformData, resolveKycStatus } from '@/context/PlatformDataContext'
-import { scopedFarmers } from '@/lib/scope'
+import { scopedFarmers, currentCooperative } from '@/lib/scope'
 import type { GhanaRegion, CropId } from '@/types'
 import { formatTonnes } from '@/lib/format'
 
@@ -26,8 +26,14 @@ export function FarmersPage() {
   const { session } = useSession()
   const { contracts: liveContracts, kycOverrides } = usePlatformData()
   const isAgent = session?.role === 'Field Agent'
+  const cooperative = currentCooperative(session)
   const baseFarmers = useMemo(() => scopedFarmers(session, liveContracts), [session, liveContracts])
-  const availableRegions = isAgent && session?.agentRegions ? session.agentRegions : ALL_REGIONS
+  const availableRegions =
+    isAgent && session?.agentRegions
+      ? session.agentRegions
+      : cooperative
+        ? ALL_REGIONS.filter((r) => baseFarmers.some((f) => f.region === r))
+        : ALL_REGIONS
 
   const [region, setRegion] = useState<GhanaRegion | 'all'>('all')
   const [crop, setCrop] = useState<CropId | 'all'>('all')
@@ -56,11 +62,13 @@ export function FarmersPage() {
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        title="Farmer Network"
+        title={cooperative ? 'Members' : 'Farmer Network'}
         subtitle={
           isAgent
             ? `Showing ${filtered.length} of ${baseFarmers.length} farmers assigned to you.`
-            : `Showing ${filtered.length} of ${dashboardMetrics.activeFarmers} farmers in the pilot network.`
+            : cooperative
+              ? `Showing ${filtered.length} of ${baseFarmers.length} members of ${cooperative.name}.`
+              : `Showing ${filtered.length} of ${dashboardMetrics.activeFarmers} farmers in the pilot network.`
         }
       />
 
