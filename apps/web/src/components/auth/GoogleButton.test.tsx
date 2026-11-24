@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
 import { GoogleButton } from './GoogleButton'
 import type { GoogleIdentity } from '@/lib/google'
 
@@ -38,6 +38,25 @@ describe('GoogleButton', () => {
 
     config.callback({ credential: 'id-token' })
     expect(onCredential).toHaveBeenCalledWith('id-token')
+  })
+
+  it("shows a plain pill until Google's button frame has loaded, never Google's unstyled stand-in", async () => {
+    const google = fakeGoogle()
+    google.renderButton.mockImplementation((parent: HTMLElement) => {
+      parent.innerHTML = '<div role="button">stand-in</div><iframe title="Sign in with Google"></iframe>'
+    })
+    render(<GoogleButton onCredential={() => {}} />)
+
+    expect(screen.getByTestId('google-button-placeholder')).toBeInTheDocument()
+    const frame = await screen.findByTitle('Sign in with Google')
+    expect(frame.parentElement).toHaveClass('opacity-0')
+
+    // Never clipped: Google's frame reaches past the area for its focus ring.
+    expect(screen.getByTestId('google-button')).not.toHaveClass('overflow-hidden')
+
+    act(() => frame.dispatchEvent(new Event('load')))
+    expect(screen.queryByTestId('google-button-placeholder')).not.toBeInTheDocument()
+    expect(frame.parentElement).toHaveClass('opacity-100')
   })
 
   it('explains how to open a real browser inside apps that block Google', () => {
