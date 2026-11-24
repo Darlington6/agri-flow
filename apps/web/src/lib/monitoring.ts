@@ -9,7 +9,18 @@ import * as Sentry from '@sentry/react'
 import type { AuthUser } from './apiClient'
 
 const FILTERED = '[Filtered]'
-const SECRET_PARAMS = new Set(['token', 'code', 'refresh', 'access', 'password'])
+// id_token, state and nonce: what Google sends back in the #fragment after its sign-in.
+const SECRET_PARAMS = new Set([
+  'token',
+  'code',
+  'refresh',
+  'access',
+  'password',
+  'id_token',
+  'access_token',
+  'state',
+  'nonce',
+])
 const EMAIL = /[\w.+-]+@[\w-]+(?:\.[\w-]+)+/g
 const PHONE = /\+\d[\d\s-]{6,17}\d/g
 
@@ -17,17 +28,24 @@ export function scrubText(text: string): string {
   return text.replace(EMAIL, FILTERED).replace(PHONE, FILTERED)
 }
 
-/** Hides one-time tokens and codes in a URL's query string. */
-export function scrubUrl(url: string): string {
-  const q = url.indexOf('?')
-  if (q === -1) return url
-  const hash = url.indexOf('#', q)
-  const query = url.slice(q + 1, hash === -1 ? undefined : hash)
-  const params = new URLSearchParams(query)
+function scrubParams(text: string): string {
+  const params = new URLSearchParams(text)
   for (const [key, value] of [...params]) {
     params.set(key, SECRET_PARAMS.has(key.toLowerCase()) ? FILTERED : scrubText(value))
   }
-  return `${url.slice(0, q)}?${params.toString().replaceAll('%5BFiltered%5D', FILTERED)}${hash === -1 ? '' : url.slice(hash)}`
+  return params.toString().replaceAll('%5BFiltered%5D', FILTERED)
+}
+
+/** Hides one-time tokens and codes in a URL's query string and #fragment. */
+export function scrubUrl(url: string): string {
+  const hash = url.indexOf('#')
+  const beforeHash = hash === -1 ? url : url.slice(0, hash)
+  const rawFragment = hash === -1 ? '' : url.slice(hash + 1)
+  // A plain anchor (#top) stays as it is; key=value fragments are scrubbed like a query.
+  const fragment = hash === -1 ? '' : `#${rawFragment.includes('=') ? scrubParams(rawFragment) : rawFragment}`
+  const q = beforeHash.indexOf('?')
+  if (q === -1) return beforeHash + fragment
+  return `${beforeHash.slice(0, q)}?${scrubParams(beforeHash.slice(q + 1))}${fragment}`
 }
 
 export function scrubEvent<E extends Sentry.ErrorEvent>(event: E): E {

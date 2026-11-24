@@ -10,8 +10,11 @@ from .tokens import signed_in
 
 
 class GoogleCredentialSerializer(serializers.Serializer):
-    # The ID token Google's sign-in button hands the app.
+    # The ID token Google hands the app.
     credential = serializers.CharField(max_length=4096)
+    # The random value the web apps put in their request to Google; the
+    # token must carry it. Optional: Google's own buttons don't use one.
+    nonce = serializers.CharField(max_length=256, required=False)
 
 
 class GoogleSignInView(APIView):
@@ -27,7 +30,9 @@ class GoogleSignInView(APIView):
         serializer = GoogleCredentialSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         try:
-            identity = google.verify(serializer.validated_data["credential"])
+            identity = google.verify(
+                serializer.validated_data["credential"], serializer.validated_data.get("nonce")
+            )
             user, created = sign_in_with_google(identity)
         except (google.InvalidGoogleToken, GoogleEmailNotVerified) as exc:
             return Response({"detail": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
