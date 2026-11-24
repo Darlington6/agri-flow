@@ -1,9 +1,9 @@
-import { Navigate, useNavigate } from 'react-router-dom'
-import { ShieldCheck, ShoppingCart, Sprout, UserCheck, Truck, Crown } from 'lucide-react'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { ShieldCheck, ShoppingCart, Sprout, UserCheck, Truck, Crown, Users, ClipboardList } from 'lucide-react'
 import { LogoMark } from '@/components/brand/LogoMark'
 import { useSession } from '@/context/SessionContext'
 import { brand } from '@/config/brand'
-import { CardButton, DemoTag } from '@/components/ui'
+import { buttonClasses, CardButton, DemoTag } from '@/components/ui'
 import type { DemoRole } from '@/types'
 import { visibleDemoRoles } from '@/lib/demoRoles'
 import { AuthLayout } from '@/components/layout/AuthLayout'
@@ -28,6 +28,11 @@ const ROLES: { role: DemoRole; description: string; icon: typeof ShieldCheck }[]
     role: 'Farmer',
     description: 'View your contract, expected harvest, climate risk and payment history.',
     icon: Sprout,
+  },
+  {
+    role: 'Cooperative',
+    description: "Follow your members' contracts, harvests and payments in one place.",
+    icon: Users,
   },
   {
     role: 'Field Agent',
@@ -61,6 +66,11 @@ export function LoginPage() {
         <p className="max-w-sm text-sm text-ink-600">
           Choose a demo role to explore the platform. No account or password required.
         </p>
+        {/* The real setup screens, saving nothing, then into the demo as the role chosen. */}
+        <Link to="/try-sign-up" className={buttonClasses('outline', 'sm', 'mt-1')}>
+          <ClipboardList className="h-4 w-4" aria-hidden />
+          See how signing up works
+        </Link>
       </div>
 
       <div className="grid w-full max-w-2xl gap-4 sm:grid-cols-2">
