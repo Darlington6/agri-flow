@@ -12,3 +12,7 @@ apps/api/
 
 # Generated
 apps/site/public/
+
+# Expo app
+.expo/
+apps/app/expo-env.d.ts

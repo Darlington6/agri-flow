@@ -179,6 +179,9 @@ adjacent features requested for a more complete pilot story:
 
 ## Technology stack
 
+**App (`apps/app`):** Expo (SDK 58) with Expo Router and TypeScript: one codebase for iOS, Android and the web.
+Real features are built here from now on; see [apps/app/README.md](apps/app/README.md).
+
 **Web (`apps/web`):** React + TypeScript + Vite, Tailwind CSS v4, React Router, Recharts, Lucide icons.
 
 **Public site (`apps/site`):** Astro (static, pre-rendered HTML), Tailwind CSS v4, built-in i18n.
@@ -196,9 +199,12 @@ of moving from prototype to real implementation:
 
 ```
 apps/
+  app/   the Expo app for iOS, Android and the web: where real features are built from now on, with
+         translations and offline use from the start. See apps/app/README.md
   site/  the public website (Astro): every page pre-rendered for search engines; English now, with
          French, Kinyarwanda, Swahili and Twi ready to add. See apps/site/README.md
-  web/   the frontend described in this README: platform screens on mock data, plus real sign-in
+  web/   the frontend described in this README: platform screens on mock data, plus real sign-in. It stays
+         as the demo until those screens move into apps/app
   api/   Django + DRF backend: identity (users, roles, sign-up/sign-in by phone code or email link, JWT, /me),
          network (farmer, buyer, delivery partner and cooperative profiles) and account setup,
          health check, OpenAPI schema and docs at /api/v1/docs/
@@ -231,13 +237,16 @@ pnpm install
 pnpm --filter @agriflow/web dev     # http://localhost:5173 — pick a demo role at /login
 ```
 
-**Web app + API** (adds real sign-in at `/signin`). `npm run dev` starts the site and the app only, so
+**The Expo app**: `npm run dev` starts it too (Metro on :8081). Press `w` in its terminal for the web
+version, or open it on a phone with Expo Go. Details in [apps/app/README.md](apps/app/README.md).
+
+**Web app + API** (adds real sign-in at `/signin`). `npm run dev` starts the site and the apps only, so
 start the API first:
 
 ```bash
 docker compose up -d --build postgres redis mailpit api   # API on http://localhost:8000 (docs at /api/v1/docs/)
 docker compose exec api python manage.py migrate   # first run, and after pulling new migrations
-npm run dev                               # site on :4321, app on :5173 (VITE_API_URL defaults to :8000)
+npm run dev                               # site on :4321, web app on :5173, Expo on :8081 (API at :8000)
 docker compose down                       # when you're done
 ```
 
