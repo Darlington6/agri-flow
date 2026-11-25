@@ -3,6 +3,7 @@
 // stores. The API checks again (apps/identity/phone.py); this is for the person
 // typing, so a local number like 0788 123 456 just works once a country is set.
 import {
+  AsYouType,
   getCountries,
   getCountryCallingCode,
   getExampleNumber,
@@ -161,10 +162,18 @@ export function toE164(input: string, country: CountryCode): string | undefined 
   return parsed?.isValid() ? parsed.number : undefined
 }
 
-/** The country a number typed with + belongs to, to move the picker along. */
+/**
+ * The country a number typed with + (or 00) belongs to, to move the picker
+ * along: as soon as the country code is complete (+233 is Ghana), before the
+ * rest is typed. Codes several countries share (+1, +7, +44) wait until the
+ * number says which.
+ */
 export function countryOf(input: string): CountryCode | undefined {
-  if (!input.trim().startsWith('+')) return undefined
-  return parsePhoneNumberFromString(input)?.country
+  const typed = input.trim().replace(/^00/, '+')
+  if (!typed.startsWith('+')) return undefined
+  const asYouType = new AsYouType()
+  asYouType.input(typed)
+  return asYouType.getCountry()
 }
 
 /**
