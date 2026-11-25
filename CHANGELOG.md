@@ -93,6 +93,19 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Added
 
+- **Signing in to the Expo app** with an email or a phone number (both send a 6-digit code; the first one
+  creates the account) and, in its web version, Continue with Google. The web app's sign-in is unchanged. Once
+  signed in, the app opens signed in every time, with or without a connection: the session and the account's
+  details are kept in the phone's keychain (iOS) or keystore (Android), and only the API ending the session
+  signs someone out, never a dropped connection. The phone field starts on the device's country and has a
+  searchable country list. Signed-in accounts see a first home screen (setting up an account in the app comes
+  next).
+- In the Expo app: the AgriFlow mark, large and faint, behind the welcome, sign-in and home screens; and on
+  Android, the app's colour behind the bottom navigation bar as well as the top one (needs a development or
+  store build; Expo Go keeps its own grey bar on phones using button navigation).
+- Sign-in emails carry a 6-digit code next to the button, for the phone apps, which can't open the link yet.
+  Link and code are one sign-in: using either uses up both. The code allows five tries, like phone codes. New
+  endpoint `POST /api/v1/auth/magic-link/code/` (`{email, code}`).
 - **The Expo app** (`apps/app`, Expo SDK 58 with Expo Router): one codebase for iOS, Android and the web, where
   real features are built from now on. This first step sets up the groundwork every screen will use:
   - the site's look: the same light and dark colour roles as the web app (a test fails if they drift apart),
@@ -223,6 +236,18 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 - `ruff format --check` in CI.
 
 ### Fixed
+
+- Trying sign-in over and over locally no longer locks you out for an hour: local Docker allows 100 texts or
+  emails an hour per caller and 50 emails per address (`SIGN_IN_THROTTLE_RATE`, `EMAILS_PER_ADDRESS_PER_HOUR`).
+  Tests, staging and production keep 5 of each.
+
+- The phone step of account setup, and the account page's nudge to add a number, say who will reach you for
+  the role you chose (a delivery partner reads "farmers, cooperatives and buyers") instead of always "buyers
+  and delivery partners".
+- Typing a number with its country code (+233, or 00233) moves the country picker as soon as the code is
+  complete, instead of waiting for more of the number. Both apps.
+- Grey text in the Expo app is the web app's secondary grey: it was 4.4:1 on cream, under the 4.5:1 minimum,
+  and is now 5:1 (lighter in dark mode, 9.9:1). A test checks it. Its "Or" dividers are bold and larger, with clearer lines.
 
 - The Google button no longer flashes a huge Google logo or sits empty while it loads: it's now our own button
   (see Changed), so there's nothing of Google's to wait for.
