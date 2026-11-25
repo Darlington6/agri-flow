@@ -29,6 +29,23 @@ export function guessLanguage(languages: readonly string[] = navigator.languages
   return 'en'
 }
 
+// Who someone in each role deals with, for "so … can reach you".
+const REACHED_BY: Record<SelfServeRole, string> = {
+  farmer: 'buyers, your cooperative and delivery partners',
+  buyer: 'farmers, cooperatives and delivery partners',
+  delivery_partner: 'farmers, cooperatives and buyers',
+  cooperative: 'your members, buyers and delivery partners',
+}
+
+/**
+ * Who'll use someone's phone number, worded for their role. Several roles,
+ * none yet, or only staff roles: the people they work with.
+ */
+export function whoCanReachYou(roles: readonly string[]): string {
+  const own = roles.filter((r): r is SelfServeRole => Object.hasOwn(REACHED_BY, r))
+  return own.length === 1 ? REACHED_BY[own[0]] : 'the people you work with on AgriFlow'
+}
+
 export interface RoleInfo {
   label: string
   /** How someone in this role would describe themselves. */

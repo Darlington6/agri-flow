@@ -131,6 +131,25 @@
                   </tr>
                 </table>
 
+                {% if code %}
+                <!-- The same sign-in as a code, for the phone apps -->
+                <p style="margin: 30px 0 6px 0; font-size: 14px; line-height: 1.5; color: #2b3a30">
+                  Using the AgriFlow app? Enter this code instead:
+                </p>
+                <p
+                  style="
+                    margin: 0;
+                    font-family: 'SFMono-Regular', Menlo, Consolas, monospace;
+                    font-size: 28px;
+                    font-weight: bold;
+                    letter-spacing: 6px;
+                    color: #222f26;
+                  "
+                >
+                  {{ code }}
+                </p>
+                {% endif %}
+
                 <!-- How long the link lasts -->
                 <table
                   role="presentation"
@@ -152,7 +171,7 @@
                       "
                     >
                       <strong>Works once, within {{ minutes }} minutes.</strong> If you didn't ask for it, you can
-                      ignore this email. Nobody can use your account without the link.
+                      ignore this email. Nobody can use your account without {% if code %}the link or the code{% else %}the link{% endif %}.
                     </td>
                   </tr>
                 </table>

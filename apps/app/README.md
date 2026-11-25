@@ -13,6 +13,11 @@ http://localhost:8081. In its terminal:
 
 To run only this app: `pnpm --filter @agriflow/app dev`.
 
+**Signing in needs the API** (`docker compose up -d postgres redis mailpit api`, see the root README). In
+development the app finds it on port 8000 of the computer running Expo, so a phone on the same Wi-Fi reaches it
+too. Codes show in a "Dev mode" box on screen, in Metro's terminal and in Mailpit (http://localhost:8025). For
+staging and production builds, set `EXPO_PUBLIC_API_URL`.
+
 ## Checks
 
 The root commands that CI runs cover this app too:
@@ -33,10 +38,24 @@ Add packages with `npx expo install <package>` (from `apps/app`), not `pnpm add`
 src/
   app/          routes only (Expo Router): every file here is a screen address
   screens/      what each route shows; a route file just renders its screen
-  components/   shared building blocks: Text, Button, Screen, LogoMark
+  components/   shared building blocks: Text, Button, TextField, PhoneField, Message, Screen, LogoMark
+  auth/         the API's sign-in endpoints, the saved session and useAuth()
+  lib/          plain helpers: the API address, phone numbers, Google, secure storage
   theme/        colour roles (light/dark), typefaces, sizes and spacing
   i18n/         languages, dictionaries and t()
+  test/         test helpers (a fake API and storage) and the route tests
 ```
+
+**Signing in.** Email first, phone one tap away; both send a 6-digit code (the email also has a link, for the
+web app). Continue with Google shows in the web version only, using the same redirect as the web app
+(`src/lib/google.ts`); iOS and Android need Google's on-device sign-in and an OAuth client each, which come
+later. The layout (`src/app/_layout.tsx`) shows the start and sign-in screens to people signed out and home to
+people signed in, and moves between them by itself.
+
+**Offline.** The session (the API's two tokens) and the account's details are saved in secure storage: the
+keychain on iOS, the keystore on Android, `localStorage` on the web. The app opens signed in from them straight
+away, then checks with the API in the background, and again whenever the app comes back to the front. No
+connection is never a reason to sign someone out; only the API refusing the session is (`src/auth/api.ts`).
 
 **Look.** Screens use colour roles (`canvas`, `surface`, `text`, `muted`, `action`, …) from `src/theme`, never
 raw colours. The roles match the web app's (`src/theme/colors.test.ts` compares them). Fonts are the site's
@@ -60,3 +79,4 @@ the same files.
 - Store builds (EAS): needs the app's bundle identifier and an Expo account. Until then, use Expo Go.
 - Android's adaptive icon reuses the square app icon; it needs artwork with the mark inside Android's safe zone.
 - Hosting the web version.
+- Continue with Google on iOS and Android (needs the bundle identifier and an OAuth client for each).

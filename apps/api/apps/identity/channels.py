@@ -27,7 +27,8 @@ class OtpDeliveryChannel(Protocol):
 class EmailDeliveryChannel(Protocol):
     # kind: "sign_in" (the account exists), "sign_up" (the link creates
     # it) or "confirm_email" (a signed-in user is adding this address).
-    def send(self, email: str, link: str, kind: str) -> None: ...
+    # code: sign-in emails only, the same sign-in to type in the phone apps.
+    def send(self, email: str, link: str, kind: str, code: str | None = None) -> None: ...
 
 
 @dataclass(frozen=True)
@@ -76,8 +77,10 @@ class ConsoleOtpChannel:
 class ConsoleEmailChannel:
     """Dev-only: logs the magic link instead of sending an email."""
 
-    def send(self, email: str, link: str, kind: str) -> None:
+    def send(self, email: str, link: str, kind: str, code: str | None = None) -> None:
         logger.info("Email link (%s) for %s: %s", kind, email, link)
+        if code:
+            logger.info("Email code for %s: %s", email, code)
 
 
 class DeliveryUnavailable(Exception):
@@ -92,13 +95,14 @@ class DjangoEmailChannel:
     settings, not here.
     """
 
-    def send(self, email: str, link: str, kind: str) -> None:
+    def send(self, email: str, link: str, kind: str, code: str | None = None) -> None:
         minutes = 15  # services.MAGIC_LINK_TTL_MINUTES; not imported, to avoid a cycle
         wording = EMAIL_WORDING[kind]
         site = settings.PUBLIC_SITE_URL
         context = {
             **asdict(wording),
             "link": link,
+            "code": code,
             "minutes": minutes,
             "preview": wording.intro,
             "site_url": site,
@@ -108,6 +112,8 @@ class DjangoEmailChannel:
             # Local development only: the link in the terminal too, even if
             # sending fails. Never in staging or production (DEBUG is off).
             logger.info("Email link (%s) for %s: %s", kind, email, link)
+            if code:
+                logger.info("Email code for %s: %s", email, code)
         try:
             send_mail(
                 subject=wording.subject,
@@ -133,7 +139,7 @@ class UnconfiguredOtpChannel:
 
 
 class UnconfiguredEmailChannel:
-    def send(self, email: str, link: str, kind: str) -> None:
+    def send(self, email: str, link: str, kind: str, code: str | None = None) -> None:
         raise DeliveryUnavailable("Email sign-in isn't available yet.")
 
 

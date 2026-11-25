@@ -50,6 +50,9 @@ services:
       DATABASE_URL: postgres://agriflow:agriflow@postgres:5432/agriflow
       REDIS_URL: redis://redis:6379/0
       CORS_ALLOWED_ORIGINS: http://localhost:5173
+      # Local only: try signing in as often as you like (strict elsewhere).
+      SIGN_IN_THROTTLE_RATE: 100/hour
+      EMAILS_PER_ADDRESS_PER_HOUR: "50"
       FRONTEND_URL: http://localhost:5173
       # Emails really go out, to Mailpit (below), so they can be seen as
       # people get them: open http://localhost:8025.

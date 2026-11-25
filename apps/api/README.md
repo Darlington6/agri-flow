@@ -68,6 +68,7 @@ An account has a phone number, an email, or both, never neither. The first succe
 | --- | --- |
 | `POST otp/request/`, `POST otp/verify/` | Text a code; the code signs in (or signs up). |
 | `POST magic-link/request/`, `GET magic-link/verify/?token=` | Email a link; the link signs in (or signs up). The answer is the same whether or not the email has an account. |
+| `POST magic-link/code/` | `{email, code}`: the 6-digit code from the same email, for the phone apps. Signs in like the link; using either uses up both. Five tries. |
 | `POST me/email/`, `POST email/confirm/` | Add an email: a link is sent to it, and the email is saved once the link is used (signed in or not). |
 | `POST me/phone/`, `POST me/phone/confirm/` | Add a phone number: a code is texted to it and must be confirmed. |
 | `POST google/` | Continue with Google: `{credential, nonce?}`: the ID token Google sent back, and the `nonce` the app put in its request to Google (the token must carry it; the web apps always send one). Signs in, links an existing account with the same Google-confirmed email, or creates one (named from Google). 400 for a token that isn't genuine or an unconfirmed email; 409 if that email's account is linked to a different Google account. |

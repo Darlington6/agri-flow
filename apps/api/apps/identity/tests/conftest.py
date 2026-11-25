@@ -19,9 +19,15 @@ class RecordingOtpChannel:
 class RecordingEmailChannel:
     def __init__(self):
         self.sent: list[tuple[str, str, str]] = []
+        self.codes: list[str | None] = []
 
-    def send(self, email: str, link: str, kind: str) -> None:
+    def send(self, email: str, link: str, kind: str, code: str | None = None) -> None:
         self.sent.append((email, link, kind))
+        self.codes.append(code)
+
+    @property
+    def last_code(self) -> str | None:
+        return self.codes[-1]
 
     @property
     def last_link(self) -> str:

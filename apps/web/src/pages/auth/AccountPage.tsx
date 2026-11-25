@@ -19,7 +19,7 @@ import {
   type Profile,
   type SetupOptions,
 } from '@/lib/apiClient'
-import { LANGUAGES, ROLE_ORDER, ROLES } from '@/lib/onboarding'
+import { LANGUAGES, ROLE_ORDER, ROLES, whoCanReachYou } from '@/lib/onboarding'
 import { countryOptions } from '@/lib/phone'
 import { AddEmail, AddPhone } from './AddContact'
 
@@ -75,7 +75,8 @@ function Account() {
           </dl>
           {!user.phone_number && adding !== 'phone' && (
             <p className="mt-3 rounded-xl bg-ink-50 p-3 text-xs text-ink-700">
-              Add a phone number so buyers and delivery partners can reach you, and to sign in by text message.
+              Add a phone number so {whoCanReachYou(user.roles.map((r) => r.slug))} can reach you, and to sign in by
+              text message.
             </p>
           )}
         </Card>
