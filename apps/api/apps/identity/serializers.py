@@ -88,5 +88,9 @@ class EmailSerializer(serializers.Serializer):
         return value.strip().lower()
 
 
+class EmailCodeSerializer(EmailSerializer):
+    code = serializers.RegexField(r"^\d{6}$", error_messages={"invalid": "Enter the 6-digit code."})
+
+
 class TokenSerializer(serializers.Serializer):
     token = serializers.CharField()

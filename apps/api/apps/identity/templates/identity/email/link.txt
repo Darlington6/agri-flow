@@ -3,8 +3,10 @@
 {{ intro }}
 
 {{ button }}: {{ link }}
-
-The link works once, within {{ minutes }} minutes. If you didn't ask for it, you can ignore this email. Nobody can use your account without the link.
+{% if code %}
+Using the AgriFlow app? Enter this code instead: {{ code }}
+{% endif %}
+The {% if code %}link and code work{% else %}link works{% endif %} once, within {{ minutes }} minutes. If you didn't ask for it, you can ignore this email. Nobody can use your account without {% if code %}them{% else %}the link{% endif %}.
 
 Thanks for growing with us,
 The AgriFlow team

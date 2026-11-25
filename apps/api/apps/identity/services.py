@@ -8,7 +8,9 @@ nobody can attach someone else's number or address.
 """
 
 import hashlib
+import hmac
 import secrets
+from dataclasses import dataclass
 from datetime import timedelta
 
 from django.contrib.auth import get_user_model
@@ -24,6 +26,14 @@ MAGIC_LINK_TTL_MINUTES = 15
 # However many machines ask, one address never gets more than this many
 # emails an hour, so nobody can flood someone's inbox through us.
 EMAILS_PER_ADDRESS_PER_HOUR = 5
+# Wrong tries allowed on an email's sign-in code, as for phone codes.
+EMAIL_CODE_MAX_ATTEMPTS = 5
+
+
+@dataclass(frozen=True)
+class SentLink:
+    link: str
+    code: str | None = None
 
 
 class AlreadyInUse(Exception):
@@ -116,9 +126,9 @@ def confirm_phone_add(user, phone_number: str, code: str):
 # ── Email links ──────────────────────────────────────────────────────────
 
 
-def _send_link(email: str, purpose: str, kind: str, base_url: str, user=None) -> str | None:
-    """Returns the link, or None when this address already had its
-    hourly share of emails (nothing is sent then)."""
+def _send_link(email: str, purpose: str, kind: str, base_url: str, user=None) -> SentLink | None:
+    """Returns the link (and, for signing in, the code), or None when this
+    address already had its hourly share of emails (nothing is sent then)."""
     an_hour_ago = timezone.now() - timedelta(hours=1)
     if (
         MagicLinkToken.objects.filter(email=email, created_at__gte=an_hour_ago).count()
@@ -126,16 +136,23 @@ def _send_link(email: str, purpose: str, kind: str, base_url: str, user=None) ->
     ):
         return None
     token = secrets.token_urlsafe(32)
+    # Signing in can happen in the phone apps, which can't open the link
+    # yet, so that email carries a code too. Link and code are one sign-in:
+    # using either uses both.
+    code = (
+        f"{secrets.randbelow(1_000_000):06d}" if purpose == MagicLinkToken.Purpose.SIGN_IN else None
+    )
     MagicLinkToken.objects.create(
         email=email,
         purpose=purpose,
         user=user,
         token_hash=_hash(token),
+        code_hash=_hash(code) if code else "",
         expires_at=timezone.now() + timedelta(minutes=MAGIC_LINK_TTL_MINUTES),
     )
     link = f"{base_url}?token={token}"
-    get_email_channel().send(email, link, kind)
-    return link
+    get_email_channel().send(email, link, kind, code)
+    return SentLink(link, code)
 
 
 def _use_link(token: str, purpose: str) -> MagicLinkToken:
@@ -151,11 +168,11 @@ def _use_link(token: str, purpose: str) -> MagicLinkToken:
     return match
 
 
-def request_magic_link(email: str, verify_base_url: str) -> str | None:
-    """Emails a link that signs in to the account with this email, or
-    creates the account if there isn't one yet (the email says which).
-    The view answers the same way either way, so the response never
-    reveals whether an email has an account. Returns the link (or None
+def request_magic_link(email: str, verify_base_url: str) -> SentLink | None:
+    """Emails a link (and a code) that signs in to the account with this
+    email, or creates the account if there isn't one yet (the email says
+    which). The view answers the same way either way, so the response never
+    reveals whether an email has an account. Returns what was sent (or None
     when the address hit its hourly limit), only for the view's own
     DEBUG-mode use.
     """
@@ -170,14 +187,44 @@ def verify_magic_link(token: str):
     return _get_or_create(email=match.email)
 
 
+def verify_email_code(email: str, code: str):
+    """The code from the latest sign-in email to this address, typed
+    instead of tapping the link. Returns (user, created) like
+    verify_magic_link; raises ValueError otherwise."""
+    match = (
+        MagicLinkToken.objects.filter(
+            email=email, purpose=MagicLinkToken.Purpose.SIGN_IN, consumed_at__isnull=True
+        )
+        .exclude(code_hash="")
+        .order_by("-created_at")
+        .first()
+    )
+    if match is None:
+        raise ValueError("No pending code for this email. Ask for a new one.")
+    if match.expires_at < timezone.now():
+        raise ValueError("Code expired. Ask for a new one.")
+    if match.code_attempts >= EMAIL_CODE_MAX_ATTEMPTS:
+        raise ValueError("Too many attempts. Ask for a new code.")
+
+    match.code_attempts += 1
+    match.save(update_fields=["code_attempts"])
+    if not hmac.compare_digest(match.code_hash, _hash(code)):
+        raise ValueError("Incorrect code.")
+
+    match.consumed_at = timezone.now()
+    match.save(update_fields=["consumed_at"])
+    return _get_or_create(email=match.email)
+
+
 def request_email_add(user, email: str, confirm_base_url: str) -> str | None:
     if user.email:
         raise AlreadySet("This account already has an email.")
     if _users().filter(email=email).exists():
         raise AlreadyInUse("This email belongs to another account.")
-    return _send_link(
+    sent = _send_link(
         email, MagicLinkToken.Purpose.ADD_EMAIL, "confirm_email", confirm_base_url, user
     )
+    return sent.link if sent else None
 
 
 def confirm_email_add(token: str):

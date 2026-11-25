@@ -48,7 +48,7 @@ def test_the_email_has_a_button_and_a_plain_text_version(settings):
     assert f'href="{link}"' in html
     assert "Create my account" in html
     assert "Welcome to AgriFlow" in sent.body
-    assert "works once, within 15 minutes" in sent.body
+    assert "link and code work once, within 15 minutes" in sent.body
     for version in (sent.body, html):
         assert "The AgriFlow team" in version
 
@@ -68,6 +68,27 @@ def test_the_logo_the_emails_load_is_on_the_website():
     # Emails load it from the site's public folder (apps/site/public/email/).
     repo = Path(__file__).resolve().parents[5]
     assert (repo / "apps/site/public/email/agriflow-mark-reversed.png").is_file()
+
+
+def test_a_sign_in_email_shows_the_code_for_the_app(settings):
+    settings.EMAIL_DELIVERY_CHANNEL = EMAIL_CHANNEL
+    APIClient().post("/api/v1/auth/magic-link/request/", {"email": "new@example.com"})
+
+    sent = mail.outbox[0]
+    html = sent.alternatives[0][0]
+    code = next(w for w in sent.body.split() if w.isdigit() and len(w) == 6)
+    assert f"Enter this code instead: {code}" in sent.body
+    assert code in html
+    assert "link and code work once" in sent.body
+
+
+def test_a_confirmation_email_has_no_code():
+    channels.DjangoEmailChannel().send(
+        "someone@example.com", "https://app.example.com/x?token=t", "confirm_email"
+    )
+    sent = mail.outbox[0]
+    assert "code" not in sent.body
+    assert "code" not in sent.alternatives[0][0].lower().replace("<code", "")
 
 
 @pytest.mark.parametrize("kind", sorted(channels.EMAIL_WORDING))
