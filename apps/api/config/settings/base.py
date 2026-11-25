@@ -141,6 +141,13 @@ TERMS_VERSION = env("TERMS_VERSION", default="2026-11-draft")
 CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])
 CORS_ALLOW_ALL_ORIGINS = env.bool("CORS_ALLOW_ALL_ORIGINS", default=True)
 
+# Sign-in limits: texts or emails one caller can ask for an hour, and emails
+# one address can get an hour. Strict by default (tests, staging,
+# production); local Docker raises them (docker-compose.yml) so trying
+# sign-in over and over doesn't lock a developer out for an hour.
+SIGN_IN_THROTTLE_RATE = env("SIGN_IN_THROTTLE_RATE", default="5/hour")
+EMAILS_PER_ADDRESS_PER_HOUR = env.int("EMAILS_PER_ADDRESS_PER_HOUR", default=5)
+
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_AUTHENTICATION_CLASSES": [
@@ -161,10 +168,10 @@ REST_FRAMEWORK = {
         "anon": "100/hour",
         # OTP request is a real abuse target (SMS costs money once a real
         # provider is behind it) — deliberately much stricter.
-        "otp_request": "5/hour",
+        "otp_request": SIGN_IN_THROTTLE_RATE,
         # Email links: anyone can type any address, so the same strict cap
         # per caller (services.py also caps emails per address).
-        "email_link": "5/hour",
+        "email_link": SIGN_IN_THROTTLE_RATE,
         # Google sign-in sends nothing, but each try checks a token.
         "google": "30/hour",
     },

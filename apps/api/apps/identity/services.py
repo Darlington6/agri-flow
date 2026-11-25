@@ -13,6 +13,7 @@ import secrets
 from dataclasses import dataclass
 from datetime import timedelta
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError, transaction
 from django.utils import timezone
@@ -23,9 +24,6 @@ from .models import MagicLinkToken, OtpCode
 OTP_TTL_MINUTES = 10
 OTP_MAX_ATTEMPTS = 5
 MAGIC_LINK_TTL_MINUTES = 15
-# However many machines ask, one address never gets more than this many
-# emails an hour, so nobody can flood someone's inbox through us.
-EMAILS_PER_ADDRESS_PER_HOUR = 5
 # Wrong tries allowed on an email's sign-in code, as for phone codes.
 EMAIL_CODE_MAX_ATTEMPTS = 5
 
@@ -132,7 +130,9 @@ def _send_link(email: str, purpose: str, kind: str, base_url: str, user=None) ->
     an_hour_ago = timezone.now() - timedelta(hours=1)
     if (
         MagicLinkToken.objects.filter(email=email, created_at__gte=an_hour_ago).count()
-        >= EMAILS_PER_ADDRESS_PER_HOUR
+        # However many machines ask, one address gets at most this many
+        # emails an hour, so nobody can flood someone's inbox through us.
+        >= settings.EMAILS_PER_ADDRESS_PER_HOUR
     ):
         return None
     token = secrets.token_urlsafe(32)
