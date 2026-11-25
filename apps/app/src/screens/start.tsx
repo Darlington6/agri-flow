@@ -1,16 +1,18 @@
+import { router } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
 
+import { Button } from '@/components/button'
 import { LogoMark } from '@/components/logo-mark'
 import { Screen } from '@/components/screen'
 import { Text } from '@/components/text'
 import { useI18n } from '@/i18n'
 import { space } from '@/theme'
 
-/** The first screen. Sign-in replaces the note once it moves into this app. */
+/** The first screen for someone signed out. */
 export function Start() {
   const { t } = useI18n()
   return (
-    <Screen centered>
+    <Screen centered backdrop>
       <View style={styles.logo}>
         <LogoMark size={72} label={t('app.name')} />
       </View>
@@ -20,9 +22,9 @@ export function Start() {
       <Text color="muted" style={styles.center}>
         {t('start.body')}
       </Text>
-      <Text variant="small" color="accent" style={[styles.center, styles.note]}>
-        {t('start.comingSoon')}
-      </Text>
+      <View style={styles.action}>
+        <Button label={t('start.signIn')} onPress={() => router.push('/sign-in')} />
+      </View>
     </Screen>
   )
 }
@@ -30,5 +32,5 @@ export function Start() {
 const styles = StyleSheet.create({
   logo: { alignItems: 'center', marginBottom: space.sm },
   center: { textAlign: 'center' },
-  note: { marginTop: space.md },
+  action: { marginTop: space.md },
 })

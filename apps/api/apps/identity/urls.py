@@ -3,7 +3,7 @@ from rest_framework_simplejwt.views import TokenBlacklistView, TokenRefreshView
 
 from .views.contact import EmailAddView, EmailConfirmView, PhoneAddView, PhoneConfirmView
 from .views.google import GoogleSignInView
-from .views.magic_link import MagicLinkRequestView, MagicLinkVerifyView
+from .views.magic_link import EmailCodeVerifyView, MagicLinkRequestView, MagicLinkVerifyView
 from .views.me import MeView
 from .views.otp import OtpRequestView, OtpVerifyView
 
@@ -12,6 +12,7 @@ urlpatterns = [
     path("otp/verify/", OtpVerifyView.as_view(), name="otp-verify"),
     path("magic-link/request/", MagicLinkRequestView.as_view(), name="magic-link-request"),
     path("magic-link/verify/", MagicLinkVerifyView.as_view(), name="magic-link-verify"),
+    path("magic-link/code/", EmailCodeVerifyView.as_view(), name="magic-link-code"),
     path("google/", GoogleSignInView.as_view(), name="google-sign-in"),
     path("token/refresh/", TokenRefreshView.as_view(), name="token-refresh"),
     # Log out: cancels the refresh token so it can't be used again.

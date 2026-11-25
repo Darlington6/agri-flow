@@ -91,10 +91,11 @@ def test_sign_up_by_phone_says_the_account_was_created(otp_channel):
 # ── Abuse limits ─────────────────────────────────────────────────────────
 
 
-def test_one_address_gets_at_most_five_emails_an_hour(email_channel):
-    for _ in range(services.EMAILS_PER_ADDRESS_PER_HOUR + 2):
+def test_one_address_gets_at_most_five_emails_an_hour(email_channel, settings):
+    assert settings.EMAILS_PER_ADDRESS_PER_HOUR == 5
+    for _ in range(settings.EMAILS_PER_ADDRESS_PER_HOUR + 2):
         services.request_magic_link(EMAIL, "https://app.example.com/magic-link")
-    assert len(email_channel.sent) == services.EMAILS_PER_ADDRESS_PER_HOUR
+    assert len(email_channel.sent) == 5
 
 
 def test_one_caller_can_ask_for_five_email_links_an_hour(email_channel):

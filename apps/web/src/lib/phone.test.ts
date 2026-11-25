@@ -32,6 +32,10 @@ describe('toE164', () => {
     expect(toE164('+254 712 345 678', 'RW')).toBe('+254712345678')
     expect(countryOf('+254712345678')).toBe('KE')
     expect(countryOf('0788123456')).toBeUndefined()
+    // As soon as the country code is complete, before the rest of the number.
+    expect(countryOf('+233')).toBe('GH')
+    expect(countryOf('00254 7')).toBe('KE')
+    expect(countryOf('+23')).toBeUndefined()
   })
 
   it('returns nothing for a number that is not valid yet', () => {
