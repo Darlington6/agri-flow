@@ -169,7 +169,9 @@ describe('AccountPage contacts', () => {
 
   it('nudges an email-only account to add a phone number', async () => {
     renderAccount({ ...phoneOnly, phone_number: null, email: 'abena@example.com' })
-    expect(await screen.findByText(/Add a phone number so buyers/)).toBeInTheDocument()
+    expect(
+      await screen.findByText(/Add a phone number so the people you work with on AgriFlow can reach you/),
+    ).toBeInTheDocument()
   })
 
   it('emails a confirmation link to the address being added', async () => {

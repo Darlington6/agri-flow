@@ -13,7 +13,7 @@ import {
   type SelfServeRole,
   type SetupOptions,
 } from '@/lib/apiClient'
-import { LANGUAGES, ROLE_ORDER, ROLES, SITE_URL, STEP_TITLES, guessLanguage } from '@/lib/onboarding'
+import { LANGUAGES, ROLE_ORDER, ROLES, SITE_URL, STEP_TITLES, guessLanguage, whoCanReachYou } from '@/lib/onboarding'
 import { ErrorText, LabelledField } from './fields'
 import { RoleDetailsForm } from './RoleDetailsForm'
 import { ROLE_ICONS } from './roleIcons'
@@ -175,7 +175,7 @@ export function OnboardingFlow({
               back={back}
             />
           )}
-          {step === 'phone' && <PhoneStep driver={driver} country={country} onDone={next} back={back} />}
+          {step === 'phone' && <PhoneStep driver={driver} country={country} roles={roles} onDone={next} back={back} />}
           {step === 'terms' && <TermsStep driver={driver} onDone={onDone} back={back} />}
         </div>
       </Card>
@@ -460,11 +460,14 @@ export function RoleStep({
 function PhoneStep({
   driver,
   country,
+  roles,
   onDone,
   back,
 }: {
   driver: OnboardingDriver
   country: string
+  /** The roles chosen on the step before, so the reason fits them. */
+  roles: readonly string[]
   onDone: () => void
   back?: () => void
 }) {
@@ -543,8 +546,8 @@ function PhoneStep({
       }}
     >
       <p className="text-sm text-ink-600">
-        So buyers and delivery partners can reach you, and you can sign in with a text message. We'll text a code to
-        check it's yours.
+        So {whoCanReachYou(roles)} can reach you, and you can sign in with a text message. We'll text a code to check
+        it's yours.
       </p>
       <PhoneInput field={phone} />
       <ErrorText messages={error ? [error] : undefined} />

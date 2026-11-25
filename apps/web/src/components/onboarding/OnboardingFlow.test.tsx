@@ -150,6 +150,8 @@ describe('OnboardingFlow', () => {
     const driver = fakeDriver({ name: 'A', country: 'RW', language: 'en', roles: ['buyer'], next: 'phone' })
     driver.requestPhoneCode = vi.fn(async () => ({ debugCode: '123456' }))
     render(<OnboardingFlow driver={driver} onDone={() => {}} />)
+    // Why, worded for a buyer.
+    expect(screen.getByText(/So farmers, cooperatives and delivery partners can reach you/)).toBeInTheDocument()
     await userEvent.type(screen.getByLabelText('Phone number'), '0788123456')
     await userEvent.click(screen.getByRole('button', { name: 'Send code' }))
     expect(driver.requestPhoneCode).toHaveBeenCalledWith('+250788123456')
@@ -173,6 +175,8 @@ describe('OnboardingFlow', () => {
       vehicle_types: ['truck'],
       service_regions: ['Nakuru', 'Nairobi'],
     })
+    // The next step's reason fits the role just chosen.
+    expect(await screen.findByText(/So farmers, cooperatives and buyers can reach you/)).toBeInTheDocument()
   })
 
   it("doesn't offer roles the account already has", async () => {

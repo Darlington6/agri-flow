@@ -178,6 +178,10 @@ class MagicLinkToken(models.Model):
     purpose = models.CharField(max_length=20, choices=Purpose.choices, default=Purpose.SIGN_IN)
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
     token_hash = models.CharField(max_length=64, unique=True)
+    # Sign-in emails also carry a 6-digit code, typed in the phone apps
+    # (an email link can't open them yet). Empty for other emails.
+    code_hash = models.CharField(max_length=64, blank=True, default="")
+    code_attempts = models.PositiveSmallIntegerField(default=0)
     expires_at = models.DateTimeField()
     consumed_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

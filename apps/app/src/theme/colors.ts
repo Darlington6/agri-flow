@@ -10,7 +10,7 @@ export const colors = {
     surface: '#ffffff', // cards, panels, inputs
     text: ink[800],
     heading: ink[900],
-    muted: ink[500], // secondary text; 4.5:1 on canvas and surface
+    muted: ink[600], // secondary text, as the web app's: 5:1 on canvas, 5.7:1 on surface
     border: ink[200],
     action: brand[800], // filled buttons: forest, like the site
     actionPressed: brand[700],
@@ -28,7 +28,7 @@ export const colors = {
     surface: '#1e2329',
     text: '#e8eaed',
     heading: '#f1f2f4',
-    muted: '#a0a8b3',
+    muted: '#bec4cd', // 9.9:1 on canvas
     border: '#363c45',
     action: gold[400], // gold, as the site's buttons on dark sections
     actionPressed: gold[300],
