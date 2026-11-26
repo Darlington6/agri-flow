@@ -1,10 +1,11 @@
 import { Image } from 'expo-image'
-import { useState } from 'react'
-import { Pressable, StyleSheet, View } from 'react-native'
+import { router } from 'expo-router'
+import { useEffect, useState } from 'react'
+import { BackHandler, Platform, Pressable, StyleSheet, View } from 'react-native'
 
 import { ApiError, OfflineError, useAuth } from '@/auth'
+import { BackLink } from '@/components/back-link'
 import { Button } from '@/components/button'
-import { LogoMark } from '@/components/logo-mark'
 import { Message } from '@/components/message'
 import { PhoneField, usePhoneField } from '@/components/phone-field'
 import { Screen } from '@/components/screen'
@@ -18,6 +19,14 @@ import { space, usePalette } from '@/theme'
 const googleLogo = require('../../../assets/google-g.svg')
 
 type Step = 'email' | 'email-code' | 'phone' | 'phone-code'
+
+// Where Back goes from each step: what was on screen before it.
+const PREVIOUS: Record<Step, Step | null> = {
+  email: null,
+  phone: 'email',
+  'email-code': 'email',
+  'phone-code': 'phone',
+}
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const CODE = /^\d{6}$/
@@ -106,11 +115,28 @@ export function SignIn({ googleError }: { googleError?: 'stale' | 'failed' | nul
 
   const choosing = step === 'email' || step === 'phone'
 
+  // Back steps through sign-in first, then leaves it for the welcome screen.
+  function back() {
+    const previous = PREVIOUS[step]
+    if (previous) goTo(previous)
+    else if (router.canGoBack()) router.back()
+    else router.replace('/')
+  }
+
+  // Android's back button and gesture do the same while there's a step to go
+  // back to. Only Android has one (React Native warns on the web).
+  useEffect(() => {
+    const previous = PREVIOUS[step]
+    if (!previous || Platform.OS !== 'android') return
+    const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
+      goTo(previous)
+      return true
+    })
+    return () => subscription.remove()
+  }, [step])
+
   return (
-    <Screen centered backdrop>
-      <View style={styles.logo}>
-        <LogoMark size={56} label={t('app.name')} />
-      </View>
+    <Screen centered backdrop glow="still" header={<BackLink label={t('signIn.back')} onPress={back} />}>
       <Text variant="title" style={styles.center}>
         {t('signIn.title')}
       </Text>
@@ -240,7 +266,6 @@ function TextLink({ label, onPress, disabled }: { label: string; onPress: () => 
 }
 
 const styles = StyleSheet.create({
-  logo: { alignItems: 'center' },
   center: { textAlign: 'center' },
   code: { fontSize: 22, letterSpacing: 6, fontVariant: ['tabular-nums'] },
   links: { alignItems: 'center', gap: space.sm },
