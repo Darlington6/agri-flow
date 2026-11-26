@@ -26,6 +26,15 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Changed
 
+- Expo app: the welcome and sign-in screens show the website's glowing logo from the top corner instead of
+  a logo above the heading (it breathes slowly on the welcome screen, unless the phone asks for less motion),
+  with text over it kept readable (a test checks the contrast). Sign-in has a Back link at the top: it steps back
+  through sign-in (code → email or phone, phone → email), then to the welcome screen, and Android's back button
+  does the same. When the keyboard opens, the screen moves up with it,
+  so the buttons under a field stay in view on iOS and Android. The country list is a card that slides up
+  and closes with a drag down on its top bar, a tap outside it or the back button, as well as Close; and the
+  phone step opens straight away (the country list is built once, when first needed).
+
 - "Continue with Google" is our own button: the same size and look as the other sign-in buttons, there at
   once, and never filled in with the browser's Google account. Tapping it goes to Google's account picker
   (every time, so people with several Google accounts choose one), and Google sends them back to

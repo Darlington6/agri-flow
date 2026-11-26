@@ -1,5 +1,7 @@
-import { fireEvent, render, screen } from '@testing-library/react-native'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react-native'
+import { router } from 'expo-router'
 import { Text } from 'react-native'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 import { AuthProvider, useAuth } from '@/auth'
 import { I18nProvider } from '@/i18n'
@@ -8,6 +10,7 @@ import { fakeApi, signedIn, storage } from '@/test/fake-api'
 import { SignIn } from '.'
 
 jest.mock('@/lib/secure-storage', () => jest.requireActual('@/test/fake-api').secureStorageMock)
+jest.mock('expo-router', () => ({ router: { canGoBack: jest.fn(() => true), back: jest.fn(), replace: jest.fn() } }))
 jest.mock('@/lib/config', () => ({ API_URL: 'http://api.test' }))
 jest.mock('expo-localization', () => ({
   getLocales: () => [{ languageTag: 'en-RW', regionCode: 'RW' }],
@@ -19,14 +22,18 @@ function Status() {
   return <Text testID="status">{`${status} ${user?.email ?? user?.phone_number ?? ''}`}</Text>
 }
 
+const NO_INSETS = { top: 0, right: 0, bottom: 0, left: 0 }
+
 async function open(props: Parameters<typeof SignIn>[0] = {}) {
   await render(
-    <AuthProvider>
-      <I18nProvider>
-        <Status />
-        <SignIn {...props} />
-      </I18nProvider>
-    </AuthProvider>,
+    <SafeAreaProvider initialMetrics={{ frame: { x: 0, y: 0, width: 390, height: 844 }, insets: NO_INSETS }}>
+      <AuthProvider>
+        <I18nProvider>
+          <Status />
+          <SignIn {...props} />
+        </I18nProvider>
+      </AuthProvider>
+    </SafeAreaProvider>,
   )
   await screen.findByText('signed-out ')
 }
@@ -131,6 +138,35 @@ describe('SignIn', () => {
     await fireEvent.changeText(screen.getByLabelText('Search countries'), 'ken')
     await fireEvent.press(screen.getByRole('button', { name: 'Kenya (+254)' }))
     expect(screen.getByRole('button', { name: 'Country: Kenya (+254)' })).toBeOnTheScreen()
+  })
+
+  it('closes the country list without changing the country', async () => {
+    fakeApi({})
+    await open()
+    await fireEvent.press(screen.getByRole('button', { name: 'Use my phone instead' }))
+    await fireEvent.press(screen.getByRole('button', { name: 'Country: Rwanda (+250)' }))
+    expect(screen.getByText('Choose your country')).toBeOnTheScreen()
+    await fireEvent.press(screen.getByRole('button', { name: 'Close' }))
+    await waitFor(() => expect(screen.queryByText('Choose your country')).toBeNull())
+    expect(screen.getByRole('button', { name: 'Country: Rwanda (+250)' })).toBeOnTheScreen()
+  })
+
+  it('goes back a step at a time, then back to the welcome screen', async () => {
+    fakeApi({ '/api/v1/auth/magic-link/request/': () => ({ status: 202, body: {} }) })
+    await open()
+    await fireEvent.press(screen.getByRole('button', { name: 'Use my phone instead' }))
+    await fireEvent.press(screen.getByRole('button', { name: 'Back' }))
+    expect(screen.getByLabelText('Email')).toBeOnTheScreen()
+
+    await fireEvent.changeText(screen.getByLabelText('Email'), 'amina@example.com')
+    await fireEvent.press(screen.getByRole('button', { name: 'Email me a code' }))
+    expect(await screen.findByLabelText('6-digit code')).toBeOnTheScreen()
+    await fireEvent.press(screen.getByRole('button', { name: 'Back' }))
+    expect(screen.getByLabelText('Email')).toHaveDisplayValue('amina@example.com')
+    expect(router.back).not.toHaveBeenCalled()
+
+    await fireEvent.press(screen.getByRole('button', { name: 'Back' }))
+    expect(router.back).toHaveBeenCalled()
   })
 
   it('only offers Google in the browser build for now', async () => {
