@@ -1,4 +1,4 @@
-import { countryOf, countryOptions, guessCountry, phoneValue, searchCountries, toE164 } from './phone'
+import { countryName, countryOf, countryOptions, guessCountry, phoneValue, searchCountries, toE164 } from './phone'
 
 describe('guessCountry', () => {
   it("starts on the account's country when there is one", () => {
@@ -44,12 +44,18 @@ describe('countries', () => {
     const original = Object.getOwnPropertyDescriptor(Intl, 'DisplayNames')!
     Object.defineProperty(Intl, 'DisplayNames', { configurable: true, value: undefined })
     try {
-      const options = countryOptions('en')
+      // A language no other test asks for, so the list is built here, not cached.
+      const options = countryOptions('en-GB')
       expect(options.find((o) => o.code === 'RW')).toEqual({ code: 'RW', name: 'Rwanda', dial: '+250' })
       expect(options.every((o) => o.name !== o.code)).toBe(true)
     } finally {
       Object.defineProperty(Intl, 'DisplayNames', original)
     }
+  })
+
+  it('builds the list once per language', () => {
+    expect(countryOptions('en')).toBe(countryOptions('en'))
+    expect(countryName('RW', 'en')).toBe('Rwanda')
   })
 
   it('finds a country by name, code or dialling code', () => {

@@ -137,20 +137,47 @@ export interface CountryOption {
   dial: string
 }
 
+function regionNames(language?: string): Intl.DisplayNames | undefined {
+  try {
+    return typeof Intl.DisplayNames === 'function'
+      ? new Intl.DisplayNames(language ? [language] : ['en'], { type: 'region' })
+      : undefined
+  } catch {
+    return undefined
+  }
+}
+
+/** One country's name in the given language where the phone can (English otherwise). */
+export function countryName(code: CountryCode, language?: string): string {
+  return regionNames(language)?.of(code) ?? COUNTRY_NAMES_EN[code] ?? code
+}
+
+function compareIn(language?: string): (a: string, b: string) => number {
+  try {
+    // One collator for the whole sort: localeCompare(…, language) builds a new
+    // one on every call, which made opening the phone step slow on Android.
+    return new Intl.Collator(language).compare
+  } catch {
+    return (a, b) => a.localeCompare(b)
+  }
+}
+
+// Built once per language: 245 names, sorted, are too slow to rebuild each time
+// the phone step opens.
+const optionsByLanguage = new Map<string, CountryOption[]>()
+
 /** Every country, named in the given language where the phone can, sorted by name. */
 export function countryOptions(language?: string): CountryOption[] {
-  let names: Intl.DisplayNames | undefined
-  try {
-    names =
-      typeof Intl.DisplayNames === 'function'
-        ? new Intl.DisplayNames(language ? [language] : ['en'], { type: 'region' })
-        : undefined
-  } catch {
-    names = undefined
-  }
-  return getCountries()
+  const key = language ?? ''
+  const cached = optionsByLanguage.get(key)
+  if (cached) return cached
+  const names = regionNames(language)
+  const compare = compareIn(language)
+  const options = getCountries()
     .map((code) => ({ code, name: names?.of(code) ?? COUNTRY_NAMES_EN[code] ?? code, dial: dialCode(code) }))
-    .sort((a, b) => a.name.localeCompare(b.name, language))
+    .sort((a, b) => compare(a.name, b.name))
+  optionsByLanguage.set(key, options)
+  return options
 }
 
 /** Countries whose name (a word in it), code or dialling code matches what was typed. */
