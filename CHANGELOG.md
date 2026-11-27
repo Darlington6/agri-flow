@@ -26,6 +26,13 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Changed
 
+- Web app: the sign-in, setup and account pages show the same backdrop as the Expo app, the glowing logo from
+  the top-left corner and the faint mark at the bottom-right, at the same strengths, so text over them stays
+  readable, and staying put while the page scrolls (beside the photos on wide screens). The logo above their headings is gone (sign-in, demo roles, the sign-up walkthrough, setup and the
+  account pages), as in the Expo app; the account pages' Home tab leads home.
+- Web app: the sign-up walkthrough's back link says "Back to the demo" and goes to it when a demo role is
+  already open, instead of "Back to the demo roles" sending people to the dashboard unexpectedly.
+
 - Expo app: new accounts set up their account in the app, with the same steps as the web app: full name,
   country and language, a role and its details, a phone number (skippable) and the terms. Each step saves as
   it's answered, so someone can stop and carry on later, on any device. Home then shows each role, whether
