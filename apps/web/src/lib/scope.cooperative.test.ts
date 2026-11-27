@@ -20,26 +20,26 @@ describe('the Cooperative demo role', () => {
   it('sees its own members, and only them', () => {
     const farmers = scopedFarmers(coop)
     expect(farmers.map((f) => f.id).sort()).toEqual([...members].sort())
-    expect(canViewFarmer(coop, farmerById('F001')!)).toBe(true) // Abena, the Farmer demo role
-    expect(canViewFarmer(coop, farmerById('F003')!)).toBe(false) // Ashanti, not a member
+    expect(canViewFarmer(coop, farmerById('F001')!)).toBe(true) // Aline, the Farmer demo role
+    expect(canViewFarmer(coop, farmerById('F003')!)).toBe(false) // Southern Province, not a member
   })
 
   it("sees the contracts its members are on, and not others'", () => {
     const ids = scopedContracts(coop).map((c) => c.id)
     expect(ids).toEqual(expect.arrayContaining(['AG-204', 'AG-205', 'AG-207', 'AG-188']))
     for (const c of scopedContracts(coop)) expect(c.farmerIds.some((f) => members.has(f))).toBe(true)
-    const onions = scopedContracts({ role: 'Platform Admin', name: 'x' }).find((c) => c.id === 'AG-206')!
-    expect(canViewContract(coop, onions)).toBe(false)
+    const beans = scopedContracts({ role: 'Platform Admin', name: 'x' }).find((c) => c.id === 'AG-206')!
+    expect(canViewContract(coop, beans)).toBe(false)
   })
 
   it("sees payments to its members only, in its members' regions", () => {
     for (const p of scopedPayments(coop)) expect(members.has(p.counterpartyId)).toBe(true)
-    expect(scopedRegions(coop).sort()).toEqual(['Bono', 'Bono East'])
+    expect(scopedRegions(coop).sort()).toEqual(['Eastern Province'])
   })
 
   it('knows which cooperative it manages', () => {
-    expect(currentCooperative(coop)?.name).toBe("Techiman Growers' Cooperative")
-    expect(currentCooperative({ role: 'Farmer', name: 'Abena', farmerId: 'F001' })).toBeUndefined()
+    expect(currentCooperative(coop)?.name).toBe("Kayonza Growers' Cooperative")
+    expect(currentCooperative({ role: 'Farmer', name: 'Aline', farmerId: 'F001' })).toBeUndefined()
   })
 
   it('calls its farmers "Members" and reaches only its pages', () => {

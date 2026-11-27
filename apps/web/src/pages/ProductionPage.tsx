@@ -6,24 +6,20 @@ import { farmerById, contractById, cropById, buyers } from '@/data'
 import { useSession } from '@/context/SessionContext'
 import { usePlatformData } from '@/context/PlatformDataContext'
 import { scopedProductionCycles } from '@/lib/scope'
-import type { CropStage, GhanaRegion, CropId, RiskLevel } from '@/types'
+import type { CropStage, DemoRegion, CropId, RiskLevel } from '@/types'
 import { formatDate } from '@/lib/date'
 import { formatTonnes } from '@/lib/format'
 
 const LIFECYCLE_STAGES: CropStage[] = ['Planned', 'Planted', 'Growing', 'Flowering', 'Maturing', 'Harvest Ready']
 
-const ALL_REGIONS: GhanaRegion[] = [
-  'Ashanti',
-  'Bono',
-  'Bono East',
-  'Northern',
-  'Upper West',
-  'Upper East',
-  'Greater Accra',
-  'Eastern',
-  'Volta',
+const ALL_REGIONS: DemoRegion[] = [
+  'City of Kigali',
+  'Eastern Province',
+  'Northern Province',
+  'Southern Province',
+  'Western Province',
 ]
-const CROP_IDS: CropId[] = ['tomatoes', 'onions', 'peppers', 'cassava']
+const CROP_IDS: CropId[] = ['irish_potato', 'beans', 'avocado', 'maize']
 const RISKS: RiskLevel[] = ['low', 'medium', 'high']
 
 export function ProductionPage() {
@@ -36,7 +32,7 @@ export function ProductionPage() {
   )
   const availableRegions = isAgent && session?.agentRegions ? session.agentRegions : ALL_REGIONS
 
-  const [region, setRegion] = useState<GhanaRegion | 'all'>('all')
+  const [region, setRegion] = useState<DemoRegion | 'all'>('all')
   const [crop, setCrop] = useState<CropId | 'all'>('all')
   const [buyerId, setBuyerId] = useState<string | 'all'>('all')
   const [risk, setRisk] = useState<RiskLevel | 'all'>('all')

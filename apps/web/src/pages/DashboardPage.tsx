@@ -49,7 +49,7 @@ import { formatPlace } from '@/lib/places'
 import { OpenOpportunities } from '@/components/contract/OpenOpportunities'
 import { aiService } from '@/services/ai'
 import type { SupplyRiskSummary } from '@/services/ai'
-import { formatGHS, formatGHSFull, formatTonnes } from '@/lib/format'
+import { formatMoney, formatMoneyFull, formatTonnes } from '@/lib/format'
 import { formatDate, formatShortDate } from '@/lib/date'
 import type { RiskLevel } from '@/types'
 
@@ -123,7 +123,7 @@ export function DashboardPage() {
     const mine = myDeliveryJobs(session, deliveryJobs)
     const available = deliveryJobs.filter((j) => j.status === 'Unassigned')
     const rankedAvailable = rankJobsForPartner(myPartner, available).slice(0, 4)
-    const earnedGHS = mine.filter((j) => j.status === 'Delivered').reduce((s, j) => s + j.feeGHS, 0)
+    const earned = mine.filter((j) => j.status === 'Delivered').reduce((s, j) => s + j.fee, 0)
 
     return (
       <div className="flex flex-col gap-6">
@@ -146,7 +146,7 @@ export function DashboardPage() {
             value={String(mine.filter((j) => j.status === 'Delivered').length)}
             icon={Truck}
           />
-          <StatCard label="Fees Earned" value={formatGHSFull(earnedGHS)} icon={Star} hint="From completed deliveries" />
+          <StatCard label="Fees Earned" value={formatMoneyFull(earned)} icon={Star} hint="From completed deliveries" />
         </div>
 
         <Card padded={false}>
@@ -188,7 +188,7 @@ export function DashboardPage() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard
             label="Contracted Demand"
-            value={formatGHS(dashboardMetrics.contractedDemandGHS)}
+            value={formatMoney(dashboardMetrics.contractedDemand)}
             icon={Wallet}
             hint="Active contracted value, network-wide"
           />
@@ -218,7 +218,7 @@ export function DashboardPage() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard
             label="Your Contracted Value"
-            value={formatGHS(contracts.reduce((s, c) => s + c.valueGHS, 0))}
+            value={formatMoney(contracts.reduce((s, c) => s + c.value, 0))}
             icon={Wallet}
             hint={`Across ${contracts.length} contract(s)`}
           />

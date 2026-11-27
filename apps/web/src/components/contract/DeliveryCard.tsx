@@ -7,7 +7,7 @@ import { recommendPartnersForJob } from '@/lib/deliveryScore'
 import { formatPlace } from '@/lib/places'
 import { deliveryPartners, deliveryPartnerById } from '@/data'
 import { formatDate } from '@/lib/date'
-import { formatGHSFull, formatTonnes } from '@/lib/format'
+import { formatMoneyFull, formatTonnes } from '@/lib/format'
 import type { DeliveryJobStatus } from '@/types'
 
 const STATUS_TONE = {
@@ -46,7 +46,7 @@ export function DeliveryCard({ contractId }: { contractId: string }) {
         <Badge tone={STATUS_TONE[job.status]}>{job.status}</Badge>
       </div>
       <p className="mt-1 text-xs text-ink-500">
-        Scheduled {formatDate(job.scheduledDate)} · Fee {formatGHSFull(job.feeGHS)}
+        Scheduled {formatDate(job.scheduledDate)} · Fee {formatMoneyFull(job.fee)}
       </p>
 
       {partner ? (

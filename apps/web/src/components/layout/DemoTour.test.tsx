@@ -10,7 +10,7 @@ import type { DemoRole } from '@/types'
 function renderDemoAs(role: DemoRole) {
   const sessions: Record<string, object> = {
     Cooperative: { role, name: 'Akua', cooperativeId: 'G001' },
-    Farmer: { role, name: 'Abena', farmerId: 'F001' },
+    Farmer: { role, name: 'Aline', farmerId: 'F001' },
   }
   localStorage.setItem('agriflow.demo-session', JSON.stringify(sessions[role]))
   return render(
@@ -34,7 +34,7 @@ describe('the demo tour', () => {
   it("opens the first time a role is explored, in that role's words", async () => {
     renderDemoAs('Cooperative')
     const tour = screen.getByRole('dialog', { name: 'Welcome to the demo, Akua' })
-    expect(tour).toHaveTextContent("Techiman Growers' Cooperative")
+    expect(tour).toHaveTextContent("Kayonza Growers' Cooperative")
 
     await userEvent.click(screen.getByRole('button', { name: 'Next' }))
     expect(screen.getByRole('heading', { name: 'Where to start' })).toHaveFocus()
@@ -55,7 +55,7 @@ describe('the demo tour', () => {
     renderDemoAs('Farmer')
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     await userEvent.click(screen.getByRole('button', { name: 'Tour' }))
-    expect(screen.getByRole('dialog', { name: 'Welcome to the demo, Abena' })).toBeInTheDocument()
+    expect(screen.getByRole('dialog', { name: 'Welcome to the demo, Aline' })).toBeInTheDocument()
   })
 
   it('is remembered per role', async () => {

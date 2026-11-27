@@ -10,7 +10,7 @@ import { scopedContracts } from '@/lib/scope'
 import { isAdminRole } from '@/lib/permissions'
 import type { ContractStage } from '@/types'
 import { formatDate } from '@/lib/date'
-import { formatGHSFull, formatTonnes } from '@/lib/format'
+import { formatMoneyFull, formatTonnes } from '@/lib/format'
 
 export function ContractsPage() {
   const { session } = useSession()
@@ -133,7 +133,7 @@ export function ContractsPage() {
                     {formatTonnes(c.suppliedQuantityTonnes)} / {formatTonnes(c.contractedQuantityTonnes)}
                   </td>
                   <td className="px-3 py-3 text-ink-600">{formatDate(c.expectedDeliveryDate)}</td>
-                  <td className="px-3 py-3 text-ink-600">{formatGHSFull(c.valueGHS)}</td>
+                  <td className="px-3 py-3 text-ink-600">{formatMoneyFull(c.value)}</td>
                   <td className="px-3 py-3 text-ink-600">{c.stage}</td>
                   <td className="px-3 py-3">
                     <RiskBadge level={c.riskLevel} />

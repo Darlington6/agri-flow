@@ -5,7 +5,7 @@ import { recommendPartnersForJob } from '@/lib/deliveryScore'
 import { formatPlace } from '@/lib/places'
 import { deliveryPartners, deliveryPartnerById, cropById } from '@/data'
 import { formatDate } from '@/lib/date'
-import { formatGHSFull, formatTonnes } from '@/lib/format'
+import { formatMoneyFull, formatTonnes } from '@/lib/format'
 import type { DeliveryJobStatus } from '@/types'
 
 const STATUS_TONE = {
@@ -24,7 +24,7 @@ export function DeliveryCoordination() {
   const { deliveryJobs, assignDeliveryPartner, setDeliveryStatus } = usePlatformData()
   const totalCommission = deliveryJobs
     .filter((j) => j.status === 'Assigned' || j.status === 'In Transit' || j.status === 'Delivered')
-    .reduce((s, j) => s + j.commissionGHS, 0)
+    .reduce((s, j) => s + j.commission, 0)
 
   return (
     <Card>
@@ -34,7 +34,7 @@ export function DeliveryCoordination() {
       </div>
       <p className="mt-1 text-xs text-ink-600">
         Open jobs are on the delivery partners' job board to book directly. Commission earned to date:{' '}
-        {formatGHSFull(totalCommission)}
+        {formatMoneyFull(totalCommission)}
       </p>
 
       <div className="mt-4 flex flex-col divide-y divide-ink-50">
@@ -58,7 +58,7 @@ export function DeliveryCoordination() {
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 {partner ? (
                   <span className="text-xs text-ink-600">
-                    {partner.name} · fee {formatGHSFull(job.feeGHS)} · commission {formatGHSFull(job.commissionGHS)}
+                    {partner.name} · fee {formatMoneyFull(job.fee)} · commission {formatMoneyFull(job.commission)}
                   </span>
                 ) : (
                   <div className="flex flex-wrap items-center gap-2">

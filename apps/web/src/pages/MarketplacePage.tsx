@@ -6,6 +6,7 @@ import { usePlatformData } from '@/context/PlatformDataContext'
 import { cropById } from '@/data'
 import { isAdminRole } from '@/lib/permissions'
 import { formatDate } from '@/lib/date'
+import { formatPrice } from '@/lib/format'
 import type { ListingCategory, ListingStatus } from '@/types'
 import { NewListingModal } from './marketplace/NewListingModal'
 
@@ -99,9 +100,7 @@ export function MarketplacePage() {
                 {l.quantity} {l.unit}
               </dd>
               <dt className="text-ink-500">Price</dt>
-              <dd className="text-right text-ink-700">
-                GHS {l.pricePerUnitGHS.toLocaleString()}/{l.unit}
-              </dd>
+              <dd className="text-right text-ink-700">{formatPrice(l.pricePerUnit, l.unit)}</dd>
               <dt className="text-ink-500">Seller</dt>
               <dd className="text-right text-ink-700">{l.sellerName}</dd>
               <dt className="text-ink-500">Posted</dt>

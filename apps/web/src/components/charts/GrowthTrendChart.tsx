@@ -1,9 +1,9 @@
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { networkGrowthTrend } from '@/data'
 import { chartColors, tooltipStyle } from './chartTheme'
-import { formatGHS } from '@/lib/format'
+import { formatMoney } from '@/lib/format'
 
-function shortGHS(v: number): string {
+function short(v: number): string {
   if (v >= 1_000_000) return `${(v / 1_000_000).toFixed(v % 1_000_000 === 0 ? 0 : 1)}M`
   if (v >= 1_000) return `${(v / 1_000).toFixed(0)}K`
   return String(v)
@@ -26,13 +26,13 @@ export function GrowthTrendChart() {
           axisLine={false}
           width={52}
           tick={{ fill: chartColors.axis, fontSize: 11 }}
-          tickFormatter={(v: number) => shortGHS(v)}
+          tickFormatter={(v: number) => short(v)}
           domain={['dataMin - 100000', 'dataMax + 100000']}
         />
-        <Tooltip contentStyle={tooltipStyle} formatter={(v) => [formatGHS(Number(v)), 'Contracted value']} />
+        <Tooltip contentStyle={tooltipStyle} formatter={(v) => [formatMoney(Number(v)), 'Contracted value']} />
         <Area
           type="monotone"
-          dataKey="contractedValueGHS"
+          dataKey="contractedValue"
           stroke={chartColors.actual}
           strokeWidth={2.5}
           fill="url(#growth-fill)"

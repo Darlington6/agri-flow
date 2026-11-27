@@ -6,21 +6,21 @@ import { cropById, dashboardMetrics } from '@/data'
 import { useSession } from '@/context/SessionContext'
 import { usePlatformData, resolveKycStatus } from '@/context/PlatformDataContext'
 import { scopedFarmers, currentCooperative } from '@/lib/scope'
-import type { GhanaRegion, CropId } from '@/types'
+import type { DemoRegion, CropId } from '@/types'
 import { formatTonnes } from '@/lib/format'
 
-const ALL_REGIONS: GhanaRegion[] = [
-  'Ashanti',
-  'Bono',
-  'Bono East',
-  'Northern',
-  'Upper West',
-  'Upper East',
-  'Greater Accra',
-  'Eastern',
-  'Volta',
+const ALL_REGIONS: DemoRegion[] = [
+  'Southern Province',
+  'Eastern Province',
+  'Eastern Province',
+  'Northern Province',
+  'Northern Province',
+  'Northern Province',
+  'City of Kigali',
+  'Eastern Province',
+  'Western Province',
 ]
-const CROP_IDS: CropId[] = ['tomatoes', 'onions', 'peppers', 'cassava']
+const CROP_IDS: CropId[] = ['irish_potato', 'beans', 'avocado', 'maize']
 
 export function FarmersPage() {
   const { session } = useSession()
@@ -35,7 +35,7 @@ export function FarmersPage() {
         ? ALL_REGIONS.filter((r) => baseFarmers.some((f) => f.region === r))
         : ALL_REGIONS
 
-  const [region, setRegion] = useState<GhanaRegion | 'all'>('all')
+  const [region, setRegion] = useState<DemoRegion | 'all'>('all')
   const [crop, setCrop] = useState<CropId | 'all'>('all')
   const [query, setQuery] = useState('')
 

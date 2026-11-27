@@ -21,18 +21,18 @@ function partner(overrides: Partial<DeliveryPartner> = {}): DeliveryPartner {
   }
 }
 
-// A non-perishable load (onions) from Musanze to Kigali, Rwanda.
+// A non-perishable load (beans) from Musanze to Kigali, Rwanda.
 function job(overrides: Partial<DeliveryJob> = {}): DeliveryJob {
   return {
     id: 'j-1',
-    cropId: 'onions',
+    cropId: 'beans',
     quantityTonnes: 8,
     from: { name: 'Musanze', area: 'Northern Province', countryCode: 'RW' },
     to: { name: 'Kigali', area: 'Kigali', countryCode: 'RW' },
     scheduledDate: '2026-11-20',
     status: 'Unassigned',
-    feeGHS: 1000,
-    commissionGHS: 100,
+    fee: 1000,
+    commission: 100,
     ...overrides,
   }
 }
@@ -77,11 +77,11 @@ describe('scorePartnerForJob', () => {
   })
 
   it('requires a refrigerated vehicle for perishable crops', () => {
-    const tomatoes = job({ cropId: 'tomatoes' })
-    const open = scorePartnerForJob(partner(), tomatoes)
+    const potatoes = job({ cropId: 'irish_potato' })
+    const open = scorePartnerForJob(partner(), potatoes)
     const cold = scorePartnerForJob(
       partner({ vehicle: { label: 'Reefer (10t)', capacityTonnes: 10, refrigerated: true } }),
-      tomatoes,
+      potatoes,
     )
     expect(open.coldChainOk).toBe(false)
     expect(open.vehicleFit).toBe(false)
@@ -90,7 +90,7 @@ describe('scorePartnerForJob', () => {
   })
 
   it('does not require refrigeration for non-perishable crops', () => {
-    expect(scorePartnerForJob(partner(), job({ cropId: 'cassava' })).coldChainOk).toBe(true)
+    expect(scorePartnerForJob(partner(), job({ cropId: 'maize' })).coldChainOk).toBe(true)
   })
 
   it('scales the rating to its weight and clamps out-of-range ratings', () => {

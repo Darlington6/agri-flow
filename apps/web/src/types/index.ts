@@ -4,8 +4,9 @@
 // product spec. All data conforming to these types currently comes from
 // src/data (mock fixtures); a real backend can implement the same shapes.
 
-export type GhanaRegion =
-  'Ashanti' | 'Bono' | 'Bono East' | 'Northern' | 'Upper West' | 'Upper East' | 'Greater Accra' | 'Eastern' | 'Volta'
+// The demo market's first-level areas (Rwanda's provinces; lib/market.ts).
+export type DemoRegion =
+  'City of Kigali' | 'Eastern Province' | 'Northern Province' | 'Southern Province' | 'Western Province'
 
 export type RiskLevel = 'low' | 'medium' | 'high'
 
@@ -28,14 +29,14 @@ export interface ServiceArea {
   areas?: string[]
 }
 
-export type CropId = 'tomatoes' | 'onions' | 'peppers' | 'cassava'
+export type CropId = 'irish_potato' | 'beans' | 'avocado' | 'maize'
 
 export interface Crop {
   id: CropId
   name: string
   unit: 'tonnes'
   varietyNotes?: string
-  // Spoils quickly without cooling in transit (e.g. tomatoes, peppers).
+  // Spoils quickly without cooling in transit (e.g. Irish potatoes, avocados).
   perishable: boolean
 }
 
@@ -71,7 +72,7 @@ export interface DemandRequest {
   qualityGrade: QualityGrade
   requiredDeliveryDate: string
   deliveryLocation: string
-  targetPriceGHSPerTonne: number
+  targetPricePerTonne: number
   frequency: DemandFrequency
   specialRequirements?: string
   status: DemandStatus
@@ -98,7 +99,7 @@ export interface FarmerRisk {
 export interface Farmer {
   id: string
   name: string
-  region: GhanaRegion
+  region: DemoRegion
   community: string
   phone: string
   primaryCropId: CropId
@@ -124,7 +125,7 @@ export interface Farmer {
 export interface FarmerGroup {
   id: string
   name: string
-  region: GhanaRegion
+  region: DemoRegion
   leadFarmerId: string
   farmerIds: string[]
 }
@@ -154,7 +155,7 @@ export interface Contract {
   suppliedQuantityTonnes: number
   expectedDeliveryDate: string
   farmerIds: string[]
-  valueGHS: number
+  value: number
   stage: ContractStage
   riskLevel: RiskLevel
   timeline: ContractTimelineEvent[]
@@ -168,7 +169,7 @@ export interface ProductionCycle {
   farmerId: string
   contractId?: string
   cropId: CropId
-  region: GhanaRegion
+  region: DemoRegion
   plantingDate: string
   expectedHarvestDate: string
   expectedYieldTonnes: number
@@ -183,14 +184,14 @@ export interface HarvestForecast {
   contractId?: string
   buyerId?: string
   cropId: CropId
-  region: GhanaRegion
+  region: DemoRegion
   expectedQuantityTonnes: number
   expectedHarvestDate: string
   riskLevel: RiskLevel
 }
 
 export interface RegionClimateRisk {
-  region: GhanaRegion
+  region: DemoRegion
   rainfallRisk: RiskLevel
   heatStress: RiskLevel
   waterStress: RiskLevel
@@ -231,7 +232,7 @@ export interface Payment {
   contractId: string
   counterpartyId: string // farmerId or buyerId
   counterpartyName: string
-  amountGHS: number
+  amount: number
   status: PaymentStatus
   method: PaymentMethod
   date: string
@@ -261,7 +262,7 @@ export interface Notification {
   // relevant buyer or field agent. Alerts with neither are platform-ops-level
   // and only shown to Platform Admin.
   relatedContractId?: string
-  relatedRegions?: GhanaRegion[]
+  relatedRegions?: DemoRegion[]
 }
 
 export type DemoRole =
@@ -301,7 +302,7 @@ export interface MarketplaceListing {
   cropId?: CropId
   quantity: number
   unit: ListingUnit
-  pricePerUnitGHS: number
+  pricePerUnit: number
   location: string
   status: ListingStatus
   postedAt: string
@@ -338,8 +339,8 @@ export interface DeliveryJob {
   scheduledDate: string
   status: DeliveryJobStatus
   partnerId?: string
-  feeGHS: number
-  commissionGHS: number
+  fee: number
+  commission: number
 }
 
 // --- In-app messaging (per contract) ---

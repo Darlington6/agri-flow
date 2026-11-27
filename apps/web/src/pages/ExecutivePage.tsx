@@ -3,41 +3,39 @@ import { PageHeader, Card, StatCard, DemoTag } from '@/components/ui'
 import { usePlatformData } from '@/context/PlatformDataContext'
 import { platformRevenueMetrics, networkGrowthTrend } from '@/data'
 import { GrowthTrendChart } from '@/components/charts/GrowthTrendChart'
-import { formatGHS, formatGHSFull } from '@/lib/format'
+import { formatMoney, formatMoneyFull } from '@/lib/format'
 
 export function ExecutivePage() {
   const { deliveryJobs } = usePlatformData()
-  const deliveryCommission = deliveryJobs
-    .filter((j) => j.status !== 'Unassigned')
-    .reduce((s, j) => s + j.commissionGHS, 0)
+  const deliveryCommission = deliveryJobs.filter((j) => j.status !== 'Unassigned').reduce((s, j) => s + j.commission, 0)
 
   const latest = networkGrowthTrend[networkGrowthTrend.length - 1]
   const first = networkGrowthTrend[0]
   const takeRatePct = platformRevenueMetrics.transactionFeeRateBps / 100
-  const transactionFeeRevenue = latest.contractedValueGHS * (platformRevenueMetrics.transactionFeeRateBps / 10_000)
+  const transactionFeeRevenue = latest.contractedValue * (platformRevenueMetrics.transactionFeeRateBps / 10_000)
   const totalRevenue =
     transactionFeeRevenue +
-    platformRevenueMetrics.subscriptionRevenueGHS +
+    platformRevenueMetrics.subscriptionRevenue +
     deliveryCommission +
-    platformRevenueMetrics.financingReferralRevenueGHS
+    platformRevenueMetrics.financingReferralRevenue
 
   const farmerGrowthPct = Math.round(((latest.farmers - first.farmers) / first.farmers) * 100)
 
   const revenueRows = [
-    { label: 'Transaction fees', amountGHS: transactionFeeRevenue, note: `${takeRatePct}% of contracted value` },
+    { label: 'Transaction fees', amount: transactionFeeRevenue, note: `${takeRatePct}% of contracted value` },
     {
       label: 'Buyer subscriptions',
-      amountGHS: platformRevenueMetrics.subscriptionRevenueGHS,
+      amount: platformRevenueMetrics.subscriptionRevenue,
       note: 'Demo monthly recurring revenue',
     },
-    { label: 'Delivery commission', amountGHS: deliveryCommission, note: 'Live — from booked delivery jobs' },
+    { label: 'Delivery commission', amount: deliveryCommission, note: 'Live — from booked delivery jobs' },
     {
       label: 'Financing referrals',
-      amountGHS: platformRevenueMetrics.financingReferralRevenueGHS,
+      amount: platformRevenueMetrics.financingReferralRevenue,
       note: 'Not live yet',
     },
   ]
-  const maxRow = Math.max(...revenueRows.map((r) => r.amountGHS), 1)
+  const maxRow = Math.max(...revenueRows.map((r) => r.amount), 1)
 
   return (
     <div className="flex flex-col gap-6">
@@ -50,13 +48,13 @@ export function ExecutivePage() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           label="Gross Contracted Value"
-          value={formatGHS(latest.contractedValueGHS)}
+          value={formatMoney(latest.contractedValue)}
           icon={Wallet}
           hint="This month, network-wide"
         />
         <StatCard
           label="Platform Revenue"
-          value={formatGHS(totalRevenue)}
+          value={formatMoney(totalRevenue)}
           icon={TrendingUp}
           hint="All sources, this month"
         />
@@ -68,7 +66,7 @@ export function ExecutivePage() {
         />
         <StatCard
           label="Delivery Commission"
-          value={formatGHS(deliveryCommission)}
+          value={formatMoney(deliveryCommission)}
           icon={Truck}
           hint="Earned on coordinated logistics"
         />
@@ -95,12 +93,12 @@ export function ExecutivePage() {
               <div key={r.label}>
                 <div className="flex items-baseline justify-between text-sm">
                   <span className="font-medium text-ink-800">{r.label}</span>
-                  <span className="text-ink-700">{formatGHSFull(r.amountGHS)}</span>
+                  <span className="text-ink-700">{formatMoneyFull(r.amount)}</span>
                 </div>
                 <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-ink-100">
                   <div
                     className="h-full rounded-full bg-brand-600"
-                    style={{ width: `${(r.amountGHS / maxRow) * 100}%` }}
+                    style={{ width: `${(r.amount / maxRow) * 100}%` }}
                   />
                 </div>
                 <p className="mt-0.5 text-xs text-ink-500">{r.note}</p>

@@ -11,13 +11,14 @@ export const TOUR_INTRO: Record<DemoRole, string> = {
   'Platform Admin':
     'You run day-to-day operations: matching demand to farmers, watching risk, and keeping payments moving.',
   'Super Admin': 'You see everything operations does, plus how the platform itself is performing.',
-  Buyer: 'You buy produce for Ghana Fresh Foods: you post what you need and follow it from contract to delivery.',
+  Buyer: 'You buy produce for Kigali Fresh Foods: you post what you need and follow it from contract to delivery.',
   'Field Agent':
     'You support the farmers in your regions: crop updates, climate-smart practices and problems in the field.',
-  Farmer: "You're Abena, a tomato farmer near Techiman, growing under contract for a buyer.",
+  Farmer: "You're Aline, a potato farmer near Kabarondo, growing under contract for a buyer.",
   Cooperative:
-    "You manage Techiman Growers' Cooperative: seven farmers, Abena among them, supplying the network's contracts.",
-  'Delivery Partner': 'You run Bono Freight Movers: you pick delivery jobs that fit your routes and get paid per job.',
+    "You manage Kayonza Growers' Cooperative: seven farmers, Aline among them, supplying the network's contracts.",
+  'Delivery Partner':
+    'You run Eastern Freight Movers: you pick delivery jobs that fit your routes and get paid per job.',
 }
 
 /** The pages worth visiting first, in order, for each role. */

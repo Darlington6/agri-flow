@@ -10,7 +10,7 @@ import { isAdminRole } from '@/lib/permissions'
 import { aiService } from '@/services/ai'
 import type { ContractRiskAssessment } from '@/services/ai'
 import { formatDate } from '@/lib/date'
-import { formatGHSFull, formatTonnes } from '@/lib/format'
+import { formatMoneyFull, formatTonnes } from '@/lib/format'
 import { MatchRequestsPanel } from '@/components/contract/MatchRequestsPanel'
 import { ContractMessages } from '@/components/contract/ContractMessages'
 import { DeliveryCard } from '@/components/contract/DeliveryCard'
@@ -91,7 +91,7 @@ export function ContractDetailPage() {
         </Card>
         <Card>
           <p className="text-xs text-ink-600">Contract value</p>
-          <p className="mt-1 font-display text-xl font-semibold text-ink-900">{formatGHSFull(contract.valueGHS)}</p>
+          <p className="mt-1 font-display text-xl font-semibold text-ink-900">{formatMoneyFull(contract.value)}</p>
         </Card>
         <Card>
           <p className="text-xs text-ink-600">Stage</p>
@@ -215,7 +215,7 @@ export function ContractDetailPage() {
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-medium text-ink-800">{formatGHSFull(p.amountGHS)}</p>
+                      <p className="text-sm font-medium text-ink-800">{formatMoneyFull(p.amount)}</p>
                       <Badge tone={p.status === 'Paid' ? 'good' : p.status === 'Processing' ? 'info' : 'warn'}>
                         {p.status}
                       </Badge>

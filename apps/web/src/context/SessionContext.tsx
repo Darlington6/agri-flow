@@ -1,20 +1,20 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
-import type { DemoRole, GhanaRegion } from '@/types'
+import type { DemoRole, DemoRegion } from '@/types'
 
 // Demo identity each role is "logged in as" — this is what data/nav scoping is
 // keyed off. In a real backend this would come from the authenticated user's
 // account, not a hardcoded constant.
-export const BUYER_DEMO_ID = 'B001' // Ghana Fresh Foods Ltd.
-export const AGENT_DEMO_REGIONS: GhanaRegion[] = ['Bono', 'Bono East', 'Ashanti']
-export const FARMER_DEMO_ID = 'F001' // Abena Owusu — supplies contract AG-204, in the Field Agent's regions
-export const COOPERATIVE_DEMO_ID = 'G001' // Techiman Growers' Cooperative — Abena (F001) is a member
-export const DELIVERY_PARTNER_DEMO_ID = 'DP-002' // Bono Freight Movers — covers the Field Agent's regions too
+export const BUYER_DEMO_ID = 'B001' // Kigali Fresh Foods Ltd.
+export const AGENT_DEMO_REGIONS: DemoRegion[] = ['Eastern Province', 'Southern Province']
+export const FARMER_DEMO_ID = 'F001' // Aline Uwase — supplies contract AG-204, in the Field Agent's regions
+export const COOPERATIVE_DEMO_ID = 'G001' // Kayonza Growers' Cooperative — Aline (F001) is a member
+export const DELIVERY_PARTNER_DEMO_ID = 'DP-002' // Eastern Freight Movers — covers the Field Agent's regions too
 
 export interface Session {
   role: DemoRole
   name: string
   buyerId?: string
-  agentRegions?: GhanaRegion[]
+  agentRegions?: DemoRegion[]
   farmerId?: string
   cooperativeId?: string
   deliveryPartnerId?: string
@@ -33,15 +33,15 @@ function buildSession(role: DemoRole): Session {
     case 'Platform Admin':
       return { role, name: 'Desmond' }
     case 'Buyer':
-      return { role, name: 'Nana', buyerId: BUYER_DEMO_ID }
+      return { role, name: 'Didier', buyerId: BUYER_DEMO_ID }
     case 'Field Agent':
-      return { role, name: 'Akosua', agentRegions: AGENT_DEMO_REGIONS }
+      return { role, name: 'Agnes', agentRegions: AGENT_DEMO_REGIONS }
     case 'Farmer':
-      return { role, name: 'Abena', farmerId: FARMER_DEMO_ID }
+      return { role, name: 'Aline', farmerId: FARMER_DEMO_ID }
     case 'Cooperative':
       return { role, name: 'Akua', cooperativeId: COOPERATIVE_DEMO_ID }
     case 'Delivery Partner':
-      return { role, name: 'Kwabena', deliveryPartnerId: DELIVERY_PARTNER_DEMO_ID }
+      return { role, name: 'Theogene', deliveryPartnerId: DELIVERY_PARTNER_DEMO_ID }
     case 'Super Admin':
       return { role, name: 'Yaw' }
   }

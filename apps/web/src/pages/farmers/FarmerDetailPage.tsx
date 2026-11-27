@@ -8,7 +8,7 @@ import { canViewFarmer } from '@/lib/scope'
 import { ROLE_PERMISSIONS } from '@/lib/permissions'
 import type { ClimateSmartPractice } from '@/types'
 import { formatDate } from '@/lib/date'
-import { formatGHSFull, formatTonnes } from '@/lib/format'
+import { formatMoneyFull, formatTonnes } from '@/lib/format'
 
 const ALL_PRACTICES: ClimateSmartPractice[] = [
   'Mulching',
@@ -159,7 +159,7 @@ export function FarmerDetailPage() {
                           {c.id} · {buyer?.name}
                         </p>
                         <p className="text-xs text-ink-500">
-                          {cropById(c.cropId)?.name} · {formatGHSFull(c.valueGHS)}
+                          {cropById(c.cropId)?.name} · {formatMoneyFull(c.value)}
                         </p>
                       </div>
                       <Badge tone="neutral">{c.stage}</Badge>
@@ -253,7 +253,7 @@ export function FarmerDetailPage() {
                 {paymentHistory.map((p) => (
                   <div key={p.id} className="flex items-center justify-between py-2.5 first:pt-0 last:pb-0">
                     <div>
-                      <p className="text-sm font-medium text-ink-800">{formatGHSFull(p.amountGHS)}</p>
+                      <p className="text-sm font-medium text-ink-800">{formatMoneyFull(p.amount)}</p>
                       <p className="text-xs text-ink-500">
                         {p.method} · {formatDate(p.date)}
                       </p>
