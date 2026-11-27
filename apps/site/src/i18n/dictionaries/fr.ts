@@ -1,4 +1,4 @@
-import type { Dictionary } from './en'
+import { en, type Dictionary } from './en'
 
 // French. Draft by the AgriFlow team; have a fluent speaker skim it before
 // publishing (locales.ts → published: true). French typography: a
@@ -240,27 +240,10 @@ export const fr: Dictionary = {
       honeypot: 'Laissez ce champ vide',
     },
   },
-  privacy: {
-    title: 'Avis de confidentialité',
-    description:
-      'Comment AgriFlow collecte, utilise et protège les informations personnelles que vous nous confiez, y compris les demandes de démo.',
-    draftNotice:
-      'Brouillon : cet avis est en cours de préparation avec un conseil juridique et sera finalisé avant le lancement.',
-    sections: [
-      {
-        title: 'Ce que nous collectons',
-        body: 'Lorsque vous demandez une démo, nous collectons les informations saisies : nom, organisation, rôle, pays, e-mail et, si vous le souhaitez, numéro de téléphone et message.',
-      },
-      {
-        title: 'Pourquoi',
-        body: 'Uniquement pour répondre à votre demande et organiser une démo. Nous ne vendons pas vos informations et ne les utilisons pas pour d’autres actions marketing.',
-      },
-      {
-        title: 'Contact',
-        body: 'Pour toute question sur vos informations, utilisez le formulaire de demande et nous vous répondrons.',
-      },
-    ],
-  },
+  // The privacy notice is being drafted in English for legal review. It's
+  // translated once the English is approved, so until then this page shows
+  // the English draft rather than an out-of-date or unreviewed translation.
+  privacy: en.privacy,
   terms: {
     title: 'Conditions d’utilisation',
     description:
