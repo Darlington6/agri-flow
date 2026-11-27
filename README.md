@@ -102,22 +102,22 @@ than rendering.
   additive rather than a separate parallel role: `isAdminRole(role)` treats Platform Admin and Super
   Admin as equivalent everywhere except the Executive route, so the two never drift out of sync as
   admin-only features are added.
-- **Buyer** — logged in as a specific buyer (Ghana Fresh Foods Ltd. in this demo). Sees only their own
+- **Buyer** — logged in as a specific buyer (Kigali Fresh Foods Ltd. in this demo). Sees only their own
   demand requests, contracts, harvest forecasts, payments and risk alerts. Farmers and Production are not
   in their nav or reachable directly.
-- **Farmer** — logged in as a specific farmer (Abena Owusu, one of the growers on contract AG-204 — the
+- **Farmer** — logged in as a specific farmer (Aline Uwase, one of the growers on contract AG-204 — the
   same contract the demo Buyer and Field Agent are connected to). Their dashboard is a personalized view
   of their own contract, expected harvest, climate-smart practice score and payment history. "Farmers" in
   their nav goes straight to their own profile rather than a directory; Demand, Production and Finance
   aren't reachable at all.
-- **Cooperative** — logged in as the manager of a farmers' cooperative (Techiman Growers' Cooperative: seven
-  tomato and pepper growers in Bono and Bono East, Abena among them). Sees only its members ("Members" in the
+- **Cooperative** — logged in as the manager of a farmers' cooperative (Kayonza Growers' Cooperative: seven
+  Irish potato and avocado growers in Eastern Province, Aline among them). Sees only its members ("Members" in the
   nav), the contracts they supply, their harvests, payments and risk alerts. Demand, Production and Finance
   aren't reachable.
-- **Field Agent** — assigned to a set of regions (Bono, Bono East, Ashanti in this demo). Sees only
+- **Field Agent** — assigned to a set of regions (Eastern and Southern Province in this demo). Sees only
   farmers, production cycles, harvests and climate risk within those regions. Demand, Contracts and
   Finance are not in their nav or reachable directly.
-- **Delivery Partner** — logged in as a specific delivery partner (Kwabena of Bono Freight Movers in this
+- **Delivery Partner** — logged in as a specific delivery partner (Theogene of Eastern Freight Movers in this
   demo, covering the same regions as the AG-204 story). Sees only their own Job Board: available
   jobs ranked for them, and the jobs they've booked. No access to farmers, contracts, or financial data
   beyond their own delivery fees.
