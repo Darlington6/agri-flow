@@ -26,6 +26,25 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Changed
 
+- Expo app: new accounts set up their account in the app, with the same steps as the web app: full name,
+  country and language, a role and its details, a phone number (skippable) and the terms. Each step saves as
+  it's answered, so someone can stop and carry on later, on any device. Home then shows each role, whether
+  it's verified yet, and what it gets during the pilot.
+- Setting up an account (web app and Expo app) now starts with "About you": full name and date of birth
+  exactly as on the person's ID, and gender (optional), kept private for verifying the account later, plus the
+  name other people see (suggested as "Aline U."). The API keeps the private details apart from the account
+  (`/api/v1/compliance/personal-details/`, migration `compliance.0001_initial`); only the person and staff see
+  them. The account page's name field is "Name others see".
+- AgriFlow is for adults: someone under 18 is asked for a parent or guardian's name, relationship and phone
+  number in that same step (web app, Expo app and API, migration `compliance.0002_guardian`), so the team can
+  check the guardian agrees.
+- The site's privacy notice is now a full draft for legal review, covering accounts (sign-in details, ID name,
+  date of birth, gender, guardians, role details, who sees what, the services that handle data, and people's
+  rights) as well as demo requests. Facts still to confirm are in [square brackets]. The French and Swahili
+  pages show the English draft until it's approved and translated.
+- Expo app: when AgriFlow can't be reached, sign-in and setup say "We can't reach AgriFlow. Check your
+  internet connection" rather than "You're offline", since the cause can be the server.
+
 - Expo app: the welcome and sign-in screens show the website's glowing logo from the top corner instead of
   a logo above the heading (it breathes slowly on the welcome screen, unless the phone asks for less motion),
   with text over it kept readable (a test checks the contrast). Sign-in has a Back link at the top: it steps back
