@@ -105,9 +105,45 @@ export interface RoleDetails {
 }
 
 /** A role the account chose, with its details. */
+/** A cooperative's members on AgriFlow: confirmed, and waiting for the manager. */
+export interface MemberCounts {
+  confirmed: number
+  pending: number
+}
+
+export type MembershipStatus = 'pending' | 'confirmed' | 'declined'
+
+/** A farmer who chose a cooperative, as its manager sees them. */
+export interface Member {
+  id: number
+  status: MembershipStatus
+  requested_at: string
+  decided_at: string | null
+  farmer: {
+    name: string
+    phone_number: string | null
+    region: string
+    district: string
+    /** Crop names. */
+    crops: string[]
+    farm_size_hectares: string | null
+    verified: boolean
+  }
+}
+
+export interface CooperativeMembers {
+  cooperative: { name: string } & MemberCounts
+  /** Waiting first, then members, then declined. */
+  members: Member[]
+}
+
 export type Profile = {
   [R in SelfServeRole]: ProfileBase & { role: R } & RoleDetails[R] &
-    (R extends 'farmer' ? { cooperative: FarmerCooperative | null } : unknown)
+    (R extends 'farmer'
+      ? { cooperative: FarmerCooperative | null }
+      : R extends 'cooperative'
+        ? { members: MemberCounts }
+        : unknown)
 }[SelfServeRole]
 
 export interface Option {
@@ -365,6 +401,19 @@ export function updateProfile<R extends SelfServeRole>(role: R, details: Partial
   return request<Profile>(`/api/v1/network/profiles/${role}/`, {
     method: 'PATCH',
     body: JSON.stringify(details),
+  })
+}
+
+/** The farmers who chose the signed-in manager's cooperative. */
+export function getCooperativeMembers() {
+  return request<CooperativeMembers>('/api/v1/network/cooperative/members/')
+}
+
+/** Confirms a farmer as a member, or declines them (removing a member declines them too). */
+export function decideMembership(id: number, status: 'confirmed' | 'declined') {
+  return request<Member>(`/api/v1/network/cooperative/members/${id}/`, {
+    method: 'POST',
+    body: JSON.stringify({ status }),
   })
 }
 

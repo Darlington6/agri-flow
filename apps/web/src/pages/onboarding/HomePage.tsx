@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Clock, Plus } from 'lucide-react'
+import { Clock, Plus, Users } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { AccountShell } from '@/components/layout/AccountShell'
 import { PageLoading } from '@/components/layout/PageLoading'
@@ -8,7 +8,7 @@ import { RequireAccount } from '@/components/layout/RequireAccount'
 import { buttonClasses, Button, Card } from '@/components/ui'
 import { ROLE_ICONS } from '@/components/onboarding/roleIcons'
 import { VerificationBadge } from '@/components/onboarding/VerificationBadge'
-import { ApiError, getProfiles, type Profile, type FarmerCooperative } from '@/lib/apiClient'
+import { ApiError, getProfiles, type FarmerCooperative, type MemberCounts, type Profile } from '@/lib/apiClient'
 import { ROLE_ORDER, ROLES } from '@/lib/onboarding'
 
 /**
@@ -95,6 +95,18 @@ function Home() {
                 {profile.role === 'farmer' && profile.cooperative && (
                   <p className="mt-3 text-sm text-ink-700">{membershipLine(profile.cooperative)}</p>
                 )}
+                {profile.role === 'cooperative' && (
+                  <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+                    <p className="text-sm text-ink-700">{membersLine(profile.members)}</p>
+                    <Link
+                      to="/members"
+                      className={buttonClasses(profile.members.pending ? 'primary' : 'outline', 'md')}
+                    >
+                      <Users className="h-4 w-4" aria-hidden />
+                      {profile.members.pending ? 'Confirm members' : 'See members'}
+                    </Link>
+                  </div>
+                )}
                 <h3 className="mt-5 flex items-center gap-1.5 text-xs font-medium tracking-wide text-ink-600 uppercase">
                   <Clock className="h-3.5 w-3.5" aria-hidden />
                   Coming during the pilot
@@ -137,4 +149,11 @@ function membershipLine(cooperative: FarmerCooperative): string {
   if (cooperative.membership === 'confirmed') return `Member of ${cooperative.name}.`
   if (cooperative.membership === 'declined') return `${cooperative.name} didn’t confirm you as a member.`
   return `Waiting for ${cooperative.name} to confirm you’re a member.`
+}
+
+/** A cooperative's members on AgriFlow, and how many are waiting. */
+function membersLine({ confirmed, pending }: MemberCounts): string {
+  const members = confirmed === 1 ? '1 member' : `${confirmed} members`
+  if (!pending) return `${members} on AgriFlow.`
+  return `${members} on AgriFlow, ${pending} waiting for you to confirm.`
 }
