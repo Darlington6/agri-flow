@@ -79,6 +79,11 @@ function RoleCard({ profile }: { profile: Profile }) {
           {t('home.checking', { role: role.toLowerCase() })}
         </Text>
       )}
+      {profile.role === 'farmer' && profile.cooperative ? (
+        <Text variant="small">
+          {t(`home.member.${profile.cooperative.membership}`, { name: profile.cooperative.name })}
+        </Text>
+      ) : null}
       <Text variant="label" color="muted">
         {t('home.coming')}
       </Text>

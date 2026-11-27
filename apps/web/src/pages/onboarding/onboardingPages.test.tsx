@@ -37,6 +37,7 @@ const FARMER = {
   district: 'Musanze',
   crops: ['maize'],
   farm_size_hectares: null,
+  cooperative: { id: 4, name: 'Abahuzamugambi', verified: true, membership: 'pending' },
   cooperative_name: '',
 }
 
@@ -113,6 +114,7 @@ describe('account setup pages', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Finish' }))
 
     expect(await screen.findByRole('heading', { name: 'Welcome, Aline' })).toBeInTheDocument()
+    expect(await screen.findByText('Waiting for Abahuzamugambi to confirm you’re a member.')).toBeInTheDocument()
     expect(calls).toContainEqual({
       path: '/api/v1/onboarding/complete/',
       method: 'POST',
@@ -169,7 +171,7 @@ describe('account setup pages', () => {
           '/api/v1/onboarding/': { body: { ...STATE, next_step: 'role' } },
           '/api/v1/network/profiles/': { body: [] },
           '/api/v1/network/options/': {
-            body: { country: 'RW', regions: [], crops: [], buyer_types: [], vehicle_types: [] },
+            body: { country: 'RW', regions: [], crops: [], buyer_types: [], vehicle_types: [], cooperatives: [] },
           },
         },
         false,

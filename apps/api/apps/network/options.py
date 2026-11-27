@@ -99,3 +99,32 @@ def places_for(country: str) -> list[dict] | None:
     if regions is None:
         return None
     return [{"name": name, "districts": districts} for name, districts in regions.items()]
+
+
+# Enough for the pilot's cooperatives in one country; a search endpoint
+# takes over when there are more.
+MAX_COOPERATIVES = 500
+
+
+def cooperatives_for(country: str) -> list[dict]:
+    """The cooperatives on AgriFlow in `country`, for farmers to choose
+    from: new ones straight away (marked unverified), never rejected ones."""
+    from django.db.models.functions import Lower
+
+    from .models import CooperativeProfile, Verification
+
+    cooperatives = (
+        CooperativeProfile.objects.filter(user__country=country)
+        .exclude(verification=Verification.REJECTED)
+        .order_by(Lower("name"))[:MAX_COOPERATIVES]
+    )
+    return [
+        {
+            "id": c.pk,
+            "name": c.name,
+            "region": c.region,
+            "district": c.district,
+            "verified": c.verification == Verification.VERIFIED,
+        }
+        for c in cooperatives
+    ]

@@ -121,6 +121,12 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Added
 
+- Farmers choose their cooperative from those on AgriFlow in their country (web app, Expo app and API,
+  migration `network.0002_membership`). New cooperatives are listed straight away, marked "not verified yet";
+  rejected ones never are. Choosing one asks to join: the farmer is a pending member until the cooperative
+  confirms them, and home says so. A cooperative not on AgriFlow yet can still be typed. The demo walkthrough
+  lists two sample cooperatives.
+
 - **Signing in to the Expo app** with an email or a phone number (both send a 6-digit code; the first one
   creates the account) and, in its web version, Continue with Google. The web app's sign-in is unchanged. Once
   signed in, the app opens signed in every time, with or without a connection: the session and the account's

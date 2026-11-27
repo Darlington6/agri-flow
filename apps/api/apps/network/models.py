@@ -57,7 +57,8 @@ class FarmerProfile(Profile, Located):
 
     crops = models.JSONField(default=list, help_text="Crop codes from options.CROPS")
     farm_size_hectares = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
-    # Free text until cooperatives can invite their members.
+    # A cooperative not on AgriFlow yet, typed. One on AgriFlow is a
+    # Membership instead (below), and this stays empty.
     cooperative_name = models.CharField(max_length=150, blank=True)
 
     class Meta(Profile.Meta):
@@ -88,8 +89,10 @@ class DeliveryPartnerProfile(Profile):
 
 
 class CooperativeProfile(Profile, Located):
-    """Set up by the person who manages the cooperative. Members join it
-    in a later release; until then farmers name their cooperative."""
+    """Set up by the person who manages the cooperative. It's listed for
+    farmers to choose straight away, marked unverified until staff check
+    its registration; farmers who choose it are members once it confirms
+    them (Membership)."""
 
     ROLE = Role.COOPERATIVE
 
@@ -100,6 +103,39 @@ class CooperativeProfile(Profile, Located):
 
     class Meta(Profile.Meta):
         verbose_name = "cooperative"
+
+
+class Membership(models.Model):
+    """A farmer belonging to a cooperative on AgriFlow. Choosing one asks
+    to join: the farmer is a pending member until the cooperative's
+    manager (or a field agent) confirms them, and only confirmed members
+    count in the cooperative's totals. A farmer belongs to one cooperative
+    at a time."""
+
+    class Status(models.TextChoices):
+        PENDING = "pending", "Waiting for the cooperative"
+        CONFIRMED = "confirmed", "Confirmed"
+        DECLINED = "declined", "Declined"
+
+    farmer = models.OneToOneField(
+        FarmerProfile, on_delete=models.CASCADE, related_name="membership"
+    )
+    cooperative = models.ForeignKey(
+        CooperativeProfile, on_delete=models.CASCADE, related_name="memberships"
+    )
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING)
+    requested_at = models.DateTimeField(auto_now_add=True)
+    # Who confirmed or declined it, and when.
+    decided_at = models.DateTimeField(null=True, blank=True)
+    decided_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="+"
+    )
+
+    class Meta:
+        ordering = ["requested_at"]
+
+    def __str__(self) -> str:
+        return f"{self.farmer.user} in {self.cooperative.name} ({self.get_status_display()})"
 
 
 PROFILE_MODELS: dict[str, type[Profile]] = {

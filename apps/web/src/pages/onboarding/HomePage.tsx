@@ -8,7 +8,7 @@ import { RequireAccount } from '@/components/layout/RequireAccount'
 import { buttonClasses, Button, Card } from '@/components/ui'
 import { ROLE_ICONS } from '@/components/onboarding/roleIcons'
 import { VerificationBadge } from '@/components/onboarding/VerificationBadge'
-import { ApiError, getProfiles, type Profile } from '@/lib/apiClient'
+import { ApiError, getProfiles, type Profile, type FarmerCooperative } from '@/lib/apiClient'
 import { ROLE_ORDER, ROLES } from '@/lib/onboarding'
 
 /**
@@ -92,6 +92,9 @@ function Home() {
                     what we need.
                   </p>
                 )}
+                {profile.role === 'farmer' && profile.cooperative && (
+                  <p className="mt-3 text-sm text-ink-700">{membershipLine(profile.cooperative)}</p>
+                )}
                 <h3 className="mt-5 flex items-center gap-1.5 text-xs font-medium tracking-wide text-ink-600 uppercase">
                   <Clock className="h-3.5 w-3.5" aria-hidden />
                   Coming during the pilot
@@ -127,4 +130,11 @@ function Home() {
       </div>
     </AccountShell>
   )
+}
+
+/** Where a farmer stands with the cooperative they chose. */
+function membershipLine(cooperative: FarmerCooperative): string {
+  if (cooperative.membership === 'confirmed') return `Member of ${cooperative.name}.`
+  if (cooperative.membership === 'declined') return `${cooperative.name} didn’t confirm you as a member.`
+  return `Waiting for ${cooperative.name} to confirm you’re a member.`
 }

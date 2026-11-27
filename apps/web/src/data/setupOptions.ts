@@ -73,5 +73,12 @@ export function demoSetupOptions(country: string): SetupOptions {
     crops: CROPS,
     buyer_types: BUYER_TYPES,
     vehicle_types: VEHICLE_TYPES,
+    cooperatives: country === 'RW' ? DEMO_COOPERATIVES : [],
   }
 }
+
+/** Sample cooperatives for the demo walkthrough (made up; nothing is saved). */
+const DEMO_COOPERATIVES: SetupOptions['cooperatives'] = [
+  { id: 1, name: 'Abahuzamugambi ba Musanze', region: 'Northern Province', district: 'Musanze', verified: true },
+  { id: 2, name: 'Twisungane Kayonza', region: 'Eastern Province', district: 'Kayonza', verified: false },
+]

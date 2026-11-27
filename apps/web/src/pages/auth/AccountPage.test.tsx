@@ -31,6 +31,7 @@ const OPTIONS = {
   ],
   buyer_types: [{ value: 'processor', label: 'Processor' }],
   vehicle_types: [{ value: 'truck', label: 'Truck' }],
+  cooperatives: [],
 }
 
 const FARMER = {
@@ -132,6 +133,7 @@ describe('AccountPage contacts', () => {
         district: 'Musanze',
         crops: ['maize', 'beans'],
         farm_size_hectares: null,
+        cooperative_id: null,
         cooperative_name: '',
       },
     })
