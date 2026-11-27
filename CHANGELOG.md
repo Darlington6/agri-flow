@@ -121,6 +121,11 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
 
 ### Added
 
+- A cooperative's manager confirms its members (web app `/members`, Expo app and API): farmers who chose the
+  cooperative wait at the top with their place, crops and a phone number to call, then Confirm or Decline;
+  members can be removed later. Home counts the members and how many are waiting, with a button to them. Only
+  confirmed members count.
+
 - Farmers choose their cooperative from those on AgriFlow in their country (web app, Expo app and API,
   migration `network.0002_membership`). New cooperatives are listed straight away, marked "not verified yet";
   rejected ones never are. Choosing one asks to join: the farmer is a pending member until the cooperative

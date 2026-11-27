@@ -8,6 +8,7 @@ import { GoogleReturnPage } from '@/pages/auth/GoogleReturnPage'
 import { SignInPage } from '@/pages/auth/SignInPage'
 import { WelcomePage } from './WelcomePage'
 import { HomePage } from './HomePage'
+import { MembersPage } from './MembersPage'
 
 const NEW_USER = {
   id: 7,
@@ -79,6 +80,7 @@ function renderAt(path: string, answers: Answers, signedIn = true) {
           <Route path="/auth/google" element={<GoogleReturnPage />} />
           <Route path="/welcome" element={<WelcomePage />} />
           <Route path="/home" element={<HomePage />} />
+          <Route path="/members" element={<MembersPage />} />
         </Routes>
       </MemoryRouter>
     </AuthProvider>,
@@ -217,6 +219,79 @@ describe('account setup pages', () => {
       renderAt('/auth/google', {}, false)
       expect(await screen.findByRole('button', { name: 'Continue with Google' })).toBeInTheDocument()
       expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+    })
+  })
+
+  describe('a cooperative’s members', () => {
+    const MANAGER = { ...READY, roles: [{ slug: 'cooperative', name: 'Cooperative' }] }
+    const COOPERATIVE = {
+      role: 'cooperative',
+      verification: 'unverified',
+      created_at: '',
+      updated_at: '',
+      name: 'Abahuzamugambi',
+      registration_number: '',
+      region: 'Northern Province',
+      district: 'Musanze',
+      member_count: null,
+      crops: ['beans'],
+      members: { confirmed: 1, pending: 1 },
+    }
+    const member = (id: number, name: string, status: string) => ({
+      id,
+      status,
+      requested_at: '',
+      decided_at: null,
+      farmer: {
+        name,
+        phone_number: '+250788123456',
+        region: 'Northern Province',
+        district: 'Musanze',
+        crops: ['Beans'],
+        farm_size_hectares: null,
+        verified: false,
+      },
+    })
+    const MEMBERS = {
+      cooperative: { name: 'Abahuzamugambi', confirmed: 1, pending: 1 },
+      members: [member(2, 'Aline U.', 'pending'), member(1, 'Jean H.', 'confirmed')],
+    }
+
+    it('home counts the members and points to those waiting', async () => {
+      renderAt('/home', { '/api/v1/auth/me/': { body: MANAGER }, '/api/v1/network/profiles/': { body: [COOPERATIVE] } })
+      expect(await screen.findByText('1 member on AgriFlow, 1 waiting for you to confirm.')).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: 'Confirm members' })).toHaveAttribute('href', '/members')
+    })
+
+    it('confirms a farmer who chose the cooperative', async () => {
+      const calls = renderAt('/members', {
+        '/api/v1/auth/me/': { body: MANAGER },
+        '/api/v1/network/cooperative/members/': { body: MEMBERS },
+        'POST /api/v1/network/cooperative/members/2/': { body: member(2, 'Aline U.', 'confirmed') },
+      })
+      expect(await screen.findByRole('heading', { name: 'Waiting for you (1)' })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: 'Members (1)' })).toBeInTheDocument()
+      expect(screen.getAllByRole('link', { name: '+250 788 123 456' })[0]).toHaveAttribute('href', 'tel:+250788123456')
+
+      await userEvent.click(screen.getByRole('button', { name: 'Confirm Aline U.' }))
+      expect(await screen.findByRole('heading', { name: 'Members (2)' })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: 'Waiting for you (0)' })).toBeInTheDocument()
+      expect(calls).toContainEqual({
+        path: '/api/v1/network/cooperative/members/2/',
+        method: 'POST',
+        body: { status: 'confirmed' },
+      })
+    })
+
+    it('says so to someone who doesn’t manage a cooperative', async () => {
+      renderAt('/members', {
+        '/api/v1/auth/me/': { body: READY },
+        '/api/v1/network/cooperative/members/': {
+          status: 403,
+          body: { detail: 'Only a cooperative’s manager can see its members.' },
+        },
+      })
+      expect(await screen.findByRole('alert')).toHaveTextContent('Only a cooperative’s manager can see its members.')
     })
   })
 })

@@ -212,6 +212,8 @@ class CooperativeProfileSerializer(ProfileSerializer):
     member_count = serializers.IntegerField(
         min_value=1, max_value=1_000_000, required=False, allow_null=True
     )
+    # Farmers on AgriFlow who chose it: confirmed, and waiting for the manager.
+    members = serializers.SerializerMethodField()
 
     class Meta(ProfileSerializer.Meta):
         model = CooperativeProfile
@@ -222,7 +224,13 @@ class CooperativeProfileSerializer(ProfileSerializer):
             "district",
             "member_count",
             "crops",
+            "members",
         ]
+
+    def get_members(self, cooperative) -> dict:
+        from .members import counts
+
+        return counts(cooperative)
 
     def validate_name(self, value):
         value = _tidy(value)
@@ -265,3 +273,9 @@ class CompleteOnboardingSerializer(serializers.Serializer):
         if not value:
             raise serializers.ValidationError("Agree to the terms to continue.")
         return value
+
+
+class MembershipDecisionSerializer(serializers.Serializer):
+    status = serializers.ChoiceField(
+        choices=[Membership.Status.CONFIRMED, Membership.Status.DECLINED]
+    )

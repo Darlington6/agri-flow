@@ -4,8 +4,12 @@ from rest_framework.views import APIView
 
 from apps.identity.serializers import UserSerializer
 
-from . import options, services
-from .serializers import CompleteOnboardingSerializer, NewProfileSerializer
+from . import members, options, services
+from .serializers import (
+    CompleteOnboardingSerializer,
+    MembershipDecisionSerializer,
+    NewProfileSerializer,
+)
 
 
 class OptionsView(APIView):
@@ -86,3 +90,38 @@ class CompleteOnboardingView(APIView):
         except services.NotReady as exc:
             return Response({"detail": str(exc)}, status=status.HTTP_409_CONFLICT)
         return Response(UserSerializer(request.user).data)
+
+
+class CooperativeMembersView(APIView):
+    """The farmers who chose the signed-in manager's cooperative: waiting
+    first, then members, then declined; with the counts."""
+
+    def get(self, request):
+        try:
+            cooperative = members.cooperative_of(request.user)
+        except members.NotAManager as exc:
+            return Response({"detail": str(exc)}, status=status.HTTP_403_FORBIDDEN)
+        return Response(
+            {
+                "cooperative": {"name": cooperative.name, **members.counts(cooperative)},
+                "members": [members.serialize(m) for m in members.memberships(cooperative)],
+            }
+        )
+
+
+class MembershipDecisionView(APIView):
+    """POST {"status": "confirmed" | "declined"}: confirms a farmer as a
+    member, or declines them (removing a member declines them too)."""
+
+    def post(self, request, membership_id: int):
+        decision = MembershipDecisionSerializer(data=request.data)
+        decision.is_valid(raise_exception=True)
+        try:
+            membership = members.decide(
+                request.user, membership_id, decision.validated_data["status"]
+            )
+        except members.NotAManager as exc:
+            return Response({"detail": str(exc)}, status=status.HTTP_403_FORBIDDEN)
+        except LookupError as exc:
+            return Response({"detail": str(exc)}, status=status.HTTP_404_NOT_FOUND)
+        return Response(members.serialize(membership))

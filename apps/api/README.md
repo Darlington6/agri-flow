@@ -99,10 +99,12 @@ phone number (optional), and agreeing to the terms and privacy notice.
 | `GET network/options/?country=RW` | The pick lists: Rwanda's provinces and districts (`regions` is null for countries without a list, where people type theirs), crops, buyer types and vehicle types. `cooperatives`: the cooperatives on AgriFlow in that country, new ones straight away (`verified: false`), never rejected ones. |
 | `GET`/`POST network/profiles/` | The account's roles and their details. `POST {role, ...}` chooses a role (`farmer`, `buyer`, `delivery_partner` or `cooperative`) and grants it together with its profile. 409 if they already have it. |
 | `PATCH network/profiles/<role>/` | Edit a profile. |
+| `GET network/cooperative/members/` | For a cooperative's manager: the farmers who chose it (waiting first, then members, then declined: name, phone, place, crop names) and the counts. 403 for anyone without a cooperative. A cooperative profile also answers with `members` (`confirmed`, `pending`). |
+| `POST network/cooperative/members/<id>/` | `{status: "confirmed" \| "declined"}`: confirms a farmer as a member, or declines them (removing a member declines them). 404 for another cooperative's. |
 
 - **Farmers join cooperatives on AgriFlow.** A farmer profile's `cooperative_id` (from the options' list) asks to
-  join that cooperative: a `Membership` that's `pending` until the cooperative confirms it (in `/admin` for now;
-  the cooperative's own screen is next). Changing cooperative asks again; `null` leaves it. Farmer profiles answer
+  join that cooperative: a `Membership` that's `pending` until the cooperative confirms it (by its manager,
+  `network/cooperative/members/`, or in `/admin`; field agents will confirm members too). Changing cooperative asks again; `null` leaves it. Farmer profiles answer
   with `cooperative` (`id`, `name`, `verified`, `membership`). A cooperative not on AgriFlow yet is typed in
   `cooperative_name` as before.
 - **Nobody can give themselves a staff role.** Field agents and admins aren't offered; staff get their roles
