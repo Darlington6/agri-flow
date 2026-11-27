@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { ArrowLeft, Mail, Smartphone } from 'lucide-react'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
-import { LogoMark } from '@/components/brand/LogoMark'
 import { GrowingSprout } from '@/components/brand/GrowingSprout'
 import { useAuth } from '@/context/AuthContext'
 import { ApiError } from '@/lib/apiClient'
@@ -83,10 +82,6 @@ export function SignInPage() {
 
   return (
     <AuthLayout photo="signIn">
-      {/* Just the logo: the demo link sits below the card, and the demo shows its own pilot badge. */}
-      <div className="mb-8 flex justify-center">
-        <LogoMark className="h-14" />
-      </div>
       {/* Screen readers still get a page heading. */}
       <h1 className="sr-only">Sign in to {brand.name}</h1>
 

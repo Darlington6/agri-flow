@@ -1,7 +1,6 @@
 import { useMemo, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Info } from 'lucide-react'
-import { LogoMark } from '@/components/brand/LogoMark'
 import { AuthLayout } from '@/components/layout/AuthLayout'
 import { OnboardingFlow, type OnboardingDriver } from '@/components/onboarding/OnboardingFlow'
 import { useSession } from '@/context/SessionContext'
@@ -19,7 +18,7 @@ const pause = () => new Promise<void>((resolve) => setTimeout(resolve, 250))
  * with that role's sample account.
  */
 export function DemoSignUpPage() {
-  const { login } = useSession()
+  const { session, login } = useSession()
   const navigate = useNavigate()
   const chosen = useRef<SelfServeRole>('farmer')
 
@@ -68,13 +67,6 @@ export function DemoSignUpPage() {
   return (
     <AuthLayout photo="demo">
       <div className="mb-6 flex flex-col items-center gap-3 text-center">
-        <Link
-          to="/login"
-          aria-label="Back to the demo roles"
-          className="rounded-lg focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:outline-none"
-        >
-          <LogoMark className="h-12" />
-        </Link>
         <h1 className="font-display text-2xl font-semibold text-ink-900">How signing up works</h1>
       </div>
 
@@ -95,8 +87,12 @@ export function DemoSignUpPage() {
         }}
       />
 
-      <Link to="/login" className="mt-8 text-xs text-ink-600 underline-offset-4 hover:text-ink-800 hover:underline">
-        Back to the demo roles
+      {/* With a demo role open, the roles page goes straight to it, so say where this leads. */}
+      <Link
+        to={session ? '/dashboard' : '/login'}
+        className="mt-8 text-xs text-ink-600 underline-offset-4 hover:text-ink-800 hover:underline"
+      >
+        {session ? 'Back to the demo' : 'Back to the demo roles'}
       </Link>
     </AuthLayout>
   )

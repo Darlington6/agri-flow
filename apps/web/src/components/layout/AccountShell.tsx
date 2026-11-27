@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import clsx from 'clsx'
-import { LogoMark } from '@/components/brand/LogoMark'
+import { Backdrop } from '@/components/brand/Backdrop'
 import { DemoTag } from '@/components/ui'
 
 const tab = ({ isActive }: { isActive: boolean }) =>
@@ -13,15 +13,9 @@ const tab = ({ isActive }: { isActive: boolean }) =>
 /** The pages of a real account (home, account): logo, title, and a way between them. */
 export function AccountShell({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <div className="flex min-h-svh flex-col items-center bg-canvas px-4 py-10 sm:py-12">
-      <div className="mb-8 flex w-full max-w-2xl flex-col items-center gap-3 text-center">
-        <Link
-          to="/home"
-          aria-label="AgriFlow home"
-          className="mb-1 rounded-lg focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:outline-none"
-        >
-          <LogoMark className="h-12" />
-        </Link>
+    <div className="relative flex min-h-svh flex-col items-center overflow-hidden bg-canvas px-4 py-10 sm:py-12">
+      <Backdrop />
+      <div className="relative mb-8 flex w-full max-w-2xl flex-col items-center gap-3 text-center">
         <nav aria-label="Your account" className="flex gap-1">
           <NavLink to="/home" className={tab}>
             Home
@@ -33,7 +27,7 @@ export function AccountShell({ title, children }: { title: string; children: Rea
         <h1 className="font-display text-2xl font-semibold text-ink-900">{title}</h1>
         <DemoTag />
       </div>
-      {children}
+      <div className="relative flex w-full flex-col items-center">{children}</div>
     </div>
   )
 }

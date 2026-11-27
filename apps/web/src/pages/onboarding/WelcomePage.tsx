@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/context/AuthContext'
-import { LogoMark } from '@/components/brand/LogoMark'
 import { AuthLayout } from '@/components/layout/AuthLayout'
 import { PageLoading } from '@/components/layout/PageLoading'
 import { Button, Card, DemoTag } from '@/components/ui'
@@ -103,7 +102,6 @@ export function WelcomePage() {
   return (
     <AuthLayout photo="signIn">
       <div className="mb-6 flex flex-col items-center gap-3 text-center">
-        <LogoMark className="h-12" />
         <h1 className="font-display text-2xl font-semibold text-ink-900">
           {user.onboarded_at ? 'Welcome back' : 'Welcome to AgriFlow'}
         </h1>
