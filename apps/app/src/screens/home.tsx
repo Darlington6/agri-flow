@@ -1,3 +1,4 @@
+import { router } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 
@@ -79,6 +80,27 @@ function RoleCard({ profile }: { profile: Profile }) {
           {t('home.checking', { role: role.toLowerCase() })}
         </Text>
       )}
+      {profile.role === 'cooperative' ? (
+        <>
+          <Text variant="small">
+            {[
+              profile.members.confirmed === 0
+                ? t('home.members.none')
+                : profile.members.confirmed === 1
+                  ? t('home.members.one')
+                  : t('home.members.many', { count: profile.members.confirmed }),
+              profile.members.pending ? t('home.members.waiting', { count: profile.members.pending }) : '',
+            ]
+              .filter(Boolean)
+              .join(' ')}
+          </Text>
+          <Button
+            variant={profile.members.pending ? 'primary' : 'secondary'}
+            label={profile.members.pending ? t('home.members.confirm') : t('home.members.see')}
+            onPress={() => router.push('/members')}
+          />
+        </>
+      ) : null}
       {profile.role === 'farmer' && profile.cooperative ? (
         <Text variant="small">
           {t(`home.member.${profile.cooperative.membership}`, { name: profile.cooperative.name })}

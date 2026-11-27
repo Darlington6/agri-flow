@@ -88,6 +88,38 @@ export interface RoleDetails {
   cooperative: CooperativeDetails
 }
 
+/** A cooperative's members on AgriFlow: confirmed, and waiting for the manager. */
+export interface MemberCounts {
+  confirmed: number
+  pending: number
+}
+
+export type MembershipStatus = 'pending' | 'confirmed' | 'declined'
+
+/** A farmer who chose a cooperative, as its manager sees them. */
+export interface Member {
+  id: number
+  status: MembershipStatus
+  requested_at: string
+  decided_at: string | null
+  farmer: {
+    name: string
+    phone_number: string | null
+    region: string
+    district: string
+    /** Crop names. */
+    crops: string[]
+    farm_size_hectares: string | null
+    verified: boolean
+  }
+}
+
+export interface CooperativeMembers {
+  cooperative: { name: string } & MemberCounts
+  /** Waiting first, then members, then declined. */
+  members: Member[]
+}
+
 /** A role the account chose, with its details. */
 export type Profile = {
   [R in SelfServeRole]: {
@@ -96,7 +128,11 @@ export type Profile = {
     created_at: string
     updated_at: string
   } & RoleDetails[R] &
-    (R extends 'farmer' ? { cooperative: FarmerCooperative | null } : unknown)
+    (R extends 'farmer'
+      ? { cooperative: FarmerCooperative | null }
+      : R extends 'cooperative'
+        ? { members: MemberCounts }
+        : unknown)
 }[SelfServeRole]
 
 export interface Option {
