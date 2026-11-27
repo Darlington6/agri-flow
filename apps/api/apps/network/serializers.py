@@ -9,6 +9,8 @@ from .models import (
     CooperativeProfile,
     DeliveryPartnerProfile,
     FarmerProfile,
+    Membership,
+    Verification,
 )
 
 
@@ -76,6 +78,12 @@ class FarmerProfileSerializer(ProfileSerializer):
         allow_null=True,
     )
 
+    # Choosing a cooperative on AgriFlow (its id, from the options' list)
+    # asks to join it; null leaves it. `cooperative` says which, and
+    # whether the cooperative has confirmed them yet.
+    cooperative_id = serializers.IntegerField(write_only=True, required=False, allow_null=True)
+    cooperative = serializers.SerializerMethodField()
+
     class Meta(ProfileSerializer.Meta):
         model = FarmerProfile
         fields = ProfileSerializer.Meta.fields + [
@@ -83,6 +91,8 @@ class FarmerProfileSerializer(ProfileSerializer):
             "district",
             "crops",
             "farm_size_hectares",
+            "cooperative_id",
+            "cooperative",
             "cooperative_name",
         ]
 
@@ -91,6 +101,57 @@ class FarmerProfileSerializer(ProfileSerializer):
 
     def validate_cooperative_name(self, value):
         return _tidy(value)
+
+    def validate_cooperative_id(self, value):
+        if value is None:
+            return None
+        cooperative = (
+            CooperativeProfile.objects.filter(pk=value, user__country=self.country)
+            .exclude(verification=Verification.REJECTED)
+            .first()
+        )
+        if cooperative is None:
+            raise serializers.ValidationError("Choose a cooperative from the list.")
+        return cooperative
+
+    def get_cooperative(self, farmer) -> dict | None:
+        membership = Membership.objects.filter(farmer=farmer).select_related("cooperative").first()
+        if membership is None:
+            return None
+        cooperative = membership.cooperative
+        return {
+            "id": cooperative.pk,
+            "name": cooperative.name,
+            "verified": cooperative.verification == Verification.VERIFIED,
+            "membership": membership.status,
+        }
+
+    def create(self, validated_data):
+        return self._save_membership(super().create, validated_data)
+
+    def update(self, instance, validated_data):
+        return self._save_membership(
+            lambda data: super(FarmerProfileSerializer, self).update(instance, data), validated_data
+        )
+
+    def _save_membership(self, save, validated_data):
+        """Choosing a cooperative on AgriFlow replaces a typed name, and
+        asks to join (again only when it's a different cooperative)."""
+        chosen = validated_data.pop("cooperative_id", ...)
+        if chosen is not ... and chosen is not None:
+            validated_data["cooperative_name"] = ""
+        farmer = save(validated_data)
+        if chosen is ...:
+            return farmer
+        current = Membership.objects.filter(farmer=farmer).first()
+        if chosen is None:
+            if current:
+                current.delete()
+        elif current is None or current.cooperative_id != chosen.pk:
+            if current:
+                current.delete()
+            Membership.objects.create(farmer=farmer, cooperative=chosen)
+        return farmer
 
 
 class BuyerProfileSerializer(ProfileSerializer):

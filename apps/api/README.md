@@ -96,10 +96,15 @@ phone number (optional), and agreeing to the terms and privacy notice.
 | `GET onboarding/` | Which steps are done, the `next_step`, whether it's `complete`, and the `terms_version` to show. |
 | `POST onboarding/skip-phone/` | They'd rather not add a phone number now; it isn't asked again. |
 | `POST onboarding/complete/` | `{terms_version, accept_terms: true}`: records which terms they agreed to and when, and finishes. 409 if a step is missing or the terms changed meanwhile. Also how someone agrees to new terms. |
-| `GET network/options/?country=RW` | The pick lists: Rwanda's provinces and districts (`regions` is null for countries without a list, where people type theirs), crops, buyer types and vehicle types. |
+| `GET network/options/?country=RW` | The pick lists: Rwanda's provinces and districts (`regions` is null for countries without a list, where people type theirs), crops, buyer types and vehicle types. `cooperatives`: the cooperatives on AgriFlow in that country, new ones straight away (`verified: false`), never rejected ones. |
 | `GET`/`POST network/profiles/` | The account's roles and their details. `POST {role, ...}` chooses a role (`farmer`, `buyer`, `delivery_partner` or `cooperative`) and grants it together with its profile. 409 if they already have it. |
 | `PATCH network/profiles/<role>/` | Edit a profile. |
 
+- **Farmers join cooperatives on AgriFlow.** A farmer profile's `cooperative_id` (from the options' list) asks to
+  join that cooperative: a `Membership` that's `pending` until the cooperative confirms it (in `/admin` for now;
+  the cooperative's own screen is next). Changing cooperative asks again; `null` leaves it. Farmer profiles answer
+  with `cooperative` (`id`, `name`, `verified`, `membership`). A cooperative not on AgriFlow yet is typed in
+  `cooperative_name` as before.
 - **Nobody can give themselves a staff role.** Field agents and admins aren't offered; staff get their roles
   in `/admin` (Users → roles) and skip the role step.
 - **A role isn't verification.** Every profile starts `unverified`; staff change `verification` in `/admin`.

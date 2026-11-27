@@ -21,6 +21,7 @@ class OptionsView(APIView):
                 "crops": options.as_options(options.CROPS),
                 "buyer_types": options.as_options(options.BUYER_TYPES),
                 "vehicle_types": options.as_options(options.VEHICLE_TYPES),
+                "cooperatives": options.cooperatives_for(country),
             }
         )
 

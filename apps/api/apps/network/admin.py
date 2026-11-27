@@ -1,6 +1,12 @@
 from django.contrib import admin
 
-from .models import BuyerProfile, CooperativeProfile, DeliveryPartnerProfile, FarmerProfile
+from .models import (
+    BuyerProfile,
+    CooperativeProfile,
+    DeliveryPartnerProfile,
+    FarmerProfile,
+    Membership,
+)
 
 
 class ProfileAdmin(admin.ModelAdmin):
@@ -38,3 +44,19 @@ class CooperativeProfileAdmin(ProfileAdmin):
     list_display = ["name", "user", "region", "district", "member_count", "verification"]
     list_filter = ProfileAdmin.list_filter + ["region"]
     search_fields = ProfileAdmin.search_fields + ["name", "registration_number"]
+
+
+@admin.register(Membership)
+class MembershipAdmin(admin.ModelAdmin):
+    """Who has asked to join which cooperative, and whether it's confirmed."""
+
+    list_display = ["farmer", "cooperative", "status", "requested_at", "decided_at"]
+    list_filter = ["status", "requested_at"]
+    list_select_related = ["farmer__user", "cooperative"]
+    raw_id_fields = ["farmer", "cooperative", "decided_by"]
+    readonly_fields = ["requested_at"]
+    search_fields = [
+        "cooperative__name",
+        "farmer__user__display_name",
+        "farmer__user__phone_number",
+    ]
