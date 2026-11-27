@@ -48,6 +48,10 @@ const OPTIONS = {
   ],
   buyer_types: [],
   vehicle_types: [],
+  cooperatives: [
+    { id: 4, name: 'Abahuzamugambi', region: 'Kigali', district: 'Gasabo', verified: true },
+    { id: 9, name: 'Twisungane', region: 'Kigali', district: '', verified: false },
+  ],
 }
 
 /** Shows whether the account is set up, as the layout would act on it. */
@@ -131,6 +135,16 @@ describe('Welcome', () => {
       await fireEvent.press(screen.getByRole('button', { name: 'District: Choose…' }))
       await fireEvent.press(screen.getByRole('button', { name: 'Gasabo' }))
       await fireEvent.press(screen.getByRole('checkbox', { name: 'Maize' }))
+
+      // Their cooperative, from AgriFlow's list (unverified ones say so), or typed.
+      await fireEvent.press(screen.getByRole('button', { name: /^Your cooperative: / }))
+      expect(screen.getByRole('button', { name: 'Twisungane, Kigali (not verified yet)' })).toBeOnTheScreen()
+      await fireEvent.press(screen.getByRole('button', { name: 'Mine isn’t on AgriFlow yet' }))
+      expect(screen.getByLabelText('Cooperative name')).toBeOnTheScreen()
+      await fireEvent.press(screen.getByRole('button', { name: /^Your cooperative: / }))
+      await fireEvent.press(screen.getByRole('button', { name: 'Abahuzamugambi, Gasabo' }))
+      expect(screen.queryByLabelText('Cooperative name')).toBeNull()
+      expect(screen.getByText('They’ll confirm you’re a member.')).toBeOnTheScreen()
       await fireEvent.press(screen.getByRole('button', { name: 'Continue' }))
 
       // Phone: worded for a farmer, and skippable.
@@ -161,6 +175,7 @@ describe('Welcome', () => {
             district: 'Gasabo',
             crops: ['maize'],
             farm_size_hectares: null,
+            cooperative_id: 4,
             cooperative_name: '',
           },
         ],

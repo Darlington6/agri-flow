@@ -20,7 +20,15 @@ describe('Home', () => {
       '/api/v1/auth/me/': () => ({ status: 200, body: user }),
       '/api/v1/network/profiles/': () => ({
         status: 200,
-        body: [{ role: 'farmer', verification: 'unverified', region: 'Kigali', crops: ['maize'] }],
+        body: [
+          {
+            role: 'farmer',
+            verification: 'unverified',
+            region: 'Kigali',
+            crops: ['maize'],
+            cooperative: { id: 4, name: 'Abahuzamugambi', verified: true, membership: 'pending' },
+          },
+        ],
       }),
     })
     await render(
@@ -41,5 +49,6 @@ describe('Home', () => {
     expect(await screen.findByRole('heading', { name: 'Farmer' })).toBeOnTheScreen()
     expect(screen.getByText('Not verified yet')).toBeOnTheScreen()
     expect(screen.getByText(/Record your harvest and follow your payments/)).toBeOnTheScreen()
+    expect(screen.getByText('Waiting for Abahuzamugambi to confirm you’re a member.')).toBeOnTheScreen()
   })
 })

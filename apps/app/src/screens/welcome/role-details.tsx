@@ -12,10 +12,21 @@ import type { RoleDetails, SelfServeRole, SetupOptions } from '@/onboarding'
 import { space } from '@/theme'
 
 type Draft = Record<string, unknown>
+
+// The farmer's cooperative choices besides those on AgriFlow.
+const NONE = 'none'
+const NOT_LISTED = 'not-listed'
 type FieldErrors = Record<string, string>
 
 const EMPTY: { [R in SelfServeRole]: RoleDetails[R] } = {
-  farmer: { region: '', district: '', crops: [], farm_size_hectares: null, cooperative_name: '' },
+  farmer: {
+    region: '',
+    district: '',
+    crops: [],
+    farm_size_hectares: null,
+    cooperative_id: null,
+    cooperative_name: '',
+  },
   buyer: { business_name: '', business_type: '', region: '', district: '', crops: [] },
   delivery_partner: { business_name: '', vehicle_types: [], service_regions: [] },
   cooperative: { name: '', registration_number: '', region: '', district: '', member_count: null, crops: [] },
@@ -67,6 +78,8 @@ export function RoleDetailsForm<R extends SelfServeRole>({
   const [errors, setErrors] = useState<FieldErrors>({})
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  // A farmer whose cooperative isn't on AgriFlow types its name.
+  const [notListed, setNotListed] = useState(false)
   // Where a delivery partner works, typed where the country has no list.
   const [typedRegions, setTypedRegions] = useState('')
 
@@ -172,13 +185,39 @@ export function RoleDetailsForm<R extends SelfServeRole>({
             onChangeText={(value) => set({ farm_size_hectares: value.replace(',', '.') || null })}
             error={errors.farm_size_hectares}
           />
-          <TextField
+          <ChoiceField
             label={t('details.cooperativeName')}
-            optional
-            value={text('cooperative_name')}
-            onChangeText={(cooperative_name) => set({ cooperative_name })}
-            error={errors.cooperative_name}
+            choices={[
+              { value: NONE, label: t('details.cooperative.none') },
+              ...options.cooperatives.map((c) => {
+                const name = [c.name, c.district || c.region].filter(Boolean).join(', ')
+                return {
+                  value: String(c.id),
+                  label: c.verified ? name : t('details.cooperative.unverified', { name }),
+                }
+              }),
+              { value: NOT_LISTED, label: t('details.cooperative.notListed') },
+            ]}
+            value={d.cooperative_id != null ? String(d.cooperative_id) : notListed ? NOT_LISTED : NONE}
+            onChange={(picked) => {
+              setNotListed(picked === NOT_LISTED)
+              if (picked === NONE) set({ cooperative_id: null, cooperative_name: '' })
+              else if (picked === NOT_LISTED) set({ cooperative_id: null })
+              else set({ cooperative_id: Number(picked), cooperative_name: '' })
+            }}
+            hint={d.cooperative_id != null ? t('details.cooperative.confirm') : undefined}
+            error={errors.cooperative_id}
           />
+          {notListed && (
+            <TextField
+              label={t('details.cooperative.typed')}
+              maxLength={150}
+              autoCapitalize="words"
+              value={text('cooperative_name')}
+              onChangeText={(cooperative_name) => set({ cooperative_name })}
+              error={errors.cooperative_name}
+            />
+          )}
         </>
       )}
 
