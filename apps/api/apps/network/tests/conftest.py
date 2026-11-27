@@ -1,15 +1,23 @@
+from datetime import date
+
 import pytest
 from rest_framework.test import APIClient
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from apps.compliance.models import PersonalDetails
 from apps.identity.models import User
 
 
 @pytest.fixture
 def user(db):
-    return User.objects.create_user(
-        email="aline@example.com", display_name="Aline", country="RW", language="en"
+    """Has given their name and place: the next step is choosing a role."""
+    user = User.objects.create_user(
+        email="aline@example.com", display_name="Aline U.", country="RW", language="en"
     )
+    PersonalDetails.objects.create(
+        user=user, legal_name="Aline Uwase", date_of_birth=date(1994, 3, 12)
+    )
+    return user
 
 
 def client_for(user) -> APIClient:

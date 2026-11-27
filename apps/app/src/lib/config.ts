@@ -22,3 +22,6 @@ export function apiUrl(
 }
 
 export const API_URL = apiUrl()
+
+/** The public website, for the terms and privacy notice people agree to. */
+export const SITE_URL = (process.env.EXPO_PUBLIC_SITE_URL ?? 'https://agri-flow-site.vercel.app').replace(/\/+$/, '')

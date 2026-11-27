@@ -1,4 +1,4 @@
-import type { Dictionary } from './en'
+import { en, type Dictionary } from './en'
 
 // Swahili (standard East African). Draft by the AgriFlow team; have a fluent
 // speaker skim it before publishing (locales.ts → published: true).
@@ -219,22 +219,18 @@ export const sw: Dictionary = {
       honeypot: 'Acha sehemu hii wazi',
     },
   },
+  // The privacy notice is being drafted in English for legal review. It's
+  // translated once the English is approved, so until then this page shows
+  // the English draft's sections (rather than an out-of-date or unreviewed
+  // translation) under this language's own title, so every page's title
+  // stays unique.
   privacy: {
+    ...en.privacy,
     title: 'Taarifa ya faragha',
     description:
       'Jinsi AgriFlow inavyokusanya, kutumia na kulinda taarifa binafsi unazotupa, ikiwemo maombi ya onyesho.',
-    draftNotice: 'Rasimu: taarifa hii inaandaliwa kwa ushauri wa kisheria na itakamilishwa kabla ya kuzinduliwa.',
-    sections: [
-      {
-        title: 'Tunachokusanya',
-        body: 'Unapoomba onyesho, tunakusanya taarifa unazoweka: jina, taasisi, nafasi yako, nchi, barua pepe, na ukipenda, namba ya simu na ujumbe.',
-      },
-      {
-        title: 'Kwa nini',
-        body: 'Ni kwa ajili ya kujibu ombi lako na kupanga onyesho tu. Hatuuzi taarifa zako wala kuzitumia kwa matangazo mengine.',
-      },
-      { title: 'Mawasiliano', body: 'Kwa maswali kuhusu taarifa zako, tumia fomu ya ombi nasi tutakujibu.' },
-    ],
+    draftNotice:
+      'Rasimu inayokaguliwa kisheria: inaonyeshwa kwa Kiingereza hadi itakapoidhinishwa, kisha itatafsiriwa.',
   },
   terms: {
     title: 'Masharti ya matumizi',

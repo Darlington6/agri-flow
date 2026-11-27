@@ -33,10 +33,11 @@ export interface PhoneFieldState {
 /**
  * State for a PhoneField, kept by the screen so going back a step shows what
  * was typed. Starts on the account's country, else the device's.
+ * `initialNumber`: one saved before (international, so it keeps its own country).
  */
-export function usePhoneField(accountCountry?: string): PhoneFieldState {
+export function usePhoneField(accountCountry?: string, initialNumber = ''): PhoneFieldState {
   const [country, setCountry] = useState<CountryCode>(() => guessCountry(accountCountry))
-  const [number, setNumber] = useState('')
+  const [number, setNumber] = useState(initialNumber)
   return { country, setCountry, number, setNumber, value: number.trim() ? phoneValue(number, country) : '' }
 }
 

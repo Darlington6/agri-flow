@@ -216,18 +216,58 @@ export const en = {
   privacy: {
     title: 'Privacy notice',
     description:
-      'How AgriFlow collects, uses and protects the personal information you share with us, including demo requests.',
-    draftNotice: 'Draft: this notice is being prepared with legal advice and will be completed before launch.',
+      'How AgriFlow collects, uses and protects the personal information you share with us: when you use the AgriFlow apps, and when you request a demo.',
+    draftNotice:
+      'Draft for legal review: this notice is being prepared with legal advice and will be completed before launch. Text in [square brackets] is still to be confirmed.',
     sections: [
       {
-        title: 'What we collect',
-        body: 'When you request a demo we collect the details you enter: your name, organisation, role, country, email, and optionally your phone number and message.',
+        title: 'Who we are',
+        body: 'AgriFlow is run by [legal name of the company], [registered address]. We decide how your information is used and are responsible for it. You can reach us about your information at [privacy contact email].',
       },
       {
-        title: 'Why',
-        body: 'Only to respond to your request and arrange a demo. We don’t sell your information or use it for unrelated marketing.',
+        title: 'Your account',
+        body: 'To create an account we need a phone number or an email address, and we send a code or link to check it’s yours. If you continue with Google, Google tells us your Google account’s ID, email address and name. We also keep your country, your language, and when you agreed to these terms.',
       },
-      { title: 'Contact', body: 'Questions about your information: use the request form and we’ll respond.' },
+      {
+        title: 'About you',
+        body: 'We ask for your full name and date of birth exactly as they appear on your national ID or passport, so we can verify your account. You can also tell us your gender; this is optional. These details are private: only you and the AgriFlow staff who verify accounts can see them. Other people see the shorter name you choose instead.',
+      },
+      {
+        title: 'Young people',
+        body: 'AgriFlow is for adults. If you are under 18, we ask for the name, phone number and relationship of a parent or guardian. Our team contacts them to check they agree to you using AgriFlow, and [what happens until they do].',
+      },
+      {
+        title: 'What you do on AgriFlow',
+        body: 'Depending on your role, we keep the details you give about it: for farmers, your province and district, crops, farm size and cooperative; for buyers, your business name and type, area and the crops you buy; for cooperatives, the cooperative’s name, registration number, area, number of members and crops; for delivery partners, your business name, vehicles and the areas you cover.',
+      },
+      {
+        title: 'Why we use it',
+        body: 'To run your account and sign you in; to verify who you are before you trade; to match farmers, cooperatives, buyers and delivery partners; to contact you about your account; to keep AgriFlow safe and prevent fraud; and to meet our legal obligations. We count how many women and young people use AgriFlow and report those totals to partners who fund agriculture, but never in a way that identifies you. We don’t sell your information. [The legal basis for each use.]',
+      },
+      {
+        title: 'Who can see it',
+        body: 'People you work with on AgriFlow see your public name, your role, the area you work in and, once you add one, your phone number, so they can reach you. Your private details are seen only by you and authorised AgriFlow staff. Services that run AgriFlow for us handle information on our behalf: Render (our servers and database), Vercel (our websites), Brevo (our emails), Sentry (error reports, without your personal details) and Google (if you continue with Google). [Where each stores information, and how we protect it when that is outside your country.]',
+      },
+      {
+        title: 'How long we keep it',
+        body: 'We keep your information while you have an account, and for [period] afterwards where the law requires it. Sign-in codes and links expire within 15 minutes. [Retention periods to be confirmed.]',
+      },
+      {
+        title: 'Keeping it safe',
+        body: 'Information travels over encrypted connections. Sign-in codes are stored only in a scrambled form, and the AgriFlow app keeps you signed in using your phone’s secure storage.',
+      },
+      {
+        title: 'Your rights',
+        body: 'You can ask to see the information we hold about you, correct it, or delete your account. You can also object to how we use it or withdraw your agreement. To do so, contact [privacy contact email]. If you’re unhappy with how we handle your information, you can complain to the data protection authority in your country; in Rwanda, that is the National Cyber Security Authority (NCSA).',
+      },
+      {
+        title: 'Demo requests',
+        body: 'When you request a demo we collect the details you enter: your name, organisation, role, country, email, and optionally your phone number and message. We use them only to respond and arrange the demo.',
+      },
+      {
+        title: 'Changes to this notice',
+        body: 'If we change this notice in a way that matters, the AgriFlow app will show you the new version and ask you to agree before you carry on.',
+      },
     ],
   },
   terms: {

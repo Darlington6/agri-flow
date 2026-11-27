@@ -49,6 +49,7 @@ function App() {
     },
   }
   const signedIn = status === 'signed-in'
+  const settingUp = !!user?.needs_onboarding
 
   return (
     // The account's language once signed in; the device's before that.
@@ -63,13 +64,18 @@ function App() {
           <Unreachable />
         ) : (
           <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: palette.canvas } }}>
-            {/* Signed out: the start and sign-in screens. Signed in: home.
-                Signing in or out moves to the other group by itself. */}
+            {/* Signed out: the start and sign-in screens. Signed in but not
+                set up (or new terms to agree to): the welcome steps. Then
+                home. Signing in, finishing setup or signing out moves to the
+                right group by itself. */}
             <Stack.Protected guard={!signedIn}>
               <Stack.Screen name="index" />
               <Stack.Screen name="sign-in" />
             </Stack.Protected>
-            <Stack.Protected guard={signedIn}>
+            <Stack.Protected guard={signedIn && settingUp}>
+              <Stack.Screen name="welcome" />
+            </Stack.Protected>
+            <Stack.Protected guard={signedIn && !settingUp}>
               <Stack.Screen name="home" />
             </Stack.Protected>
             <Stack.Screen name="auth/google" />

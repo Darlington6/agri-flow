@@ -13,6 +13,7 @@ const routes = {
   index: require('@/app/index').default,
   'sign-in': require('@/app/sign-in').default,
   home: require('@/app/home').default,
+  welcome: require('@/app/welcome').default,
   'auth/google': require('@/app/auth/google').default,
 }
 
@@ -39,11 +40,18 @@ describe('routes', () => {
     expect(await screen.findByRole('button', { name: 'Sign in or create an account' })).toBeOnTheScreen()
   })
 
-  it('asks a new account to finish setting up', async () => {
-    saveSession({ ...USER, display_name: '', needs_onboarding: true })
-    fakeApi({ '/api/v1/auth/me/': () => 'offline' })
+  it('takes a new account to the welcome steps, and home can’t be reached until they’re done', async () => {
+    saveSession({ ...USER, display_name: '', needs_onboarding: true, onboarded_at: null })
+    fakeApi({
+      '/api/v1/auth/me/': () => 'offline',
+      '/api/v1/onboarding/': () => 'offline',
+      '/api/v1/network/profiles/': () => 'offline',
+    })
     await renderRouter(routes, { initialUrl: '/home' })
-    expect(await screen.findByRole('heading', { name: 'Finish setting up your account' })).toBeOnTheScreen()
-    expect(screen.getByRole('heading', { name: 'Welcome' })).toBeOnTheScreen()
+    expect(await screen.findByRole('heading', { name: 'Welcome to AgriFlow' })).toBeOnTheScreen()
+    expect(
+      await screen.findByText('We can’t reach AgriFlow. Check your internet connection and try again.'),
+    ).toBeOnTheScreen()
+    expect(screen.queryByText('Sign out')).toBeNull()
   })
 })

@@ -38,8 +38,10 @@ Add packages with `npx expo install <package>` (from `apps/app`), not `pnpm add`
 src/
   app/          routes only (Expo Router): every file here is a screen address
   screens/      what each route shows; a route file just renders its screen
-  components/   shared building blocks: Text, Button, TextField, PhoneField, Message, Screen, LogoMark
-  auth/         the API's sign-in endpoints, the saved session and useAuth()
+  components/   shared building blocks: Text, Button, TextField, PhoneField, ChoiceField, ChipGroup,
+                Checkbox, Sheet, Message, Screen, LogoMark, LogoGlow
+  auth/         the API's endpoints, the saved session and useAuth()
+  onboarding/   setting up an account: its types and rules (which steps, which roles)
   lib/          plain helpers: the API address, phone numbers, Google, secure storage
   theme/        colour roles (light/dark), typefaces, sizes and spacing
   i18n/         languages, dictionaries and t()
@@ -49,8 +51,18 @@ src/
 **Signing in.** Email first, phone one tap away; both send a 6-digit code (the email also has a link, for the
 web app). Continue with Google shows in the web version only, using the same redirect as the web app
 (`src/lib/google.ts`); iOS and Android need Google's on-device sign-in and an OAuth client each, which come
-later. The layout (`src/app/_layout.tsx`) shows the start and sign-in screens to people signed out and home to
-people signed in, and moves between them by itself.
+later. The layout (`src/app/_layout.tsx`) shows the start and sign-in screens to people signed out, the welcome
+steps to accounts not set up yet (or with new terms to agree to), and home after that, and moves between them by
+itself.
+
+**Setting up an account.** The same steps as the web app's, one per screen: who they are (full name and date of
+birth as on their ID, and optionally gender, all kept private for verification later, plus the shorter name
+other people see; someone under 18 also gives a parent or guardian's name, relationship and phone number),
+country and language, a role and its details, a phone number (skippable; not asked of
+phone sign-ups) and the terms. Each step saves as it's answered, so someone can stop and carry on later on any
+device; the API says where they got to. Staff skip the role step; someone already set up only sees new terms.
+Back (top left, and Android's back button) steps back through it. It needs a connection, and says so when
+there isn't one.
 
 **Offline.** The session (the API's two tokens) and the account's details are saved in secure storage: the
 keychain on iOS, the keystore on Android, `localStorage` on the web. The app opens signed in from them straight

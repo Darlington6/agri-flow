@@ -106,6 +106,24 @@ export interface SetupOptions {
 
 export type OnboardingStep = 'name' | 'place' | 'role' | 'phone' | 'terms'
 
+export type Gender = 'woman' | 'man' | 'prefer_not_to_say'
+export type GuardianRelationship = 'parent' | 'legal_guardian' | 'relative'
+
+/** Who someone is, as on their ID: private (only they and our team see it), for verification later. */
+export interface PersonalDetails {
+  legal_name: string
+  /** YYYY-MM-DD; null until given. */
+  date_of_birth: string | null
+  gender: Gender | ''
+  /** Under 18: their parent or guardian (empty for adults). */
+  guardian_name: string
+  guardian_relationship: GuardianRelationship | ''
+  /** E.164. */
+  guardian_phone: string
+  /** Worked out by the API from the date of birth. */
+  is_minor?: boolean
+}
+
 export interface OnboardingState {
   steps: Record<OnboardingStep, boolean>
   next_step: OnboardingStep | null
@@ -291,6 +309,17 @@ export function completeOnboarding(termsVersion: string) {
   return request<AuthUser>('/api/v1/onboarding/complete/', {
     method: 'POST',
     body: JSON.stringify({ terms_version: termsVersion, accept_terms: true }),
+  })
+}
+
+export function getPersonalDetails() {
+  return request<PersonalDetails>('/api/v1/compliance/personal-details/')
+}
+
+export function savePersonalDetails(details: PersonalDetails) {
+  return request<PersonalDetails>('/api/v1/compliance/personal-details/', {
+    method: 'PUT',
+    body: JSON.stringify(details),
   })
 }
 

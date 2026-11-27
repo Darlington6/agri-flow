@@ -104,7 +104,9 @@ describe('SignIn', () => {
     await open()
     await fireEvent.changeText(screen.getByLabelText('Email'), 'amina@example.com')
     await fireEvent.press(screen.getByRole('button', { name: 'Email me a code' }))
-    expect(await screen.findByText('You’re offline. Connect to the internet to sign in.')).toBeOnTheScreen()
+    expect(
+      await screen.findByText('We can’t reach AgriFlow. Check your internet connection and try again.'),
+    ).toBeOnTheScreen()
   })
 
   it('signs in with a texted code, reading a local number in the right country', async () => {

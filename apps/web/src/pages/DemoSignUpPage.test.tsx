@@ -31,7 +31,8 @@ describe('the sign-up walkthrough', () => {
     renderWalkthrough()
     expect(screen.getByText(/nothing you enter is saved or sent/)).toBeInTheDocument()
 
-    await userEvent.type(screen.getByLabelText('Your name'), 'Aline')
+    await userEvent.type(screen.getByLabelText('Full name'), 'Aline Uwase')
+    await userEvent.type(screen.getByLabelText('Date of birth'), '1994-03-12')
     await userEvent.click(screen.getByRole('button', { name: 'Continue' }))
     await userEvent.selectOptions(await screen.findByLabelText('Country'), 'RW')
     await userEvent.click(screen.getByRole('button', { name: 'Continue' }))

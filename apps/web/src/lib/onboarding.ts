@@ -1,4 +1,12 @@
-import type { AuthUser, Language, OnboardingStep, SelfServeRole, Verification } from '@/lib/apiClient'
+import type {
+  AuthUser,
+  Gender,
+  GuardianRelationship,
+  Language,
+  OnboardingStep,
+  SelfServeRole,
+  Verification,
+} from '@/lib/apiClient'
 
 /** The public site, for the terms and privacy notice people agree to. */
 export const SITE_URL = (import.meta.env.VITE_SITE_URL ?? 'https://agri-flow-site.vercel.app').replace(/\/$/, '')
@@ -102,9 +110,55 @@ export const VERIFICATION_LABEL: Record<Verification, string> = {
   rejected: 'Verification declined',
 }
 
+// The first step asks who someone is, exactly as on their ID (national ID
+// or passport): our team checks it against the ID when verifying the
+// account later. Those details stay private; other people see a shorter
+// public name.
+export const NAME_HINT = 'Exactly as on your national ID or passport. Only our team sees it, to verify your account.'
+export const PUBLIC_NAME_HINT = 'Buyers, farmers and delivery partners see this.'
+export const BIRTH_DATE_HINT = 'As on your ID. Only our team sees it.'
+export const GENDER_HINT = 'Kept private. It helps us show how many women AgriFlow reaches.'
+
+// AgriFlow is for adults. Someone younger needs a parent or guardian, whom
+// our team contacts to check they agree.
+export const ADULT_AGE = 18
+export const GUARDIAN_INTRO =
+  'You’re under 18, so a parent or guardian needs to agree to you using AgriFlow. Our team will contact them.'
+
+export const RELATIONSHIPS: { value: GuardianRelationship; label: string }[] = [
+  { value: 'parent', label: 'Parent' },
+  { value: 'legal_guardian', label: 'Legal guardian' },
+  { value: 'relative', label: 'Other family member' },
+]
+
+/** Whether someone born on `dateOfBirth` (YYYY-MM-DD) is under 18 on `today`. False until a full date is given. */
+export function isMinor(dateOfBirth: string, today: Date = new Date()): boolean {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateOfBirth)
+  if (!match) return false
+  const [year, month, day] = match.slice(1).map(Number)
+  const age =
+    today.getFullYear() -
+    year -
+    (today.getMonth() + 1 < month || (today.getMonth() + 1 === month && today.getDate() < day) ? 1 : 0)
+  return age < ADULT_AGE
+}
+
+export const GENDERS: { value: Gender; label: string }[] = [
+  { value: 'woman', label: 'Woman' },
+  { value: 'man', label: 'Man' },
+  { value: 'prefer_not_to_say', label: 'Prefer not to say' },
+]
+
+/** The public name to suggest from a full name: the first name and the last name's initial ("Aline U."). */
+export function shortName(fullName: string): string {
+  const words = fullName.trim().split(/\s+/).filter(Boolean)
+  if (words.length < 2) return words[0] ?? ''
+  return `${words[0]} ${words.at(-1)![0].toUpperCase()}.`
+}
+
 /** The steps, in order, with the heading each shows. */
 export const STEP_TITLES: Record<OnboardingStep, string> = {
-  name: 'What should we call you?',
+  name: 'About you',
   place: 'Where are you?',
   role: 'What brings you to AgriFlow?',
   phone: 'Add your phone number',

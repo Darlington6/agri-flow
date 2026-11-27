@@ -11,11 +11,14 @@ import {
   completeOnboarding,
   createProfile,
   getOnboarding,
+  getPersonalDetails,
   getProfiles,
   getSetupOptions,
+  savePersonalDetails,
   skipPhone,
   type AuthUser,
   type OnboardingState,
+  type PersonalDetails,
   type Profile,
 } from '@/lib/apiClient'
 
@@ -26,11 +29,13 @@ function apiDriver(
   user: AuthUser,
   state: OnboardingState,
   profiles: Profile[],
+  personal: PersonalDetails,
   auth: ReturnType<typeof useAuth>,
 ): OnboardingDriver {
   return {
     start: {
       name: user.display_name,
+      personal,
       country: user.country,
       language: user.language,
       roles: profiles.map((p) => p.role),
@@ -41,7 +46,10 @@ function apiDriver(
       termsVersion: state.terms_version,
     },
     loadOptions: getSetupOptions,
-    saveName: (display_name) => auth.updateAccount({ display_name }),
+    async saveAbout(details, display_name) {
+      await savePersonalDetails(details)
+      await auth.updateAccount({ display_name })
+    },
     savePlace: (country, language) => auth.updateAccount({ country, language }),
     async chooseRole(role, details) {
       await createProfile(role, details)
@@ -65,7 +73,11 @@ export function WelcomePage() {
   const auth = useAuth()
   const { user, loading } = auth
   const navigate = useNavigate()
-  const [loaded, setLoaded] = useState<{ state: OnboardingState; profiles: Profile[] } | null>(null)
+  const [loaded, setLoaded] = useState<{
+    state: OnboardingState
+    profiles: Profile[]
+    personal: PersonalDetails
+  } | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [attempt, setAttempt] = useState(0)
   // Set once they finish, so the redirect below goes home rather than the
@@ -76,8 +88,8 @@ export function WelcomePage() {
   useEffect(() => {
     if (!userId) return
     let current = true
-    Promise.all([getOnboarding(), getProfiles()])
-      .then(([state, profiles]) => current && setLoaded({ state, profiles }))
+    Promise.all([getOnboarding(), getProfiles(), getPersonalDetails()])
+      .then(([state, profiles, personal]) => current && setLoaded({ state, profiles, personal }))
       .catch((err) => current && setError(err instanceof ApiError ? err.message : "Couldn't load your account."))
     return () => {
       current = false
@@ -121,7 +133,7 @@ export function WelcomePage() {
         <PageLoading />
       ) : (
         <OnboardingFlow
-          driver={apiDriver(user, loaded.state, loaded.profiles, auth)}
+          driver={apiDriver(user, loaded.state, loaded.profiles, loaded.personal, auth)}
           onDone={() => {
             setFinished(true)
             navigate('/home', { replace: true })
