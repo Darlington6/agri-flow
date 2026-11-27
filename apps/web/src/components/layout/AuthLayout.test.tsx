@@ -10,7 +10,8 @@ function prefersReducedMotion(reduce: boolean) {
   )
 }
 
-const images = (container: HTMLElement) => [...container.querySelectorAll('img')]
+// The photos only, not the logo in the page's backdrop.
+const images = (container: HTMLElement) => [...container.querySelectorAll<HTMLImageElement>('img[sizes]')]
 
 describe('AuthLayout photos', () => {
   afterEach(() => vi.unstubAllGlobals())

@@ -1,6 +1,5 @@
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { ShieldCheck, ShoppingCart, Sprout, UserCheck, Truck, Crown, Users, ClipboardList } from 'lucide-react'
-import { LogoMark } from '@/components/brand/LogoMark'
 import { useSession } from '@/context/SessionContext'
 import { brand } from '@/config/brand'
 import { buttonClasses, CardButton, DemoTag } from '@/components/ui'
@@ -60,7 +59,6 @@ export function LoginPage() {
   return (
     <AuthLayout photo="demo">
       <div className="mb-8 flex flex-col items-center gap-3 text-center">
-        <LogoMark className="h-14" />
         <h1 className="font-display text-2xl font-semibold text-ink-900">{brand.name}</h1>
         <DemoTag />
         <p className="max-w-sm text-sm text-ink-600">

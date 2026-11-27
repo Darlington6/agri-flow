@@ -94,9 +94,9 @@ describe('AccountPage contacts', () => {
     expect(screen.queryByRole('button', { name: 'Add phone number' })).not.toBeInTheDocument()
   })
 
-  it('links the logo to the account home', async () => {
+  it('links back to the account home', async () => {
     renderAccount(phoneOnly)
-    expect(await screen.findByRole('link', { name: 'AgriFlow home' })).toHaveAttribute('href', '/home')
+    expect(await screen.findByRole('link', { name: 'Home' })).toHaveAttribute('href', '/home')
   })
 
   it('lists the chosen roles with their verification, and roles given by AgriFlow', async () => {

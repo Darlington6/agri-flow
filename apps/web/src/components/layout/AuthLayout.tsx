@@ -2,6 +2,7 @@ import { useState, type CSSProperties, type ReactNode } from 'react'
 import clsx from 'clsx'
 import type { AppPhoto } from '@agriflow/media'
 import { appSlides } from '@/lib/appPhotos'
+import { Backdrop } from '@/components/brand/Backdrop'
 
 /** Seconds each photo gets (the site's home page uses 7). */
 const SLIDE_SECONDS = 5
@@ -36,7 +37,8 @@ export function AuthLayout({ photo, children }: { photo: AppPhoto; children: Rea
   return (
     <div className="min-h-svh bg-canvas lg:grid lg:grid-cols-2">
       {/* Decorative: the page's heading carries the meaning. */}
-      <div aria-hidden className="relative h-36 overflow-hidden sm:h-52 lg:sticky lg:top-0 lg:h-svh">
+      {/* Above the page's fixed backdrop, so the glow never tints the photos. */}
+      <div aria-hidden className="relative z-10 h-36 overflow-hidden sm:h-52 lg:sticky lg:top-0 lg:h-svh">
         {shown.map(({ src, srcSet, focus }, i) => (
           <img
             key={src}
@@ -65,8 +67,10 @@ export function AuthLayout({ photo, children }: { photo: AppPhoto; children: Rea
         {/* A soft fade into the page on phones, so the band doesn't end in a hard line. */}
         <div className="absolute inset-x-0 bottom-0 z-10 h-12 bg-gradient-to-t from-canvas to-transparent lg:hidden" />
       </div>
-      <main className="flex flex-col items-center justify-center px-4 pt-6 pb-12 sm:px-6 lg:min-h-svh lg:py-12">
-        {children}
+      <main className="relative flex flex-col items-center justify-center overflow-hidden px-4 pt-6 pb-12 sm:px-6 lg:min-h-svh lg:py-12">
+        {/* Fixed to the content's half of the window on wide screens, beside the photos. */}
+        <Backdrop className="lg:left-1/2" />
+        <div className="relative flex w-full flex-col items-center">{children}</div>
       </main>
     </div>
   )

@@ -11,7 +11,7 @@ function Dashboard() {
 }
 
 function renderWalkthrough() {
-  render(
+  return render(
     <SessionProvider>
       <MemoryRouter initialEntries={['/try-sign-up']}>
         <Routes>
@@ -25,6 +25,16 @@ function renderWalkthrough() {
 
 describe('the sign-up walkthrough', () => {
   beforeEach(() => localStorage.clear())
+
+  it('leads back to the demo roles, or straight back to the demo when a role is open', async () => {
+    const { unmount } = renderWalkthrough()
+    expect(screen.getByRole('link', { name: 'Back to the demo roles' })).toHaveAttribute('href', '/login')
+    unmount()
+
+    localStorage.setItem('agriflow.demo-session', JSON.stringify({ role: 'farmer' }))
+    renderWalkthrough()
+    expect(screen.getByRole('link', { name: 'Back to the demo' })).toHaveAttribute('href', '/dashboard')
+  })
 
   it('runs the real setup screens, saves nothing, and opens the demo as the role chosen', async () => {
     const fetchSpy = vi.spyOn(globalThis, 'fetch')
