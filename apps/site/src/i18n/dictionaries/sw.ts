@@ -221,8 +221,17 @@ export const sw: Dictionary = {
   },
   // The privacy notice is being drafted in English for legal review. It's
   // translated once the English is approved, so until then this page shows
-  // the English draft rather than an out-of-date or unreviewed translation.
-  privacy: en.privacy,
+  // the English draft's sections (rather than an out-of-date or unreviewed
+  // translation) under this language's own title, so every page's title
+  // stays unique.
+  privacy: {
+    ...en.privacy,
+    title: 'Taarifa ya faragha',
+    description:
+      'Jinsi AgriFlow inavyokusanya, kutumia na kulinda taarifa binafsi unazotupa, ikiwemo maombi ya onyesho.',
+    draftNotice:
+      'Rasimu inayokaguliwa kisheria: inaonyeshwa kwa Kiingereza hadi itakapoidhinishwa, kisha itatafsiriwa.',
+  },
   terms: {
     title: 'Masharti ya matumizi',
     description:

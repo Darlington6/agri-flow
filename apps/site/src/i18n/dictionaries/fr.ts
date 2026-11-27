@@ -242,8 +242,17 @@ export const fr: Dictionary = {
   },
   // The privacy notice is being drafted in English for legal review. It's
   // translated once the English is approved, so until then this page shows
-  // the English draft rather than an out-of-date or unreviewed translation.
-  privacy: en.privacy,
+  // the English draft's sections (rather than an out-of-date or unreviewed
+  // translation) under this language's own title, so every page's title
+  // stays unique.
+  privacy: {
+    ...en.privacy,
+    title: 'Avis de confidentialité',
+    description:
+      'Comment AgriFlow collecte, utilise et protège les informations personnelles que vous nous confiez, y compris les demandes de démo.',
+    draftNotice:
+      'Brouillon en cours de révision juridique : il est affiché en anglais jusqu’à son approbation, puis sera traduit.',
+  },
   terms: {
     title: 'Conditions d’utilisation',
     description:
