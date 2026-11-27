@@ -77,6 +77,7 @@ function App() {
             </Stack.Protected>
             <Stack.Protected guard={signedIn && !settingUp}>
               <Stack.Screen name="home" />
+              <Stack.Screen name="members" />
             </Stack.Protected>
             <Stack.Screen name="auth/google" />
           </Stack>

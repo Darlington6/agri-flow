@@ -7,6 +7,8 @@ import { API_URL } from '@/lib/config'
 
 import { clearSession, currentTokens, saveTokens } from './session'
 import type {
+  CooperativeMembers,
+  Member,
   OnboardingState,
   PersonalDetails,
   Profile,
@@ -192,6 +194,16 @@ export function savePersonalDetails(details: PersonalDetails) {
     method: 'PUT',
     body: JSON.stringify(details),
   })
+}
+
+/** The farmers who chose the signed-in manager's cooperative. */
+export function getCooperativeMembers() {
+  return request<CooperativeMembers>('/api/v1/network/cooperative/members/')
+}
+
+/** Confirms a farmer as a member, or declines them (removing a member declines them too). */
+export function decideMembership(id: number, status: 'confirmed' | 'declined') {
+  return request<Member>(`/api/v1/network/cooperative/members/${id}/`, post({ status }))
 }
 
 export function getSetupOptions(country: string) {
