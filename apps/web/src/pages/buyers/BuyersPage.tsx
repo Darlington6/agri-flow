@@ -10,6 +10,7 @@ import type { DemandStatus } from '@/types'
 import { formatDate } from '@/lib/date'
 import { formatTonnes } from '@/lib/format'
 import { NewDemandRequestModal } from './NewDemandRequestModal'
+import { formatPrice } from '@/lib/format'
 
 const STATUS_TONE: Record<DemandStatus, 'good' | 'warn' | 'info' | 'neutral'> = {
   Open: 'info',
@@ -116,7 +117,7 @@ export function BuyersPage() {
                   <dt className="text-ink-500">Location</dt>
                   <dd className="text-right text-ink-700">{d.deliveryLocation}</dd>
                   <dt className="text-ink-500">Target price</dt>
-                  <dd className="text-right text-ink-700">GHS {d.targetPriceGHSPerTonne.toLocaleString()}/t</dd>
+                  <dd className="text-right text-ink-700">{formatPrice(d.targetPricePerTonne, 't')}</dd>
                   <dt className="text-ink-500">Frequency</dt>
                   <dd className="text-right text-ink-700">{d.frequency}</dd>
                 </dl>

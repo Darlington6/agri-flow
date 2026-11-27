@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { Modal, Field, inputClass, Button } from '@/components/ui'
 import { buyers, crops } from '@/data'
 import type { DemandFrequency, DemandRequest, QualityGrade } from '@/types'
+import { DEMO_MARKET } from '@/lib/market'
 
 const GRADES: QualityGrade[] = ['Grade A', 'Grade B', 'Export Grade']
 const FREQUENCIES: DemandFrequency[] = ['One-time', 'Weekly', 'Bi-weekly', 'Monthly']
@@ -35,8 +36,8 @@ export function NewDemandRequestModal({
       contractedTonnes: 0,
       qualityGrade: grade,
       requiredDeliveryDate: deliveryDate || '2026-12-01',
-      deliveryLocation: location || 'Accra',
-      targetPriceGHSPerTonne: Number(price) || 0,
+      deliveryLocation: location || 'Kigali',
+      targetPricePerTonne: Number(price) || 0,
       frequency,
       specialRequirements: requirements || undefined,
       status: 'Open',
@@ -122,7 +123,7 @@ export function NewDemandRequestModal({
           <Field label="Delivery location">
             <input
               type="text"
-              placeholder="Accra"
+              placeholder="Kigali"
               className={inputClass}
               value={location}
               onChange={(e) => setLocation(e.target.value)}
@@ -130,7 +131,7 @@ export function NewDemandRequestModal({
           </Field>
         </div>
 
-        <Field label="Target price (GHS / tonne)">
+        <Field label={`Target price (${DEMO_MARKET.currency} / tonne)`}>
           <input
             type="number"
             min="0"

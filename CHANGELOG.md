@@ -32,6 +32,12 @@ this is pre-launch, so everything lives under Unreleased until there's a first r
   account pages), as in the Expo app; the account pages' Home tab leads home.
 - Web app: the sign-up walkthrough's back link says "Back to the demo" and goes to it when a demo role is
   already open, instead of "Back to the demo roles" sending people to the dashboard unexpectedly.
+- The web demo is set in Rwanda, the pilot country: provinces and real sectors instead of Ghana's regions and
+  towns, Irish potatoes, beans, avocados and maize instead of tomatoes, onions, peppers and cassava, made-up
+  Rwandan farmers, buyers and companies, +250 phone numbers, a dry-season climate picture, and every amount
+  in RWF (contract values from sample farm-gate prices per tonne). Money no longer has GHS in its field
+  names: the demo's market and each country's currency live in `src/lib/market.ts`, and amounts are
+  formatted with it.
 
 - Expo app: new accounts set up their account in the app, with the same steps as the web app: full name,
   country and language, a role and its details, a phone number (skippable) and the terms. Each step saves as

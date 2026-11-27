@@ -25,11 +25,12 @@ const AT_RISK_NARRATIVES: Record<string, { projectedFulfillmentPct: number; reco
   'AG-202': {
     projectedFulfillmentPct: 65,
     recommendation:
-      'Expand farmer recruitment beyond Northern Region to close the matching gap before the planting window closes.',
+      'Expand farmer recruitment beyond Northern Province Region to close the matching gap before the planting window closes.',
   },
   'AG-203': {
     projectedFulfillmentPct: 82,
-    recommendation: "Match 2-3 additional Volta-region growers to reach the export order's full contracted volume.",
+    recommendation:
+      "Match 2-3 additional Western Province-region growers to reach the export order's full contracted volume.",
   },
 }
 
@@ -87,7 +88,7 @@ export class MockAIService implements AIService {
     )
     return {
       headline:
-        'Tomato supply for Ghana Fresh Foods Ltd. is currently projected at 92% of contracted volume. Six farms show elevated rainfall exposure. Consider reallocating 2.5 tonnes of expected harvest from lower-risk farms.',
+        'Potato supply for Kigali Fresh Foods Ltd. is currently projected at 92% of contracted volume. Six farms show elevated rainfall exposure. Consider reallocating 2.5 tonnes of expected harvest from lower-risk farms.',
       atRiskContracts,
       generatedAt: nowIso(),
     }
@@ -102,7 +103,7 @@ export class MockAIService implements AIService {
       {
         id: 'RA-001',
         kind: 'recommendation',
-        title: 'Source 1.6 tonnes of additional tomato supply',
+        title: 'Source 1.6 tonnes of additional potato supply',
         description:
           'Contract AG-204 is projected at 92% fulfillment. Identify 1-2 nearby farms to close the gap before the Oct 18 delivery date.',
         contractId: 'AG-204',
@@ -110,7 +111,7 @@ export class MockAIService implements AIService {
       {
         id: 'RA-002',
         kind: 'recommendation',
-        title: 'Find replacement onion supply within 7 days',
+        title: 'Find replacement bean supply within 7 days',
         description: 'Contract AG-217 is projected at 76% fulfillment due to drought exposure on both matched farms.',
         contractId: 'AG-217',
       },
@@ -119,7 +120,7 @@ export class MockAIService implements AIService {
         kind: 'detection',
         title: 'Follow up with 3 farmers on missing crop updates',
         description:
-          'Kojo Mensah, Rahinatu Yakubu and Ibrahim Mohammed have not submitted a crop update in over 2 weeks.',
+          'Innocent Bizimana, Diane Ingabire and Ibrahim Habumugisha have not submitted a crop update in over 2 weeks.',
       },
       {
         id: 'RA-004',
@@ -146,7 +147,7 @@ export class MockAIService implements AIService {
 
     if (q.includes('meet') && q.includes('demand')) {
       return assistantMessage(
-        'Projected supply across active contracts is currently running at roughly 87% of contracted demand for the month. Tomato and cassava contracts are tracking close to plan. Onion supply is the primary gap — Contract AG-217 is projected at 76% fulfillment due to drought exposure on two farms. Confirming 2 additional onion growers this week would close most of the shortfall before the delivery window.',
+        'Projected supply across active contracts is currently running at roughly 87% of contracted demand for the month. Potato and maize contracts are tracking close to plan. Bean supply is the primary gap — Contract AG-217 is projected at 76% fulfillment due to drought exposure on two farms. Confirming 2 additional bean growers this week would close most of the shortfall before the delivery window.',
       )
     }
 
@@ -181,7 +182,7 @@ export class MockAIService implements AIService {
 
     if (q.includes('prioritize') || q.includes('this week')) {
       return assistantMessage(
-        "This week's priorities:\n\n1. Source replacement onion supply for Contract AG-217 (76% projected fulfillment) — 7-day window.\n2. Allocate cold storage for next week's harvest before the 7-tonne shortfall hits.\n3. Follow up with 3 farmers who have not submitted crop updates.\n4. Check in on Contract AG-188 — planting delay is compressing the maturity window.",
+        "This week's priorities:\n\n1. Source replacement bean supply for Contract AG-217 (76% projected fulfillment) — 7-day window.\n2. Allocate cold storage for next week's harvest before the 7-tonne shortfall hits.\n3. Follow up with 3 farmers who have not submitted crop updates.\n4. Check in on Contract AG-188 — planting delay is compressing the maturity window.",
       )
     }
 

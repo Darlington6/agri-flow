@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { Modal, Field, inputClass, Button } from '@/components/ui'
 import { crops } from '@/data'
 import type { ListingCategory, ListingUnit, MarketplaceListing } from '@/types'
+import { DEMO_MARKET } from '@/lib/market'
 
 const CATEGORIES: ListingCategory[] = ['Produce Surplus', 'Farm Inputs', 'Farm Residue']
 const UNITS: ListingUnit[] = ['tonnes', 'kg', 'bags', 'litres', 'units']
@@ -41,7 +42,7 @@ export function NewListingModal({
       cropId: cropId ? (cropId as MarketplaceListing['cropId']) : undefined,
       quantity: Number(quantity) || 0,
       unit,
-      pricePerUnitGHS: Number(price) || 0,
+      pricePerUnit: Number(price) || 0,
       location: location || 'Not specified',
       status: 'Available',
       postedAt: new Date().toISOString().slice(0, 10),
@@ -70,7 +71,7 @@ export function NewListingModal({
             className={inputClass}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="e.g. Surplus Grade A tomatoes — 1 tonne"
+            placeholder="e.g. Surplus Grade A Irish potatoes — 1 tonne"
           />
         </Field>
 
@@ -90,7 +91,7 @@ export function NewListingModal({
               className={inputClass}
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              placeholder="e.g. Techiman, Bono"
+              placeholder="e.g. Kabarondo, Eastern Province"
             />
           </Field>
         </div>
@@ -115,7 +116,7 @@ export function NewListingModal({
               ))}
             </select>
           </Field>
-          <Field label="Price / unit (GHS)">
+          <Field label={`Price / unit (${DEMO_MARKET.currency})`}>
             <input
               type="number"
               min="0"

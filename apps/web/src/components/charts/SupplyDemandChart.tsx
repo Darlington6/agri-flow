@@ -5,7 +5,7 @@ import type { CropId } from '@/types'
 import { chartColors, tooltipStyle } from './chartTheme'
 
 export function SupplyDemandChart() {
-  const [cropId, setCropId] = useState<CropId>('tomatoes')
+  const [cropId, setCropId] = useState<CropId>('irish_potato')
 
   const data = useMemo(
     () =>

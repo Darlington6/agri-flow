@@ -4,10 +4,10 @@ import { contractById } from './contracts'
 import { addDays } from '@/lib/date'
 
 export const CROP_CYCLE_DAYS: Record<CropId, number> = {
-  tomatoes: 90,
-  onions: 100,
-  peppers: 100,
-  cassava: 270,
+  irish_potato: 90,
+  beans: 100,
+  avocado: 100,
+  maize: 270,
 }
 
 // Derived from the farmer network: each contracted farmer has one active

@@ -144,6 +144,15 @@ Locations are structured (`Place`: name, administrative area, ISO country code),
 matching works across countries: regions in Ghana, provinces in Rwanda, counties in Kenya. Compare and
 format them with `src/lib/places.ts`; never match place names by substring.
 
+## The demo's market and money
+
+The sample data is set in Rwanda, the pilot country: its provinces and real sectors, Rwanda-relevant crops
+(Irish potatoes, beans, avocados, maize, from the API's crop list) and prices in RWF. The names, companies
+and figures are made up. `src/lib/market.ts` says which market the demo is in (`DEMO_MARKET`) and each
+country's currency; amounts in the data are plain numbers in that currency, formatted with `formatMoney`,
+`formatMoneyFull` and `formatPrice` (`src/lib/format.ts`). Field names never carry a currency, so another
+country is a data change, not a code change.
+
 - Test files are type-checked by `tsconfig.test.json` (Node types available); app code by
   `tsconfig.app.json` (no Node types, so app code can't depend on Node by accident).
 

@@ -4,7 +4,7 @@ import type {
   DemandRequest,
   DeliveryJob,
   Farmer,
-  GhanaRegion,
+  DemoRegion,
   HarvestForecast,
   Notification,
   Payment,
@@ -141,7 +141,7 @@ export function scopedBuyers(session: Session | null): Buyer[] {
   return []
 }
 
-export function scopedRegions(session: Session | null, liveContracts: Contract[] = contracts): GhanaRegion[] {
+export function scopedRegions(session: Session | null, liveContracts: Contract[] = contracts): DemoRegion[] {
   if (!session || isAdminRole(session.role)) return []
   if (session.role === 'Field Agent' && session.agentRegions) return session.agentRegions
   if (session.role === 'Buyer' || session.role === 'Farmer' || session.role === 'Cooperative') {

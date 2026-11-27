@@ -16,7 +16,7 @@ import { useSession } from '@/context/SessionContext'
 import { usePlatformData } from '@/context/PlatformDataContext'
 import { scopedContracts, scopedFarmers, scopedPayments } from '@/lib/scope'
 import { formatDate } from '@/lib/date'
-import { formatGHS, formatGHSFull } from '@/lib/format'
+import { formatMoney, formatMoneyFull } from '@/lib/format'
 
 const METHOD_ICON = {
   'MTN Mobile Money': Smartphone,
@@ -31,9 +31,7 @@ export function FinancePage() {
   const isBuyer = session?.role === 'Buyer'
   const payments = isBuyer ? scopedPayments(session, liveContracts) : allPayments
   const contracts = isBuyer ? scopedContracts(session, liveContracts) : []
-  const deliveryCommission = deliveryJobs
-    .filter((j) => j.status !== 'Unassigned')
-    .reduce((s, j) => s + j.commissionGHS, 0)
+  const deliveryCommission = deliveryJobs.filter((j) => j.status !== 'Unassigned').reduce((s, j) => s + j.commission, 0)
 
   return (
     <div className="flex flex-col gap-6">
@@ -50,24 +48,22 @@ export function FinancePage() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard
             label="Your Contracted Value"
-            value={formatGHS(contracts.reduce((s, c) => s + c.valueGHS, 0))}
+            value={formatMoney(contracts.reduce((s, c) => s + c.value, 0))}
             icon={Wallet}
           />
           <StatCard
             label="Your Delivered Value"
-            value={formatGHS(
-              contracts
-                .filter((c) => c.stage === 'Delivered' || c.stage === 'Paid')
-                .reduce((s, c) => s + c.valueGHS, 0),
+            value={formatMoney(
+              contracts.filter((c) => c.stage === 'Delivered' || c.stage === 'Paid').reduce((s, c) => s + c.value, 0),
             )}
             icon={TrendingUp}
           />
           <StatCard
             label="Your Pending Payments"
-            value={formatGHS(
+            value={formatMoney(
               payments
                 .filter((p) => p.direction === 'Buyer Payment' && p.status !== 'Paid')
-                .reduce((s, p) => s + p.amountGHS, 0),
+                .reduce((s, p) => s + p.amount, 0),
             )}
             icon={Clock}
           />
@@ -79,21 +75,21 @@ export function FinancePage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard label="Contracted Value" value={formatGHS(financeMetrics.contractedValueGHS)} icon={Wallet} />
-          <StatCard label="Delivered Value" value={formatGHS(financeMetrics.deliveredValueGHS)} icon={TrendingUp} />
+          <StatCard label="Contracted Value" value={formatMoney(financeMetrics.contractedValue)} icon={Wallet} />
+          <StatCard label="Delivered Value" value={formatMoney(financeMetrics.deliveredValue)} icon={TrendingUp} />
           <StatCard
             label="Pending Farmer Payments"
-            value={formatGHS(financeMetrics.pendingFarmerPaymentsGHS)}
+            value={formatMoney(financeMetrics.pendingFarmerPayments)}
             icon={Clock}
           />
           <StatCard
             label="Financing Requested"
-            value={formatGHS(financeMetrics.financingRequestedGHS)}
+            value={formatMoney(financeMetrics.financingRequested)}
             icon={PiggyBank}
           />
           <StatCard
             label="Delivery Commission"
-            value={formatGHS(deliveryCommission)}
+            value={formatMoney(deliveryCommission)}
             icon={Truck}
             hint="Earned on coordinated logistics"
           />
@@ -138,7 +134,7 @@ export function FinancePage() {
                           {p.method}
                         </span>
                       </td>
-                      <td className="px-3 py-3 text-ink-600">{formatGHSFull(p.amountGHS)}</td>
+                      <td className="px-3 py-3 text-ink-600">{formatMoneyFull(p.amount)}</td>
                       <td className="px-3 py-3 text-ink-600">{formatDate(p.date)}</td>
                       <td className="px-6 py-3">
                         <Badge tone={p.status === 'Paid' ? 'good' : p.status === 'Processing' ? 'info' : 'warn'}>

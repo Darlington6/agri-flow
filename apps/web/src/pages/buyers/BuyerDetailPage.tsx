@@ -6,7 +6,7 @@ import { useSession } from '@/context/SessionContext'
 import { usePlatformData, resolveKycStatus } from '@/context/PlatformDataContext'
 import { canViewBuyer } from '@/lib/scope'
 import { formatDate } from '@/lib/date'
-import { formatGHSFull, formatTonnes } from '@/lib/format'
+import { formatMoneyFull, formatTonnes } from '@/lib/format'
 import { FileQuestion } from 'lucide-react'
 
 export function BuyerDetailPage() {
@@ -111,7 +111,7 @@ export function BuyerDetailPage() {
                           </Link>
                         </td>
                         <td className="px-3 py-3 text-ink-600">{cropById(c.cropId)?.name}</td>
-                        <td className="px-3 py-3 text-ink-600">{formatGHSFull(c.valueGHS)}</td>
+                        <td className="px-3 py-3 text-ink-600">{formatMoneyFull(c.value)}</td>
                         <td className="px-3 py-3 text-ink-600">{c.stage}</td>
                         <td className="px-5 py-3">
                           <RiskBadge level={c.riskLevel} />

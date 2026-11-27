@@ -239,7 +239,7 @@ export function LandingPage() {
         <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
           <h2 className="font-display text-2xl font-semibold text-ink-900 sm:text-3xl">Explore a working prototype</h2>
           <p className="mt-3 text-sm text-ink-600 sm:text-base">
-            Walk through a live demand-to-farm scenario: a buyer's tomato order, matched farmers, climate risk, harvest
+            Walk through a live demand-to-farm scenario: a buyer's potato order, matched farmers, climate risk, harvest
             forecast, post-harvest coordination and payment — all connected.
           </p>
           <Link to="/login" className={buttonClasses('primary', 'md', 'mt-7')}>

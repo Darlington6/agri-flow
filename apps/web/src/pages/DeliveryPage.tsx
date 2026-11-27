@@ -7,7 +7,7 @@ import { rankJobsForPartner } from '@/lib/deliveryScore'
 import { formatPlace, formatServiceAreas } from '@/lib/places'
 import { cropById } from '@/data'
 import { formatDate } from '@/lib/date'
-import { formatGHSFull, formatTonnes } from '@/lib/format'
+import { formatMoneyFull, formatTonnes } from '@/lib/format'
 import type { DeliveryJobStatus } from '@/types'
 
 const STATUS_TONE = {
@@ -40,7 +40,7 @@ export function DeliveryPage() {
   const rankedAvailable = rankJobsForPartner(partner, available)
   const activeCount = myJobs.filter((j) => j.status === 'Assigned' || j.status === 'In Transit').length
   const deliveredCount = myJobs.filter((j) => j.status === 'Delivered').length
-  const earnedGHS = myJobs.filter((j) => j.status === 'Delivered').reduce((sum, j) => sum + j.feeGHS, 0)
+  const earned = myJobs.filter((j) => j.status === 'Delivered').reduce((sum, j) => sum + j.fee, 0)
 
   return (
     <div className="flex flex-col gap-6">
@@ -63,7 +63,7 @@ export function DeliveryPage() {
           hint="Assigned or in transit"
         />
         <StatCard label="Completed Deliveries" value={String(deliveredCount)} icon={CheckCircle2} />
-        <StatCard label="Fees Earned" value={formatGHSFull(earnedGHS)} icon={Star} hint="From completed deliveries" />
+        <StatCard label="Fees Earned" value={formatMoneyFull(earned)} icon={Star} hint="From completed deliveries" />
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -85,7 +85,7 @@ export function DeliveryPage() {
                     </p>
                     <p className="text-xs text-ink-500">
                       {formatPlace(job.from)} → {formatPlace(job.to)} · {formatDate(job.scheduledDate)} · fee{' '}
-                      {formatGHSFull(job.feeGHS)}
+                      {formatMoneyFull(job.fee)}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">

@@ -10,7 +10,7 @@ const phoneOnly = {
   id: 1,
   phone_number: '+250788123456',
   email: null,
-  display_name: 'Abena',
+  display_name: 'Aline',
   country: 'RW',
   language: 'en',
   roles: [],
@@ -160,7 +160,7 @@ describe('AccountPage contacts', () => {
     expect(await screen.findByText('Saved.')).toBeInTheDocument()
     expect(calls).toContainEqual({
       path: '/api/v1/auth/me/',
-      body: { display_name: 'Abena', country: 'RW', language: 'rw' },
+      body: { display_name: 'Aline', country: 'RW', language: 'rw' },
     })
   })
 

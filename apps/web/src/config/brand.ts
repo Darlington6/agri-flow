@@ -6,7 +6,7 @@ export const brand = {
   statement: 'Turn agricultural demand into reliable, climate-smart supply.',
   substatement: 'Know what the market needs. Grow with confidence. Deliver reliably.',
   environmentLabel: 'Demo / Pilot Simulation',
-  country: 'Ghana',
+  country: 'Rwanda',
 } as const
 
 export type Brand = typeof brand

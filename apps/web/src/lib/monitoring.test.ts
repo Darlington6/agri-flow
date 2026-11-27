@@ -72,7 +72,7 @@ describe('identify', () => {
       id: 42,
       phone_number: '+250788123456',
       email: 'abena@example.com',
-      display_name: 'Abena',
+      display_name: 'Aline',
       country: 'RW',
       language: 'en',
       roles: [{ slug: 'buyer', name: 'Buyer' }],

@@ -1,14 +1,14 @@
 import type { FarmerGroup } from '@/types'
 
-// The demo cooperative: tomato and pepper growers around Techiman, already on
-// the network's contracts (AG-204, AG-205, AG-207, AG-188). Abena (F001, the
+// The demo cooperative: potato and avocado growers around Kabarondo, already on
+// the network's contracts (AG-204, AG-205, AG-207, AG-188). Aline (F001, the
 // Farmer demo role) is a member, so the Cooperative, Farmer and Buyer demos
 // tell the same story from different seats.
 export const farmerGroups: FarmerGroup[] = [
   {
     id: 'G001',
-    name: "Techiman Growers' Cooperative",
-    region: 'Bono',
+    name: "Kayonza Growers' Cooperative",
+    region: 'Eastern Province',
     leadFarmerId: 'F001',
     farmerIds: ['F001', 'F002', 'F004', 'F009', 'F010', 'F019', 'F022'],
   },
