@@ -25,6 +25,14 @@ function fakeDriver(start: Partial<OnboardingDriver['start']> = {}): OnboardingD
   return {
     start: {
       name: '',
+      personal: {
+        legal_name: '',
+        date_of_birth: null,
+        gender: '',
+        guardian_name: '',
+        guardian_relationship: '',
+        guardian_phone: '',
+      },
       country: '',
       language: '',
       roles: [],
@@ -36,7 +44,7 @@ function fakeDriver(start: Partial<OnboardingDriver['start']> = {}): OnboardingD
       ...start,
     },
     loadOptions: vi.fn(async () => OPTIONS),
-    saveName: vi.fn(async () => {}),
+    saveAbout: vi.fn(async () => {}),
     savePlace: vi.fn(async () => {}),
     chooseRole: vi.fn(async () => {}),
     requestPhoneCode: vi.fn(async () => ({})),
@@ -47,15 +55,55 @@ function fakeDriver(start: Partial<OnboardingDriver['start']> = {}): OnboardingD
 }
 
 describe('OnboardingFlow', () => {
+  it('asks someone under 18 for a parent or guardian', async () => {
+    const driver = fakeDriver()
+    render(<OnboardingFlow driver={driver} onDone={() => {}} />)
+    await userEvent.type(screen.getByLabelText('Full name'), 'Eric Habimana')
+    const fifteen = `${new Date().getFullYear() - 15}-01-15`
+    await userEvent.type(screen.getByLabelText('Date of birth'), fifteen)
+
+    expect(screen.getByText(/You’re under 18/)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Continue' })).toBeDisabled()
+    await userEvent.type(screen.getByLabelText('Parent or guardian’s full name'), 'Jean Habimana')
+    await userEvent.click(screen.getByLabelText('Parent'))
+    await userEvent.type(screen.getByLabelText('Their phone number'), '0788 123 456')
+    await userEvent.click(screen.getByRole('button', { name: 'Continue' }))
+
+    expect(driver.saveAbout).toHaveBeenCalledWith(
+      expect.objectContaining({
+        date_of_birth: fifteen,
+        guardian_name: 'Jean Habimana',
+        guardian_relationship: 'parent',
+        guardian_phone: expect.stringMatching(/^\+\d+788123456$/),
+      }),
+      'Eric H.',
+    )
+  })
+
   it('walks through every step, saving each, and finishes', async () => {
     const driver = fakeDriver()
     const onDone = vi.fn()
     render(<OnboardingFlow driver={driver} onDone={onDone} />)
 
     expect(screen.getByText('Step 1 of 5')).toBeInTheDocument()
-    await userEvent.type(screen.getByLabelText('Your name'), '  Aline Uwase ')
+    // Who they are, as on their ID; the public name is suggested from it.
+    expect(screen.getByRole('button', { name: 'Continue' })).toBeDisabled()
+    await userEvent.type(screen.getByLabelText('Full name'), '  Aline Uwase ')
+    expect(screen.getByLabelText('Name others see')).toHaveValue('Aline U.')
+    await userEvent.type(screen.getByLabelText('Date of birth'), '1994-03-12')
+    await userEvent.click(screen.getByLabelText('Woman'))
     await userEvent.click(screen.getByRole('button', { name: 'Continue' }))
-    expect(driver.saveName).toHaveBeenCalledWith('Aline Uwase')
+    expect(driver.saveAbout).toHaveBeenCalledWith(
+      {
+        legal_name: 'Aline Uwase',
+        date_of_birth: '1994-03-12',
+        gender: 'woman',
+        guardian_name: '',
+        guardian_relationship: '',
+        guardian_phone: '',
+      },
+      'Aline U.',
+    )
 
     // Country and language start from the device; both can change.
     expect(await screen.findByRole('heading', { name: 'Where are you?' })).toHaveFocus()
@@ -116,7 +164,7 @@ describe('OnboardingFlow', () => {
   it('goes back with what was typed still there', async () => {
     render(<OnboardingFlow driver={fakeDriver({ name: 'Aline', next: 'place' })} onDone={() => {}} />)
     await userEvent.click(screen.getByRole('button', { name: 'Back' }))
-    expect(screen.getByLabelText('Your name')).toHaveValue('Aline')
+    expect(screen.getByLabelText('Name others see')).toHaveValue('Aline')
   })
 
   it('needs at least one crop before saving', async () => {

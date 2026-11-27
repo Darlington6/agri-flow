@@ -19,7 +19,7 @@ import {
   type Profile,
   type SetupOptions,
 } from '@/lib/apiClient'
-import { LANGUAGES, ROLE_ORDER, ROLES, whoCanReachYou } from '@/lib/onboarding'
+import { LANGUAGES, PUBLIC_NAME_HINT, ROLE_ORDER, ROLES, whoCanReachYou } from '@/lib/onboarding'
 import { countryOptions } from '@/lib/phone'
 import { AddEmail, AddPhone } from './AddContact'
 
@@ -127,7 +127,7 @@ function AboutYou() {
     <Card>
       <h2 className={sectionTitle}>About you</h2>
       <form className="mt-3 flex flex-col gap-3" onSubmit={handleSave}>
-        <LabelledField label="Display name">
+        <LabelledField label="Name others see" hint={PUBLIC_NAME_HINT}>
           {(props) => (
             <input
               {...props}

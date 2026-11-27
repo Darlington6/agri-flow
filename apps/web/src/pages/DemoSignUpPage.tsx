@@ -27,6 +27,14 @@ export function DemoSignUpPage() {
     () => ({
       start: {
         name: '',
+        personal: {
+          legal_name: '',
+          date_of_birth: null,
+          gender: '',
+          guardian_name: '',
+          guardian_relationship: '',
+          guardian_phone: '',
+        },
         country: '',
         language: '',
         roles: [],
@@ -37,7 +45,7 @@ export function DemoSignUpPage() {
         termsVersion: 'demo',
       },
       loadOptions: async (country) => demoSetupOptions(country),
-      saveName: pause,
+      saveAbout: pause,
       savePlace: pause,
       async chooseRole(role) {
         chosen.current = role

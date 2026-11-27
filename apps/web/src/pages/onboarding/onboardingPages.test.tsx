@@ -42,6 +42,20 @@ const FARMER = {
 
 type Answers = Record<string, { status?: number; body: unknown }>
 
+// Answers every test can share unless it says otherwise.
+const DEFAULTS: Answers = {
+  '/api/v1/compliance/personal-details/': {
+    body: {
+      legal_name: '',
+      date_of_birth: null,
+      gender: '',
+      guardian_name: '',
+      guardian_relationship: '',
+      guardian_phone: '',
+    },
+  },
+}
+
 function renderAt(path: string, answers: Answers, signedIn = true) {
   const calls: { path: string; method: string; body: unknown }[] = []
   vi.stubGlobal(
@@ -50,7 +64,8 @@ function renderAt(path: string, answers: Answers, signedIn = true) {
       const p = new URL(url).pathname
       calls.push({ path: p, method: init.method ?? 'GET', body: init.body ? JSON.parse(String(init.body)) : undefined })
       const answer = answers[`${init.method ?? 'GET'} ${p}`] ??
-        answers[p] ?? { status: 404, body: { detail: 'Not found' } }
+        answers[p] ??
+        DEFAULTS[p] ?? { status: 404, body: { detail: 'Not found' } }
       return new Response(JSON.stringify(answer.body), { status: answer.status ?? 200 })
     }),
   )

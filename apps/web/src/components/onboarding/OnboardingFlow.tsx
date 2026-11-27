@@ -3,17 +3,37 @@ import { ArrowLeft, ExternalLink } from 'lucide-react'
 import { Button, Card, CardButton, inputClass, ProgressBar } from '@/components/ui'
 // Imported directly, not from the ui index, so the phone library only downloads with the pages that use it.
 import { PhoneInput } from '@/components/ui/PhoneInput'
-import { usePhoneField } from '@/components/ui/usePhoneField'
+import { usePhoneField, type PhoneField } from '@/components/ui/usePhoneField'
 import { countryOptions, formatPhone, guessCountry } from '@/lib/phone'
 import {
   ApiError,
+  type Gender,
+  type GuardianRelationship,
   type Language,
   type OnboardingStep,
+  type PersonalDetails,
   type RoleDetails,
   type SelfServeRole,
   type SetupOptions,
 } from '@/lib/apiClient'
-import { LANGUAGES, ROLE_ORDER, ROLES, SITE_URL, STEP_TITLES, guessLanguage, whoCanReachYou } from '@/lib/onboarding'
+import {
+  BIRTH_DATE_HINT,
+  GENDER_HINT,
+  GENDERS,
+  GUARDIAN_INTRO,
+  isMinor,
+  LANGUAGES,
+  NAME_HINT,
+  PUBLIC_NAME_HINT,
+  RELATIONSHIPS,
+  ROLE_ORDER,
+  ROLES,
+  SITE_URL,
+  STEP_TITLES,
+  guessLanguage,
+  shortName,
+  whoCanReachYou,
+} from '@/lib/onboarding'
 import { ErrorText, LabelledField } from './fields'
 import { RoleDetailsForm } from './RoleDetailsForm'
 import { ROLE_ICONS } from './roleIcons'
@@ -26,6 +46,8 @@ import { ROLE_ICONS } from './roleIcons'
 export interface OnboardingDriver {
   start: {
     name: string
+    /** Their private details so far (empty values before the first step). */
+    personal: PersonalDetails
     country: string
     language: Language | ''
     /** Roles the account already has (not offered again). */
@@ -40,7 +62,8 @@ export interface OnboardingDriver {
     termsVersion: string
   }
   loadOptions: (country: string) => Promise<SetupOptions>
-  saveName: (name: string) => Promise<void>
+  /** Saves who they are: the private details (as on their ID) and the name others see. */
+  saveAbout: (details: PersonalDetails, publicName: string) => Promise<void>
   savePlace: (country: string, language: Language) => Promise<void>
   chooseRole: <R extends SelfServeRole>(role: R, details: RoleDetails[R]) => Promise<void>
   /** debugCode: the API's, in local development only. demoCode: the demo's (no text is sent). */
@@ -105,7 +128,16 @@ export function OnboardingFlow({
   const step = steps[index]
 
   // What's been entered, kept here so going back shows it.
-  const [name, setName] = useState(start.name)
+  const [about, setAbout] = useState<About>(() => ({
+    legalName: start.personal.legal_name,
+    publicName: start.name,
+    publicNameEdited: Boolean(start.name),
+    dateOfBirth: start.personal.date_of_birth ?? '',
+    gender: start.personal.gender,
+    guardianName: start.personal.guardian_name,
+    guardianRelationship: start.personal.guardian_relationship,
+  }))
+  const guardianPhone = usePhoneField(undefined, start.personal.guardian_phone)
   const [country, setCountry] = useState(start.country || guessCountry())
   const [language, setLanguage] = useState<Language>(start.language || guessLanguage())
   const [roles, setRoles] = useState<SelfServeRole[]>(start.roles)
@@ -146,7 +178,26 @@ export function OnboardingFlow({
         </h2>
         <div className="mt-4">
           {step === 'name' && (
-            <NameStep name={name} setName={setName} save={() => driver.saveName(name.trim())} onSaved={next} />
+            <AboutStep
+              about={about}
+              setAbout={setAbout}
+              guardianPhone={guardianPhone}
+              save={() => {
+                const minor = isMinor(about.dateOfBirth)
+                return driver.saveAbout(
+                  {
+                    legal_name: about.legalName.trim(),
+                    date_of_birth: about.dateOfBirth,
+                    gender: about.gender,
+                    guardian_name: minor ? about.guardianName.trim() : '',
+                    guardian_relationship: minor ? about.guardianRelationship : '',
+                    guardian_phone: minor ? guardianPhone.value : '',
+                  },
+                  about.publicName.trim(),
+                )
+              }}
+              onSaved={next}
+            />
           )}
           {step === 'place' && (
             <PlaceStep
@@ -204,18 +255,45 @@ function Actions({ children }: { children: ReactNode }) {
   return <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">{children}</div>
 }
 
-function NameStep({
-  name,
-  setName,
+/** What's entered on the first step, kept by the flow so going back shows it. */
+export interface About {
+  legalName: string
+  publicName: string
+  /** Edited by hand: stop suggesting one from the full name. */
+  publicNameEdited: boolean
+  dateOfBirth: string
+  gender: Gender | ''
+  guardianName: string
+  guardianRelationship: GuardianRelationship | ''
+}
+
+/** Today as YYYY-MM-DD, in the person's own time zone: the latest date of birth allowed. */
+function today(): string {
+  const now = new Date()
+  return new Date(now.getTime() - now.getTimezoneOffset() * 60_000).toISOString().slice(0, 10)
+}
+
+function AboutStep({
+  about,
+  setAbout,
+  guardianPhone,
   save,
   onSaved,
 }: {
-  name: string
-  setName: (name: string) => void
+  about: About
+  setAbout: (about: About) => void
+  /** Their parent or guardian's number, kept by the flow. */
+  guardianPhone: PhoneField
   save: () => Promise<void>
   onSaved: () => void
 }) {
   const { busy, error, run } = useSave()
+  const minor = isMinor(about.dateOfBirth)
+  const ready =
+    about.legalName.trim() &&
+    about.publicName.trim() &&
+    about.dateOfBirth &&
+    (!minor || (about.guardianName.trim() && about.guardianRelationship && guardianPhone.value))
   return (
     <form
       className="flex flex-col gap-4"
@@ -224,23 +302,120 @@ function NameStep({
         void run(save, onSaved)
       }}
     >
-      <LabelledField label="Your name" hint="Buyers, farmers and our team will see this.">
+      <LabelledField label="Full name" hint={NAME_HINT}>
+        {(props) => (
+          <input
+            {...props}
+            className={inputClass}
+            required
+            maxLength={200}
+            autoComplete="name"
+            autoFocus
+            value={about.legalName}
+            onChange={(e) =>
+              setAbout({
+                ...about,
+                legalName: e.target.value,
+                publicName: about.publicNameEdited ? about.publicName : shortName(e.target.value),
+              })
+            }
+          />
+        )}
+      </LabelledField>
+      <LabelledField label="Name others see" hint={PUBLIC_NAME_HINT}>
         {(props) => (
           <input
             {...props}
             className={inputClass}
             required
             maxLength={150}
-            autoComplete="name"
-            autoFocus
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            autoComplete="nickname"
+            value={about.publicName}
+            onChange={(e) => setAbout({ ...about, publicName: e.target.value, publicNameEdited: true })}
           />
         )}
       </LabelledField>
+      <LabelledField label="Date of birth" hint={BIRTH_DATE_HINT}>
+        {(props) => (
+          <input
+            {...props}
+            className={inputClass}
+            type="date"
+            required
+            min="1900-01-01"
+            max={today()}
+            autoComplete="bday"
+            value={about.dateOfBirth}
+            onChange={(e) => setAbout({ ...about, dateOfBirth: e.target.value })}
+          />
+        )}
+      </LabelledField>
+      <fieldset>
+        <legend className="mb-2 text-xs font-medium text-ink-600">
+          Gender <span className="font-normal text-ink-500">(optional)</span>
+        </legend>
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+          {GENDERS.map((g) => (
+            <label
+              key={g.value}
+              className="flex min-h-11 cursor-pointer items-center gap-2 rounded-xl border border-ink-200 px-3 text-sm text-ink-800 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary-500"
+            >
+              <input
+                type="radio"
+                name="gender"
+                className="accent-primary-600"
+                value={g.value}
+                checked={about.gender === g.value}
+                onChange={() => setAbout({ ...about, gender: g.value })}
+              />
+              {g.label}
+            </label>
+          ))}
+        </div>
+        <p className="mt-2 text-xs text-ink-500">{GENDER_HINT}</p>
+      </fieldset>
+      {minor && (
+        <div className="flex flex-col gap-4 rounded-xl border border-ink-200 p-4">
+          <p className="text-sm text-ink-700">{GUARDIAN_INTRO}</p>
+          <LabelledField label="Parent or guardian’s full name">
+            {(props) => (
+              <input
+                {...props}
+                className={inputClass}
+                required
+                maxLength={200}
+                value={about.guardianName}
+                onChange={(e) => setAbout({ ...about, guardianName: e.target.value })}
+              />
+            )}
+          </LabelledField>
+          <fieldset>
+            <legend className="mb-2 text-xs font-medium text-ink-600">Who they are to you</legend>
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+              {RELATIONSHIPS.map((r) => (
+                <label
+                  key={r.value}
+                  className="flex min-h-11 cursor-pointer items-center gap-2 rounded-xl border border-ink-200 px-3 text-sm text-ink-800 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary-500"
+                >
+                  <input
+                    type="radio"
+                    name="guardian-relationship"
+                    className="accent-primary-600"
+                    value={r.value}
+                    checked={about.guardianRelationship === r.value}
+                    onChange={() => setAbout({ ...about, guardianRelationship: r.value })}
+                  />
+                  {r.label}
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <PhoneInput field={guardianPhone} label="Their phone number" />
+        </div>
+      )}
       <ErrorText messages={error ? [error] : undefined} />
       <Actions>
-        <Button type="submit" disabled={busy || !name.trim()}>
+        <Button type="submit" disabled={busy || !ready}>
           {busy ? 'Saving…' : 'Continue'}
         </Button>
       </Actions>
