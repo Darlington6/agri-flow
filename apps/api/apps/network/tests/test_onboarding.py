@@ -1,6 +1,9 @@
+from datetime import date
+
 import pytest
 from django.test import override_settings
 
+from apps.compliance.models import PersonalDetails
 from apps.identity.models import Role, User
 
 from .conftest import FARMER, client_for
@@ -89,7 +92,15 @@ def test_staff_dont_choose_a_role(db):
         phone_number="+250788000111", display_name="Eric", country="RW", language="rw"
     )
     agent.roles.add(Role.objects.get(slug="field_agent"))
+    PersonalDetails.objects.create(
+        user=agent, legal_name="Eric Habimana", date_of_birth=date(1990, 1, 1)
+    )
     assert client_for(agent).get(URL).json()["next_step"] == "terms"
+
+
+def test_the_name_step_needs_the_private_details_too(db):
+    named = User.objects.create_user(email="new@example.com", display_name="Aline U.")
+    assert client_for(named).get(URL).json()["next_step"] == "name"
 
 
 def test_skipping_the_phone_is_remembered(client, user):

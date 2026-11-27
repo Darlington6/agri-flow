@@ -3,7 +3,9 @@
 Setting up an account (onboarding) is a few steps, each saved as soon as
 it's done, so people can stop and pick up later on any device:
 
-1. name      - what to call them (User.display_name)
+1. name      - who they are: their full name, date of birth and (optionally)
+               gender as on their ID, kept private (apps/compliance), and the
+               name other people see (User.display_name)
 2. place     - country and language
 3. role      - a farmer, buyer, delivery partner or cooperative profile
 4. phone     - add a phone number (optional: they can skip it)
@@ -17,6 +19,7 @@ from django.conf import settings
 from django.db import IntegrityError, transaction
 from django.utils import timezone
 
+from apps.compliance.services import has_personal_details
 from apps.identity.models import Role
 
 from .models import PROFILE_MODELS
@@ -95,7 +98,7 @@ def steps(user) -> dict[str, bool]:
     """Which steps are done."""
     has_role = bool(profiles(user)) or user.roles.filter(slug__in=Role.STAFF_SLUGS).exists()
     return {
-        "name": bool(user.display_name.strip()),
+        "name": bool(user.display_name.strip()) and has_personal_details(user),
         "place": bool(user.country and user.language),
         # Staff accounts (given their roles in /admin) don't choose one.
         "role": has_role,

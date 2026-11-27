@@ -87,11 +87,12 @@ text or an email is limited to 5 an hour per caller, and one address gets at mos
 ## Setting up an account (`/api/v1/onboarding/`, `/api/v1/network/`)
 
 After signing up, people set up their account in a few steps, each saved as soon as it's done, so they can
-stop and carry on later on any device: their name, country and language, what they do on AgriFlow, a phone
-number (optional), and agreeing to the terms and privacy notice.
+stop and carry on later on any device: who they are (below), country and language, what they do on AgriFlow, a
+phone number (optional), and agreeing to the terms and privacy notice.
 
 | Endpoint | What it does |
 | --- | --- |
+| `GET`/`PUT compliance/personal-details/` | Who they are, as on their ID: `legal_name`, `date_of_birth` (`YYYY-MM-DD`) and `gender` (`woman`, `man`, `prefer_not_to_say`, or empty). Under 18 (worked out from the date of birth, `is_minor`), `guardian_name`, `guardian_relationship` (`parent`, `legal_guardian`, `relative`) and `guardian_phone` are required too; for adults they're kept empty. Private: only the person (here) and staff (`/admin`) see it, never other users or `me/`. The first step is done once these and the public `display_name` are set. |
 | `GET onboarding/` | Which steps are done, the `next_step`, whether it's `complete`, and the `terms_version` to show. |
 | `POST onboarding/skip-phone/` | They'd rather not add a phone number now; it isn't asked again. |
 | `POST onboarding/complete/` | `{terms_version, accept_terms: true}`: records which terms they agreed to and when, and finishes. 409 if a step is missing or the terms changed meanwhile. Also how someone agrees to new terms. |
@@ -102,6 +103,9 @@ number (optional), and agreeing to the terms and privacy notice.
 - **Nobody can give themselves a staff role.** Field agents and admins aren't offered; staff get their roles
   in `/admin` (Users → roles) and skip the role step.
 - **A role isn't verification.** Every profile starts `unverified`; staff change `verification` in `/admin`.
+- **Private details live in `apps/compliance`,** apart from the sign-in account, for verifying accounts
+  (KYC) later. Gender is optional and only for reporting how many women AgriFlow reaches. The privacy notice
+  must say what's collected and why before launch.
 - **The terms version** is `TERMS_VERSION` (an environment variable, default `2026-11-draft`). Change it
   when the terms or privacy notice change materially, and everyone is asked to agree again.
 

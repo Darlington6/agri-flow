@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     # — Platform Blueprint, Section 1.
     "apps.identity",
     "apps.network",
+    "apps.compliance",
 ]
 
 AUTH_USER_MODEL = "identity.User"
