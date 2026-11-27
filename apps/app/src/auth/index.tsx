@@ -3,7 +3,7 @@ import { AppState } from 'react-native'
 
 import * as api from './api'
 import { clearSession, currentTokens, loadSession, saveTokens, saveUser } from './session'
-import type { AuthUser, SignedIn } from './types'
+import type { AccountChanges, AuthUser, SignedIn } from './types'
 
 export { ApiError, OfflineError } from './api'
 export type { AuthUser } from './types'
@@ -27,6 +27,13 @@ interface Auth {
   requestPhoneCode: (phoneNumber: string) => Promise<{ debugCode?: string }>
   verifyPhoneCode: (phoneNumber: string, code: string) => Promise<AuthUser>
   signInWithGoogle: (credential: string, nonce: string) => Promise<AuthUser>
+  /** Saves name, country or language; the account shows the API's answer. */
+  updateAccount: (changes: AccountChanges) => Promise<void>
+  /** Shows an account the API just sent (e.g. after finishing setup). */
+  replaceUser: (user: AuthUser) => void
+  /** Texts a code to add a number; it's only added once confirmed. */
+  requestPhoneAdd: (phoneNumber: string) => Promise<{ debugCode?: string }>
+  confirmPhoneAdd: (phoneNumber: string, code: string) => Promise<void>
   /** Tries again after `unreachable`. */
   retry: () => Promise<void>
   signOut: () => Promise<void>
@@ -129,6 +136,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       },
       verifyPhoneCode: async (phoneNumber, code) => signedIn(await api.verifyPhoneCode(phoneNumber, code)),
       signInWithGoogle: async (credential, nonce) => signedIn(await api.signInWithGoogle(credential, nonce)),
+      async updateAccount(changes) {
+        show(await api.updateMe(changes))
+      },
+      replaceUser: show,
+      async requestPhoneAdd(phoneNumber) {
+        const { debug_code } = await api.requestPhoneAdd(phoneNumber)
+        logForDev(`Code for ${phoneNumber}`, debug_code)
+        return { debugCode: debug_code }
+      },
+      async confirmPhoneAdd(phoneNumber, code) {
+        show(await api.confirmPhoneAdd(phoneNumber, code))
+      },
       async retry() {
         setStatus('loading')
         await refresh(false)

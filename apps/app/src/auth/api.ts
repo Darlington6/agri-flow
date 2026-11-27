@@ -6,7 +6,16 @@
 import { API_URL } from '@/lib/config'
 
 import { clearSession, currentTokens, saveTokens } from './session'
-import type { AuthUser, SignedIn } from './types'
+import type {
+  OnboardingState,
+  PersonalDetails,
+  Profile,
+  RoleDetails,
+  SelfServeRole,
+  SetupOptions,
+} from '@/onboarding/types'
+
+import type { AccountChanges, AuthUser, SignedIn } from './types'
 
 /** The API answered with an error. */
 export class ApiError extends Error {
@@ -143,6 +152,58 @@ export function signInWithGoogle(credential: string, nonce: string) {
 
 export function getMe() {
   return request<AuthUser>('/api/v1/auth/me/')
+}
+
+export function updateMe(changes: AccountChanges) {
+  return request<AuthUser>('/api/v1/auth/me/', { method: 'PATCH', body: JSON.stringify(changes) })
+}
+
+/** Texts a code to a number being added to the signed-in account. */
+export function requestPhoneAdd(phoneNumber: string) {
+  return request<{ debug_code?: string }>('/api/v1/auth/me/phone/', post({ phone_number: phoneNumber }))
+}
+
+export function confirmPhoneAdd(phoneNumber: string, code: string) {
+  return request<AuthUser>('/api/v1/auth/me/phone/confirm/', post({ phone_number: phoneNumber, code }))
+}
+
+// ── Setting up an account ────────────────────────────────────────────────
+
+export function getOnboarding() {
+  return request<OnboardingState>('/api/v1/onboarding/')
+}
+
+export function skipPhone() {
+  return request<OnboardingState>('/api/v1/onboarding/skip-phone/', { method: 'POST' })
+}
+
+/** Records the terms version agreed to, and finishes setting up. */
+export function completeOnboarding(termsVersion: string) {
+  return request<AuthUser>('/api/v1/onboarding/complete/', post({ terms_version: termsVersion, accept_terms: true }))
+}
+
+/** Their private details (empty values before they're given). */
+export function getPersonalDetails() {
+  return request<PersonalDetails>('/api/v1/compliance/personal-details/')
+}
+
+export function savePersonalDetails(details: PersonalDetails) {
+  return request<PersonalDetails>('/api/v1/compliance/personal-details/', {
+    method: 'PUT',
+    body: JSON.stringify(details),
+  })
+}
+
+export function getSetupOptions(country: string) {
+  return request<SetupOptions>(`/api/v1/network/options/?country=${encodeURIComponent(country)}`)
+}
+
+export function getProfiles() {
+  return request<Profile[]>('/api/v1/network/profiles/')
+}
+
+export function createProfile<R extends SelfServeRole>(role: R, details: Partial<RoleDetails[R]>) {
+  return request<Profile>('/api/v1/network/profiles/', post({ ...details, role }))
 }
 
 /** Retires the refresh token on the server. Best effort: offline, it expires on its own. */

@@ -24,6 +24,9 @@ export interface AuthUser {
   date_joined: string
 }
 
+/** What someone can change about their own account. */
+export type AccountChanges = Partial<Pick<AuthUser, 'display_name' | 'country' | 'language'>>
+
 export interface SignedIn {
   access: string
   refresh: string
