@@ -51,7 +51,27 @@ export interface FarmerDetails {
   district: string
   crops: string[]
   farm_size_hectares: string | null
+  /** A cooperative on AgriFlow, from the options' list: asks to join it (null: none, or a typed name). */
+  cooperative_id: number | null
+  /** A cooperative not on AgriFlow yet, typed. */
   cooperative_name: string
+}
+
+/** The farmer's cooperative on AgriFlow, and whether it has confirmed them yet. */
+export interface FarmerCooperative {
+  id: number
+  name: string
+  verified: boolean
+  membership: 'pending' | 'confirmed' | 'declined'
+}
+
+/** A cooperative farmers can choose (new ones are listed straight away, unverified). */
+export interface CooperativeOption {
+  id: number
+  name: string
+  region: string
+  district: string
+  verified: boolean
 }
 
 export interface BuyerDetails {
@@ -86,7 +106,8 @@ export interface RoleDetails {
 
 /** A role the account chose, with its details. */
 export type Profile = {
-  [R in SelfServeRole]: ProfileBase & { role: R } & RoleDetails[R]
+  [R in SelfServeRole]: ProfileBase & { role: R } & RoleDetails[R] &
+    (R extends 'farmer' ? { cooperative: FarmerCooperative | null } : unknown)
 }[SelfServeRole]
 
 export interface Option {
@@ -102,6 +123,8 @@ export interface SetupOptions {
   crops: Option[]
   buyer_types: Option[]
   vehicle_types: Option[]
+  /** The cooperatives on AgriFlow in this country. */
+  cooperatives: CooperativeOption[]
 }
 
 export type OnboardingStep = 'name' | 'place' | 'role' | 'phone' | 'terms'

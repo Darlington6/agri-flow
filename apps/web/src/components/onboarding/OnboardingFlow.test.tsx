@@ -19,6 +19,10 @@ const OPTIONS: SetupOptions = {
     { value: 'motorbike', label: 'Motorbike' },
     { value: 'truck', label: 'Truck' },
   ],
+  cooperatives: [
+    { id: 4, name: 'Abahuzamugambi', region: 'Northern Province', district: 'Musanze', verified: true },
+    { id: 9, name: 'Twisungane', region: 'Eastern Province', district: '', verified: false },
+  ],
 }
 
 function fakeDriver(start: Partial<OnboardingDriver['start']> = {}): OnboardingDriver {
@@ -55,6 +59,29 @@ function fakeDriver(start: Partial<OnboardingDriver['start']> = {}): OnboardingD
 }
 
 describe('OnboardingFlow', () => {
+  it('lets a farmer choose their cooperative from AgriFlow, or type one that isn’t on it', async () => {
+    const driver = fakeDriver({ name: 'Aline U.', country: 'RW', language: 'en', next: 'role' })
+    render(<OnboardingFlow driver={driver} onDone={() => {}} />)
+    await userEvent.click(await screen.findByRole('button', { name: /Farmer/ }))
+    await userEvent.selectOptions(await screen.findByLabelText('Province'), 'Northern Province')
+    await userEvent.selectOptions(screen.getByLabelText('District'), 'Musanze')
+    await userEvent.click(screen.getByRole('button', { name: 'Maize' }))
+
+    // Unverified cooperatives are listed, and say so.
+    expect(screen.getByRole('option', { name: 'Twisungane, Eastern Province (not verified yet)' })).toBeInTheDocument()
+    await userEvent.selectOptions(screen.getByLabelText(/Your cooperative/), 'Mine isn’t on AgriFlow yet')
+    await userEvent.type(screen.getByLabelText('Cooperative name'), 'Abakundakawa')
+    await userEvent.selectOptions(screen.getByLabelText(/Your cooperative/), 'Abahuzamugambi, Musanze')
+    expect(screen.queryByLabelText('Cooperative name')).toBeNull()
+    expect(screen.getByText('They’ll confirm you’re a member.')).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: 'Continue' }))
+
+    expect(driver.chooseRole).toHaveBeenCalledWith(
+      'farmer',
+      expect.objectContaining({ cooperative_id: 4, cooperative_name: '' }),
+    )
+  })
+
   it('asks someone under 18 for a parent or guardian', async () => {
     const driver = fakeDriver()
     render(<OnboardingFlow driver={driver} onDone={() => {}} />)
@@ -124,6 +151,7 @@ describe('OnboardingFlow', () => {
       district: 'Musanze',
       crops: ['maize'],
       farm_size_hectares: null,
+      cooperative_id: null,
       cooperative_name: '',
     })
 
