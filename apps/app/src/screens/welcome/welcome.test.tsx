@@ -16,6 +16,10 @@ jest.mock('expo-localization', () => ({
   getCalendars: () => [{ timeZone: 'Africa/Kigali' }],
 }))
 
+// The walkthroughs press through several screens: more than Jest's default
+// 5 seconds on CI's slower machines.
+const WALKTHROUGH_MS = 30_000
+
 const NEW: AuthUser = {
   ...USER,
   display_name: '',
@@ -73,125 +77,135 @@ async function open() {
 afterEach(() => storage.clear())
 
 describe('Welcome', () => {
-  it('sets up a farmer step by step, saving each answer', async () => {
-    saveSession(NEW)
-    let user = NEW
-    const api = fakeApi({
-      '/api/v1/auth/me/': (body) => {
-        if (body) user = { ...user, ...body }
-        return { status: 200, body: user }
-      },
-      '/api/v1/onboarding/': () => ({ status: 200, body: STATE }),
-      '/api/v1/network/profiles/': (body) =>
-        body ? { status: 201, body: { ...body, verification: 'unverified' } } : { status: 200, body: [] },
-      '/api/v1/compliance/personal-details/': (body) => ({ status: 200, body: body ?? NO_DETAILS }),
-      '/api/v1/network/options/': () => ({ status: 200, body: OPTIONS }),
-      '/api/v1/onboarding/skip-phone/': () => ({ status: 200, body: STATE }),
-      '/api/v1/onboarding/complete/': () => ({
-        status: 200,
-        body: { ...user, needs_onboarding: false, onboarded_at: '2026-11-26T00:00:00Z' },
-      }),
-    })
-    await open()
-
-    // About you: as on their ID, private; the public name is suggested from it.
-    expect(await screen.findByRole('heading', { name: 'About you' })).toBeOnTheScreen()
-    expect(screen.getByRole('button', { name: 'Continue' })).toBeDisabled()
-    await fireEvent.changeText(screen.getByLabelText('Full name'), '  Aline Uwase ')
-    expect(screen.getByLabelText('Name others see')).toHaveDisplayValue('Aline U.')
-    await fireEvent.changeText(screen.getByLabelText('Day'), '31')
-    await fireEvent.changeText(screen.getByLabelText('Month'), '2')
-    await fireEvent.changeText(screen.getByLabelText('Year'), '1994')
-    await fireEvent.press(screen.getByRole('button', { name: 'Continue' }))
-    expect(screen.getByText('Enter a real date: day, month and a 4-digit year.')).toBeOnTheScreen()
-    await fireEvent.changeText(screen.getByLabelText('Day'), '12')
-    await fireEvent.changeText(screen.getByLabelText('Month'), '3')
-    await fireEvent.press(screen.getByRole('radio', { name: 'Woman' }))
-    await fireEvent.press(screen.getByRole('button', { name: 'Continue' }))
-
-    // Place: the country starts on the phone's (Rwanda), English chosen.
-    expect(await screen.findByRole('heading', { name: 'Where are you?' })).toBeOnTheScreen()
-    expect(screen.getByRole('button', { name: 'Country: Rwanda' })).toBeOnTheScreen()
-    await fireEvent.press(screen.getByRole('button', { name: 'Continue' }))
-
-    // Role, then its details.
-    await fireEvent.press(await screen.findByRole('button', { name: /^Farmer\./ }))
-    expect(await screen.findByRole('heading', { name: 'About your farm' })).toBeOnTheScreen()
-    await fireEvent.press(await screen.findByRole('button', { name: 'Continue' }))
-    expect(screen.getByText('Choose at least one crop.')).toBeOnTheScreen()
-
-    await fireEvent.press(screen.getByRole('button', { name: 'Province: Choose…' }))
-    await fireEvent.press(screen.getByRole('button', { name: 'Kigali' }))
-    await fireEvent.press(screen.getByRole('button', { name: 'District: Choose…' }))
-    await fireEvent.press(screen.getByRole('button', { name: 'Gasabo' }))
-    await fireEvent.press(screen.getByRole('checkbox', { name: 'Maize' }))
-    await fireEvent.press(screen.getByRole('button', { name: 'Continue' }))
-
-    // Phone: worded for a farmer, and skippable.
-    expect(await screen.findByText(/So buyers, your cooperative and delivery partners can reach you/)).toBeOnTheScreen()
-    await fireEvent.press(screen.getByRole('button', { name: 'Skip for now' }))
-
-    // Terms: Finish only once they've agreed.
-    expect(await screen.findByRole('heading', { name: 'One last thing' })).toBeOnTheScreen()
-    expect(screen.getByRole('button', { name: 'Finish' })).toBeDisabled()
-    await fireEvent.press(screen.getByRole('checkbox', { name: /I agree to the terms of use/ }))
-    await fireEvent.press(screen.getByRole('button', { name: 'Finish' }))
-    expect(await screen.findByText('set up')).toBeOnTheScreen()
-
-    expect(api.calls.filter((c) => c.body).map((c) => [c.path, c.body])).toEqual([
-      [
-        '/api/v1/compliance/personal-details/',
-        { legal_name: 'Aline Uwase', date_of_birth: '1994-03-12', gender: 'woman', ...NO_GUARDIAN },
-      ],
-      ['/api/v1/auth/me/', { display_name: 'Aline U.' }],
-      ['/api/v1/auth/me/', { country: 'RW', language: 'en' }],
-      [
-        '/api/v1/network/profiles/',
-        {
-          role: 'farmer',
-          region: 'Kigali',
-          district: 'Gasabo',
-          crops: ['maize'],
-          farm_size_hectares: null,
-          cooperative_name: '',
+  it(
+    'sets up a farmer step by step, saving each answer',
+    async () => {
+      saveSession(NEW)
+      let user = NEW
+      const api = fakeApi({
+        '/api/v1/auth/me/': (body) => {
+          if (body) user = { ...user, ...body }
+          return { status: 200, body: user }
         },
-      ],
-      ['/api/v1/onboarding/complete/', { terms_version: '2026-11-draft', accept_terms: true }],
-    ])
-  })
+        '/api/v1/onboarding/': () => ({ status: 200, body: STATE }),
+        '/api/v1/network/profiles/': (body) =>
+          body ? { status: 201, body: { ...body, verification: 'unverified' } } : { status: 200, body: [] },
+        '/api/v1/compliance/personal-details/': (body) => ({ status: 200, body: body ?? NO_DETAILS }),
+        '/api/v1/network/options/': () => ({ status: 200, body: OPTIONS }),
+        '/api/v1/onboarding/skip-phone/': () => ({ status: 200, body: STATE }),
+        '/api/v1/onboarding/complete/': () => ({
+          status: 200,
+          body: { ...user, needs_onboarding: false, onboarded_at: '2026-11-26T00:00:00Z' },
+        }),
+      })
+      await open()
 
-  it('asks someone under 18 for a parent or guardian', async () => {
-    saveSession(NEW)
-    const api = fakeApi({
-      '/api/v1/auth/me/': () => ({ status: 200, body: NEW }),
-      '/api/v1/onboarding/': () => ({ status: 200, body: STATE }),
-      '/api/v1/network/profiles/': () => ({ status: 200, body: [] }),
-      '/api/v1/compliance/personal-details/': (body) => ({ status: 200, body: body ?? NO_DETAILS }),
-    })
-    await open()
-    await fireEvent.changeText(await screen.findByLabelText('Full name'), 'Eric Habimana')
-    const year = String(new Date().getFullYear() - 15)
-    await fireEvent.changeText(screen.getByLabelText('Day'), '15')
-    await fireEvent.changeText(screen.getByLabelText('Month'), '1')
-    await fireEvent.changeText(screen.getByLabelText('Year'), year)
+      // About you: as on their ID, private; the public name is suggested from it.
+      expect(await screen.findByRole('heading', { name: 'About you' })).toBeOnTheScreen()
+      expect(screen.getByRole('button', { name: 'Continue' })).toBeDisabled()
+      await fireEvent.changeText(screen.getByLabelText('Full name'), '  Aline Uwase ')
+      expect(screen.getByLabelText('Name others see')).toHaveDisplayValue('Aline U.')
+      await fireEvent.changeText(screen.getByLabelText('Day'), '31')
+      await fireEvent.changeText(screen.getByLabelText('Month'), '2')
+      await fireEvent.changeText(screen.getByLabelText('Year'), '1994')
+      await fireEvent.press(screen.getByRole('button', { name: 'Continue' }))
+      expect(screen.getByText('Enter a real date: day, month and a 4-digit year.')).toBeOnTheScreen()
+      await fireEvent.changeText(screen.getByLabelText('Day'), '12')
+      await fireEvent.changeText(screen.getByLabelText('Month'), '3')
+      await fireEvent.press(screen.getByRole('radio', { name: 'Woman' }))
+      await fireEvent.press(screen.getByRole('button', { name: 'Continue' }))
 
-    expect(screen.getByText(/You’re under 18/)).toBeOnTheScreen()
-    expect(screen.getByRole('button', { name: 'Continue' })).toBeDisabled()
-    await fireEvent.changeText(screen.getByLabelText('Parent or guardian’s full name'), 'Jean Habimana')
-    await fireEvent.press(screen.getByRole('radio', { name: 'Parent' }))
-    await fireEvent.changeText(screen.getByLabelText('Their phone number'), '0788 123 456')
-    await fireEvent.press(screen.getByRole('button', { name: 'Continue' }))
+      // Place: the country starts on the phone's (Rwanda), English chosen.
+      expect(await screen.findByRole('heading', { name: 'Where are you?' })).toBeOnTheScreen()
+      expect(screen.getByRole('button', { name: 'Country: Rwanda' })).toBeOnTheScreen()
+      await fireEvent.press(screen.getByRole('button', { name: 'Continue' }))
 
-    expect(await screen.findByRole('heading', { name: 'Where are you?' })).toBeOnTheScreen()
-    expect(api.calls.find((c) => c.path === '/api/v1/compliance/personal-details/' && c.body)?.body).toEqual({
-      legal_name: 'Eric Habimana',
-      date_of_birth: `${year}-01-15`,
-      gender: '',
-      guardian_name: 'Jean Habimana',
-      guardian_relationship: 'parent',
-      guardian_phone: '+250788123456',
-    })
-  })
+      // Role, then its details.
+      await fireEvent.press(await screen.findByRole('button', { name: /^Farmer\./ }))
+      expect(await screen.findByRole('heading', { name: 'About your farm' })).toBeOnTheScreen()
+      await fireEvent.press(await screen.findByRole('button', { name: 'Continue' }))
+      expect(screen.getByText('Choose at least one crop.')).toBeOnTheScreen()
+
+      await fireEvent.press(screen.getByRole('button', { name: 'Province: Choose…' }))
+      await fireEvent.press(screen.getByRole('button', { name: 'Kigali' }))
+      await fireEvent.press(screen.getByRole('button', { name: 'District: Choose…' }))
+      await fireEvent.press(screen.getByRole('button', { name: 'Gasabo' }))
+      await fireEvent.press(screen.getByRole('checkbox', { name: 'Maize' }))
+      await fireEvent.press(screen.getByRole('button', { name: 'Continue' }))
+
+      // Phone: worded for a farmer, and skippable.
+      expect(
+        await screen.findByText(/So buyers, your cooperative and delivery partners can reach you/),
+      ).toBeOnTheScreen()
+      await fireEvent.press(screen.getByRole('button', { name: 'Skip for now' }))
+
+      // Terms: Finish only once they've agreed.
+      expect(await screen.findByRole('heading', { name: 'One last thing' })).toBeOnTheScreen()
+      expect(screen.getByRole('button', { name: 'Finish' })).toBeDisabled()
+      await fireEvent.press(screen.getByRole('checkbox', { name: /I agree to the terms of use/ }))
+      await fireEvent.press(screen.getByRole('button', { name: 'Finish' }))
+      expect(await screen.findByText('set up')).toBeOnTheScreen()
+
+      expect(api.calls.filter((c) => c.body).map((c) => [c.path, c.body])).toEqual([
+        [
+          '/api/v1/compliance/personal-details/',
+          { legal_name: 'Aline Uwase', date_of_birth: '1994-03-12', gender: 'woman', ...NO_GUARDIAN },
+        ],
+        ['/api/v1/auth/me/', { display_name: 'Aline U.' }],
+        ['/api/v1/auth/me/', { country: 'RW', language: 'en' }],
+        [
+          '/api/v1/network/profiles/',
+          {
+            role: 'farmer',
+            region: 'Kigali',
+            district: 'Gasabo',
+            crops: ['maize'],
+            farm_size_hectares: null,
+            cooperative_name: '',
+          },
+        ],
+        ['/api/v1/onboarding/complete/', { terms_version: '2026-11-draft', accept_terms: true }],
+      ])
+    },
+    WALKTHROUGH_MS,
+  )
+
+  it(
+    'asks someone under 18 for a parent or guardian',
+    async () => {
+      saveSession(NEW)
+      const api = fakeApi({
+        '/api/v1/auth/me/': () => ({ status: 200, body: NEW }),
+        '/api/v1/onboarding/': () => ({ status: 200, body: STATE }),
+        '/api/v1/network/profiles/': () => ({ status: 200, body: [] }),
+        '/api/v1/compliance/personal-details/': (body) => ({ status: 200, body: body ?? NO_DETAILS }),
+      })
+      await open()
+      await fireEvent.changeText(await screen.findByLabelText('Full name'), 'Eric Habimana')
+      const year = String(new Date().getFullYear() - 15)
+      await fireEvent.changeText(screen.getByLabelText('Day'), '15')
+      await fireEvent.changeText(screen.getByLabelText('Month'), '1')
+      await fireEvent.changeText(screen.getByLabelText('Year'), year)
+
+      expect(screen.getByText(/You’re under 18/)).toBeOnTheScreen()
+      expect(screen.getByRole('button', { name: 'Continue' })).toBeDisabled()
+      await fireEvent.changeText(screen.getByLabelText('Parent or guardian’s full name'), 'Jean Habimana')
+      await fireEvent.press(screen.getByRole('radio', { name: 'Parent' }))
+      await fireEvent.changeText(screen.getByLabelText('Their phone number'), '0788 123 456')
+      await fireEvent.press(screen.getByRole('button', { name: 'Continue' }))
+
+      expect(await screen.findByRole('heading', { name: 'Where are you?' })).toBeOnTheScreen()
+      expect(api.calls.find((c) => c.path === '/api/v1/compliance/personal-details/' && c.body)?.body).toEqual({
+        legal_name: 'Eric Habimana',
+        date_of_birth: `${year}-01-15`,
+        gender: '',
+        guardian_name: 'Jean Habimana',
+        guardian_relationship: 'parent',
+        guardian_phone: '+250788123456',
+      })
+    },
+    WALKTHROUGH_MS,
+  )
 
   it('picks up where they stopped, and goes back a step', async () => {
     saveSession({ ...NEW, display_name: 'Aline', country: 'RW', language: 'en' })
